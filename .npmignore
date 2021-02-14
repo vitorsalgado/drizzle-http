@@ -1,0 +1,14 @@
+.changeset
+.github
+.yarn
+src
+benchmarks
+internal
+node_modules
+test
+!dist
+jest.config.js
+tsconfig.json
+yarn.lock
+*.log
+*.tgz

@@ -1,0 +1,24 @@
+{
+  "name": "@drizzle-http/test-utils",
+  "version": "0.0.1",
+  "description": "Test utilities for Drizzle-Http",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "preinstall": "tsc --build --force",
+    "build": "tsc --build --force"
+  },
+  "author": {
+    "name": "Vitor Hugo Salgado",
+    "url": "https://github.com/vitorsalgado"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^3.11.0"
+  }
+}

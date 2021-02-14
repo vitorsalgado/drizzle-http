@@ -1,0 +1,64 @@
+{
+  "name": "@drizzle-http/monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "coverage": "codecov -f coverage/*.json",
+    "build": "lerna exec -- yarn build",
+    "lint": "eslint --ext .ts .",
+    "clean": "lerna clean",
+    "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/drizzle-http.git"
+  },
+  "author": {
+    "name": "Vitor Hugo Salgado",
+    "url": "https://github.com/vitorsalgado"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/drizzle-http/issues"
+  },
+  "homepage": "https://github.com/vitorsalgado/drizzle-http#readme",
+  "workspaces": [
+    "benchmarks",
+    "internal/*",
+    "pkgs/*"
+  ],
+  "keywords": [
+    "http",
+    "http client",
+    "rest",
+    "api",
+    "undici",
+    "node",
+    "typescript",
+    "decorator",
+    "rxjs"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "^2.14.1",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.27",
+    "@types/superagent": "^4.1.10",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "codecov": "^3.8.1",
+    "concurrently": "^5.3.0",
+    "eslint": "^7.20.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-tsdoc": "^0.2.11",
+    "jest": "^26.6.3",
+    "lerna": "^3.22.1",
+    "ts-jest": "^26.5.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  }
+}
