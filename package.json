@@ -27,7 +27,8 @@
   "workspaces": [
     "benchmarks",
     "internal/*",
-    "pkgs/*"
+    "pkgs/*",
+    "examples/*"
   ],
   "keywords": [
     "http",

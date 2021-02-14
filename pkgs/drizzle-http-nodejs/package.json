@@ -1,7 +1,7 @@
 {
-  "name": "@drizzle-http/logging-interceptor",
+  "name": "@drizzle-http/nodejs",
   "version": "0.0.1",
-  "description": "Logging Interceptor for Drizzle-HTTP",
+  "description": "Drizzle-HTTP default packages for Node.js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -19,12 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@drizzle-http/core": "0.0.1",
-    "pino": "^6.11.1",
-    "pino-pretty": "^4.5.0"
-  },
-  "devDependencies": {
-    "@drizzle-http/test-utils": "0.0.1",
-    "@drizzle-http/undici": "0.0.1",
-    "@types/pino": "^6.3.5"
+    "@drizzle-http/logging-interceptor": "0.0.1",
+    "@drizzle-http/undici": "0.0.1"
   }
 }

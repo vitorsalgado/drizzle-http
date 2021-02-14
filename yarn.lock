@@ -1794,7 +1794,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
+"@drizzle-http/logging-interceptor@0.0.1, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor"
   dependencies:
@@ -1830,6 +1830,16 @@ __metadata:
     ts-jest: ^26.5.1
     ts-node: ^9.1.1
     typescript: ^4.1.5
+  languageName: unknown
+  linkType: soft
+
+"@drizzle-http/nodejs@workspace:pkgs/drizzle-http-nodejs":
+  version: 0.0.0-use.local
+  resolution: "@drizzle-http/nodejs@workspace:pkgs/drizzle-http-nodejs"
+  dependencies:
+    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/logging-interceptor": 0.0.1
+    "@drizzle-http/undici": 0.0.1
   languageName: unknown
   linkType: soft
 
