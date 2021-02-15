@@ -2,7 +2,8 @@
   "packages": [
     "benchmarks",
     "internal/*",
-    "pkgs/*"
+    "pkgs/*",
+    "examples/*"
   ],
   "version": "0.0.1",
   "npmClient": "yarn",
