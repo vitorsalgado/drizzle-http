@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "target": "ES2017",
+    "module": "ES6",
+    "lib": ["ES2017", "DOM"],
+    "outDir": "dist",
+    "allowJs": true
+  },
+  "references": [
+    { "path": "../drizzle-http", "prepend": false },
+    { "path": "../drizzle-http-fetch", "prepend": false },
+    { "path": "../../internal/test-utils", "prepend": false }
+  ],
+  "include": ["src/**/*"]
+}

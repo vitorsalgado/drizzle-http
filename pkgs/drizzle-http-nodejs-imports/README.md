@@ -1,6 +1,6 @@
 # Drizzle-HTTP Node.js
 
-Basic packages for Node.js
+Basic packages for **Node.js**.
 
 ## Installation
 
