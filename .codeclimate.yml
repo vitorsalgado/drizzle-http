@@ -1,0 +1,17 @@
+exclude_patterns:
+  - "examples/"
+  - "benchmarks/"
+  - "internal/"
+  - "**/*.spec.ts"
+  - "**/*.spec.js"
+  - "**/*.d.ts"
+  - "**/node_modules/"
+  - "/dist/"
+  - "/dist-es5/"
+
+plugins:
+  eslint:
+    enabled: true
+    config:
+      extensions:
+        - .ts
