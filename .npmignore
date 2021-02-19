@@ -4,8 +4,10 @@
 src
 benchmarks
 internal
+examples
 node_modules
 test
+scripts
 !dist
 jest.config.js
 tsconfig.json

@@ -1,6 +1,6 @@
 # Logging Interceptor
 
-![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
+![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 
 Drizzle-HTTP interceptor that logs HTTP requests and responses.  
 The default Logger implementation uses [Pino](https://getpino.io/).

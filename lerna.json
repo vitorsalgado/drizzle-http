@@ -2,9 +2,16 @@
   "packages": [
     "benchmarks",
     "internal/*",
-    "pkgs/*"
+    "pkgs/*",
+    "examples/*"
   ],
   "version": "0.0.1",
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "ignoreChanges": ["docs", "examples", "benchmarks", "assets", "*.md"],
+      "message": "chore(release): publish"
+    }
+  }
 }

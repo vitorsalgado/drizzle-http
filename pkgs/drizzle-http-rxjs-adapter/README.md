@@ -1,6 +1,6 @@
 # RxJs Call Adapter
 
-![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
+![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 
 [RxJs](https://rxjs-dev.firebaseapp.com/) call adapter implementation for Drizzle-HTTP.
 

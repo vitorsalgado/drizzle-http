@@ -1,6 +1,6 @@
 # Fetch Client for Drizzle-HTTP
 
-![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
+![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 
 Fetch based HTTP client implementation for Drizzle-HTTP.  
 This library contains several decorators to facilitate the definition of some request parameters for Fetch. See list

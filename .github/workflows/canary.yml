@@ -1,4 +1,4 @@
-name: ci
+name: canary-release
 
 on:
   push:
@@ -20,7 +20,7 @@ env:
   CI: true
 
 jobs:
-  build:
+  release-canary:
 
     runs-on: ubuntu-latest
 
@@ -53,18 +53,14 @@ jobs:
       - name: Build
         run: |
           yarn build:packages
-
-      - name: Lint
-        run: |
-          yarn lint
-
-      - name: Test
-        run: |
-          yarn test:ci
-          yarn coverage:upload
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Build Release
-        run: |
           yarn build:release
+
+      - name: Create Release Pull Request
+        uses: changesets/action@master
+        with:
+          publish: yarn release:canary
+          commit: 'chore(release): update packages versions'
+          title: 'Canary Release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

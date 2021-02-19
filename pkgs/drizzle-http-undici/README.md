@@ -1,6 +1,6 @@
 # Undici Client for Drizzle-HTTP
 
-![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
+![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 
 HTTP Call client implementation based on [Undici](https://github.com/nodejs/undici).
 

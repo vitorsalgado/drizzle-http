@@ -4,7 +4,7 @@
 
 # Drizzle HTTP
 
-![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
+![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability) 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)

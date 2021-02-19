@@ -24,11 +24,13 @@ module.exports = {
     '!**/build/**',
     '!**/vendor/**',
     '!**/dist/**',
-    '!**/dist-es5/**'
+    '!**/dist-es5/**',
+    '!scripts/*'
   ],
   modulePathIgnorePatterns: [
-    'examples/.*',
-    'benchmarks/.*',
+    'examples/*',
+    'benchmarks/*',
+    'scripts/*',
     'pkgs/.*/dist',
     'pkgs/.*/dist-es5',
     'pkgs/.*/tsconfig.*',
@@ -43,7 +45,8 @@ module.exports = {
     '/pkgs/.*/dist',
     '/pkgs/.*/dist-es5',
     '/pkgs/drizzle-http-fetch',
-    'internal/clinic/*'
+    'internal/clinic/*',
+    '/scripts/'
   ],
   moduleNameMapper: {
     '@drizzle-http/test-utils(.*)$': '<rootDir>/internal/test-utils/src/$1',
