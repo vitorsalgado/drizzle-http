@@ -7,16 +7,25 @@ The default Logger implementation uses [Pino](https://getpino.io/).
 
 ## Installation
 
+### NPM
+
 ```
 npm i @drizzle-http/core
 npm i @drizzle-http/logging-interceptor
+```
+
+### Yarn
+
+```
+yarn add @drizzle-http/core
+yarn add @drizzle-http/logging-interceptor
 ```
 
 ## Usage
 
 ### Default Implementation
 
-```
+```typescript
 const api = Drizzle.builder()
   .baseUrl(address)
   .callFactory(UndiciCallFactory.DEFAULT)
@@ -27,12 +36,12 @@ const api = Drizzle.builder()
 
 ### Customize
 
-```
+```typescript
 const interceptor = new LoggingInterceptor(fake, Level.BODY)
 interceptor.redactHeader('x-super-secret-header')
 interceptor.redactHeaders(['x-other-secret-header', 'x-one-more-secret-header'])
-    
-const api = Drizzle.builder()
+
+const api = DrizzleBuilder.newBuilder()
   .baseUrl(address)
   .callFactory(UndiciCallFactory.DEFAULT)
   .addInterceptor(interceptor)
@@ -45,10 +54,10 @@ const api = Drizzle.builder()
 You can change the level using the following values: `NONE, BASIC, HEADERS, BODY`.  
 To customize the default Pino implementation, provide a custom instance of **PinoLogger**. E.g.:
 
-```
-const customPinoLogger = new PinoLogger({ // pino.LoggerOptions })
+```typescript
+const customPinoLogger = new PinoLogger({ /* pino.LoggerOptions */ })
 
-const api = Drizzle.builder()
+const api = DrizzleBuilder.newBuilder()
   .baseUrl(address)
   .callFactory(UndiciCallFactory.DEFAULT)
   .addInterceptor(new LoggingInterceptor(customPinoLogger))
@@ -58,6 +67,6 @@ const api = Drizzle.builder()
 
 To avoid logging sensitive information on Headers, use:
 
-```
+```typescript
 loggingInterceptor.redactHeader('secret-header')
 ```

@@ -1,5 +1,4 @@
 import { NoParametersRequestBuilder, RequestFactory } from './request.factory'
-import { Drizzle } from './drizzle'
 import { ApiInstanceMeta } from './drizzle.meta'
 import { Readable } from 'stream'
 import {
@@ -13,11 +12,10 @@ import {
 import { pathParameterRegex } from './internal'
 import { MediaTypes } from './http.media.types'
 import EventEmitter from 'events'
+import { DrizzleBuilder } from './drizzle.builder'
 
 describe('Request Factory', () => {
-  const drizzle = Drizzle.builder()
-    .useDefaults()
-    .build()
+  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
 
   it('should init with default values', () => {
     const requestFactory = new RequestFactory()
@@ -331,7 +329,7 @@ describe('Request Factory', () => {
       expect(requestFactory.defaultHeaders.toObject()).toStrictEqual({
         'x-id': '100',
         'x-trace-id': '200',
-        'user-agent': 'Drizzle-Http/0.0.1'
+        'user-agent': 'Drizzle-Http'
       })
     })
 

@@ -41,12 +41,6 @@ export class Drizzle {
     this.shutdownHooks = []
   }
 
-  static Builder = DrizzleBuilder
-
-  static builder(): DrizzleBuilder {
-    return new DrizzleBuilder()
-  }
-
   /**
    * Get all registered {@link Interceptor} instances
    * @returns All registered {@link Interceptor} instances

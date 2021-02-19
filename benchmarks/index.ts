@@ -5,7 +5,19 @@ import Benchmark from 'benchmark'
 import Axios from 'axios'
 import NodeFetch from 'node-fetch'
 import fetch from 'undici-fetch'
-import { Body, ContentType, Drizzle, GET, Headers, Param, POST, Query, Response, theTypes } from '@drizzle-http/core'
+import {
+  Body,
+  ContentType,
+  DrizzleBuilder,
+  GET,
+  Headers,
+  MediaTypes,
+  Param,
+  POST,
+  Query,
+  Response,
+  theTypes
+} from '@drizzle-http/core'
 import { Streaming, StreamTo, StreamToResult, UndiciCallFactory } from '@drizzle-http/undici'
 
 const suite = new Benchmark.Suite()
@@ -13,14 +25,14 @@ const suite = new Benchmark.Suite()
 const connections = parseInt(process.env.CONNECTIONS ?? '', 10) || 50
 const parallelRequests = parseInt(process.env.PARALLEL ?? '', 10) || 10
 const pipelining = parseInt(process.env.PIPELINING ?? '', 10) || 10
-const dest: any = {}
+const target: any = {}
 
 if (process.env.PORT) {
-  dest.port = process.env.PORT
-  dest.url = `http://localhost:${process.env.PORT}/`
+  target.port = process.env.PORT
+  target.url = `http://localhost:${process.env.PORT}/`
 } else {
-  dest.port = '3000'
-  dest.url = 'http://localhost:3000/'
+  target.port = '3000'
+  target.url = 'http://localhost:3000/'
 }
 
 const httpAgent = new http.Agent({ keepAlive: true, maxSockets: connections })
@@ -34,7 +46,7 @@ const httpOptions = {
   path: '/',
   agent: httpAgent,
   port: '3000',
-  url: dest.url
+  url: target.url
 }
 
 const undiciOptions = {
@@ -45,36 +57,30 @@ const undiciOptions = {
   bodyTimeout: 0
 }
 
-const options = { pipelining, connections, ...dest }
-const pool = new Pool(dest.url, options)
+const options = { pipelining, connections, ...target }
+const pool = new Pool(target.url, options)
 
-interface Result {
-  status: string
-}
-
+@ContentType(MediaTypes.APPLICATION_JSON_UTF8)
 class API {
   @GET('/')
-  @ContentType('application/json')
   getArgLess(): Promise<Response> {
     return theTypes(Promise, Response)
   }
 
   @POST('/{id}')
-  @ContentType('application/json')
   post(@Param('id') _id: string, @Query('filter') _filter: string, @Body() _data: any): Promise<Response> {
     return theTypes(Promise, Response)
   }
 
   @GET('/')
-  @ContentType('application/json')
   @Streaming()
   streaming(@StreamTo() target: Writable): Promise<StreamToResult> {
     return theTypes(Promise)
   }
 }
 
-const drizzle = Drizzle.builder()
-  .baseUrl(dest.url)
+const drizzle = DrizzleBuilder.newBuilder()
+  .baseUrl(target.url)
   .useDefaults()
   .callFactory(new UndiciCallFactory(options))
   .build()
@@ -105,20 +111,20 @@ suite
     }
   })
 
-  // .add('drizzle-http - stream', {
-  //   defer: true,
-  //   fn: (deferred: any) => {
-  //     Promise.all(Array.from(Array(parallelRequests)).map(() =>
-  //       api
-  //         .streaming(
-  //           new Writable({
-  //             write(_chunk, _encoding, callback) {
-  //               callback()
-  //             }
-  //           }))
-  //     )).then(() => deferred.resolve())
-  //   }
-  // })
+  .add('drizzle-http - stream', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(Array.from(Array(parallelRequests)).map(() =>
+        api
+          .streaming(
+            new Writable({
+              write(_chunk, _encoding, callback) {
+                callback()
+              }
+            }))
+      )).then(() => deferred.resolve())
+    }
+  })
 
   .add('undici - pool - request', {
     defer: true,
@@ -172,19 +178,19 @@ suite
     }
   })
 
-  // .add('undici - stream', {
-  //   defer: true,
-  //   fn: (deferred: any) => {
-  //     Promise.all(Array.from(Array(parallelRequests)).map(() =>
-  //       pool.stream(undiciOptions, () =>
-  //         new Writable({
-  //           write(_chunk, _encoding, callback) {
-  //             callback()
-  //           }
-  //         }))
-  //     )).then(() => deferred.resolve())
-  //   }
-  // })
+  .add('undici - stream', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(Array.from(Array(parallelRequests)).map(() =>
+        pool.stream(undiciOptions, () =>
+          new Writable({
+            write(_chunk, _encoding, callback) {
+              callback()
+            }
+          }))
+      )).then(() => deferred.resolve())
+    }
+  })
 
   .add('http', {
     defer: true,
@@ -211,7 +217,11 @@ suite
     defer: true,
     fn: (deferred: any) => {
       Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        Axios.post(dest.url, { headers: { 'Content-Type': 'application/json' }, data, httpAgent: axiosAgent })
+        Axios.post(target.url, {
+          headers: { 'Content-Type': 'application/json' },
+          data,
+          httpAgent: axiosAgent
+        })
       )).then(() => deferred.resolve())
     }
   })
@@ -220,7 +230,7 @@ suite
     defer: true,
     fn: (deferred: any) => {
       Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        fetch(dest.url,
+        fetch(target.url,
           {
             method: 'post',
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -235,7 +245,7 @@ suite
     defer: true,
     fn: (deferred: any) => {
       Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        NodeFetch(dest.url,
+        NodeFetch(target.url,
           {
             method: 'post',
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -262,4 +272,4 @@ suite
     console.log('Slowest is: ' + self.filter('slowest').map('name'))
   })
 
-  .run()
+  .run({ async: true })

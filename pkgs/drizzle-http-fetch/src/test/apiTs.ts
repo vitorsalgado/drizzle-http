@@ -1,4 +1,4 @@
-import { ContentType, Drizzle, GET, Response, theTypes } from '@drizzle-http/core'
+import { ContentType, DrizzleBuilder, GET, Response, theTypes } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '../'
 
 class ApiTs {
@@ -11,7 +11,7 @@ class ApiTs {
   }
 }
 
-Drizzle.builder()
+DrizzleBuilder.newBuilder()
   .baseUrl('http://localhost:3001/')
   .callFactory(FetchCallFactory.DEFAULT)
   .build()

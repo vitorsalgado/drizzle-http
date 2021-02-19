@@ -1,11 +1,17 @@
 const Path = require('path')
+const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 
 module.exports = {
+  mode: 'production',
+  bail: true,
   entry: {
     ts: './src/test/apiTs.ts',
     js: './src/test/apiJs.js'
   },
   devtool: 'inline-source-map',
+  plugins: [
+    new CleanPlugin()
+  ],
   module: {
     rules: [
       {
@@ -23,7 +29,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.json'],
 
     fallback: {
       querystring: require.resolve('querystring-es3'),
@@ -31,6 +37,9 @@ module.exports = {
       buffer: require.resolve('bops'),
       url: require.resolve('url/')
     }
+  },
+  performance: {
+    hints: 'warning'
   },
   output: {
     filename: '[name].js',

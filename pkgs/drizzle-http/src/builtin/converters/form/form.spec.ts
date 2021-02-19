@@ -2,12 +2,12 @@ import MediaTypes from '../../../http.media.types'
 import { FormRequestConverter, FormRequestConverterFactory } from './index'
 import { RequestFactory } from '../../../request.factory'
 import { BodyParameter } from '../../../request.parameters'
-import { Drizzle } from '../../../drizzle'
 import CommonHeaders from '../../../http.common.headers'
+import { DrizzleBuilder } from '../../../drizzle.builder'
 
 describe('Form Converter', function () {
   it(`should return form request converter when content type contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8}`, function () {
-    const drizzle = Drizzle.builder().build()
+    const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
 
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
@@ -24,7 +24,7 @@ describe('Form Converter', function () {
   })
 
   it(`should return null when content type does not contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8}`, function () {
-    const drizzle = Drizzle.builder().build()
+    const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com').build()
 
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'

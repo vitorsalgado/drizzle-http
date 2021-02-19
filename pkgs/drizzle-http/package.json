@@ -4,24 +4,38 @@
   "description": "Drizzle-Http core module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
-  },
+  "module": "./dist/es5/index.js",
   "scripts": {
-    "preinstall": "tsc --build --force",
-    "build": "tsc --build --force"
+    "build": "tsc --project tsconfig.json && tsc --project tsconfig.es5.json",
+    "postinstall": "yarn build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
+    "directory": "pkgs/drizzle-http"
+  },
+  "keywords": [
+    "drizzle-http",
+    "undici",
+    "http",
+    "api"
+  ],
   "dependencies": {
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "0.0.1",
-    "undici": "^3.3.1"
+    "@types/node": "^14.14.29",
+    "typescript": "^4.1.5",
+    "undici": "^3.3.3"
   }
 }

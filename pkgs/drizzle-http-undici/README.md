@@ -6,9 +6,18 @@ HTTP Call client implementation based on [Undici](https://github.com/nodejs/undi
 
 ## Installation
 
+### NPM
+
 ```
 npm i @drizzle-http/core
 npm i @drizzle-http/undici
+```
+
+### Yarn
+
+```
+yarn add @drizzle-http/core
+yarn add @drizzle-http/undici
 ```
 
 ## Features
@@ -22,7 +31,7 @@ npm i @drizzle-http/undici
 ### Basic setup
 
 ```typescript
-const api: API = Drizzle.builder()
+const api: API = DrizzleBuilder.newBuilder()
   .baseUrl(addr)
   .callFactory(UndiciCallFactory.DEFAULT)
   .build()

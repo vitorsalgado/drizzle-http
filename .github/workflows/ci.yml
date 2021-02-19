@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Use Node
         uses: actions/setup-node@v2
@@ -38,7 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn build
+          yarn build:packages
 
       - name: Lint
         run: |
@@ -46,8 +47,11 @@ jobs:
 
       - name: Test
         run: |
-          yarn test:coverage
-          yarn coverage
+          yarn test:ci
+          yarn coverage:upload
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Build Release
+        run: |
+          yarn build:release

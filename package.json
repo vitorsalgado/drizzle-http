@@ -3,13 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "coverage": "codecov -f coverage/*.json",
-    "build": "lerna exec -- yarn build",
+    "test": "jest --detectOpenHandles --logHeapUsage",
+    "test:coverage": "yarn test --coverage",
+    "test:ci": "yarn test --coverage --ci",
+    "coverage:upload": "codecov -f coverage/*.json",
+    "build:packages": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
+    "build:ts": "tsc --project tsconfig.build.json && tsc --project tsconfig.build.es5.json",
+    "build:release": "yarn build:ts && node project.build.js",
     "lint": "eslint --ext .ts .",
-    "clean": "lerna clean",
+    "clean": "lerna clean && lerna exec -- rm -rf dist && lerna exec -- rm -rf dist-es5 && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\""
+  },
+  "engines": {
+    "node": ">=12.4.0"
   },
   "repository": {
     "type": "git",
@@ -43,6 +49,8 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.14.1",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-typescript": "^8.2.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.27",
     "@types/superagent": "^4.1.10",
@@ -56,8 +64,16 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-tsdoc": "^0.2.11",
+    "fs-extra": "^9.1.0",
+    "globby": "^11.0.2",
     "jest": "^26.6.3",
     "lerna": "^3.22.1",
+    "pino": "^6.11.1",
+    "pino-pretty": "^4.5.0",
+    "rollup": "^2.39.0",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-generate-package-json": "^3.2.0",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"

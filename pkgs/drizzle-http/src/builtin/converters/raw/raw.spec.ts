@@ -1,4 +1,3 @@
-import { Drizzle } from '../../../drizzle'
 import { RequestFactory } from '../../../request.factory'
 import CommonHeaders from '../../../http.common.headers'
 import MediaTypes from '../../../http.media.types'
@@ -9,9 +8,10 @@ import {
   RawResponseConverter,
   RawResponseConverterFactory
 } from './index'
+import { DrizzleBuilder } from '../../../drizzle.builder'
 
 describe('Raw Converter', function () {
-  const drizzle = Drizzle.builder().build()
+  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
 
   it('should return raw response converter when generic return type is Response', function () {
     const requestFactory = new RequestFactory()

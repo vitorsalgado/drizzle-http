@@ -172,6 +172,14 @@ export class RequestFactory {
       this.defaultHeaders.merge(drizzle.headers)
     }
 
+    if (!this.path.startsWith('http:') || !this.path.startsWith('https:')) {
+      const url = new URL(drizzle.baseUrl)
+
+      if (/\/.+/.test(url.pathname)) {
+        this.path = url.pathname + this.path
+      }
+    }
+
     this.parameters
       .sort((a, b) => a.index - b.index)
       .forEach((parameter) => {

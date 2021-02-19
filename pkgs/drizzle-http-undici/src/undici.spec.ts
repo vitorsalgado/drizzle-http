@@ -4,11 +4,13 @@ import {
   Cancellation,
   ContentType,
   Drizzle,
+  DrizzleBuilder,
   GET,
   H,
   Header,
   HeaderMap,
   HttpError,
+  MediaTypes,
   P,
   Param,
   Q,
@@ -19,10 +21,11 @@ import {
   Timeout
 } from '@drizzle-http/core'
 import { UndiciCallFactory } from './factory'
-import { closeTestServer, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
+import { closeTestServer, Ok, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { Streaming, StreamTo, StreamToHttpError, StreamToResult } from './stream.call'
 import { Writable } from 'stream'
 import EventEmitter from 'events'
+import { URL } from 'url'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()
@@ -87,6 +90,7 @@ class API {
 
 describe('Undici Call', function () {
   let drizzle: Drizzle
+  let address = ''
   let api: API
 
   beforeAll(async () => {
@@ -94,10 +98,14 @@ describe('Undici Call', function () {
       fastify.get('/long-running', (req, res) => {
         setTimeout(() => res.status(200).send({ ok: true }), 5000)
       })
+      fastify.get('/testing/join/base/path', (req, res) => {
+        res.status(200).send({ ok: true })
+      })
     })
 
     await startTestServer().then((addr: string) => {
-      drizzle = Drizzle.builder()
+      address = addr
+      drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(UndiciCallFactory.DEFAULT)
         .addDefaultHeader('Content-Type', 'application/json')
@@ -136,7 +144,7 @@ describe('Undici Call', function () {
         }
       }
 
-      Drizzle.builder().build().create(FailApi)
+      DrizzleBuilder.newBuilder().build().create(FailApi)
     }).toThrowError()
 
     expect(() => {
@@ -147,7 +155,7 @@ describe('Undici Call', function () {
         }
       }
 
-      Drizzle.builder().build().create(FailApi)
+      DrizzleBuilder.newBuilder().build().create(FailApi)
     }).toThrowError()
   })
 
@@ -240,5 +248,25 @@ describe('Undici Call', function () {
         expect(err).not.toBeNull()
         expect(err.code).toEqual('UND_ERR_ABORTED')
       })
+  })
+
+  it('should join paths', async () => {
+    class TestAPI {
+      @GET('/base/path')
+      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+      exec(): Promise<Ok> {
+        return theTypes(Promise)
+      }
+    }
+
+    const testApi = DrizzleBuilder.newBuilder()
+      .baseUrl(new URL('/testing/join', address).href)
+      .callFactory(UndiciCallFactory.DEFAULT)
+      .build()
+      .create(TestAPI)
+
+    const res = await testApi.exec()
+
+    expect(res.ok).toBeTruthy()
   })
 })

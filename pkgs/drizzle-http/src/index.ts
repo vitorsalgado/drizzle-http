@@ -1,9 +1,6 @@
 export * from './builtin'
-export * as BuiltIns from './builtin'
 export * from './decorators'
 export * from './internal'
-export * as Internals from './internal'
-
 export * from './call.adapter'
 export * from './call'
 export * from './drizzle.api.invoker'

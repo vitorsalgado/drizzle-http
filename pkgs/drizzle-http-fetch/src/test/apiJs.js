@@ -1,4 +1,4 @@
-import { ContentType, Drizzle, GET, Response, theTypes } from '@drizzle-http/core'
+import { ContentType, DrizzleBuilder, GET, Response, theTypes } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '../'
 
 class ApiJs {
@@ -6,12 +6,12 @@ class ApiJs {
   @ContentType('application/json;charset=utf-8')
   @CORS()
   @KeepAlive(true)
-  test () {
+  test() {
     return theTypes(Promise, Response)
   }
 }
 
-Drizzle.builder()
+DrizzleBuilder.newBuilder()
   .baseUrl('http://localhost:3001/')
   .callFactory(FetchCallFactory.DEFAULT)
   .build()

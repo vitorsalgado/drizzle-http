@@ -6,14 +6,23 @@
 
 ## Installation
 
+### NPM
+
 ```
 npm i @drizzle-http/core
 npm i @drizzle-http/rxjs-adapter
 ```
 
-## Usage
+### Yarn
 
 ```
+yarn add @drizzle-http/core
+yarn add @drizzle-http/rxjs-adapter
+```
+
+## Usage
+
+```typescript
 class API {
   @GET('/{id}/projects')
   @RxJs()
@@ -22,7 +31,7 @@ class API {
   }
 }
 
-const api = Drizzle.builder()
+const api = DrizzleBuilder.newBuilder()
   .baseUrl(addr)
   .addCallAdapterFactories(RxJsCallAdapterFactory.DEFAULT)
   .build()

@@ -25,8 +25,12 @@ import {
 } from './request.parameters'
 import { Headers } from './http.headers'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Pkg = require('../package.json')
+/**
+ * Shortcut function to create new {@link DrizzleBuilder} instance
+ */
+export function initDrizzleHttp(): DrizzleBuilder {
+  return DrizzleBuilder.newBuilder()
+}
 
 /**
  * Builds {@link Drizzle} instance
@@ -54,6 +58,10 @@ export class DrizzleBuilder {
     this._responseConverterFactories = []
     this._enableDrizzleUserAgent = true
     this._useDefaults = true
+  }
+
+  static newBuilder(): DrizzleBuilder {
+    return new DrizzleBuilder()
   }
 
   /**
@@ -259,7 +267,7 @@ export class DrizzleBuilder {
     }
 
     if (this._enableDrizzleUserAgent) {
-      this.addDefaultHeader('user-agent', `Drizzle-Http/${Pkg.version}`)
+      this.addDefaultHeader('user-agent', 'Drizzle-Http')
     }
 
     return new Drizzle(

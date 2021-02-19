@@ -5,6 +5,7 @@ import { Drizzle } from '../../../drizzle'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { TestCallFactory } from '../../../internal/http/test'
 import { HttpError } from '../../../response'
+import { DrizzleBuilder } from '../../../drizzle.builder'
 
 class API {
   @GET('/{id}/projects')
@@ -27,7 +28,7 @@ describe('Callback Call Adapter - @Callback decorated', function () {
 
   beforeAll(() =>
     startTestServer().then((addr: string) => {
-      drizzle = Drizzle.builder()
+      drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .useDefaults()
         .callFactory(TestCallFactory.INSTANCE)

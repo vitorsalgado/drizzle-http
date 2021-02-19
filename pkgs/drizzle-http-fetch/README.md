@@ -10,16 +10,25 @@ By default, responses with error status code will be returned on `then()`.
 
 ## Installation
 
+### NPM
+
 ```
 npm i @drizzle-http/core
 npm i @drizzle-http/fetch
+```
+
+### Yarn
+
+```
+yarn add @drizzle-http/core
+yarn add @drizzle-http/fetch
 ```
 
 ## Usage
 
 ### Typescript
 
-```
+```typescript
 class ApiTs {
   @GET('/')
   @ContentType('application/json;charset=utf-8')
@@ -30,7 +39,7 @@ class ApiTs {
   }
 }
 
-const apiTs: ApiTs = Drizzle.builder()
+const apiTs: ApiTs = DrizzleBuilder.newBuilder()
   .baseUrl('http://localhost:3001/')
   .callFactory(FetchCallFactory.DEFAULT)
   .build()
@@ -39,23 +48,39 @@ const apiTs: ApiTs = Drizzle.builder()
 
 ## Javascript
 
-```
+```javascript
 class ApiJs {
   @GET('/')
   @ContentType('application/json;charset=utf-8')
   @CORS()
-  @KeepAlive(true)
-  test () {
+  @KeepAlive(true) test() {
     return theTypes(Promise, Response)
   }
-  
-const apiJs = Drizzle.builder()
-  .baseUrl('http://localhost:3001/')
-  .callFactory(FetchCallFactory.DEFAULT)
-  .build()
-  .create(ApiJs)
+
+  const
+  apiJs = DrizzleBuilder.newBuilder()
+    .baseUrl('http://localhost:3001/')
+    .callFactory(FetchCallFactory.DEFAULT)
+    .build()
+    .create(ApiJs)
 }
 
+```
+
+### Minimum Babel Setup
+
+```
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "@babel/transform-runtime",
+    "@babel/plugin-proposal-nullish-coalescing-operator",
+    "@babel/plugin-proposal-optional-chaining",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "babel-plugin-parameter-decorator",
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
+}
 ```
 
 ## Additional Decorators
@@ -74,3 +99,4 @@ const apiJs = Drizzle.builder()
 | @ReferrerPolicy()         | Configure RequestInit.referrerPolicy      | Method |
 | @KeepAlive()         | Configure RequestInit.keepAlive      | Method |
 | @Integrity()         | Configure RequestInit.integrity      | Method |
+

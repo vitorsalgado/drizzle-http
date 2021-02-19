@@ -5,8 +5,8 @@
 # Drizzle HTTP
 
 ![CI](https://github.com/vitorsalgado/drizzle-http/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http) 
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)  
+[![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 
 > Decorator based HTTP client fully written in **Typescript**.  
 > Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).
@@ -48,7 +48,8 @@ See all [available packages](pkgs/README.md) in this monorepo.
 ## Installation
 
 Drizzle-HTTP is divided in different packages. The main package `@drizzle-http/core` just contain the core components.
-You need to install additional packages to make Drizzle-HTTP work.  
+You need to install additional packages to make Drizzle-HTTP work. E.g.:  
+Install both `@drizzle-http/core` and `@drizzle-http/undic` to have a basic setup for a backend app.  
 To make things easier, there are two packages that contains defaults for **Node.js** and **Browser** usage.  
 See below:
 
@@ -56,17 +57,21 @@ See below:
 Node.js
 
 npm i @drizzle-http/nodejs
+or
+yarn add @drizzle-http/nodejs
 ```
 
-More details: [here](pkgs/drizzle-http-nodejs-imports)
+More details: [here](pkgs/drizzle-http-nodejs)
 
 ```
 Browser
 
 npm i @drizzle-http/browser
+or
+yarn add @drizzle-http/browser
 ```
 
-More details: [here](pkgs/drizzle-http-browser-imports)
+More details: [here](pkgs/drizzle-http-browser)
 
 ## Getting Started
 
@@ -80,7 +85,7 @@ Usage typically looks like the example below:
 
 ```typescript
 import {
-  Drizzle,
+  DrizzleBuilder,
   AsJson,
   HttpError,
   Response,
@@ -130,7 +135,7 @@ class API {
   }
 }
 
-const api: API = Drizzle.builder()
+const api: API = DrizzleBuilder.newBuilder()
   .baseUrl('http://some.nice.addr/')
   .callFactory(UndiciCallFactory.DEFAULT)
   .addInterceptor(new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY))

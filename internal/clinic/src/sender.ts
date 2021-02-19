@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http'
-import { Body, Drizzle, HeaderMap, MediaTypes, Param, POST, Query, Response, theTypes } from '@drizzle-http/core'
+import { Body, DrizzleBuilder, HeaderMap, MediaTypes, Param, POST, Query, Response, theTypes } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 
 const port = process.env.SENDER_PORT || 3000
@@ -12,7 +12,7 @@ class API {
   }
 }
 
-const api: API = Drizzle.builder()
+const api: API = DrizzleBuilder.newBuilder()
   .baseUrl(`http://localhost:${process.env.RECEIVER_PORT || 3001}`)
   .callFactory(new UndiciCallFactory())
   .build()
@@ -20,7 +20,10 @@ const api: API = Drizzle.builder()
 
 createServer(
   (_req: IncomingMessage, res: ServerResponse) => {
-    api.test('100', 'active', { name: 'test', description: 'test-description' })
+    api.test('100', 'active', {
+      name: 'test',
+      description: 'test-description'
+    })
       .then(response => response.json())
       .then(json => {
         res.writeHead(200, 'OK', { 'Content-Type': 'application/json; charset=utf-8' })

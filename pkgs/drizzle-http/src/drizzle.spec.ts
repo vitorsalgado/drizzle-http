@@ -1,6 +1,7 @@
 import {
   Body,
   Drizzle,
+  DrizzleBuilder,
   GET,
   H,
   Header,
@@ -60,7 +61,7 @@ describe('Drizzle', () => {
 
   beforeAll(() =>
     startTestServer().then((addr: string) => {
-      drizzle = Drizzle.builder()
+      drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .useDefaults()
         .callFactory(TestCallFactory.INSTANCE)
@@ -112,7 +113,7 @@ describe('Drizzle', () => {
         expect(response.status).toEqual(200)
 
         return response.json<TestResult<TestId>>()
-          .then(parsed => {
+          .then((parsed) => {
             expect(parsed.result.id).toEqual(id)
             expect(parsed.params.id).toEqual(id)
             expect(parsed.query).toHaveProperty('sort', orderBy)

@@ -1,6 +1,10 @@
-export class Headers extends Map<string, string> {
+const sHeaders = Symbol('headers')
+
+export class Headers {
+  private readonly [sHeaders]: Map<string, string>
+
   constructor(init: [string, string] | Record<string, string> | string[][] | null) {
-    super()
+    this[sHeaders] = new Map<string, string>()
     this.initialize(init)
   }
 
@@ -20,26 +24,79 @@ export class Headers extends Map<string, string> {
       throw new TypeError('Header name must not be null or empty.')
     }
 
-    return super.set(Headers.normalizeHeaderName(name), value)
+    this[sHeaders].set(Headers.normalizeHeaderName(name), value)
+
+    return this
   }
 
   get(key: string): string | undefined {
-    return super.get(Headers.normalizeHeaderName(key))
+    return this[sHeaders].get(Headers.normalizeHeaderName(key))
   }
 
   delete(key: string): boolean {
-    return super.delete(Headers.normalizeHeaderName(key))
+    return this[sHeaders].delete(Headers.normalizeHeaderName(key))
   }
 
   has(key: string): boolean {
-    return super.has(Headers.normalizeHeaderName(key))
+    return this[sHeaders].has(Headers.normalizeHeaderName(key))
+  }
+
+  keys(): IterableIterator<string> {
+    return this[sHeaders].keys()
+  }
+
+  values(): IterableIterator<string> {
+    return this[sHeaders].values()
+  }
+
+  entries(): IterableIterator<[string, string]> {
+    return this[sHeaders].entries()
   }
 
   forEach(callback: (value: string, key: string, map: Map<string, string>) => void, thisArg?: any): void {
-    for (const [key, value] of this) {
-      callback.call(thisArg, value, key, this)
+    for (const [key, value] of this[sHeaders]) {
+      callback.call(thisArg, value, key, this[sHeaders])
     }
   }
+
+  get size(): number {
+    return this[sHeaders].size
+  }
+
+  [Symbol.iterator](): IterableIterator<[string, string]> {
+    return this[sHeaders][Symbol.iterator]()
+  }
+
+  // region Utils
+
+  toObject(): Record<string, string> {
+    return Array
+      .from(this[sHeaders])
+      .reduce((obj, [key, value]) =>
+        (Object.assign(obj, { [key]: value })), {})
+  }
+
+  merge(headers: Headers): void {
+    for (const [name, value] of headers) {
+      if (!this.has(name)) {
+        this.set(name, value)
+      }
+    }
+  }
+
+  mergeObject(obj: Record<string, string>): void {
+    for (const [k, v] of Object.entries(obj)) {
+      if (!this.has(k)) {
+        this.set(k, v)
+      }
+    }
+  }
+
+  isEmpty(): boolean {
+    return this[sHeaders].size === 0
+  }
+
+  // endregion
 
   private static normalizeHeaderName(name: string): string {
     return name.toLowerCase()
@@ -64,32 +121,4 @@ export class Headers extends Map<string, string> {
       }
     }
   }
-
-  // region Utils
-
-  toObject(): Record<string, string> {
-    return Object.fromEntries(this)
-  }
-
-  merge(headers: Headers): void {
-    for (const [name, value] of headers) {
-      if (!this.has(name)) {
-        this.set(name, value)
-      }
-    }
-  }
-
-  mergeObject(obj: Record<string, string>): void {
-    for (const [k, v] of Object.entries(obj)) {
-      if (!this.has(k)) {
-        this.set(k, v)
-      }
-    }
-  }
-
-  isEmpty(): boolean {
-    return this.size === 0
-  }
-
-  // endregion
 }

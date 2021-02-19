@@ -5,13 +5,9 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
-  },
   "scripts": {
-    "preinstall": "tsc --build --force",
-    "build": "tsc --build --force",
+    "build": "tsc --build",
+    "postinstall": "yarn build",
     "run:receiver": "node dist/receiver.js",
     "run:doctor": "clinic doctor -- node dist/sender.js",
     "run:flame": "clinic flame -- node dist/sender.js",
@@ -27,5 +23,8 @@
     "@drizzle-http/undici": "0.0.1",
     "autocannon": "^7.0.3",
     "clinic": "^8.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.5"
   }
 }

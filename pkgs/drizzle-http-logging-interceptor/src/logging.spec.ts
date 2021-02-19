@@ -1,5 +1,5 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
-import { Body, Drizzle, GET, HeaderMap, Param, POST, Response, theTypes } from '@drizzle-http/core'
+import { Body, DrizzleBuilder, GET, HeaderMap, Param, POST, Response, theTypes } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Level, Logger, LoggingInterceptor, PinoLogger } from './index'
 
@@ -29,7 +29,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const api = Drizzle.builder()
+    const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(UndiciCallFactory.DEFAULT)
       .addInterceptor(LoggingInterceptor.DEFAULT)
@@ -48,7 +48,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const api = Drizzle.builder()
+    const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(UndiciCallFactory.DEFAULT)
       .addInterceptor(new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY))
@@ -69,7 +69,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const api = Drizzle.builder()
+    const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(UndiciCallFactory.DEFAULT)
       .addInterceptor(new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY))
@@ -120,7 +120,7 @@ describe('Logging Interceptor', function () {
     const interceptor = new LoggingInterceptor(fake, Level.BODY)
     interceptor.redactHeader('x-super-secret-header')
 
-    const api = Drizzle.builder()
+    const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(UndiciCallFactory.DEFAULT)
       .addInterceptor(interceptor)

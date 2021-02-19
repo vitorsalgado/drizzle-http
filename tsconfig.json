@@ -1,12 +1,19 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "lib": ["ES2020", "esnext.asynciterable"],
+    "outDir": "dist",
+    "baseUrl": ".",
+
+    "lib": ["esnext"],
     "module": "CommonJS",
-    "target": "ES2020",
-    "declaration": true,
+    "target": "ES2019",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "importHelpers": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -17,20 +24,22 @@
     "noImplicitReturns": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "composite": true
+    "composite": true,
+    "skipLibCheck": true,
+
+    "paths": {
+      "@drizzle-http/*": ["pkgs/*/src/index.ts"]
+    }
   },
+  "include": ["pkgs"],
   "exclude": [
+    "**/node_modules",
+    "**/dist",
     ".changeset",
     ".github",
     ".yarn",
-    "assets",
-    "*.spec.ts",
-    "**/node_modules",
-    "**/dist"
+    "assets"
   ]
 }

@@ -1,4 +1,4 @@
-import { AsJson, Drizzle, GET, HttpError, Param, theTypes } from '@drizzle-http/core'
+import { AsJson, DrizzleBuilder, GET, HttpError, Param, theTypes } from '@drizzle-http/core'
 import { Observable } from 'rxjs'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { RxJs, RxJsCallAdapterFactory } from './index'
@@ -25,7 +25,7 @@ describe('RxJs Call Adapter', () => {
 
   beforeAll(() =>
     startTestServer().then((addr: string) => {
-      api = Drizzle.builder()
+      api = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(UndiciCallFactory.DEFAULT)
         .addCallAdapterFactories(RxJsCallAdapterFactory.INSTANCE)

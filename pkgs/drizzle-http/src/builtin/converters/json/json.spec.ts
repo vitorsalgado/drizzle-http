@@ -1,7 +1,6 @@
 import MediaTypes from '../../../http.media.types'
 import { RequestFactory } from '../../../request.factory'
 import { BodyParameter } from '../../../request.parameters'
-import { Drizzle } from '../../../drizzle'
 import CommonHeaders from '../../../http.common.headers'
 import {
   JsonRequestConverter,
@@ -9,9 +8,10 @@ import {
   JsonResponseConverter,
   JsonResponseConverterFactory
 } from './index'
+import { DrizzleBuilder } from '../../../drizzle.builder'
 
 describe('JSON Converter', function () {
-  const drizzle = Drizzle.builder().build()
+  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
 
   it(`should return form request converter when content contains ${MediaTypes.APPLICATION_JSON}`, function () {
     const requestFactory = new RequestFactory()

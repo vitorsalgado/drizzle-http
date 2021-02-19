@@ -24,7 +24,7 @@ export class UndiciCallFactory extends CallFactory {
   }
 
   setup(drizzle: Drizzle): void {
-    this._pool = new Pool(new URL(drizzle.baseUrl), this._options)
+    this._pool = new Pool(new URL(drizzle.baseUrl).origin, this._options)
 
     drizzle.registerShutdownHook(async () => {
       if (this._pool !== null) {
