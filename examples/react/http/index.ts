@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict'
-
 /* eslint-disable */
 
 import { DrizzleBuilder, GET, Query, theTypes } from '@drizzle-http/core'
