@@ -1,5 +1,5 @@
 <p style="text-align: center" align="center">
-  <a href="https://github.com/vitorsalgado/drizzle-http" target="_blank"><img src="assets/drizzle.png" width="150px" alt="Drizzle HTTP Logo" /></a>
+  <a href="https://github.com/vitorsalgado/drizzle-http" target="_blank"><img src="docs/assets/drizzle.png" width="150px" alt="Drizzle HTTP Logo" /></a>
 </p>
 
 # Drizzle HTTP
