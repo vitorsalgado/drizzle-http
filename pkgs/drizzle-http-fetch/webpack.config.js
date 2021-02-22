@@ -41,6 +41,7 @@ module.exports = {
   performance: {
     hints: 'warning'
   },
+  stats: 'errors-only',
   output: {
     filename: '[name].js',
     path: Path.resolve(__dirname, 'src', 'test', 'dist')

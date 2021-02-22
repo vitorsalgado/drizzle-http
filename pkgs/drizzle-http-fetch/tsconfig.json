@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "target": "es5",
     "outDir": "dist",
@@ -12,6 +11,6 @@
     { "path": "../drizzle-http", "prepend": false },
     { "path": "../../internal/test-utils", "prepend": false }
   ],
-  "include": ["src/**/*", "node_modules/@types/puppeteer/index.d.ts"],
-  "exclude": ["node_modules", "dist", "dist-es5", "**/*.spec.ts"]
+  "include": ["src", "node_modules/@types/puppeteer/index.d.ts"],
+  "exclude": ["node_modules", "dist", "dist-es5", "**/*.spec.ts", "src/test", "src/test/apiTs.ts"]
 }

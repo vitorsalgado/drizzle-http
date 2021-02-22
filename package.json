@@ -8,11 +8,11 @@
     "test:ci": "yarn test --coverage --ci",
     "coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts .",
-    "build:packages": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
+    "build": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
     "build:ts": "tsc --project tsconfig.build.json && tsc --project tsconfig.build.es5.json",
     "build:release": "yarn build:ts && node project.build.js",
-    "release:canary": "(node scripts/canary.js && yarn changeset publish --tag alpha) || echo Skipping Canary...",
     "clean": "lerna clean && lerna exec -- rm -rf dist && lerna exec -- rm -rf dist-es5 && lerna exec -- rm -rf tsconfig.tsbuildinfo",
+    "clean:dist": "lerna exec -- rm -rf dist && lerna exec -- rm -rf dist-es5 && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\""
   },
   "engines": {
@@ -45,8 +45,7 @@
     "undici",
     "node",
     "typescript",
-    "decorator",
-    "rxjs"
+    "decorator"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.14.1",

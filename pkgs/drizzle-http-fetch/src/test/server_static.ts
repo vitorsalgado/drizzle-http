@@ -1,5 +1,3 @@
-'use strict'
-
 import { createServer } from 'http'
 import Fs from 'fs'
 import { Socket } from 'net'

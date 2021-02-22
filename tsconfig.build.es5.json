@@ -1,14 +1,9 @@
 {
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "outDir": "dist-es5",
+    "outDir": "dist-build/es5",
     "target": "es5",
     "downlevelIteration": true,
     "strictNullChecks": false
-  },
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.spec.js",
-    "*.spec.ts"
-  ]
+  }
 }

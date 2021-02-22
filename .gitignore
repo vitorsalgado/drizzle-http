@@ -119,5 +119,5 @@ typings/
 package-lock.json
 
 # Dist
+dist-build/
 dist/
-dist-es5/

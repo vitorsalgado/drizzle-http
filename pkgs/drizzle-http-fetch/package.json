@@ -2,18 +2,16 @@
   "name": "@drizzle-http/fetch",
   "version": "0.0.1",
   "description": "Browser Fetch HTTP client for Drizzle-HTTP",
-  "main": "./dist/index.js",
+  "browser": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "module": "./dist/es5/index.js",
   "scripts": {
     "pretest": "yarn build",
-    "build": "tsc --build && webpack --config webpack.config.js",
+    "build": "tsc --build && webpack --config webpack.config.js && rm -rf ./dist/test",
     "postinstall": "yarn build",
     "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\""
   },
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"
   },
   "author": {
     "name": "Vitor Hugo Salgado",

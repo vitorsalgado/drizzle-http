@@ -2,13 +2,14 @@
 
 module.exports = {
   ignorePackages: [],
+  dist: 'dist',
   distributions: [
     {
-      from: 'dist',
+      from: 'dist-build/main',
       to: ''
     },
     {
-      from: 'dist-es5',
+      from: 'dist-build/es5',
       to: '/es5'
     }
   ]

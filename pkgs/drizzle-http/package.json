@@ -10,8 +10,7 @@
     "postinstall": "yarn build"
   },
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"
   },
   "author": {
     "name": "Vitor Hugo Salgado",

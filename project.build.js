@@ -43,6 +43,7 @@ async function run() {
     }
 
     const pkgPath = pkgRef.replace('/package.json', '')
+    const destination = Config.dist
 
     for (const { from, to } of Config.distributions) {
       Logger.info('Cleaning: ' + Path.join(pkgPath, from).toString())
@@ -51,7 +52,7 @@ async function run() {
       const pkgDist = pkgPath.replace('/pkgs/', `/${from}/pkgs/`)
       const pkgSrc = Path.resolve(pkgDist, 'src')
       const pkgEntry = Path.resolve(pkgSrc, 'index.js')
-      const pkgDest = Path.join(pkgPath, 'dist', to)
+      const pkgDest = Path.join(destination, pkg.name, to)
 
       Logger.info(`From: ${from} -- To: ${to}`)
       Logger.info('Dist: ' + pkgDist)
@@ -71,13 +72,14 @@ async function run() {
             builtins: true
           }),
           GeneratePackageJson({
-            baseContents: rewritePkg(pkg),
+            baseContents: rewritePkg(pkg, { from }),
             additionalDependencies: Object.keys(pkg.dependencies || {}),
             outputFolder: pkgDest
           }),
           Copy({
             targets: [
               { src: Path.resolve(pkgPath, 'README.md'), dest: pkgDest },
+              { src: Path.resolve(pkgPath, 'CHANGELOG.md'), dest: pkgDest },
               { src: 'LICENSE', dest: pkgDest, rename: 'LICENSE.txt' }
             ]
           })
@@ -116,7 +118,7 @@ async function run() {
   Logger.info('FINISHED: Build Release')
 }
 
-const rewritePkg = pkg => {
+const rewritePkg = (pkg, opts) => {
   const newPkg = {}
   const fieldsToKeep = [
     'name',
@@ -131,7 +133,8 @@ const rewritePkg = pkg => {
     'keywords',
     'author',
     'license',
-    'engines'
+    'engines',
+    'browser'
   ]
 
   fieldsToKeep.forEach(field => {
@@ -143,6 +146,11 @@ const rewritePkg = pkg => {
   newPkg.main = 'index.cjs.js'
   newPkg.module = 'index.esm.js'
   newPkg.typings = 'index.d.ts'
+
+  if (typeof pkg.browser !== 'undefined') {
+    newPkg.browser = 'index.esm.js'
+  }
+
   newPkg.license = PackageMain.license
 
   if (pkg.bin) {

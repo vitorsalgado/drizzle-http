@@ -28,6 +28,8 @@ module.exports = {
     '!scripts/*'
   ],
   modulePathIgnorePatterns: [
+    'dist',
+    'dist-*',
     'examples/*',
     'benchmarks/*',
     'scripts/*',
