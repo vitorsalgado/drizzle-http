@@ -1,4 +1,12 @@
+.github/
 .yarn/
+
 benchmarks/
+docs/
 dist/
+dist-es5/
+dist-build/
 examples/
+scripts/
+
+*.d.ts
