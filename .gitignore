@@ -120,4 +120,5 @@ package-lock.json
 
 # Dist
 dist-build/
+dist-es5/
 dist/

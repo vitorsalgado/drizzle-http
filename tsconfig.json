@@ -3,8 +3,8 @@
     "outDir": "dist-build/main",
     "baseUrl": ".",
 
-    "lib": ["esnext"],
-    "module": "CommonJS",
+    "lib": ["esnext", "es6", "dom"],
+    "module": "ESNext",
     "target": "ES2019",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

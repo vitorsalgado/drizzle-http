@@ -7,10 +7,6 @@ module.exports = {
     {
       from: 'dist-build/main',
       to: ''
-    },
-    {
-      from: 'dist-build/es5',
-      to: '/es5'
     }
   ]
 }

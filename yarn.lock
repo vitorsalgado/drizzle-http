@@ -2036,13 +2036,12 @@ __metadata:
   dependencies:
     "@changesets/cli": ^2.14.1
     "@rollup/plugin-node-resolve": ^11.2.0
-    "@rollup/plugin-typescript": ^8.2.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.27
-    "@types/superagent": ^4.1.10
     "@typescript-eslint/eslint-plugin": ^4.15.0
     "@typescript-eslint/parser": ^4.15.0
     codecov: ^3.8.1
+    commander: ^7.1.0
     concurrently: ^5.3.0
     eslint: ^7.20.0
     eslint-config-standard: ^16.0.2
@@ -3813,20 +3812,6 @@ __metadata:
   peerDependencies:
     rollup: ^1.20.0||^2.0.0
   checksum: 173bb5822b8a6fd3a2c09303efd437711062885099dd1a4a6e91b449b99fcf5a4dc43e7d3836edeaca85ef7235547a193a3011314298ecbc529e8b123c371718
-  languageName: node
-  linkType: hard
-
-"@rollup/plugin-typescript@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "@rollup/plugin-typescript@npm:8.2.0"
-  dependencies:
-    "@rollup/pluginutils": ^3.1.0
-    resolve: ^1.17.0
-  peerDependencies:
-    rollup: ^2.14.0
-    tslib: "*"
-    typescript: ">=3.4.0"
-  checksum: 123b975f4f70476c535f20f8b806b52df86471fb812263828648016ea736d8571fc254633206e418367a384f5baa4b5e61677e1975414aa1cbc17ae250c6bd6a
   languageName: node
   linkType: hard
 
@@ -7379,7 +7364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^7.0.0":
+"commander@npm:^7.0.0, commander@npm:^7.1.0":
   version: 7.1.0
   resolution: "commander@npm:7.1.0"
   checksum: 2b6dacb11f17cd9b702ae18b586b060327590dd57e2702edefbff701ec7c63b55338e70544210893bad280fc9579ffb839dd8ae0a6bc652fceffe3f9ad1c2c44
