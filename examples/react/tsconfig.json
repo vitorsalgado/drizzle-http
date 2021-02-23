@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
+    "module": "CommonJS",
     "rootDir": "./http",
     "outDir": "./http",
     "sourceMap": false

@@ -20,7 +20,7 @@ function App() {
       <ol>
         {
           parties.map(party =>
-            <li>
+            <li key={party.id}>
               {party.sigla}: {party.nome}
             </li>
           )
