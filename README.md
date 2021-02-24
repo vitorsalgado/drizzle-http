@@ -1,12 +1,12 @@
-<p style="text-align: center" align="center">
-  <a href="https://github.com/vitorsalgado/drizzle-http" target="_blank"><img src="docs/assets/drizzle.png" width="150px" alt="Drizzle HTTP Logo" /></a>
+<p style="text-align: center" align="right">
+  <a href="https://github.com/vitorsalgado/drizzle-http" target="_blank"><img src="docs/assets/drizzle.png" width="130px" alt="Drizzle HTTP Logo" /></a>
 </p>
 
 # Drizzle HTTP
 
 ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 
 > Decorator based HTTP client fully written in **Typescript**.  
@@ -54,19 +54,25 @@ Install both `@drizzle-http/core` and `@drizzle-http/undic` to have a basic setu
 To make things easier, there are two packages that contains defaults for **Node.js** and **Browser** usage.  
 See below:
 
-```
-Node.js
+### Node.js
 
-npm i @drizzle-http/nodejs
-or
+#### NPM
+
+```
+npm install @drizzle-http/nodejs
+```
+
+#### Yarn
+
+```
 yarn add @drizzle-http/nodejs
 ```
 
 More details: [here](pkgs/drizzle-http-nodejs)
 
-```
-Browser
+### Browser
 
+```
 npm i @drizzle-http/browser
 or
 yarn add @drizzle-http/browser
