@@ -3,7 +3,7 @@
 import { DrizzleBuilder, GET, Query, theTypes } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '@drizzle-http/fetch'
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 
 class PartiesClientAPI {
   @GET('/')
@@ -14,10 +14,8 @@ class PartiesClientAPI {
   }
 }
 
-const deputiesApi = DrizzleBuilder.newBuilder()
+export const deputiesApi = DrizzleBuilder.newBuilder()
   .baseUrl(`http://localhost:${PORT}`)
   .callFactory(FetchCallFactory.DEFAULT)
   .build()
   .create(PartiesClientAPI)
-
-export default deputiesApi

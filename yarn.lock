@@ -1746,6 +1746,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.13.8":
+  version: 7.13.8
+  resolution: "@babel/runtime@npm:7.13.8"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: d8db125d3629c4000322e8264d7510640ac671136f416d1fcd4b74d26d7e703bf671820fab81a29a5ee0bd11e981de518666619398ec29b1ab5e155ab8131812
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.10.4, @babel/template@npm:^7.12.13, @babel/template@npm:^7.3.3":
   version: 7.12.13
   resolution: "@babel/template@npm:7.12.13"
@@ -1880,15 +1889,11 @@ __metadata:
     "@drizzle-http/test-utils": 0.0.1
     "@types/puppeteer": ^5.4.3
     babel-loader: ^8.2.2
-    bops: ^1.0.1
     concurrently: ^6.0.0
     puppeteer: ^7.1.0
-    querystring-es3: ^0.2.1
-    reflect-metadata: ^0.1.13
-    stream-browserify: ^3.0.0
     ts-loader: ^8.0.17
+    tslib: ^2.1.0
     typescript: ^4.1.5
-    url: ^0.11.0
     webpack: ^5.24.0
     webpack-cli: ^4.5.0
   languageName: unknown
@@ -1913,8 +1918,37 @@ __metadata:
     "@drizzle-http/test-utils": 0.0.1
     "@types/node": ^14.14.31
     reflect-metadata: ^0.1.13
-    typescript: ^4.1.5
+    tslib: ^2.1.0
     undici: ^3.3.3
+  languageName: unknown
+  linkType: soft
+
+"@drizzle-http/example-javascript@workspace:examples/javascript":
+  version: 0.0.0-use.local
+  resolution: "@drizzle-http/example-javascript@workspace:examples/javascript"
+  dependencies:
+    "@babel/cli": ^7.13.0
+    "@babel/core": ^7.13.1
+    "@babel/plugin-proposal-class-properties": ^7.13.0
+    "@babel/plugin-proposal-decorators": ^7.13.0
+    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.13.0
+    "@babel/plugin-proposal-object-rest-spread": ^7.13.0
+    "@babel/plugin-proposal-optional-chaining": ^7.13.0
+    "@babel/plugin-transform-runtime": ^7.13.2
+    "@babel/preset-env": ^7.13.0
+    "@babel/runtime": ^7.13.2
+    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/undici": 0.0.1
+    babel-loader: ^8.2.2
+    babel-plugin-parameter-decorator: ^1.0.16
+    bops: ^1.0.1
+    clean-webpack-plugin: ^3.0.0
+    querystring-es3: ^0.2.1
+    reflect-metadata: ^0.1.13
+    stream-browserify: ^3.0.0
+    url: ^0.11.0
+    webpack: ^5.24.0
+    webpack-cli: ^4.5.0
   languageName: unknown
   linkType: soft
 
@@ -1964,21 +1998,34 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@drizzle-http/example-typescript@workspace:examples/typescript":
+  version: 0.0.0-use.local
+  resolution: "@drizzle-http/example-typescript@workspace:examples/typescript"
+  dependencies:
+    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/undici": 0.0.1
+  languageName: unknown
+  linkType: soft
+
 "@drizzle-http/fetch@0.0.1, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch"
   dependencies:
     "@babel/cli": ^7.13.0
     "@babel/core": ^7.13.1
+    "@babel/plugin-proposal-class-properties": ^7.13.0
     "@babel/plugin-proposal-decorators": ^7.13.0
+    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.13.0
     "@babel/plugin-proposal-object-rest-spread": ^7.13.0
+    "@babel/plugin-proposal-optional-chaining": ^7.13.0
     "@babel/plugin-transform-runtime": ^7.13.2
     "@babel/preset-env": ^7.13.0
-    "@babel/runtime": ^7.13.2
+    "@babel/runtime": ^7.13.8
     "@drizzle-http/core": 0.0.1
     "@drizzle-http/test-utils": 0.0.1
     "@types/puppeteer": ^5.4.3
     babel-loader: ^8.2.2
+    babel-plugin-parameter-decorator: ^1.0.16
     bops: ^1.0.1
     clean-webpack-plugin: ^3.0.0
     concurrently: ^6.0.0
@@ -1987,6 +2034,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     stream-browserify: ^3.0.0
     ts-loader: ^8.0.17
+    tslib: ^2.1.0
     typescript: ^4.1.5
     url: ^0.11.0
     webpack: ^5.24.0
@@ -2004,6 +2052,7 @@ __metadata:
     "@types/pino": ^6.3.6
     pino: ^6.11.1
     pino-pretty: ^4.5.0
+    tslib: ^2.1.0
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
@@ -2012,6 +2061,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/monorepo@workspace:."
   dependencies:
+    "@rollup/plugin-commonjs": ^17.1.0
     "@rollup/plugin-node-resolve": ^11.2.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.31
@@ -2038,6 +2088,7 @@ __metadata:
     rollup-plugin-generate-package-json: ^3.2.0
     ts-jest: ^26.5.1
     ts-node: ^9.1.1
+    tslib: ^2.1.0
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
@@ -2050,6 +2101,7 @@ __metadata:
     "@drizzle-http/logging-interceptor": 0.0.1
     "@drizzle-http/undici": 0.0.1
     "@types/node": ^14.14.31
+    tslib: ^2.1.0
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
@@ -2062,6 +2114,7 @@ __metadata:
     "@drizzle-http/test-utils": 0.0.1
     "@drizzle-http/undici": 0.0.1
     rxjs: ^6.6.3
+    tslib: ^2.1.0
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
@@ -2072,7 +2125,7 @@ __metadata:
   dependencies:
     "@types/node": ^14.14.31
     fastify: ^3.12.0
-    typescript: ^4.1.5
+    tslib: ^2.1.0
   languageName: unknown
   linkType: soft
 
@@ -2082,7 +2135,7 @@ __metadata:
   dependencies:
     "@drizzle-http/core": 0.0.1
     "@drizzle-http/test-utils": 0.0.1
-    typescript: ^4.1.5
+    tslib: ^2.1.0
     undici: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -3748,6 +3801,23 @@ __metadata:
   dependencies:
     debug: ^4.1.1
   checksum: 4ec9c0482b3b1126d834ea493cf92b4c11167c863edf72d2eb3769e875b6a10c7cb0d04963bd34eb267addaa9be6028c63ff3e5e305986b5ceafa83dafd720c2
+  languageName: node
+  linkType: hard
+
+"@rollup/plugin-commonjs@npm:^17.1.0":
+  version: 17.1.0
+  resolution: "@rollup/plugin-commonjs@npm:17.1.0"
+  dependencies:
+    "@rollup/pluginutils": ^3.1.0
+    commondir: ^1.0.1
+    estree-walker: ^2.0.1
+    glob: ^7.1.6
+    is-reference: ^1.2.1
+    magic-string: ^0.25.7
+    resolve: ^1.17.0
+  peerDependencies:
+    rollup: ^2.30.0
+  checksum: 9b162f93090e5bf544c85bb835a29f65371726d2e6161aa1a048bbb708b77433184e5836e7118e2c6277f9a9a7b5835f56e420d2040b1b623b03ca76db4b5d10
   languageName: node
   linkType: hard
 
@@ -9545,6 +9615,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"estree-walker@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "estree-walker@npm:2.0.2"
+  checksum: 378cc9d3be56962c5219c55ad1fde732cb7d55a11cde5acbf5995f39ddd0e98c1095a43c0ef15a520d1d6910e816bd3daff5fc5d7d38baaf8b12d5a2970df57c
+  languageName: node
+  linkType: hard
+
 "esutils@npm:^2.0.2":
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
@@ -10753,7 +10830,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.0.5, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4":
+"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.0.5, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
   version: 7.1.6
   resolution: "glob@npm:7.1.6"
   dependencies:
@@ -12225,6 +12302,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"is-reference@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "is-reference@npm:1.2.1"
+  dependencies:
+    "@types/estree": "*"
+  checksum: 9daa3d7c4dc159e326be68c025a43bf714b36a6d065c2cc6907f7c44d010867dd10ec7f74bff37cb5d2000ac8b03c94cde3d69c85dc9a56a887ce576200ad01f
+  languageName: node
+  linkType: hard
+
 "is-regex@npm:^1.0.4, is-regex@npm:^1.1.1":
   version: 1.1.2
   resolution: "is-regex@npm:1.1.2"
@@ -13676,6 +13762,15 @@ fsevents@^1.2.7:
   dependencies:
     sourcemap-codec: ^1.4.1
   checksum: b8647d71da03f6817742bada0e30dd7c3efb628266f9d28f206d234b16aa8b1a4702a86bd38bfd56bea34a75ea0da964d89bac2fa14aef2d6ce04d7a6a9583cb
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.25.7":
+  version: 0.25.7
+  resolution: "magic-string@npm:0.25.7"
+  dependencies:
+    sourcemap-codec: ^1.4.4
+  checksum: 4b70c13eb21c6f1c54bf7fb029748dc44d6bfcd3c59e5deeda060eecc38df6144b91d10fb7a3cf6156fadab1a68f83d69a189df20ca5f6bd088bf0196ea8f039
   languageName: node
   linkType: hard
 
@@ -18384,7 +18479,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"sourcemap-codec@npm:^1.4.1":
+"sourcemap-codec@npm:^1.4.1, sourcemap-codec@npm:^1.4.4":
   version: 1.4.8
   resolution: "sourcemap-codec@npm:1.4.8"
   checksum: 4d56d1232a45af813606d1755f11e7ae6b3542c615a7e3f904382f0134a9412ba8d090e83749254d78449eafdfcc62d5158b8f35e6241480b51b74b5c46b99f9
@@ -19729,7 +19824,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.1, tslib@npm:^2.0.3":
+"tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0":
   version: 2.1.0
   resolution: "tslib@npm:2.1.0"
   checksum: d8f5bdd067611651c6b846c2388f4dc8ba1f5af124e66105f5263d1ad56da17f4b8c6566887ca2f205c5a9758451871ceca87d5d06087af2dca1699c5e33db69

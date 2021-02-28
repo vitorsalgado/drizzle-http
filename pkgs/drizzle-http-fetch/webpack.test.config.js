@@ -6,11 +6,30 @@ const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 module.exports = {
   mode: 'production',
   bail: true,
-  entry: Path.resolve(__dirname, './out/index.js'),
+  entry: {
+    ts: Path.resolve(__dirname, './src/test/apiTs.ts'),
+    js: Path.resolve(__dirname, './src/test/apiJs.js')
+  },
   devtool: 'inline-source-map',
   plugins: [
     new CleanPlugin()
   ],
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
 
@@ -21,13 +40,12 @@ module.exports = {
       url: require.resolve('url/')
     }
   },
-
   performance: {
     hints: 'warning'
   },
   stats: 'errors-only',
   output: {
-    filename: 'index.js',
-    path: Path.resolve(__dirname, 'dist')
+    filename: '[name].js',
+    path: Path.resolve(__dirname, 'src', 'test', 'dist')
   }
 }

@@ -24,7 +24,7 @@ module.exports = {
     '!**/build/**',
     '!**/vendor/**',
     '!**/dist/**',
-    '!**/dist-es5/**',
+    '!**/out/**',
     '!scripts/*'
   ],
   modulePathIgnorePatterns: [
@@ -34,7 +34,7 @@ module.exports = {
     'benchmarks/*',
     'scripts/*',
     'pkgs/.*/dist',
-    'pkgs/.*/dist-es5',
+    'pkgs/.*/out',
     'pkgs/.*/tsconfig.*',
     'internal/clinic/*'
   ],
@@ -43,10 +43,8 @@ module.exports = {
     '/benchmarks/',
     '/examples/',
     '/dist/',
-    '/dist-es5/',
+    '/out/',
     '/pkgs/.*/dist',
-    '/pkgs/.*/dist-es5',
-    '/pkgs/drizzle-http-fetch',
     'internal/clinic/*',
     '/scripts/'
   ],

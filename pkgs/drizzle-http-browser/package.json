@@ -8,9 +8,6 @@
     "build": "tsc --build",
     "postinstall": "yarn build"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
@@ -32,11 +29,7 @@
     "@drizzle-http/core": "0.0.1",
     "@drizzle-http/fetch": "0.0.1",
     "@drizzle-http/logging-interceptor": "0.0.1",
-    "bops": "^1.0.1",
-    "querystring-es3": "^0.2.1",
-    "reflect-metadata": "^0.1.13",
-    "stream-browserify": "^3.0.0",
-    "url": "^0.11.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.0",

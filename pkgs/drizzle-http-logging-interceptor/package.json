@@ -8,9 +8,6 @@
     "build": "tsc --build",
     "postinstall": "yarn build"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
@@ -31,7 +28,8 @@
   "dependencies": {
     "@drizzle-http/core": "0.0.1",
     "pino": "^6.11.1",
-    "pino-pretty": "^4.5.0"
+    "pino-pretty": "^4.5.0",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "0.0.1",

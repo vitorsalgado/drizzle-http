@@ -4,8 +4,6 @@
 benchmarks/
 docs/
 dist/
-dist-es5/
-dist-build/
 examples/
 scripts/
 

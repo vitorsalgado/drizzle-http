@@ -1,13 +1,13 @@
 {
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
-    "rootDir": "./http",
-    "outDir": "./http",
+    "rootDir": "src",
+    "outDir": "dist",
     "sourceMap": false
   },
   "references": [
     { "path": "../../pkgs/drizzle-http", "prepend": false },
     { "path": "../../pkgs/drizzle-http-undici", "prepend": false }
   ],
-  "include": ["http/"]
+  "include": ["src"]
 }

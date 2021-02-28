@@ -2,10 +2,7 @@
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
     "rootDir": "src",
-    "target": "es5",
-    "outDir": "dist",
-    "downlevelIteration": true,
-    "allowJs": true
+    "outDir": "./dist"
   },
   "references": [
     { "path": "../drizzle-http", "prepend": false },

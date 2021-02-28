@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import PartiesClientAPI from './api'
+import { deputiesApi } from './api'
 
 function App() {
   const [parties, updateParties] = useState([])
   const [acronym, setAcronym] = useState('')
 
   const onPartiesSearch = () =>
-    PartiesClientAPI
+    deputiesApi
       .parties(acronym)
       .then(response => response.json())
       .then(parties =>

@@ -8,9 +8,6 @@
     "build": "tsc --build",
     "postinstall": "yarn build"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
@@ -29,10 +26,10 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "0.0.1",
+    "tslib": "^2.1.0",
     "undici": "^3.3.3"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "0.0.1",
-    "typescript": "^4.1.5"
+    "@drizzle-http/test-utils": "0.0.1"
   }
 }

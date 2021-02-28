@@ -110,7 +110,11 @@ typings/
 !**/.yarn/versions
 **/.pnp.*
 
+# Mac
 .DS_Store
+
+# Rollup
+.rollup.cache
 
 # Project
 .vscode/
@@ -119,6 +123,5 @@ typings/
 package-lock.json
 
 # Dist
-dist-build/
-dist-es5/
 dist/
+out/
