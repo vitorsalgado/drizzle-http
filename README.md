@@ -5,11 +5,9 @@
 ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 
-> Decorator based HTTP client fully written in **Typescript**.  
-> Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).
-
+> Decorator based HTTP client written in **Typescript**.  
+> Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).  
 > IMPORTANT! This library is still experimental.
 ---
 
@@ -17,19 +15,37 @@
 
 **Drizzle-HTTP** is a library that makes writing http clients in Typescript and Javascript easier by using decorators to
 configure http calls.  
-It takes performance in consideration and request configurations are pre-processed to make calls faster.  
-The core package uses only one dependency, [Reflect Metadata](https://www.npmjs.com/package/reflect-metadata).
-
-**Note!**: Decorators need to be applied to concrete Classes only.
+It takes performance in consideration and request configurations are pre-processed to make calls faster.
 
 ## Table of Contents
 
+- [Installation](#installation)
 - [Packages](#packages)
 - [Features](#features)
-- [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Overview](#overview)
 - [Benchmarks](#benchmarks)
+- [Contributing](#contributing)
+
+## Installation
+
+Drizzle-HTTP is divided in several packages.  
+The package `drizzle-http` provides all builtin packages contained in this monorepo.  
+If you which to install each package individually, bear in mind that you will always need the core
+package `@drizzle-http/core`.  
+See below installation instructions for `drizzle-http` main package:
+
+### NPM
+
+```
+npm i drizzle-http
+```
+
+### Yarn
+
+```
+yarn add drizzle-http
+```
 
 ## Packages
 
@@ -44,47 +60,11 @@ See all [available packages](pkgs/README.md) in this monorepo.
 - Add interceptors
 - Request cancellation
 
-## Installation
-
-Drizzle-HTTP is divided in different packages. The main package `@drizzle-http/core` just contain the core components.
-You need to install additional packages to make Drizzle-HTTP work. E.g.:  
-Install both `@drizzle-http/core` and `@drizzle-http/undic` to have a basic setup for a backend app.  
-To make things easier, there are two packages that contains defaults for **Node.js** and **Browser** usage.  
-See below:
-
-### Node.js
-
-#### NPM
-
-```
-npm install @drizzle-http/nodejs
-```
-
-#### Yarn
-
-```
-yarn add @drizzle-http/nodejs
-```
-
-More details: [here](pkgs/drizzle-http-nodejs)
-
-### Browser
-
-```
-npm i @drizzle-http/browser
-or
-yarn add @drizzle-http/browser
-```
-
-More details: [here](pkgs/drizzle-http-browser)
-
 ## Getting Started
 
 Go to [docs](docs/README.md) to see how to use Drizzle-HTTP in your project.
 
 ## Overview
-
-### Basics
 
 Usage typically looks like the example below:
 
@@ -102,9 +82,11 @@ import {
   GET,
   Timeout,
   MediaTypes,
-} from '@drizzle-http/core'
-import { UndiciCallFactory } from '@drizzle-http/undici'
-import { Level, LoggingInterceptor, PinoLogger } from '@drizzle-http/logging-interceptor'
+  UndiciCallFactory,
+  Level,
+  LoggingInterceptor,
+  PinoLogger
+} from 'drizzle-http'
 
 interface Project {
   id: string
@@ -167,6 +149,10 @@ api
 
 For more details, check [getting started](docs/README.md) docs.
 
+## Examples
+
+We have some usage examples available in this [directory](examples).
+
 ## Benchmarks
 
 ```
@@ -191,6 +177,12 @@ node-fetch x 1,156 ops/sec ±1.36% (78 runs sampled)
 
 This benchmark consists in different clients performing calls to server that responds a 80kb JSON with multiple
 connections.
+
+## Contributing
+
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
+
+See [CONTRIBUTING](CONTRIBUTING.md) for more details.
 
 ## License
 

@@ -2,7 +2,8 @@
 
 ## Packages
 
-- [Core](drizzle-http)
+- [Drizzle-Http](drizzle-http)
+- [Core](drizzle-http-core)
 - [Undici Client](drizzle-http-undici)
 - [Fetch Client](drizzle-http-fetch)
 - [RxJs Adapter](drizzle-http-rxjs-adapter)
