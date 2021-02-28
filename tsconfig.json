@@ -30,6 +30,7 @@
     "skipLibCheck": true,
 
     "paths": {
+      "drizzle-http": ["pkgs/drizzle-http/src/index.ts"],
       "@drizzle-http/*": ["pkgs/*/src/index.ts", "examples/*/src/index.ts", "internal/*/src/index.ts"]
     }
   },

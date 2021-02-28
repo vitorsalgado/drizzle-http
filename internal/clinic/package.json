@@ -23,8 +23,5 @@
     "@drizzle-http/undici": "0.0.1",
     "autocannon": "^7.0.4",
     "clinic": "^8.0.1"
-  },
-  "devDependencies": {
-    "typescript": "^4.1.5"
   }
 }

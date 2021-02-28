@@ -16,9 +16,12 @@ import {
   POST,
   Query,
   Response,
-  theTypes
-} from '@drizzle-http/core'
-import { Streaming, StreamTo, StreamToResult, UndiciCallFactory } from '@drizzle-http/undici'
+  Streaming,
+  StreamTo,
+  StreamToResult,
+  theTypes,
+  UndiciCallFactory
+} from 'drizzle-http'
 
 const suite = new Benchmark.Suite()
 
@@ -35,9 +38,18 @@ if (process.env.PORT) {
   target.url = 'http://localhost:3000/'
 }
 
-const httpAgent = new http.Agent({ keepAlive: true, maxSockets: connections })
-const axiosAgent = new http.Agent({ keepAlive: true, maxSockets: connections })
-const nodeFetchAgent = new http.Agent({ keepAlive: true, maxSockets: connections })
+const httpAgent = new http.Agent({
+  keepAlive: true,
+  maxSockets: connections
+})
+const axiosAgent = new http.Agent({
+  keepAlive: true,
+  maxSockets: connections
+})
+const nodeFetchAgent = new http.Agent({
+  keepAlive: true,
+  maxSockets: connections
+})
 
 const httpOptions = {
   method: 'GET',
@@ -57,7 +69,10 @@ const undiciOptions = {
   bodyTimeout: 0
 }
 
-const options = { pipelining, connections, ...target }
+const options = {
+  pipelining,
+  connections, ...target
+}
 const pool = new Pool(target.url, options)
 
 @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
@@ -87,7 +102,12 @@ const drizzle = DrizzleBuilder.newBuilder()
 
 const api: API = drizzle.create(API)
 
-const data = { id: 100, name: 'bench', context: 'benchmark-test', active: true }
+const data = {
+  id: 100,
+  name: 'bench',
+  context: 'benchmark-test',
+  active: true
+}
 
 suite
 

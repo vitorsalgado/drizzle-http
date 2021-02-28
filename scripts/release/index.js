@@ -28,7 +28,7 @@ program
   .description('Publishes all packages to NPM')
   .option('-t, --tag <tag>', 'Tag', 'latest')
   .action(async (options) => {
-    Logger.info('--> Publishing Packages')
+    Logger.info('--> Publishing Packages\n')
 
     const criteria = 'pkgs/**/package.json'
     const pkgRefs = await Globby(criteria, {

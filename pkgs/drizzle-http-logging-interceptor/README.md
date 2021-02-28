@@ -7,17 +7,18 @@ The default Logger implementation uses [Pino](https://getpino.io/).
 
 ## Installation
 
+The main package, _**drizzle-http**_, already contains this module.  
+To install it individually, use:
+
 ### NPM
 
 ```
-npm i @drizzle-http/core
 npm i @drizzle-http/logging-interceptor
 ```
 
 ### Yarn
 
 ```
-yarn add @drizzle-http/core
 yarn add @drizzle-http/logging-interceptor
 ```
 

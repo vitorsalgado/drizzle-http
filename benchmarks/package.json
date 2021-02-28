@@ -15,10 +15,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "0.0.1",
-    "@drizzle-http/undici": "0.0.1",
     "axios": "^0.21.1",
     "benchmark": "^2.1.4",
+    "drizzle-http": "0.0.1",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
     "undici": "^3.3.3",
@@ -27,7 +26,6 @@
   "devDependencies": {
     "@types/benchmark": "^2.1.0",
     "@types/node-fetch": "^2.5.8",
-    "@types/superagent": "^4.1.10",
-    "typescript": "^4.1.5"
+    "@types/superagent": "^4.1.10"
   }
 }

@@ -26,7 +26,7 @@ describe('Fetch Client', () => {
     const page = await browser.newPage()
     await page.goto('http://localhost:3002/ts.html')
 
-    await page.waitFor(2500)
+    await page.waitForTimeout(2500)
 
     const div = await page.$('#test')
     const txt = await div?.getProperty('innerText')
@@ -39,7 +39,7 @@ describe('Fetch Client', () => {
     const page = await browser.newPage()
     await page.goto('http://localhost:3002/ts.html')
 
-    await page.waitFor(2500)
+    await page.waitForTimeout(2500)
 
     const div = await page.$('#test')
     const txt = await div?.getProperty('innerText')

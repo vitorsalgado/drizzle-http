@@ -4,6 +4,10 @@
   "description": "Undici HTTP client for Drizzle-Http",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc --build",
     "postinstall": "yarn build"
@@ -13,6 +17,7 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-undici",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",

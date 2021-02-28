@@ -9,11 +9,8 @@
     "test:failures": "yarn test --onlyFailures",
     "coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts .",
-    "build:test": "lerna exec -- \"yarn build:test || true\"",
     "build": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
-    "build:ts": "tsc --project tsconfig.build.json && tsc --project tsconfig.build.es5.json",
-    "build:release": "yarn build && yarn build:ts && node project.build.js",
-    "release": "yarn build:release && node project.release.js",
+    "release": "yarn build && node scripts/release/index.js",
     "clean": "lerna clean && yarn clean:dist",
     "clean:dist": "lerna exec -- rm -rf dist && lerna exec -- rm -rf out && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\""
@@ -33,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
-  "homepage": "https://github.com/vitorsalgado/drizzle-http#readme",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http",
   "workspaces": [
     "benchmarks",
     "internal/*",
@@ -48,11 +45,11 @@
     "undici",
     "node",
     "typescript",
-    "decorator"
+    "decorator",
+    "easy",
+    "annotations"
   ],
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.31",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
@@ -72,13 +69,8 @@
     "lerna": "^3.22.1",
     "pino": "^6.11.1",
     "pino-pretty": "^4.5.0",
-    "rollup": "^2.39.0",
-    "rollup-plugin-auto-external": "^2.0.0",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-generate-package-json": "^3.2.0",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
-    "tslib": "^2.1.0",
     "typescript": "^4.1.5"
   }
 }

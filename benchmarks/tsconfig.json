@@ -5,8 +5,7 @@
     "outDir": "./dist"
   },
   "references": [
-    { "path": "../pkgs/drizzle-http", "prepend": false },
-    { "path": "../pkgs/drizzle-http-undici", "prepend": false }
+    { "path": "../pkgs/drizzle-http", "prepend": false }
   ],
   "include": ["./**/*"]
 }

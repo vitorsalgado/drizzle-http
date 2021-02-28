@@ -1,8 +1,19 @@
+'use strict'
+
 const Path = require('path')
+const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 
 module.exports = {
-  entry: './src/index.ts',
+  mode: 'production',
+  bail: true,
+  entry: {
+    ts: Path.resolve(__dirname, '../src/test/apiTs.ts'),
+    js: Path.resolve(__dirname, '../src/test/apiJs.js')
+  },
   devtool: 'inline-source-map',
+  plugins: [
+    new CleanPlugin()
+  ],
   module: {
     rules: [
       {
@@ -20,7 +31,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.json'],
 
     fallback: {
       querystring: require.resolve('querystring-es3'),
@@ -29,8 +40,12 @@ module.exports = {
       url: require.resolve('url/')
     }
   },
+  performance: {
+    hints: 'warning'
+  },
+  stats: 'errors-only',
   output: {
-    filename: 'index.js',
-    path: Path.resolve(__dirname, 'dist')
+    filename: '[name].js',
+    path: Path.resolve(__dirname, 'src', 'test', 'dist')
   }
 }
