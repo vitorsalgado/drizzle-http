@@ -10,7 +10,7 @@
     "coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts .",
     "build": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
-    "release": "yarn build && node scripts/release/index.js",
+    "release": "node scripts/release/index.js publish",
     "clean": "lerna clean && yarn clean:dist",
     "clean:dist": "lerna exec -- rm -rf dist && lerna exec -- rm -rf out && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\""
