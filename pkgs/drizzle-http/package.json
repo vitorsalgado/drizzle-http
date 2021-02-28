@@ -42,7 +42,6 @@
     "@drizzle-http/fetch": "0.0.1",
     "@drizzle-http/logging-interceptor": "0.0.1",
     "@drizzle-http/rxjs-adapter": "0.0.1",
-    "@drizzle-http/undici": "0.0.1",
-    "tslib": "^2.1.0"
+    "@drizzle-http/undici": "0.0.1"
   }
 }

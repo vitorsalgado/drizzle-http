@@ -35,6 +35,7 @@
     "undici": "^3.3.3"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "0.0.1"
+    "@drizzle-http/test-utils": "0.0.1",
+    "typescript": "^4.1.5"
   }
 }

@@ -30,7 +30,6 @@
     "@drizzle-http/core": "0.0.1",
     "@drizzle-http/fetch": "0.0.1",
     "@drizzle-http/undici": "0.0.1",
-    "@hapi/joi": "^17.1.1",
     "@types/react": "^16.14.4",
     "@types/react-dom": "^16.9.11",
     "@types/react-router-dom": "^5.1.7",

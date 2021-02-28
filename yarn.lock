@@ -1884,6 +1884,7 @@ __metadata:
     "@types/node": ^14.14.31
     reflect-metadata: ^0.1.13
     tslib: ^2.1.0
+    typescript: ^4.1.5
     undici: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -1937,7 +1938,6 @@ __metadata:
     "@drizzle-http/core": 0.0.1
     "@drizzle-http/fetch": 0.0.1
     "@drizzle-http/undici": 0.0.1
-    "@hapi/joi": ^17.1.1
     "@types/react": ^16.14.4
     "@types/react-dom": ^16.9.11
     "@types/react-router-dom": ^5.1.7
@@ -2000,6 +2000,7 @@ __metadata:
     stream-browserify: ^3.0.0
     ts-loader: ^8.0.17
     tslib: ^2.1.0
+    typescript: ^4.1.5
     url: ^0.11.0
     webpack: ^5.24.0
     webpack-cli: ^4.5.0
@@ -2017,6 +2018,7 @@ __metadata:
     pino: ^6.11.1
     pino-pretty: ^4.5.0
     tslib: ^2.1.0
+    typescript: ^4.1.5
   languageName: unknown
   linkType: soft
 
@@ -2058,6 +2060,7 @@ __metadata:
     "@drizzle-http/undici": 0.0.1
     rxjs: ^6.6.3
     tslib: ^2.1.0
+    typescript: ^4.1.5
   languageName: unknown
   linkType: soft
 
@@ -2068,6 +2071,7 @@ __metadata:
     "@types/node": ^14.14.31
     fastify: ^3.12.0
     tslib: ^2.1.0
+    typescript: ^4.1.5
   languageName: unknown
   linkType: soft
 
@@ -2078,6 +2082,7 @@ __metadata:
     "@drizzle-http/core": 0.0.1
     "@drizzle-http/test-utils": 0.0.1
     tslib: ^2.1.0
+    typescript: ^4.1.5
     undici: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -2199,15 +2204,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hapi/address@npm:^4.0.1":
-  version: 4.1.0
-  resolution: "@hapi/address@npm:4.1.0"
-  dependencies:
-    "@hapi/hoek": ^9.0.0
-  checksum: 2844aceeb993bb767ae2c34e75767e7eff1b0cf811c4655c6500206d8d06a7deacdf4cf4172901e3bcafcbd7e8892b5ff786d0469071b9ba5ec14d0896034497
-  languageName: node
-  linkType: hard
-
 "@hapi/bourne@npm:^2.0.0":
   version: 2.0.0
   resolution: "@hapi/bourne@npm:2.0.0"
@@ -2215,37 +2211,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hapi/formula@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@hapi/formula@npm:2.0.0"
-  checksum: 02d14257149799b478e21f2620639470efb152f09dd2083fb9a6f247f29760de4af6ceb938b2337ecdf2a0514c2edd5beca6df5415d5c2cea909977fb0da4eaf
-  languageName: node
-  linkType: hard
-
 "@hapi/hoek@npm:^9.0.0":
   version: 9.1.1
   resolution: "@hapi/hoek@npm:9.1.1"
   checksum: e5be371c579bcdef755566b88ccd6bbf5c52ad2cc770e134ee909156cdcff2acf7aad3f4b5400d83742a27acc580a00a82d2cde8c812db0b0437e4e80fa0a6a0
-  languageName: node
-  linkType: hard
-
-"@hapi/joi@npm:^17.1.1":
-  version: 17.1.1
-  resolution: "@hapi/joi@npm:17.1.1"
-  dependencies:
-    "@hapi/address": ^4.0.1
-    "@hapi/formula": ^2.0.0
-    "@hapi/hoek": ^9.0.0
-    "@hapi/pinpoint": ^2.0.0
-    "@hapi/topo": ^5.0.0
-  checksum: 7547ccf2a8168e4f68f630069ab069f94d0689bd18a034a6dea40cc9c7e88776665670316f65bdd29068dccde111f3d7164504cfaf6db183110b64f36c5643dd
-  languageName: node
-  linkType: hard
-
-"@hapi/pinpoint@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@hapi/pinpoint@npm:2.0.0"
-  checksum: 445ca018999145dccff58ca1be71fa533c3124a1d0f256b8c3daf88067992a20aebfbdee49664741cfac160d924c76d24bd3e8eeb521af721e6f606f4bd64634
   languageName: node
   linkType: hard
 
@@ -8747,7 +8716,6 @@ __metadata:
     "@drizzle-http/logging-interceptor": 0.0.1
     "@drizzle-http/rxjs-adapter": 0.0.1
     "@drizzle-http/undici": 0.0.1
-    tslib: ^2.1.0
   languageName: unknown
   linkType: soft
 

@@ -120,7 +120,9 @@ typings/
 .vscode/
 .idea/
 .nvmrc
+.npmrc
 package-lock.json
+temp/
 
 # Dist
 dist/
