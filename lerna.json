@@ -9,11 +9,8 @@
     "examples/*"
   ],
   "ignoreChanges": [
-    "benchmarks",
     "assets",
     "docs",
-    "examples",
-    "internal",
     "**/__fixtures__/**",
     "**/__tests__/**",
     "**/*.md"
@@ -22,8 +19,6 @@
     "publish": {
       "ignoreChanges": [
         "docs",
-        "examples",
-        "benchmarks",
         "assets",
         "*.md"
       ],

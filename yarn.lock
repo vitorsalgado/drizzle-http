@@ -1857,7 +1857,7 @@ __metadata:
     "@types/superagent": ^4.1.10
     axios: ^0.21.1
     benchmark: ^2.1.4
-    drizzle-http: 0.0.1
+    drizzle-http: 0.0.1-alpha.0
     node-fetch: ^2.6.1
     superagent: ^6.1.0
     undici: ^3.3.3
@@ -1869,14 +1869,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/clinic-test@workspace:internal/clinic"
   dependencies:
-    "@drizzle-http/core": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/core": 0.0.1-alpha.0
+    "@drizzle-http/undici": 0.0.1-alpha.0
     autocannon: ^7.0.4
     clinic: ^8.0.1
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/core@0.0.1, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
+"@drizzle-http/core@0.0.1-alpha.0, @drizzle-http/core@^0.0.1-alpha.0, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/core@workspace:pkgs/drizzle-http-core"
   dependencies:
@@ -1903,8 +1903,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.13.2
     "@babel/preset-env": ^7.13.0
     "@babel/runtime": ^7.13.2
-    "@drizzle-http/core": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/core": 0.0.1-alpha.0
+    "@drizzle-http/undici": 0.0.1-alpha.0
     babel-loader: ^8.2.2
     babel-plugin-parameter-decorator: ^1.0.16
     bops: ^1.0.1
@@ -1935,9 +1935,9 @@ __metadata:
     "@babel/preset-env": ^7.13.0
     "@babel/preset-react": ^7.12.13
     "@babel/runtime": ^7.13.2
-    "@drizzle-http/core": 0.0.1
-    "@drizzle-http/fetch": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/core": 0.0.1-alpha.0
+    "@drizzle-http/fetch": 0.0.1-alpha.0
+    "@drizzle-http/undici": 0.0.1-alpha.0
     "@types/react": ^16.14.4
     "@types/react-dom": ^16.9.11
     "@types/react-router-dom": ^5.1.7
@@ -1967,12 +1967,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/example-typescript@workspace:examples/typescript"
   dependencies:
-    "@drizzle-http/core": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/core": 0.0.1-alpha.0
+    "@drizzle-http/undici": 0.0.1-alpha.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/fetch@0.0.1, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
+"@drizzle-http/fetch@0.0.1-alpha.0, @drizzle-http/fetch@^0.0.1-alpha.0, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch"
   dependencies:
@@ -1986,7 +1986,7 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.13.2
     "@babel/preset-env": ^7.13.0
     "@babel/runtime": ^7.13.8
-    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/core": ^0.0.1-alpha.0
     "@drizzle-http/test-utils": 0.0.1
     "@types/puppeteer": ^5.4.3
     babel-loader: ^8.2.2
@@ -2007,13 +2007,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/logging-interceptor@0.0.1, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
+"@drizzle-http/logging-interceptor@^0.0.1-alpha.0, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor"
   dependencies:
-    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/core": ^0.0.1-alpha.0
     "@drizzle-http/test-utils": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/undici": ^0.0.1-alpha.0
     "@types/pino": ^6.3.6
     pino: ^6.11.1
     pino-pretty: ^4.5.0
@@ -2054,13 +2054,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/rxjs-adapter@0.0.1, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
+"@drizzle-http/rxjs-adapter@^0.0.1-alpha.0, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter"
   dependencies:
-    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/core": ^0.0.1-alpha.0
     "@drizzle-http/test-utils": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/undici": ^0.0.1-alpha.0
     rxjs: ^6.6.3
     tslib: ^2.1.0
     typescript: ^4.1.5
@@ -2078,11 +2078,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/undici@0.0.1, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
+"@drizzle-http/undici@0.0.1-alpha.0, @drizzle-http/undici@^0.0.1-alpha.0, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/undici@workspace:pkgs/drizzle-http-undici"
   dependencies:
-    "@drizzle-http/core": 0.0.1
+    "@drizzle-http/core": ^0.0.1-alpha.0
     "@drizzle-http/test-utils": 0.0.1
     tslib: ^2.1.0
     typescript: ^4.1.5
@@ -8710,16 +8710,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-http@0.0.1, drizzle-http@workspace:pkgs/drizzle-http":
+"drizzle-http@0.0.1-alpha.0, drizzle-http@workspace:pkgs/drizzle-http":
   version: 0.0.0-use.local
   resolution: "drizzle-http@workspace:pkgs/drizzle-http"
   dependencies:
-    "@drizzle-http/core": 0.0.1
-    "@drizzle-http/fetch": 0.0.1
-    "@drizzle-http/logging-interceptor": 0.0.1
-    "@drizzle-http/rxjs-adapter": 0.0.1
+    "@drizzle-http/core": ^0.0.1-alpha.0
+    "@drizzle-http/fetch": ^0.0.1-alpha.0
+    "@drizzle-http/logging-interceptor": ^0.0.1-alpha.0
+    "@drizzle-http/rxjs-adapter": ^0.0.1-alpha.0
     "@drizzle-http/test-utils": 0.0.1
-    "@drizzle-http/undici": 0.0.1
+    "@drizzle-http/undici": ^0.0.1-alpha.0
   languageName: unknown
   linkType: soft
 

@@ -32,7 +32,6 @@ program
   .action(async options => {
     Logger.info('--> Publishing Packages\n')
 
-    const changed = JSON.parse(execSync('lerna changed --json').toString())
     const criteria = 'pkgs/**/package.json'
     const pkgRefs = await Globby(criteria, {
       cwd: process.cwd(),
@@ -42,17 +41,10 @@ program
 
     Logger.info('Context:')
     Logger.info('Pwd: ' + process.cwd())
-    Logger.info('Changed Packages: ' + changed.map(x => x.name).join(', '))
-    Logger.info('Total Changed Packages: ' + changed.length.toString() + '\n')
 
     for (const pkgRef of pkgRefs) {
       const pkg = require(pkgRef)
       const pkgPath = pkgRef.replace('/package.json', '')
-
-      if (!changed.some(x => x.name !== pkg.name)) {
-        Logger.info(`Package "${pkg.name}" has no changes to publish. Skipping.\n`)
-        continue
-      }
 
       Logger.info('Package: ' + pkg.name)
       Logger.info('Path: ' + pkgPath)
@@ -64,7 +56,7 @@ program
       FsExt.copySync(Path.join(pkgPath, 'package.json'), Path.join(pkgPath, 'temp', 'package.json'))
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
 
-      execSync(`npm publish --tag=${options.tag}`, { cwd: pkgPath })
+      execSync(`npm publish --access public --tag=${options.tag}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
       FsExt.copySync(Path.join(pkgPath, 'temp', 'package.json'), Path.join(pkgPath, 'package.json'))
