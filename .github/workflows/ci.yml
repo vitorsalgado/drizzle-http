@@ -49,6 +49,7 @@ jobs:
 
       - name: Test
         run: |
+          node pkgs/drizzle-http-fetch/node_modules/puppeteer/install.js
           yarn test:ci
           yarn coverage:upload
         env:
