@@ -8,7 +8,7 @@ describe('Fetch Client', () => {
   beforeAll(async () => {
     browser = await Puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
     })
 
     StaticServer.start()
