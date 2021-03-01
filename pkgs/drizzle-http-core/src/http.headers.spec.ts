@@ -12,7 +12,11 @@ describe('Headers', function () {
   })
 
   it('should init with key/value object', () => {
-    const h = new Headers({ name: 'test', description: 'none', age: '32' })
+    const h = new Headers({
+      name: 'test',
+      description: 'none',
+      age: '32'
+    })
 
     expect(h.size).toEqual(3)
     expect(h.get('name')).toEqual('test')
@@ -104,12 +108,18 @@ describe('Headers', function () {
     h.set('name', 'test')
     h.set('age', '32')
 
-    expect(h.toObject()).toStrictEqual({ name: 'test', age: '32' })
+    expect(h.toObject()).toStrictEqual({
+      name: 'test',
+      age: '32'
+    })
   })
 
   it('should merge object, ignoring', () => {
     const h = new Headers([])
-    const obj = { name: 'test', age: '32' }
+    const obj = {
+      name: 'test',
+      age: '32'
+    }
 
     h.set('accept', 'everything')
     h.set('cache', 'always')
@@ -124,7 +134,10 @@ describe('Headers', function () {
 
   it('should merge two headers', () => {
     const h1 = new Headers([])
-    const obj = { name: 'test', age: '32' }
+    const obj = {
+      name: 'test',
+      age: '32'
+    }
 
     h1.set('accept', 'everything')
     h1.set('cache', 'always')
@@ -148,7 +161,11 @@ describe('Headers', function () {
   })
 
   it('should return all values when calling .values()', () => {
-    const h = new Headers({ name: 'test', description: 'none', age: '32' })
+    const h = new Headers({
+      name: 'test',
+      description: 'none',
+      age: '32'
+    })
     const values = Array.from(h.values())
 
     expect(values).toHaveLength(3)
@@ -158,11 +175,15 @@ describe('Headers', function () {
   })
 
   it('should return all entries when calling .entries()', () => {
-    const h = new Headers({ name: 'test', description: 'none', age: '32' })
+    const h = new Headers({
+      name: 'test',
+      description: 'none',
+      age: '32'
+    })
     const values = Array.from(h.entries())
 
     expect(values).toHaveLength(3)
-    expect(values[0]).toEqual(['name','test'])
+    expect(values[0]).toEqual(['name', 'test'])
     expect(values[1]).toEqual(['description', 'none'])
     expect(values[2]).toEqual(['age', '32'])
   })
