@@ -146,4 +146,24 @@ describe('Headers', function () {
     expect(h1.get('happy')).toEqual('*-*')
     expect(h1.get('last')).toEqual('no')
   })
+
+  it('should return all values when calling .values()', () => {
+    const h = new Headers({ name: 'test', description: 'none', age: '32' })
+    const values = Array.from(h.values())
+
+    expect(values).toHaveLength(3)
+    expect(values).toContain('test')
+    expect(values).toContain('none')
+    expect(values).toContain('32')
+  })
+
+  it('should return all entries when calling .entries()', () => {
+    const h = new Headers({ name: 'test', description: 'none', age: '32' })
+    const values = Array.from(h.entries())
+
+    expect(values).toHaveLength(3)
+    expect(values[0]).toEqual(['name','test'])
+    expect(values[1]).toEqual(['description', 'none'])
+    expect(values[2]).toEqual(['age', '32'])
+  })
 })

@@ -102,4 +102,12 @@ describe('Response', function () {
   it('should return Response marked as error handledType when calling error()', () => {
     expect(Response.error().type).toEqual('error')
   })
+
+  it('should fail when cloning with used body', async function () {
+    const response = new Response(Readable.from(txt(), { objectMode: false }))
+
+    await response.text()
+
+    expect(() => response.clone()).toThrowError()
+  })
 })

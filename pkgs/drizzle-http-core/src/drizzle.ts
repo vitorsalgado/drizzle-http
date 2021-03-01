@@ -34,7 +34,7 @@ export class Drizzle {
     public readonly callFactory: CallFactory,
     private readonly _interceptors: Interceptor<unknown, unknown>[],
     private readonly callAdapterFactories: Set<CallAdapterFactory>,
-    private readonly parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[],
+    private readonly _parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[],
     private readonly requestConverterFactories: Set<RequestConverterFactory>,
     private readonly responseConverterFactories: Set<ResponseConverterFactory>
   ) {
@@ -47,6 +47,13 @@ export class Drizzle {
    */
   interceptors(): Interceptor<unknown, unknown>[] {
     return [...this._interceptors]
+  }
+
+  /**
+   * Get all registered {@link ParameterHandlerFactory} instances
+   */
+  parameterHandlerFactories(): ParameterHandlerFactory<any, unknown>[] {
+    return [...this._parameterHandlerFactories]
   }
 
   /**
@@ -71,7 +78,7 @@ export class Drizzle {
   }
 
   parameterHandlerFactory<P extends Parameter, R>(requestFactory: RequestFactory, parameter: Parameter): ParameterHandlerFactory<P, R> {
-    const factory = this.parameterHandlerFactories
+    const factory = this._parameterHandlerFactories
       .filter(x =>
         x.handledType() === parameter.type)[0]
 

@@ -27,6 +27,11 @@ module.exports = {
     '!**/out/**',
     '!scripts/*'
   ],
+  coveragePathIgnorePatterns: [
+    'drizzle-http-fetch/src/test',
+    'drizzle-http-core/src/internal/http/test',
+    '/node_modules/'
+  ],
   modulePathIgnorePatterns: [
     'dist',
     'dist-*',

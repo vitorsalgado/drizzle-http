@@ -51,6 +51,17 @@ describe('Body', () => {
       expect(await body.text()).toEqual('')
       expect(body.bodyUsed).toBeTruthy()
     })
+
+    it('with numbers', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const body = new HttpBody(50)
+
+      expect(body.body).toBeInstanceOf(Buffer)
+      expect(body.bodyUsed).toBeFalsy()
+      expect(await body.text()).toEqual('50')
+      expect(body.bodyUsed).toBeTruthy()
+    })
   })
 
   it('should return text when calling .text()', async () => {

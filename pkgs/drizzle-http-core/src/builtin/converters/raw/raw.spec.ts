@@ -9,9 +9,13 @@ import {
   RawResponseConverterFactory
 } from './index'
 import { DrizzleBuilder } from '../../../drizzle.builder'
+import { TestCallFactory } from '../../../internal/http/test'
 
 describe('Raw Converter', function () {
-  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
+  const drizzle = DrizzleBuilder.newBuilder()
+    .baseUrl('http://www.test.com.br')
+    .callFactory(new TestCallFactory())
+    .build()
 
   it('should return raw response converter when generic return type is Response', function () {
     const requestFactory = new RequestFactory()

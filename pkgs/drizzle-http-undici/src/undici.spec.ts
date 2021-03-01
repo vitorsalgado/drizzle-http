@@ -9,6 +9,7 @@ import {
   H,
   Header,
   HeaderMap,
+  Headers,
   HttpError,
   MediaTypes,
   P,
@@ -20,9 +21,8 @@ import {
   theTypes,
   Timeout
 } from '@drizzle-http/core'
-import { UndiciCallFactory } from './factory'
+import { Streaming, StreamTo, StreamToHttpError, StreamToResult, UndiciCallFactory, UndiciOptionsBuilder } from './'
 import { closeTestServer, Ok, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { Streaming, StreamTo, StreamToHttpError, StreamToResult } from './stream.call'
 import { Writable } from 'stream'
 import EventEmitter from 'events'
 import { URL } from 'url'
@@ -107,7 +107,20 @@ describe('Undici Call', function () {
       address = addr
       drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
-        .callFactory(UndiciCallFactory.DEFAULT)
+        .callFactory(
+          new UndiciCallFactory(
+            UndiciOptionsBuilder.newBuilder()
+              .connections(1)
+              .headersTimeout(5000)
+              .bodyTimeout(5000)
+              .keepAliveTimeout(4e3)
+              .keepAliveMaxTimeout(600e3)
+              .keepAliveTimeoutThreshold(1e3)
+              .pipelining(1)
+              .maxHeaderSize(16384)
+              .tls(null)
+              .socketPath(null)
+              .build()))
         .addDefaultHeader('Content-Type', 'application/json')
         .build()
       api = drizzle.create(API)
@@ -268,5 +281,11 @@ describe('Undici Call', function () {
     const res = await testApi.exec()
 
     expect(res.ok).toBeTruthy()
+  })
+
+  it('should init stream result', function () {
+    expect(() => new StreamToResult('http://www.test.com.br/', 200, new Headers({}), new Writable()))
+      .not
+      .toThrowError()
   })
 })

@@ -9,9 +9,13 @@ import {
   JsonResponseConverterFactory
 } from './index'
 import { DrizzleBuilder } from '../../../drizzle.builder'
+import { TestCallFactory } from '../../../internal/http/test'
 
 describe('JSON Converter', function () {
-  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
+  const drizzle = DrizzleBuilder.newBuilder()
+    .baseUrl('http://www.test.com.br')
+    .callFactory(new TestCallFactory())
+    .build()
 
   it(`should return form request converter when content contains ${MediaTypes.APPLICATION_JSON}`, function () {
     const requestFactory = new RequestFactory()

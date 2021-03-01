@@ -37,15 +37,14 @@ export function initDrizzleHttp(): DrizzleBuilder {
  * baseUrl is required to be called before calling build.
  */
 export class DrizzleBuilder {
-  _baseURL!: string
-  _headers: Headers
-  _callFactory!: CallFactory
-  _interceptors: Interceptor<unknown, unknown>[]
-  _callAdapterFactories: CallAdapterFactory[]
-  _parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[]
-  _requestConverterFactories: RequestConverterFactory[]
-  _responseConverterFactories: ResponseConverterFactory[]
-
+  private _baseURL!: string
+  private readonly _headers: Headers
+  private _callFactory!: CallFactory
+  private readonly _interceptors: Interceptor<unknown, unknown>[]
+  private readonly _callAdapterFactories: CallAdapterFactory[]
+  private readonly _parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[]
+  private readonly _requestConverterFactories: RequestConverterFactory[]
+  private readonly _responseConverterFactories: ResponseConverterFactory[]
   private _enableDrizzleUserAgent: boolean
   private _useDefaults: boolean
 
@@ -89,9 +88,7 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   callFactory(factory: CallFactory): this {
-    if (factory === null) {
-      throw new DrizzleError('Parameter "factory" must not be null.')
-    }
+    Check.nullOrUndefined(factory, 'Parameter "factory" must not be null.')
 
     this._callFactory = factory
 
@@ -105,8 +102,10 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addInterceptor(...interceptors: Interceptor<unknown, unknown>[]): this {
-    if (interceptors === null || interceptors.length === 0) {
-      throw new DrizzleError('Parameter "interceptor" must not be null or empty.')
+    Check.nullOrUndefined(interceptors, 'Parameter "interceptor" must not be null.')
+
+    if (interceptors.length === 0) {
+      throw new DrizzleError('Parameter "interceptor" must not be empty.')
     }
 
     this._interceptors.push(...interceptors)
@@ -123,8 +122,10 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addCallAdapterFactories(...callAdapterFactory: CallAdapterFactory[]): this {
-    if (callAdapterFactory === null || callAdapterFactory.length === 0) {
-      throw new DrizzleError('Parameter "callAdapterFactory" must not be null or empty.')
+    Check.nullOrUndefined(callAdapterFactory, 'Parameter "callAdapterFactory" must not be null.')
+
+    if (callAdapterFactory.length === 0) {
+      throw new DrizzleError('Parameter "callAdapterFactory" must not be empty.')
     }
 
     this._callAdapterFactories.push(...callAdapterFactory)
@@ -155,8 +156,10 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addRequestConverterFactories(...requestConverterFactory: RequestConverterFactory[]): this {
-    if (requestConverterFactory === null || requestConverterFactory.length === 0) {
-      throw new DrizzleError('Parameter "requestConverterFactory" must not be null or empty.')
+    Check.nullOrUndefined(requestConverterFactory, 'Parameter "requestConverterFactory" must not be null.')
+
+    if (requestConverterFactory.length === 0) {
+      throw new DrizzleError('Parameter "requestConverterFactory" must not be empty.')
     }
 
     this._requestConverterFactories.push(...requestConverterFactory)
@@ -172,8 +175,10 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addResponseConverterFactories(...responseConverterFactory: ResponseConverterFactory[]): this {
-    if (responseConverterFactory === null || responseConverterFactory.length === 0) {
-      throw new DrizzleError('Parameter "responseConverterFactory" must not be null or empty.')
+    Check.nullOrUndefined(responseConverterFactory, 'Parameter "responseConverterFactory" must not be null.')
+
+    if (responseConverterFactory.length === 0) {
+      throw new DrizzleError('Parameter "responseConverterFactory" must not be empty.')
     }
 
     this._responseConverterFactories.push(...responseConverterFactory)
@@ -190,9 +195,8 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addDefaultHeader(key: string, value: string): this {
-    if (key === null || value === null) {
-      throw new DrizzleError('Parameters "key" and "value" must not be null. If you want a empty Header value, provide a empty string for parameter "value".')
-    }
+    Check.nullOrUndefined(key, 'Parameters "key" must not be null')
+    Check.nullOrUndefined(value, 'Parameters "value" must not be null. If you want a empty Header value, provide a empty string.')
 
     if (key.length === 0) {
       throw new DrizzleError('Parameter "key" must not be an empty string.')
@@ -252,13 +256,8 @@ export class DrizzleBuilder {
       this.setDefaults()
     }
 
-    if (this._baseURL === null) {
-      throw new Error('"BaseUrl" must not be null.')
-    }
-
-    if (this._callFactory === null) {
-      throw new Error('No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.')
-    }
+    Check.nullOrUndefined(this._baseURL, '"BaseUrl" must not be null or undefined.')
+    Check.nullOrUndefined(this._callFactory, 'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.')
 
     if (this._parameterHandlerFactories.length === 0) {
       throw new Error('No "Parameter Handler Factories" set. ' +

@@ -6,9 +6,11 @@
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
 
-> Decorator based HTTP client written in **Typescript**.  
-> Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).  
-> IMPORTANT! This library is still experimental.
+Decorator based HTTP client written in **Typescript**.  
+Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).
+
+This library is still experimental.
+
 ---
 
 ## What it is

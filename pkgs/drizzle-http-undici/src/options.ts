@@ -11,13 +11,18 @@ export class UndiciOptionsBuilder {
   private _tls?: TlsOptions | null
   private _maxHeaderSize?: number
   private _headersTimeout?: number
+  private _bodyTimeout?: number
 
   connections(conns: number): this {
     this._connections = conns
     return this
   }
 
-  socketPath(path: string): this {
+  static newBuilder(): UndiciOptionsBuilder {
+    return new UndiciOptionsBuilder()
+  }
+
+  socketPath(path: string | null): this {
     this._socketPath = path
     return this
   }
@@ -42,7 +47,7 @@ export class UndiciOptionsBuilder {
     return this
   }
 
-  tls(opts: TlsOptions): this {
+  tls(opts: TlsOptions | null): this {
     this._tls = opts
     return this
   }
@@ -57,6 +62,11 @@ export class UndiciOptionsBuilder {
     return this
   }
 
+  bodyTimeout(timeout: number): this {
+    this._bodyTimeout = timeout
+    return this
+  }
+
   build(): Pool.Options {
     return {
       connections: this._connections,
@@ -67,9 +77,10 @@ export class UndiciOptionsBuilder {
       pipelining: this._pipelining,
       tls: this._tls,
       maxHeaderSize: this._maxHeaderSize,
-      headersTimeout: this._headersTimeout
+      headersTimeout: this._headersTimeout,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      bodyTimeout: this._bodyTimeout
     }
   }
 }
-
-export const Builder = new UndiciOptionsBuilder()

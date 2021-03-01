@@ -8715,6 +8715,7 @@ __metadata:
     "@drizzle-http/fetch": 0.0.1
     "@drizzle-http/logging-interceptor": 0.0.1
     "@drizzle-http/rxjs-adapter": 0.0.1
+    "@drizzle-http/test-utils": 0.0.1
     "@drizzle-http/undici": 0.0.1
   languageName: unknown
   linkType: soft

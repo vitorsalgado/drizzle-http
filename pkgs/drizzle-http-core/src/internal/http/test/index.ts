@@ -9,6 +9,18 @@ import { RequestOptions } from 'undici/types/client'
 import { isAbsolute } from '../../url.utils'
 import { Headers } from '../../../http.headers'
 
+export class NoopCallFactory implements CallFactory {
+  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return undefined
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setup(drizzle: Drizzle): void {
+  }
+}
+
 class TestCall<T> extends Call<Promise<T>> {
   constructor(
     readonly url: URL,
@@ -22,7 +34,10 @@ class TestCall<T> extends Call<Promise<T>> {
   }
 
   async execute(): Promise<T> {
-    return request(this.request.url, { ...toRequest(this.request), path: undefined } as any)
+    return request(this.request.url, {
+      ...toRequest(this.request),
+      path: undefined
+    } as any)
       .then(res => {
         if (Response.isOK(res.statusCode)) {
           return this.responseConverter.convert(

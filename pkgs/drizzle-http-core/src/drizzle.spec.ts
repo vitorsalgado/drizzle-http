@@ -1,4 +1,5 @@
 import {
+  Abort,
   Body,
   Drizzle,
   DrizzleBuilder,
@@ -19,6 +20,7 @@ import {
 } from '../src'
 import { closeTestServer, Data, Ok, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { TestCallFactory } from './internal/http/test'
+import EventEmitter from 'events'
 
 @HeaderMap({})
 @Timeout(2, 2)
@@ -39,7 +41,8 @@ class API {
     @Q('sort') sort: string,
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
-    @H('code') code: number): Promise<TestResult<TestId>> {
+    @H('code') code: number,
+    @Abort() abort: EventEmitter): Promise<TestResult<TestId>> {
     return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
   }
 
@@ -88,8 +91,9 @@ describe('Drizzle', () => {
     const sort = 'asc'
     const cache = true
     const code = 666
+    const ee = new EventEmitter()
 
-    return api.projects(id, name, filter, sort, prop, cache, code)
+    return api.projects(id, name, filter, sort, prop, cache, code, ee)
       .then(response => {
         expect(response.result.id).toEqual(id)
         expect(response.query).toHaveProperty('filter', filter)

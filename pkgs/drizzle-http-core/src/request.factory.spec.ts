@@ -13,9 +13,15 @@ import { pathParameterRegex } from './internal'
 import { MediaTypes } from './http.media.types'
 import EventEmitter from 'events'
 import { DrizzleBuilder } from './drizzle.builder'
+import { CallFactory, CallProvider } from './call'
+import { Drizzle } from './drizzle'
+import { TestCallFactory } from './internal/http/test'
 
 describe('Request Factory', () => {
-  const drizzle = DrizzleBuilder.newBuilder().baseUrl('http://www.test.com.br').build()
+  const drizzle = DrizzleBuilder.newBuilder()
+    .baseUrl('http://www.test.com.br')
+    .callFactory(new TestCallFactory())
+    .build()
 
   it('should init with default values', () => {
     const requestFactory = new RequestFactory()
