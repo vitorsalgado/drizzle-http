@@ -3,6 +3,7 @@
 # Drizzle HTTP
 
 ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
+![npm](https://img.shields.io/npm/v/drizzle-http?color=light%20green)  
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
 
