@@ -46,6 +46,7 @@ jobs:
       - name: Lint
         run: |
           yarn lint
+          yarn prettier:ci
 
       - name: Test
         run: |

@@ -38,7 +38,11 @@ export class RawRequestConverterFactory extends RequestConverterFactory {
   static INSTANCE: RawRequestConverterFactory = new RawRequestConverterFactory()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  requestConverter(_drizzle: Drizzle, _method: string, _requestInit: RequestFactory): RequestBodyConverter<unknown> | null {
+  requestConverter(
+    _drizzle: Drizzle,
+    _method: string,
+    _requestInit: RequestFactory
+  ): RequestBodyConverter<unknown> | null {
     return RawRequestConverter.INSTANCE
   }
 }
@@ -46,7 +50,11 @@ export class RawRequestConverterFactory extends RequestConverterFactory {
 export class RawResponseConverterFactory extends ResponseConverterFactory {
   static INSTANCE: RawResponseConverterFactory = new RawResponseConverterFactory()
 
-  responseBodyConverter(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): ResponseConverter<Response, Promise<Response>> | null {
+  responseBodyConverter(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): ResponseConverter<Response, Promise<Response>> | null {
     // the return V is the internal Response, similar to Fetch API
     if (requestFactory.isGenericReturnTypeOf(Response)) {
       return RawResponseConverter.INSTANCE

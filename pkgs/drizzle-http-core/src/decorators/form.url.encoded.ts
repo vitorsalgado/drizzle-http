@@ -20,7 +20,9 @@ export function FormUrlEncoded() {
       return
     }
 
-    DrizzleMeta.provideInstanceMetadata(target)
-      .defaultHeaders.append(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
+      CommonHeaders.CONTENT_TYPE,
+      MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
+    )
   }
 }

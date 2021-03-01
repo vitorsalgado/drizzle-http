@@ -24,4 +24,4 @@ async function run() {
   console.log(parties)
 }
 
-(async () => await run())()
+;(async () => await run())()

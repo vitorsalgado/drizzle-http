@@ -77,10 +77,11 @@ export class Drizzle {
     return null
   }
 
-  parameterHandlerFactory<P extends Parameter, R>(requestFactory: RequestFactory, parameter: Parameter): ParameterHandlerFactory<P, R> {
-    const factory = this._parameterHandlerFactories
-      .filter(x =>
-        x.handledType() === parameter.type)[0]
+  parameterHandlerFactory<P extends Parameter, R>(
+    requestFactory: RequestFactory,
+    parameter: Parameter
+  ): ParameterHandlerFactory<P, R> {
+    const factory = this._parameterHandlerFactories.filter(x => x.handledType() === parameter.type)[0]
 
     if (factory === null || typeof factory === 'undefined') {
       throw new NoParameterHandlerFoundForType(parameter.type, requestFactory.method, parameter.index)
@@ -105,7 +106,7 @@ export class Drizzle {
       }
     }
 
-    return RawRequestConverter.INSTANCE as unknown as RequestBodyConverter<R>
+    return (RawRequestConverter.INSTANCE as unknown) as RequestBodyConverter<R>
   }
 
   /**
@@ -123,7 +124,7 @@ export class Drizzle {
       }
     }
 
-    return RawResponseConverter.INSTANCE as unknown as ResponseConverter<F, T>
+    return (RawResponseConverter.INSTANCE as unknown) as ResponseConverter<F, T>
   }
 
   /**
@@ -151,7 +152,7 @@ export class Drizzle {
    * @param TargetApi - the target API class with decorated methods
    * @returns A proxy instance of the target API class
    */
-  create<T extends { new(...args: any[]): any }>(TargetApi: T) {
+  create<T extends { new (...args: any[]): any }>(TargetApi: T) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
 

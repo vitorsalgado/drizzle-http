@@ -26,7 +26,9 @@ export class FormRequestConverter implements RequestBodyConverter<any> {
     } else if (Array.isArray(value) && value.length > 0) {
       if (!Array.isArray(value[0])) {
         throw new RequestBodyTypeNotAllowed(
-          requestFactory.method, `${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} @Body() arg must be a object, 2d Array or string.`)
+          requestFactory.method,
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} @Body() arg must be a object, 2d Array or string.`
+        )
       }
 
       const res: string[] = []
@@ -47,7 +49,11 @@ export class FormRequestConverter implements RequestBodyConverter<any> {
 export class FormRequestConverterFactory extends RequestConverterFactory {
   static INSTANCE: FormRequestConverterFactory = new FormRequestConverterFactory()
 
-  requestConverter(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null {
+  requestConverter(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): RequestBodyConverter<unknown> | null {
     if (requestFactory.isFormUrlEncoded()) {
       return FormRequestConverter.INSTANCE
     }

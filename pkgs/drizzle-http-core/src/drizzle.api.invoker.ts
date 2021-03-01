@@ -12,7 +12,9 @@ import { Check } from './internal'
  * @typeParam V - Type of the response
  * @returns A function wrapping request context related information
  */
-export function serviceInvoker(drizzle: Drizzle): <T>(requestFactory: RequestFactory, method: string) => (...args: any[]) => T {
+export function serviceInvoker(
+  drizzle: Drizzle
+): <T>(requestFactory: RequestFactory, method: string) => (...args: any[]) => T {
   Check.nullOrUndefined(drizzle, 'Drizzle instance cannot be null.')
 
   const callFactory = drizzle.callFactory

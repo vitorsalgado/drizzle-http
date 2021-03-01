@@ -71,7 +71,8 @@ const undiciOptions = {
 
 const options = {
   pipelining,
-  connections, ...target
+  connections,
+  ...target
 }
 const pool = new Pool(target.url, options)
 
@@ -114,169 +115,196 @@ suite
   .add('drizzle-http', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        api.post('identifier', 'some filter parameter', data)
-          .then((response: Response) => response.json())
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          api.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('drizzle-http - no args', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        api.getArgLess()
-          .then((response: Response) => response.json())
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() => api.getArgLess().then((response: Response) => response.json()))
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('drizzle-http - stream', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        api
-          .streaming(
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          api.streaming(
             new Writable({
               write(_chunk, _encoding, callback) {
                 callback()
               }
-            }))
-      )).then(() => deferred.resolve())
+            })
+          )
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('undici - pool - request', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() => new Promise<void>(resolve => {
-          const d: Buffer[] = []
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(
+          () =>
+            new Promise<void>(resolve => {
+              const d: Buffer[] = []
 
-          pool
-            .request({
-              path: `/10002000?filter=${encodeURIComponent('some filter parameter')}`,
-              body: JSON.stringify(data),
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' }
+              pool
+                .request({
+                  path: `/10002000?filter=${encodeURIComponent('some filter parameter')}`,
+                  body: JSON.stringify(data),
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' }
+                })
+                .then(({ body }) =>
+                  body
+                    .pipe(
+                      new Writable({
+                        write(_chunk, _encoding, callback) {
+                          d.push(_chunk)
+                          callback()
+                        }
+                      })
+                    )
+                    .on('finish', () => {
+                      resolve(JSON.parse(Buffer.concat(d).toString()) as any)
+                    })
+                )
             })
-            .then(({ body }) =>
-              body
-                .pipe(new Writable({
-                  write(_chunk, _encoding, callback) {
-                    d.push(_chunk)
-                    callback()
-                  }
-                }))
-                .on('finish', () => {
-                  resolve(JSON.parse(Buffer.concat(d).toString()) as any)
-                }))
-        })
-      )).then(() => deferred.resolve())
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('undici - pool - request - no args', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() => new Promise<void>(resolve => {
-          const d: Buffer[] = []
-          pool
-            .request(undiciOptions)
-            .then(({ body }) =>
-              body
-                .pipe(new Writable({
-                  write(_chunk, _encoding, callback) {
-                    d.push(_chunk)
-                    callback()
-                  }
-                }))
-                .on('finish', () => {
-                  resolve(JSON.parse(Buffer.concat(d).toString()) as any)
-                }))
-        })
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(
+          () =>
+            new Promise<void>(resolve => {
+              const d: Buffer[] = []
+              pool.request(undiciOptions).then(({ body }) =>
+                body
+                  .pipe(
+                    new Writable({
+                      write(_chunk, _encoding, callback) {
+                        d.push(_chunk)
+                        callback()
+                      }
+                    })
+                  )
+                  .on('finish', () => {
+                    resolve(JSON.parse(Buffer.concat(d).toString()) as any)
+                  })
+              )
+            })
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('undici - stream', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        pool.stream(undiciOptions, () =>
-          new Writable({
-            write(_chunk, _encoding, callback) {
-              callback()
-            }
-          }))
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          pool.stream(
+            undiciOptions,
+            () =>
+              new Writable({
+                write(_chunk, _encoding, callback) {
+                  callback()
+                }
+              })
+          )
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('http', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() => new Promise(resolve => {
-          const d: Buffer[] = []
-          http.get(httpOptions, (res) =>
-            res
-              .pipe(new Writable({
-                write(_chunk, _encoding, callback) {
-                  d.push(_chunk)
-                  callback()
-                }
-              }))
-              .on('finish', () => {
-                resolve(JSON.parse(Buffer.concat(d).toString()) as any)
-              }))
-        })
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(
+          () =>
+            new Promise(resolve => {
+              const d: Buffer[] = []
+              http.get(httpOptions, res =>
+                res
+                  .pipe(
+                    new Writable({
+                      write(_chunk, _encoding, callback) {
+                        d.push(_chunk)
+                        callback()
+                      }
+                    })
+                  )
+                  .on('finish', () => {
+                    resolve(JSON.parse(Buffer.concat(d).toString()) as any)
+                  })
+              )
+            })
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('axios', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        Axios.post(target.url, {
-          headers: { 'Content-Type': 'application/json' },
-          data,
-          httpAgent: axiosAgent
-        })
-      )).then(() => deferred.resolve())
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          Axios.post(target.url, {
+            headers: { 'Content-Type': 'application/json' },
+            data,
+            httpAgent: axiosAgent
+          })
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('undici-fetch', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        fetch(target.url,
-          {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          fetch(target.url, {
             method: 'post',
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: Readable.from(JSON.stringify(data), { objectMode: false })
-          } as any
-        ).then(res => res.json())
-      )).then(() => deferred.resolve())
+          } as any).then(res => res.json())
+        )
+      ).then(() => deferred.resolve())
     }
   })
 
   .add('node-fetch', {
     defer: true,
     fn: (deferred: any) => {
-      Promise.all(Array.from(Array(parallelRequests)).map(() =>
-        NodeFetch(target.url,
-          {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          NodeFetch(target.url, {
             method: 'post',
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(data),
             agent: nodeFetchAgent
-          } as any
-        ).then(res => res.json())
-      )).then(() => deferred.resolve())
+          } as any).then(res => res.json())
+        )
+      ).then(() => deferred.resolve())
     }
   })
-
 
   // @ts-ignore
   .on('cycle', ({ target }) => {

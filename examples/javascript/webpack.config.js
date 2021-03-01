@@ -14,9 +14,7 @@ module.exports = {
   optimization: {
     minimize: false
   },
-  plugins: [
-    new CleanPlugin()
-  ],
+  plugins: [new CleanPlugin()],
   module: {
     rules: [
       {

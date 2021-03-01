@@ -3,13 +3,11 @@ import { RequestFactory } from './request.factory'
 import { RequestValues } from './request.values'
 
 export class Parameter {
-  constructor(public readonly index: number, public readonly type: string) {
-  }
+  constructor(public readonly index: number, public readonly type: string) {}
 }
 
 export abstract class ParameterHandler<P extends Parameter, V> {
-  constructor(public readonly parameter: P) {
-  }
+  constructor(public readonly parameter: P) {}
 
   abstract apply(requestValues: RequestValues, value: V): void
 }

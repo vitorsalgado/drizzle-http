@@ -48,7 +48,10 @@ export class UndiciCallFactory extends CallFactory {
       const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
 
       if (streamToIndex === null || typeof streamToIndex === 'undefined' || streamToIndex < 0) {
-        throw new InvalidRequestMethodConfigurationError('Method is decorated with @Streaming but there is no argument decorated with @StreamTo().', method)
+        throw new InvalidRequestMethodConfigurationError(
+          'Method is decorated with @Streaming but there is no argument decorated with @StreamTo().',
+          method
+        )
       }
 
       return function (request: Request, args: any[]): Call<unknown> {
@@ -58,7 +61,10 @@ export class UndiciCallFactory extends CallFactory {
       const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
 
       if (streamToIndex > -1) {
-        throw new InvalidRequestMethodConfigurationError('Found an argument decorated with @StreamTo() but method is not decorated with @Streaming()', method)
+        throw new InvalidRequestMethodConfigurationError(
+          'Found an argument decorated with @StreamTo() but method is not decorated with @Streaming()',
+          method
+        )
       }
     }
 

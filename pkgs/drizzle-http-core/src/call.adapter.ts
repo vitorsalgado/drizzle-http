@@ -24,5 +24,9 @@ export abstract class CallAdapterFactory {
    * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  abstract provideCallAdapter(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null
+  abstract provideCallAdapter(
+    drizzle: Drizzle,
+    method: string,
+    requestFactory: RequestFactory
+  ): CallAdapter<unknown, unknown> | null
 }

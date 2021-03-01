@@ -10,8 +10,7 @@ export class RequestValues {
     public readonly formFields: string[] = [],
     public body: BodyType = null,
     public signal: any | null = null
-  ) {
-  }
+  ) {}
 
   buildPath(): string {
     return this.path + (this.query.length > 0 ? '?' + this.query.join('&') : '')

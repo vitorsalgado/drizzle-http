@@ -3,7 +3,8 @@ module.exports = {
   plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'standard'
+    'standard',
+    'prettier'
   ],
   env: {
     jest: true,

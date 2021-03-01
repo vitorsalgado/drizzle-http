@@ -2,8 +2,7 @@ import { DrizzleError } from './errors'
 
 export class Check {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {
-  }
+  private constructor() {}
 
   /**
    * Throws an {@link DrizzleError} if parameter value is null or undefined

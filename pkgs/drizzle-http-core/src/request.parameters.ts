@@ -39,7 +39,11 @@ export class QueryParameterHandlerFactory extends ParameterHandlerFactory<QueryP
 
   handledType = (): string => QueryParameterType
 
-  parameterHandler(_drizzle: Drizzle, _rf: RequestFactory, p: QueryParameter): ParameterHandler<QueryParameter, string | string[]> {
+  parameterHandler(
+    _drizzle: Drizzle,
+    _rf: RequestFactory,
+    p: QueryParameter
+  ): ParameterHandler<QueryParameter, string | string[]> {
     return new QueryParameterHandler(p)
   }
 }
@@ -73,7 +77,11 @@ export class QueryNameParameterHandlerFactory extends ParameterHandlerFactory<Qu
 
   handledType = (): string => QueryNameParameterType
 
-  parameterHandler(_drizzle: Drizzle, _rf: RequestFactory, p: QueryNameParameter): ParameterHandler<QueryNameParameter, string | string[]> {
+  parameterHandler(
+    _drizzle: Drizzle,
+    _rf: RequestFactory,
+    p: QueryNameParameter
+  ): ParameterHandler<QueryNameParameter, string | string[]> {
     return new QueryNameParameterHandler(p)
   }
 }
@@ -85,11 +93,7 @@ export class QueryNameParameterHandlerFactory extends ParameterHandlerFactory<Qu
 export const PathParameterType = 'path_param'
 
 export class PathParameter extends Parameter {
-  constructor(
-    public readonly key: string,
-    public readonly regex: RegExp,
-    public readonly index: number
-  ) {
+  constructor(public readonly key: string, public readonly regex: RegExp, public readonly index: number) {
     super(index, PathParameterType)
   }
 }
@@ -119,7 +123,11 @@ export class PathParameterHandlerFactory extends ParameterHandlerFactory<PathPar
 
   handledType = (): string => PathParameterType
 
-  parameterHandler(_drizzle: Drizzle, _rf: RequestFactory, p: PathParameter): ParameterHandler<PathParameter, string | string[]> {
+  parameterHandler(
+    _drizzle: Drizzle,
+    _rf: RequestFactory,
+    p: PathParameter
+  ): ParameterHandler<PathParameter, string | string[]> {
     return new PathParameterHandler(p)
   }
 }
@@ -159,7 +167,11 @@ export class FormParameterHandlerFactory extends ParameterHandlerFactory<FormPar
 
   handledType = (): string => FormParameterType
 
-  parameterHandler(_drizzle: Drizzle, _rf: RequestFactory, p: FormParameter): ParameterHandler<FormParameter, string | string[]> {
+  parameterHandler(
+    _drizzle: Drizzle,
+    _rf: RequestFactory,
+    p: FormParameter
+  ): ParameterHandler<FormParameter, string | string[]> {
     return new FormParameterHandler(p)
   }
 }
@@ -197,7 +209,11 @@ export class HeaderParameterHandlerFactory extends ParameterHandlerFactory<Heade
 
   handledType = (): string => HeaderParameterType
 
-  parameterHandler(_drizzle: Drizzle, _rf: RequestFactory, p: HeaderParameter): ParameterHandler<HeaderParameter, string | string[]> {
+  parameterHandler(
+    _drizzle: Drizzle,
+    _rf: RequestFactory,
+    p: HeaderParameter
+  ): ParameterHandler<HeaderParameter, string | string[]> {
     return new HeaderParameterHandler(p)
   }
 }
@@ -218,7 +234,8 @@ export class BodyParameterHandler extends ParameterHandler<BodyParameter, BodyTy
   constructor(
     private readonly converter: RequestBodyConverter<BodyType>,
     private readonly requestFactory: RequestFactory,
-    parameter: BodyParameter) {
+    parameter: BodyParameter
+  ) {
     super(parameter)
   }
 
@@ -236,8 +253,16 @@ export class BodyParameterHandlerFactory extends ParameterHandlerFactory<BodyPar
 
   handledType = (): string => BodyParameterType
 
-  parameterHandler(drizzle: Drizzle, requestFactory: RequestFactory, p: BodyParameter): ParameterHandler<BodyParameter, BodyType> {
-    return new BodyParameterHandler(drizzle.requestBodyConverter(requestFactory.method, requestFactory), requestFactory, p)
+  parameterHandler(
+    drizzle: Drizzle,
+    requestFactory: RequestFactory,
+    p: BodyParameter
+  ): ParameterHandler<BodyParameter, BodyType> {
+    return new BodyParameterHandler(
+      drizzle.requestBodyConverter(requestFactory.method, requestFactory),
+      requestFactory,
+      p
+    )
   }
 }
 
@@ -268,7 +293,11 @@ export class SignalParameterHandlerFactory extends ParameterHandlerFactory<Signa
 
   handledType = (): string => SignalParameterType
 
-  parameterHandler(drizzle: Drizzle, requestFactory: RequestFactory, p: SignalParameter): ParameterHandler<SignalParameter, any> {
+  parameterHandler(
+    drizzle: Drizzle,
+    requestFactory: RequestFactory,
+    p: SignalParameter
+  ): ParameterHandler<SignalParameter, any> {
     return new SignalParameterHandler(p)
   }
 }

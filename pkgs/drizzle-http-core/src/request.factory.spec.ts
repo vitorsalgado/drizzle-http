@@ -162,7 +162,8 @@ describe('Request Factory', () => {
       requestFactory.path = '/test/{id}/name/{name}/another/{id}/testing/{project}'
       requestFactory.addParameters(
         new PathParameter('id', pathParameterRegex('id'), 0),
-        new PathParameter('name', pathParameterRegex('name'), 1))
+        new PathParameter('name', pathParameterRegex('name'), 1)
+      )
 
       requestFactory.preProcess(drizzle)
 
@@ -177,7 +178,8 @@ describe('Request Factory', () => {
       requestFactory.addParameters(
         new PathParameter('id', pathParameterRegex('id'), 0),
         new PathParameter('name', pathParameterRegex('name'), 1),
-        new PathParameter('some', pathParameterRegex('some'), 1))
+        new PathParameter('some', pathParameterRegex('some'), 1)
+      )
 
       requestFactory.preProcess(drizzle)
 
@@ -191,7 +193,8 @@ describe('Request Factory', () => {
       requestFactory.path = '/test/{id}/name/{name}?filter=all&sort={sort}'
       requestFactory.addParameters(
         new PathParameter('id', pathParameterRegex('id'), 0),
-        new PathParameter('name', pathParameterRegex('name'), 1))
+        new PathParameter('name', pathParameterRegex('name'), 1)
+      )
 
       requestFactory.preProcess(drizzle)
 
@@ -304,8 +307,7 @@ describe('Request Factory', () => {
     })
 
     it('should merge with values from ApiInstanceMeta', () => {
-      class TestEmitter extends EventEmitter {
-      }
+      class TestEmitter extends EventEmitter {}
 
       const testEmitter = new TestEmitter()
 
@@ -411,7 +413,7 @@ describe('Request Factory', () => {
 
       requestFactory.preProcessAndValidate(drizzle)
 
-      function * b() {
+      function* b() {
         yield 'name=nice+coder'
         yield '&'
         yield 'age=32'
@@ -505,13 +507,10 @@ describe('Request Factory', () => {
     requestFactory.addParameter(new HeaderParameter('x-id', 2))
     requestFactory.addParameters(
       new PathParameter('id', pathParameterRegex('id'), 0),
-      new PathParameter('version', pathParameterRegex('version'), 1))
-    requestFactory.addParameters(
-      new QueryParameter('filter', 3),
-      new QueryParameter('active', 4))
-    requestFactory.addParameters(
-      new QueryNameParameter(5),
-      new QueryNameParameter(6))
+      new PathParameter('version', pathParameterRegex('version'), 1)
+    )
+    requestFactory.addParameters(new QueryParameter('filter', 3), new QueryParameter('active', 4))
+    requestFactory.addParameters(new QueryNameParameter(5), new QueryNameParameter(6))
 
     const instanceMeta = new ApiInstanceMeta()
     instanceMeta.connectTimeout = 10
@@ -523,9 +522,19 @@ describe('Request Factory', () => {
     requestFactory.preProcessAndValidate(drizzle)
 
     const requestBuilder = requestFactory.requestBuilder(drizzle)
-    const request = requestBuilder.toRequest([50, '1.0', '8bc', ['all', 'completed'], true, 'sendTo(boss)', 'pages(10)'])
+    const request = requestBuilder.toRequest([
+      50,
+      '1.0',
+      '8bc',
+      ['all', 'completed'],
+      true,
+      'sendTo(boss)',
+      'pages(10)'
+    ])
 
-    expect(request.url).toEqual('/api/1.0/groups/50/projects?filter=all&filter=completed&active=true&sendTo%28boss%29&pages%2810%29')
+    expect(request.url).toEqual(
+      '/api/1.0/groups/50/projects?filter=all&filter=completed&active=true&sendTo%28boss%29&pages%2810%29'
+    )
     expect(request.method).toEqual('GET')
     expect(request.bodyTimeout).toEqual(5)
     expect(request.headersTimeout).toEqual(10)

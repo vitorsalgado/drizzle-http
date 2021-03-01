@@ -3,7 +3,7 @@ import { Readable } from 'stream'
 import { Headers } from './http.headers'
 
 describe('Response', function () {
-  function * txt() {
+  function* txt() {
     yield 'start'
     yield '-'
     yield 'end'
@@ -43,14 +43,13 @@ describe('Response', function () {
     const type = 'type'
     const url = 'http://www.test.com/path'
 
-    const response = new Response(Readable.from(txt(), { objectMode: false }),
-      {
-        status,
-        statusText,
-        headers,
-        type,
-        url
-      })
+    const response = new Response(Readable.from(txt(), { objectMode: false }), {
+      status,
+      statusText,
+      headers,
+      type,
+      url
+    })
 
     expect(response.status).toEqual(status)
     expect(response.statusText).toEqual(statusText)

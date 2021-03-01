@@ -5,19 +5,18 @@ import { Socket } from 'net'
 const sockets = new Set<Socket>()
 const port = process.env.STATIC_SERVER_PORT || 3002
 
-const server = createServer(
-  (req, res) => {
-    Fs.readFile(__dirname + req.url, (err, data) => {
-      if (err) {
-        res.writeHead(404)
-        res.end(JSON.stringify(err))
-        return
-      }
+const server = createServer((req, res) => {
+  Fs.readFile(__dirname + req.url, (err, data) => {
+    if (err) {
+      res.writeHead(404)
+      res.end(JSON.stringify(err))
+      return
+    }
 
-      res.writeHead(200)
-      res.end(data)
-    })
+    res.writeHead(200)
+    res.end(data)
   })
+})
 
 server.on('connection', socket => {
   sockets.add(socket)

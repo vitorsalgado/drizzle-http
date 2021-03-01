@@ -16,13 +16,13 @@ class API {
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
     @H('code') code: number,
-    @Abort() abort: EventEmitter): Promise<TestResult<TestId>> {
+    @Abort() abort: EventEmitter
+  ): Promise<TestResult<TestId>> {
     return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
   }
 }
 
 describe('Drizzle Http', function () {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  it('should load all modules correctly', () => {
-  })
+  it('should load all modules correctly', () => {})
 })

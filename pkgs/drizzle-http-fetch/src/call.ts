@@ -16,15 +16,16 @@ export class FetchCall<T> extends Call<Promise<T>> {
   }
 
   execute(): Promise<T> {
-    return fetch(this.request.url, FetchCall.requestInit(this.requestInit, this.request))
-      .then(response => this.responseConverter.convert(response as any))
+    return fetch(this.request.url, FetchCall.requestInit(this.requestInit, this.request)).then(response =>
+      this.responseConverter.convert(response as any)
+    )
   }
 
   static requestInit(requestInit: RequestInit, request: Request): RequestInit {
     return {
       ...requestInit,
       method: request.method,
-      headers: request.headers as unknown as Headers,
+      headers: (request.headers as unknown) as Headers,
       body: request.body as BodyInit
     }
   }

@@ -2,7 +2,7 @@ import { Readable } from 'stream'
 import { HttpBody } from './http.body'
 
 describe('Body', () => {
-  function * txt() {
+  function* txt() {
     yield 'start'
     yield '-'
     yield 'end'

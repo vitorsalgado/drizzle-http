@@ -10,21 +10,18 @@ function App() {
     deputiesApi
       .parties(acronym)
       .then(response => response.json())
-      .then(parties =>
-        updateParties([...parties.dados]))
+      .then(parties => updateParties([...parties.dados]))
 
   return (
     <div>
-      <input type='text' onChange={event => setAcronym(event.target.value)} />
+      <input type="text" onChange={event => setAcronym(event.target.value)} />
       <button onClick={onPartiesSearch}>Search Parties</button>
       <ol>
-        {
-          parties.map(party =>
-            <li key={party.id}>
-              {party.sigla}: {party.nome}
-            </li>
-          )
-        }
+        {parties.map(party => (
+          <li key={party.id}>
+            {party.sigla}: {party.nome}
+          </li>
+        ))}
       </ol>
     </div>
   )

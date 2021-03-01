@@ -19,18 +19,27 @@ describe('Request', function () {
 
   it('should fail when init a GET,HEAD or OPTIONS request with body', function () {
     expect(() => new Request(url, { body: new Readable() })).toThrow()
-    expect(() => new Request(url, {
-      method: 'GET',
-      body: new Readable()
-    })).toThrow()
-    expect(() => new Request(url, {
-      method: 'OPTIONS',
-      body: new Readable()
-    })).toThrow()
-    expect(() => new Request(url, {
-      method: 'HEAD',
-      body: new Readable()
-    })).toThrow()
+    expect(
+      () =>
+        new Request(url, {
+          method: 'GET',
+          body: new Readable()
+        })
+    ).toThrow()
+    expect(
+      () =>
+        new Request(url, {
+          method: 'OPTIONS',
+          body: new Readable()
+        })
+    ).toThrow()
+    expect(
+      () =>
+        new Request(url, {
+          method: 'HEAD',
+          body: new Readable()
+        })
+    ).toThrow()
   })
 
   it('should normalize http method', () => {
@@ -67,7 +76,7 @@ describe('Request', function () {
   })
 
   it('should fail when cloning with used body', async function () {
-    function * txt() {
+    function* txt() {
       yield 'start'
       yield '-'
       yield 'end'

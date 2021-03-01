@@ -17,14 +17,19 @@ class CallbackCallAdapter implements CallAdapter<Promise<unknown>, void> {
   static INSTANCE: CallbackCallAdapter = new CallbackCallAdapter()
 
   adapt(action: Call<Promise<unknown>>): void {
-    action.execute()
+    action
+      .execute()
       .then(response => action.argv[action.argv.length - 1](null, response))
       .catch(error => action.argv[action.argv.length - 1](error, null))
   }
 }
 
 export class CallbackCallAdapterFactory extends CallAdapterFactory {
-  provideCallAdapter(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provideCallAdapter(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): CallAdapter<unknown, unknown> | null {
     if (requestFactory.getConfig(KEY_IS_CALLBACK)) {
       return CallbackCallAdapter.INSTANCE
     }

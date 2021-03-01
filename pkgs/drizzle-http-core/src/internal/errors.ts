@@ -18,7 +18,11 @@ export class PrematureServerResponseCloseError extends DrizzleError {
 
 export class InvalidRequestMethodConfigurationError extends DrizzleError {
   constructor(public method: string, message: string) {
-    super(`Method "${method === null || typeof method === 'undefined' ? '' : method}" contains invalid configuration(s): ` + message, 'DRIZZLE_HTTP_ERR_INVALID_REQ_METHOD_CONFIG')
+    super(
+      `Method "${method === null || typeof method === 'undefined' ? '' : method}" contains invalid configuration(s): ` +
+        message,
+      'DRIZZLE_HTTP_ERR_INVALID_REQ_METHOD_CONFIG'
+    )
     Error.captureStackTrace(this, InvalidRequestMethodConfigurationError)
     this.name = 'InvalidRequestMethodConfigurationError'
   }
@@ -58,7 +62,10 @@ export class MethodNotSupportedError extends DrizzleError {
 
 export class NoParameterHandlerFoundForType extends DrizzleError {
   constructor(type: string, method: string, index: number) {
-    super(`Type "${type}" does not have a parameter handler associated. Check method "${method}", decorated parameter [${index}].`, 'DRIZZLE_HTTP_ERR_PARAMETER_HANDLER_NOT_FOUND')
+    super(
+      `Type "${type}" does not have a parameter handler associated. Check method "${method}", decorated parameter [${index}].`,
+      'DRIZZLE_HTTP_ERR_PARAMETER_HANDLER_NOT_FOUND'
+    )
     Error.captureStackTrace(this, NoParameterHandlerFoundForType)
     this.name = 'NoParameterHandlerFoundForType'
   }

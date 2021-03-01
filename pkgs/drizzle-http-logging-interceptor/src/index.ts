@@ -52,8 +52,8 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
   constructor(
     private readonly logger: Logger = PinoLogger.DEFAULT,
     private level: Level = Level.BASIC,
-    private readonly headersToRedact: Set<string> = new Set<string>()) {
-  }
+    private readonly headersToRedact: Set<string> = new Set<string>()
+  ) {}
 
   redactHeader(...names: string[]): void {
     if (names === null || names.length === 0) {
@@ -117,12 +117,17 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
 
     const start = LoggingInterceptor.ms()
 
-    return chain.proceed(request)
+    return chain
+      .proceed(request)
       .then(response => {
         const took = LoggingInterceptor.ms() - start
-        const bodySize = response.headers.has('content-length') ? response.headers.get('content-length') : 'unknown-length'
+        const bodySize = response.headers.has('content-length')
+          ? response.headers.get('content-length')
+          : 'unknown-length'
 
-        this.logger.info(`<-- ${response.status}${response.statusText ? ' ' + response.statusText : ''} ${response.url}`)
+        this.logger.info(
+          `<-- ${response.status}${response.statusText ? ' ' + response.statusText : ''} ${response.url}`
+        )
         this.logger.info('Took: ' + took.toString() + 'ms')
 
         if (logHeaders) {
@@ -161,7 +166,11 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
         const took = LoggingInterceptor.ms() - start
 
         if (error instanceof HttpError) {
-          this.logger.error(`<-- ${error.response.status}${error.response.statusText ? ' ' + error.response.statusText : ''} ${error.response.url}`)
+          this.logger.error(
+            `<-- ${error.response.status}${error.response.statusText ? ' ' + error.response.statusText : ''} ${
+              error.response.url
+            }`
+          )
 
           if (logHeaders) {
             for (const [name, value] of error.response.headers) {

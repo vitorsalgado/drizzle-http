@@ -17,15 +17,16 @@ export class NoopCallFactory implements CallFactory {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup(drizzle: Drizzle): void {
-  }
+  setup(drizzle: Drizzle): void {}
 }
 
 class TestCall<T> extends Call<Promise<T>> {
   constructor(
     readonly url: URL,
     private responseConverter: ResponseConverter<Response, T>,
-    public readonly request: Request, public readonly argv: any[]) {
+    public readonly request: Request,
+    public readonly argv: any[]
+  ) {
     super(request, argv)
 
     if (!isAbsolute(this.request.url)) {
@@ -37,25 +38,26 @@ class TestCall<T> extends Call<Promise<T>> {
     return request(this.request.url, {
       ...toRequest(this.request),
       path: undefined
-    } as any)
-      .then(res => {
-        if (Response.isOK(res.statusCode)) {
-          return this.responseConverter.convert(
-            new Response(res.body, {
-              status: res.statusCode,
-              headers: new Headers(res.headers as Record<string, string>),
-              url: this.request.url
-            }))
-        }
-
-        throw new HttpError(
-          this.request,
+    } as any).then(res => {
+      if (Response.isOK(res.statusCode)) {
+        return this.responseConverter.convert(
           new Response(res.body, {
             status: res.statusCode,
             headers: new Headers(res.headers as Record<string, string>),
             url: this.request.url
-          }))
-      })
+          })
+        )
+      }
+
+      throw new HttpError(
+        this.request,
+        new Response(res.body, {
+          status: res.statusCode,
+          headers: new Headers(res.headers as Record<string, string>),
+          url: this.request.url
+        })
+      )
+    })
   }
 }
 
@@ -64,13 +66,17 @@ export class TestCallFactory implements CallFactory {
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     return function (request, args) {
-      return new TestCall(new URL(drizzle.baseUrl), drizzle.responseBodyConverter(method, requestFactory), request, args)
+      return new TestCall(
+        new URL(drizzle.baseUrl),
+        drizzle.responseBodyConverter(method, requestFactory),
+        request,
+        args
+      )
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  setup(_drizzle: Drizzle): void {
-  }
+  setup(_drizzle: Drizzle): void {}
 }
 
 export function toRequest(request: Request): RequestOptions {

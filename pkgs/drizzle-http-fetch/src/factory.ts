@@ -6,8 +6,7 @@ export class FetchCallFactory extends CallFactory {
   static DEFAULT: FetchCallFactory = new FetchCallFactory()
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup(drizzle: Drizzle): void {
-  }
+  setup(drizzle: Drizzle): void {}
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     const responseConverter = drizzle.responseBodyConverter(method, requestFactory)

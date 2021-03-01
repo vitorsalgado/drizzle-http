@@ -25,12 +25,7 @@ export function StreamTo() {
  * Represents a Stream Response
  */
 export class StreamToResult {
-  constructor(
-    public url: string,
-    public status: number,
-    public headers: Headers,
-    public stream: Writable) {
-  }
+  constructor(public url: string, public status: number, public headers: Headers, public stream: Writable) {}
 }
 
 export class StreamToHttpError extends DrizzleError {
@@ -42,12 +37,7 @@ export class StreamToHttpError extends DrizzleError {
 }
 
 export class UndiciStreamCall extends Call<Promise<StreamToResult>> {
-  constructor(
-    private readonly client: Pool,
-    private readonly streamTo: number,
-    request: Request,
-    argv: any[]
-  ) {
+  constructor(private readonly client: Pool, private readonly streamTo: number, request: Request, argv: any[]) {
     super(request, argv)
   }
 
@@ -56,29 +46,29 @@ export class UndiciStreamCall extends Call<Promise<StreamToResult>> {
       const response: any = { url: this.request.url }
       const to = this.argv[this.streamTo] as Writable
 
-      this.client
-        .stream(
-          toUndiciRequest(this.request),
-          ({ statusCode, headers }) => {
-            response.status = statusCode
-            response.headers = new Headers(headers as Record<string, string>)
+      this.client.stream(
+        toUndiciRequest(this.request),
+        ({ statusCode, headers }) => {
+          response.status = statusCode
+          response.headers = new Headers(headers as Record<string, string>)
 
-            return to
-          },
-          (err, data) => {
-            if (err) {
-              return reject(new StreamToHttpError(this.request, response))
-            }
-
-            response.headers?.mergeObject(data.trailers as Record<string, string>)
-            response.stream = to
-
-            if (Response.isOK(response.status)) {
-              return resolve(response as StreamToResult)
-            }
-
+          return to
+        },
+        (err, data) => {
+          if (err) {
             return reject(new StreamToHttpError(this.request, response))
-          })
+          }
+
+          response.headers?.mergeObject(data.trailers as Record<string, string>)
+          response.stream = to
+
+          if (Response.isOK(response.status)) {
+            return resolve(response as StreamToResult)
+          }
+
+          return reject(new StreamToHttpError(this.request, response))
+        }
+      )
     })
   }
 }

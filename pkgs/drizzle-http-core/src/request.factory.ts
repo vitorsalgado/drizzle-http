@@ -93,7 +93,9 @@ export class RequestFactory {
     }
 
     if (!this.httpMethod) {
-      throw this.invalidArgErr('No HTTP Method. Use @GET(), @POST(), @PUT(), @DELETE(), @PATCH(), @OPTIONS() or @HEAD() decorators on method level.')
+      throw this.invalidArgErr(
+        'No HTTP Method. Use @GET(), @POST(), @PUT(), @DELETE(), @PATCH(), @OPTIONS() or @HEAD() decorators on method level.'
+      )
     }
 
     if ((this.httpMethod === 'GET' || this.httpMethod === 'HEAD' || this.httpMethod === 'OPTIONS') && this.hasBody()) {
@@ -131,12 +133,13 @@ export class RequestFactory {
       }
     }
 
-    const nonDupPathParams = new Set((this.path.match(REGEX_EXTRACT_TEMPLATE_PARAMS) ?? []))
+    const nonDupPathParams = new Set(this.path.match(REGEX_EXTRACT_TEMPLATE_PARAMS) ?? [])
 
     if (pathParameters.length !== nonDupPathParams.size) {
       throw this.invalidArgErr(
         'Path parameter configuration is not in sync with URL. ' +
-        'Check your path and arguments decorated with @Param().')
+          'Check your path and arguments decorated with @Param().'
+      )
     } else {
       for (const param of pathParameters) {
         if (!nonDupPathParams.has(`{${param.key}}`)) {
@@ -147,12 +150,15 @@ export class RequestFactory {
 
     if (this.isFormUrlEncoded()) {
       if (this.bodyIndex > 0 && formParameters.length > 0) {
-        throw this.invalidArgErr(`${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} request cannot contain both @Body() and @Field() decorators.`)
+        throw this.invalidArgErr(
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} request cannot contain both @Body() and @Field() decorators.`
+        )
       }
     } else {
       if (formParameters.length > 0) {
         throw this.invalidArgErr(
-          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} requests. Maybe you are missing @FormUrlEncoded() decorator?`)
+          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} requests. Maybe you are missing @FormUrlEncoded() decorator?`
+        )
       }
     }
   }
@@ -182,7 +188,7 @@ export class RequestFactory {
 
     this.parameters
       .sort((a, b) => a.index - b.index)
-      .forEach((parameter) => {
+      .forEach(parameter => {
         const handlerFactory = drizzle.parameterHandlerFactory(this, parameter)
         const handler = handlerFactory.parameterHandler(drizzle, this, parameter)
 
@@ -327,9 +333,7 @@ export class RequestFactory {
    * @param type - return class handledType
    */
   isReturnTypeOf(type: ReturnType): boolean {
-    return this.returnType !== null &&
-      typeof this.returnType !== 'undefined' &&
-      this.returnType === type
+    return this.returnType !== null && typeof this.returnType !== 'undefined' && this.returnType === type
   }
 
   /**
@@ -337,9 +341,11 @@ export class RequestFactory {
    * @param type - return class handledType
    */
   isGenericReturnTypeOf(type: ReturnType): boolean {
-    return this.returnGenericType !== null &&
+    return (
+      this.returnGenericType !== null &&
       typeof this.returnGenericType !== 'undefined' &&
       this.returnGenericType === type
+    )
   }
 
   /**
@@ -387,7 +393,7 @@ export class RequestFactory {
    * Return registered query parameters
    */
   getQueryParameters(): Array<QueryParameter> {
-    return [...this.parameters.filter(x => x.type === QueryParameterType) as Array<QueryParameter>]
+    return [...(this.parameters.filter(x => x.type === QueryParameterType) as Array<QueryParameter>)]
   }
 
   /**
@@ -401,7 +407,7 @@ export class RequestFactory {
    * Return registered query name parameters
    */
   getQueryNameParameters(): Array<QueryNameParameter> {
-    return [...this.parameters.filter(x => x.type === QueryNameParameterType) as Array<QueryNameParameter>]
+    return [...(this.parameters.filter(x => x.type === QueryNameParameterType) as Array<QueryNameParameter>)]
   }
 
   /**
@@ -415,7 +421,7 @@ export class RequestFactory {
    * Return registered form field parameters
    */
   getFormParameters(): Array<FormParameter> {
-    return [...this.parameters.filter(x => x.type === FormParameterType) as Array<FormParameter>]
+    return [...(this.parameters.filter(x => x.type === FormParameterType) as Array<FormParameter>)]
   }
 
   /**
@@ -429,7 +435,7 @@ export class RequestFactory {
    * Return registered path parameters
    */
   getPathParameters(): Array<PathParameter> {
-    return [...this.parameters.filter(x => x.type === PathParameterType) as Array<PathParameter>]
+    return [...(this.parameters.filter(x => x.type === PathParameterType) as Array<PathParameter>)]
   }
 
   /**
@@ -457,7 +463,7 @@ export class RequestFactory {
    * Return registered header parameters
    */
   getHeaderParameters(): Array<HeaderParameter> {
-    return [...this.parameters.filter(x => x.type === HeaderParameterType) as Array<HeaderParameter>]
+    return [...(this.parameters.filter(x => x.type === HeaderParameterType) as Array<HeaderParameter>)]
   }
 
   /**
@@ -473,9 +479,7 @@ export class RequestFactory {
    * @returns true / false
    */
   containsDynamicParameters(): boolean {
-    return this.hasArgs() ||
-      this.parameters.length > 0 ||
-      this.hasBody()
+    return this.hasArgs() || this.parameters.length > 0 || this.hasBody()
   }
 
   /**
@@ -532,8 +536,8 @@ export class NoParametersRequestBuilder implements RequestBuilder {
 export class DynamicParametrizedRequestBuilder implements RequestBuilder {
   constructor(
     private readonly requestFactory: RequestFactory,
-    private readonly requestBodyConverter: RequestBodyConverter<BodyType>) {
-  }
+    private readonly requestBodyConverter: RequestBodyConverter<BodyType>
+  ) {}
 
   toRequest(args: any[]): Request {
     const requestValues = new RequestValues(
@@ -543,7 +547,8 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       this.requestFactory.defaultHeaders,
       [],
       null,
-      this.requestFactory.signal)
+      this.requestFactory.signal
+    )
 
     for (let i = 0; i < this.requestFactory.parameterHandlers.length; i++) {
       const ph = this.requestFactory.parameterHandlers[i]

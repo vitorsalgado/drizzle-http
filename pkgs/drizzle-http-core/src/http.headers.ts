@@ -64,10 +64,7 @@ export class Headers {
   // region Utils
 
   toObject(): Record<string, string> {
-    return Array
-      .from(this[sHeaders])
-      .reduce((obj, [key, value]) =>
-        (Object.assign(obj, { [key]: value })), {})
+    return Array.from(this[sHeaders]).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {})
   }
 
   merge(headers: Headers): void {

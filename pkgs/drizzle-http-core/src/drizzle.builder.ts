@@ -196,7 +196,10 @@ export class DrizzleBuilder {
    */
   addDefaultHeader(key: string, value: string): this {
     Check.nullOrUndefined(key, 'Parameters "key" must not be null')
-    Check.nullOrUndefined(value, 'Parameters "value" must not be null. If you want a empty Header value, provide a empty string.')
+    Check.nullOrUndefined(
+      value,
+      'Parameters "value" must not be null. If you want a empty Header value, provide a empty string.'
+    )
 
     if (key.length === 0) {
       throw new DrizzleError('Parameter "key" must not be an empty string.')
@@ -242,7 +245,8 @@ export class DrizzleBuilder {
     this.addRequestConverterFactories(
       new JsonRequestConverterFactory(),
       new FormRequestConverterFactory(),
-      new RawRequestConverterFactory())
+      new RawRequestConverterFactory()
+    )
 
     this._responseConverterFactories.unshift(new RawResponseConverterFactory())
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
@@ -257,12 +261,17 @@ export class DrizzleBuilder {
     }
 
     Check.nullOrUndefined(this._baseURL, '"BaseUrl" must not be null or undefined.')
-    Check.nullOrUndefined(this._callFactory, 'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.')
+    Check.nullOrUndefined(
+      this._callFactory,
+      'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.'
+    )
 
     if (this._parameterHandlerFactories.length === 0) {
-      throw new Error('No "Parameter Handler Factories" set. ' +
-        'Use "parameterHandlerFactory()" method to add a "ParameterHandlerFactory" instance. ' +
-        'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."')
+      throw new Error(
+        'No "Parameter Handler Factories" set. ' +
+          'Use "parameterHandlerFactory()" method to add a "ParameterHandlerFactory" instance. ' +
+          'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."'
+      )
     }
 
     if (this._enableDrizzleUserAgent) {
@@ -277,6 +286,7 @@ export class DrizzleBuilder {
       new Set<CallAdapterFactory>(this._callAdapterFactories),
       this._parameterHandlerFactories,
       new Set<RequestConverterFactory>(this._requestConverterFactories),
-      new Set<ResponseConverterFactory>(this._responseConverterFactories))
+      new Set<ResponseConverterFactory>(this._responseConverterFactories)
+    )
   }
 }

@@ -11,9 +11,7 @@ module.exports = {
     js: Path.resolve(__dirname, '../src/test/apiJs.js')
   },
   devtool: 'inline-source-map',
-  plugins: [
-    new CleanPlugin()
-  ],
+  plugins: [new CleanPlugin()],
   module: {
     rules: [
       {

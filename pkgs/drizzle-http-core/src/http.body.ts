@@ -6,7 +6,7 @@ const sBody = Symbol('body')
 const sBodyUsed = Symbol('bodyUsed')
 
 export class HttpBody {
-  [sBody]: BodyType
+  [sBody]: BodyType;
   [sBodyUsed]: boolean
 
   constructor(input: BodyType = null) {

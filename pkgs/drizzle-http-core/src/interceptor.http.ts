@@ -4,8 +4,7 @@ import { CallProvider } from './call'
 import { Chain, Interceptor } from './interceptor'
 
 export class HttpExecInterceptor implements Interceptor<Request, Response> {
-  constructor(private readonly callProvider: CallProvider) {
-  }
+  constructor(private readonly callProvider: CallProvider) {}
 
   async intercept(chain: Chain<Request, Response>): Promise<Response> {
     return this.callProvider(chain.request(), chain.argv()).execute() as Response
@@ -17,8 +16,8 @@ export class ExecutorChain<TReq, TRes> implements Chain<TReq, TRes> {
     private readonly _index: number,
     private readonly _interceptors: Interceptor<TReq, TRes>[],
     private readonly _request: TReq,
-    private readonly _argv: any[]) {
-  }
+    private readonly _argv: any[]
+  ) {}
 
   static First<TReq, TRes>(
     interceptors: Interceptor<TReq, TRes>[],

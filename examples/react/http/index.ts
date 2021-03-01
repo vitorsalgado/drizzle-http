@@ -24,40 +24,39 @@ const partiesAPI = DrizzleBuilder.newBuilder()
 
 const port = parseInt(String(process.env.PORT || 3001))
 
-createServer(
-  (req, res) => {
-    const cors = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Max-Age': 2592000
-    }
+createServer((req, res) => {
+  const cors = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Max-Age': 2592000
+  }
 
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204, cors)
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, cors)
+    res.end()
+    return
+  }
+
+  const query = url.parse(req.url as string, true).query
+  const header = { 'Content-Type': 'application/json;charset=utf-8' }
+  const charset = 'utf-8'
+
+  res.setHeader('Content-Type', 'application/json;charset=utf-8')
+  res.writeHead(200, { ...header, ...cors })
+
+  partiesAPI
+    .parties(query.acronym, res)
+    .then(() => {
+      if (res.headersSent) {
+        return res.end()
+      }
+    })
+    .catch((err: StreamToHttpError) => {
+      res.writeHead(500, 'Internal Server Error', { ...header, ...cors })
+      res.write(JSON.stringify({ error: err.stack }), charset)
       res.end()
-      return
-    }
-
-    const query = url.parse(req.url as string, true).query
-    const header = { 'Content-Type': 'application/json;charset=utf-8' }
-    const charset = 'utf-8'
-
-    res.setHeader('Content-Type', 'application/json;charset=utf-8')
-    res.writeHead(200, { ...header, ...cors })
-
-    partiesAPI
-      .parties(query.acronym, res)
-      .then(() => {
-        if (res.headersSent) {
-          return res.end()
-        }
-      })
-      .catch((err: StreamToHttpError) => {
-        res.writeHead(500, 'Internal Server Error', { ...header, ...cors })
-        res.write(JSON.stringify({ error: err.stack }), charset)
-        res.end()
-      })
-  })
+    })
+})
   .listen(port)
   .on('error', console.error)

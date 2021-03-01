@@ -42,7 +42,8 @@ class API {
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
     @H('code') code: number,
-    @Abort() abort: EventEmitter): Promise<TestResult<TestId>> {
+    @Abort() abort: EventEmitter
+  ): Promise<TestResult<TestId>> {
     return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
   }
 
@@ -71,17 +72,17 @@ describe('Drizzle', () => {
         .addDefaultHeader('Content-Type', 'application/json')
         .build()
       api = drizzle.create(API)
-    }))
+    })
+  )
 
   afterAll(() => Promise.all([closeTestServer(), drizzle.shutdown()]))
 
   it('should call simple / route and parse AsJson response', () =>
-    api.get()
-      .then(response => {
-        expect(response.headers).toHaveProperty('content-type', 'application/json')
-        expect(response.headers).toHaveProperty('x-env', 'Test')
-        expect(response.result.ok).toBeTruthy()
-      }))
+    api.get().then(response => {
+      expect(response.headers).toHaveProperty('content-type', 'application/json')
+      expect(response.headers).toHaveProperty('x-env', 'Test')
+      expect(response.result.ok).toBeTruthy()
+    }))
 
   it('should should send all specified arguments in the request respecting decorators setupTestServer', () => {
     const id = 'bbbcc31f-94ea-4b20-a184-644e8f3b5f15'
@@ -93,36 +94,33 @@ describe('Drizzle', () => {
     const code = 666
     const ee = new EventEmitter()
 
-    return api.projects(id, name, filter, sort, prop, cache, code, ee)
-      .then(response => {
-        expect(response.result.id).toEqual(id)
-        expect(response.query).toHaveProperty('filter', filter)
-        expect(response.query).toHaveProperty('sort', sort)
-        expect(response.query).toHaveProperty(prop)
-        expect(response.params).toHaveProperty('id', id)
-        expect(response.params).toHaveProperty('name', name)
-        expect(response.headers).toHaveProperty('content-type', 'application/json')
-        expect(response.headers).toHaveProperty('cache', String(cache))
-        expect(response.headers).toHaveProperty('code', String(code))
-        expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
-      })
+    return api.projects(id, name, filter, sort, prop, cache, code, ee).then(response => {
+      expect(response.result.id).toEqual(id)
+      expect(response.query).toHaveProperty('filter', filter)
+      expect(response.query).toHaveProperty('sort', sort)
+      expect(response.query).toHaveProperty(prop)
+      expect(response.params).toHaveProperty('id', id)
+      expect(response.params).toHaveProperty('name', name)
+      expect(response.headers).toHaveProperty('content-type', 'application/json')
+      expect(response.headers).toHaveProperty('cache', String(cache))
+      expect(response.headers).toHaveProperty('code', String(code))
+      expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
+    })
   })
 
   it('should return raw http response when response handledType is "raw" and return handledType is Response', () => {
     const id = 'test'
     const orderBy = 'desc'
-    return api.getRaw(id, orderBy)
-      .then(response => {
-        expect(response.ok).toBeTruthy()
-        expect(response.status).toEqual(200)
+    return api.getRaw(id, orderBy).then(response => {
+      expect(response.ok).toBeTruthy()
+      expect(response.status).toEqual(200)
 
-        return response.json<TestResult<TestId>>()
-          .then((parsed) => {
-            expect(parsed.result.id).toEqual(id)
-            expect(parsed.params.id).toEqual(id)
-            expect(parsed.query).toHaveProperty('sort', orderBy)
-          })
+      return response.json<TestResult<TestId>>().then(parsed => {
+        expect(parsed.result.id).toEqual(id)
+        expect(parsed.params.id).toEqual(id)
+        expect(parsed.query).toHaveProperty('sort', orderBy)
       })
+    })
   })
 
   it('should post json body data', () => {
@@ -130,10 +128,9 @@ describe('Drizzle', () => {
     const project = 'test-project-3780921'
     const body = { description: 'description is unnecessary', active: true, meta: { type: 'none', more: [100, 200] } }
 
-    return api.post(id, project, body)
-      .then(response => {
-        expect(response.result.ok).toBeTruthy()
-        expect(response.body).toEqual(body)
-      })
+    return api.post(id, project, body).then(response => {
+      expect(response.result.ok).toBeTruthy()
+      expect(response.body).toEqual(body)
+    })
   })
 })

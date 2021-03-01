@@ -76,8 +76,7 @@ describe('Logging Interceptor', function () {
       .build()
       .create(API3)
 
-    return api.execute('test', 'proj', { name: 'test' })
-      .catch((err: any) => expect(err.response.status).toEqual(404))
+    return api.execute('test', 'proj', { name: 'test' }).catch((err: any) => expect(err.response.status).toEqual(404))
   })
 
   it('should not log redacted header value', () => {
@@ -94,8 +93,7 @@ describe('Logging Interceptor', function () {
     }
 
     class FakeLogger implements Logger {
-      constructor(private readonly spy: jest.Mock<any, any>) {
-      }
+      constructor(private readonly spy: jest.Mock<any, any>) {}
 
       error(message: string, error?: Error): void {
         if (message.toLowerCase().indexOf('super-secret-value') > -1) {
@@ -127,7 +125,8 @@ describe('Logging Interceptor', function () {
       .build()
       .create(API4)
 
-    return api.execute({ name: 'test' })
+    return api
+      .execute({ name: 'test' })
       .then((response: Response) => {
         expect(response.status).toEqual(200)
         expect(response.ok).toBeTruthy()

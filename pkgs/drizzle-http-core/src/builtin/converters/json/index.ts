@@ -30,7 +30,11 @@ export class JsonResponseConverter<T> implements ResponseConverter<Response, Pro
 export class JsonRequestConverterFactory extends RequestConverterFactory {
   static INSTANCE: JsonRequestConverterFactory = new JsonRequestConverterFactory()
 
-  requestConverter(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null {
+  requestConverter(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): RequestBodyConverter<unknown> | null {
     if (requestFactory.contentTypeContains(MediaTypes.APPLICATION_JSON)) {
       return JsonRequestConverter.INSTANCE
     }
@@ -42,7 +46,11 @@ export class JsonRequestConverterFactory extends RequestConverterFactory {
 export class JsonResponseConverterFactory extends ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()
 
-  responseBodyConverter<T>(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): ResponseConverter<Response, Promise<T>> | null {
+  responseBodyConverter<T>(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): ResponseConverter<Response, Promise<T>> | null {
     if (requestFactory.contentTypeContains(MediaTypes.APPLICATION_JSON)) {
       return JsonResponseConverter.INSTANCE
     }

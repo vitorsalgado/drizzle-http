@@ -11,10 +11,7 @@ import { Interceptor } from './interceptor'
  * @typeParam V - handledType of the response
  */
 export abstract class Call<T> {
-  protected constructor(
-    readonly request: Request,
-    readonly argv: any[]) {
-  }
+  protected constructor(readonly request: Request, readonly argv: any[]) {}
 
   /**
    * Executes the HTTP request
@@ -54,11 +51,7 @@ export abstract class CallFactory {
 export class BridgeCall<T> extends Call<T> {
   private readonly chain: ExecutorChain<unknown, unknown>
 
-  constructor(
-    interceptors: Interceptor<unknown, unknown>[],
-    request: Request,
-    argv: any[]
-  ) {
+  constructor(interceptors: Interceptor<unknown, unknown>[], request: Request, argv: any[]) {
     super(request, argv)
     this.chain = ExecutorChain.First(interceptors, request, argv)
   }

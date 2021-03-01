@@ -25,7 +25,11 @@ describe('Headers', function () {
   })
 
   it('should init with 2d array', () => {
-    const h = new Headers([['name', 'test'], ['description', 'none'], ['age', '32']])
+    const h = new Headers([
+      ['name', 'test'],
+      ['description', 'none'],
+      ['age', '32']
+    ])
 
     expect(h.size).toEqual(3)
     expect(h.get('name')).toEqual('test')

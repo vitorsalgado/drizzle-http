@@ -83,7 +83,8 @@ class API {
     @Q('sort') sort: string,
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
-    @H('code') code: number): Promise<TestResult<TestId>> {
+    @H('code') code: number
+  ): Promise<TestResult<TestId>> {
     return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
   }
 }
@@ -120,7 +121,9 @@ describe('Undici Call', function () {
               .maxHeaderSize(16384)
               .tls(null)
               .socketPath(null)
-              .build()))
+              .build()
+          )
+        )
         .addDefaultHeader('Content-Type', 'application/json')
         .build()
       api = drizzle.create(API)
@@ -130,21 +133,19 @@ describe('Undici Call', function () {
   afterAll(() => Promise.all([closeTestServer(), drizzle.shutdown()]))
 
   it('should execute http call', function () {
-    return api.execute('test')
-      .then(response => {
-        expect(response.ok).toBeTruthy()
-        expect(response.url.length).toBeGreaterThanOrEqual(1)
-        expect(response.status).toEqual(200)
-      })
+    return api.execute('test').then(response => {
+      expect(response.ok).toBeTruthy()
+      expect(response.url.length).toBeGreaterThanOrEqual(1)
+      expect(response.status).toEqual(200)
+    })
   })
 
   it('should return logErrorMsg when request fails', function () {
     expect.assertions(1)
 
-    return api.nowhere()
-      .catch((err: HttpError) => {
-        expect(err.response.status).toEqual(404)
-      })
+    return api.nowhere().catch((err: HttpError) => {
+      expect(err.response.status).toEqual(404)
+    })
   })
 
   it('should fail if @Streaming() and @StreamTo() are not in sync', () => {
@@ -173,12 +174,14 @@ describe('Undici Call', function () {
   })
 
   it('should pipe the response direct to the writable stream', () => {
-    return api.streaming(
-      new Writable({
-        write(_chunk, _encoding, callback) {
-          callback()
-        }
-      }))
+    return api
+      .streaming(
+        new Writable({
+          write(_chunk, _encoding, callback) {
+            callback()
+          }
+        })
+      )
       .then(response => {
         expect(response.status).toEqual(200)
         expect(response.stream).not.toBeNull()
@@ -190,12 +193,14 @@ describe('Undici Call', function () {
   it('should return logErrorMsg when stream to request fails', () => {
     expect.assertions(1)
 
-    return api.streamingFromNowhere(
-      new Writable({
-        write(_chunk, _encoding, callback) {
-          callback()
-        }
-      }))
+    return api
+      .streamingFromNowhere(
+        new Writable({
+          write(_chunk, _encoding, callback) {
+            callback()
+          }
+        })
+      )
       .catch((err: StreamToHttpError) => {
         expect(err.response.status).toEqual(404)
       })
@@ -210,19 +215,18 @@ describe('Undici Call', function () {
     const cache = true
     const code = 666
 
-    return api.complete(id, name, filter, sort, prop, cache, code)
-      .then(response => {
-        expect(response.result.id).toEqual(id)
-        expect(response.query).toHaveProperty('filter', filter)
-        expect(response.query).toHaveProperty('sort', sort)
-        expect(response.query).toHaveProperty(prop)
-        expect(response.params).toHaveProperty('id', id)
-        expect(response.params).toHaveProperty('name', name)
-        expect(response.headers).toHaveProperty('content-type', 'application/json;charset=UTF-8')
-        expect(response.headers).toHaveProperty('cache', String(cache))
-        expect(response.headers).toHaveProperty('code', String(code))
-        expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
-      })
+    return api.complete(id, name, filter, sort, prop, cache, code).then(response => {
+      expect(response.result.id).toEqual(id)
+      expect(response.query).toHaveProperty('filter', filter)
+      expect(response.query).toHaveProperty('sort', sort)
+      expect(response.query).toHaveProperty(prop)
+      expect(response.params).toHaveProperty('id', id)
+      expect(response.params).toHaveProperty('name', name)
+      expect(response.headers).toHaveProperty('content-type', 'application/json;charset=UTF-8')
+      expect(response.headers).toHaveProperty('cache', String(cache))
+      expect(response.headers).toHaveProperty('code', String(code))
+      expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
+    })
   })
 
   it('should cancel the request when abort signal is sent', async () => {
@@ -232,11 +236,10 @@ describe('Undici Call', function () {
 
     setTimeout(() => cancel.emit('abort', 1000))
 
-    return api.longRunning(cancel)
-      .catch(err => {
-        expect(err).not.toBeNull()
-        expect(err.code).toEqual('UND_ERR_ABORTED')
-      })
+    return api.longRunning(cancel).catch(err => {
+      expect(err).not.toBeNull()
+      expect(err.code).toEqual('UND_ERR_ABORTED')
+    })
   })
 
   it('should cancel the request when send abort signal from method level event emitter', () => {
@@ -244,11 +247,10 @@ describe('Undici Call', function () {
 
     setTimeout(() => evtMethod.emit('abort', 1000))
 
-    return api.longRunningMethod()
-      .catch(err => {
-        expect(err).not.toBeNull()
-        expect(err.code).toEqual('UND_ERR_ABORTED')
-      })
+    return api.longRunningMethod().catch(err => {
+      expect(err).not.toBeNull()
+      expect(err.code).toEqual('UND_ERR_ABORTED')
+    })
   })
 
   it('should cancel the request when send abort signal from class level event emitter', () => {
@@ -256,11 +258,10 @@ describe('Undici Call', function () {
 
     setTimeout(() => evtCls.emit('abort', 1000))
 
-    return api.longRunningClass()
-      .catch(err => {
-        expect(err).not.toBeNull()
-        expect(err.code).toEqual('UND_ERR_ABORTED')
-      })
+    return api.longRunningClass().catch(err => {
+      expect(err).not.toBeNull()
+      expect(err.code).toEqual('UND_ERR_ABORTED')
+    })
   })
 
   it('should join paths', async () => {
@@ -284,8 +285,6 @@ describe('Undici Call', function () {
   })
 
   it('should init stream result', function () {
-    expect(() => new StreamToResult('http://www.test.com.br/', 200, new Headers({}), new Writable()))
-      .not
-      .toThrowError()
+    expect(() => new StreamToResult('http://www.test.com.br/', 200, new Headers({}), new Writable())).not.toThrowError()
   })
 })

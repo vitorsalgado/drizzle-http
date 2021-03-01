@@ -16,8 +16,7 @@ export class API {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  nowhere(): Observable<TestResult<TestId>> {
-  }
+  nowhere(): Observable<TestResult<TestId>> {}
 }
 
 describe('RxJs Call Adapter', () => {
@@ -31,33 +30,32 @@ describe('RxJs Call Adapter', () => {
         .addCallAdapterFactories(RxJsCallAdapterFactory.INSTANCE)
         .build()
         .create(API)
-    }))
+    })
+  )
 
   afterAll(() => closeTestServer())
 
-  it('should capture the success response on next', (done) => {
+  it('should capture the success response on next', done => {
     expect.assertions(1)
 
-    api.getRx('test-id')
-      .subscribe({
-        next(x) {
-          expect(x.params).toHaveProperty('id')
-        },
-        complete() {
-          done()
-        }
-      })
+    api.getRx('test-id').subscribe({
+      next(x) {
+        expect(x.params).toHaveProperty('id')
+      },
+      complete() {
+        done()
+      }
+    })
   })
 
-  it('should capture the logErrorMsg response on logErrorMsg', (done) => {
+  it('should capture the logErrorMsg response on logErrorMsg', done => {
     expect.assertions(1)
 
-    api.nowhere()
-      .subscribe({
-        error(err: HttpError) {
-          expect(err.response.status).toEqual(404)
-          done()
-        }
-      })
+    api.nowhere().subscribe({
+      error(err: HttpError) {
+        expect(err.response.status).toEqual(404)
+        done()
+      }
+    })
   })
 })

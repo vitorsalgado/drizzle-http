@@ -53,7 +53,10 @@ export class Request extends HttpBody {
     this.method = init.method ?? 'GET'
     this.method = this.method.toUpperCase()
 
-    if ((this.method === 'GET' || this.method === 'HEAD' || this.method === 'OPTIONS') && (this.body !== null || typeof this.body === 'undefined')) {
+    if (
+      (this.method === 'GET' || this.method === 'HEAD' || this.method === 'OPTIONS') &&
+      (this.body !== null || typeof this.body === 'undefined')
+    ) {
       throw new TypeError('Request with GET/HEAD/OPTIONS cannot have body.')
     }
 

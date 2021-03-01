@@ -16,5 +16,9 @@ export abstract class ResponseConverterFactory {
    * This will be called outside the context of a request.
    * Every request will already contain a {@link ResponseConverter} instance ready.
    */
-  abstract responseBodyConverter(drizzle: Drizzle, method: string, requestFactory: RequestFactory): ResponseConverter<unknown, unknown> | null
+  abstract responseBodyConverter(
+    drizzle: Drizzle,
+    method: string,
+    requestFactory: RequestFactory
+  ): ResponseConverter<unknown, unknown> | null
 }

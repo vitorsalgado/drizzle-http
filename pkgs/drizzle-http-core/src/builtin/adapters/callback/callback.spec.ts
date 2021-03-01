@@ -35,11 +35,12 @@ describe('Callback Call Adapter - @Callback decorated', function () {
         .addDefaultHeader('Content-Type', 'application/json')
         .build()
       api = drizzle.create(API)
-    }))
+    })
+  )
 
   afterAll(() => Promise.all([closeTestServer(), drizzle.shutdown()]))
 
-  it('should return the response in the callback function', (done) => {
+  it('should return the response in the callback function', done => {
     api.getCallback('test', (error: Error, data: TestResult<TestId>) => {
       expect(error).toBeNull()
       expect(data.result.id).toEqual('test')
@@ -47,7 +48,7 @@ describe('Callback Call Adapter - @Callback decorated', function () {
     })
   })
 
-  it('should call the callback with the error when integration fails', (done) => {
+  it('should call the callback with the error when integration fails', done => {
     api.err((error: HttpError) => {
       expect(error).not.toBeNull()
       expect(error.request).not.toBeNull()

@@ -10,11 +10,15 @@ export class TestResult<T> {
   result!: T
 }
 
-export interface Ok {ok: boolean}
+export interface Ok {
+  ok: boolean
+}
 
-export interface TestId {id: string}
+export interface TestId {
+  id: string
+}
 
 export interface Data {
-  description: string,
+  description: string
   active: boolean
 }

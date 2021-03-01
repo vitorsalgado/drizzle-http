@@ -22,12 +22,10 @@ module.exports = {
   },
 
   envsAsString: {
-    'process.env': Object
-      .keys(EnvVars)
-      .reduce((env, key) => {
-        env[key] = JSON.stringify(EnvVars[key])
-        return env
-      }, {})
+    'process.env': Object.keys(EnvVars).reduce((env, key) => {
+      env[key] = JSON.stringify(EnvVars[key])
+      return env
+    }, {})
   },
 
   vars: EnvVars

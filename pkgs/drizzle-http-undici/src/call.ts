@@ -5,8 +5,8 @@ import { Writable } from 'stream'
 import { IncomingHttpHeaders } from 'http'
 
 export interface StreamerResult {
-  data: Buffer,
-  status: number,
+  data: Buffer
+  status: number
   headers: Headers
 }
 
@@ -45,14 +45,14 @@ export class Streamer extends Writable {
   }
 
   // eslint-disable-next-line no-undef
-  _write(chunk: any, _encoding: BufferEncoding, callback: (error?: (Error | null)) => void) {
+  _write(chunk: any, _encoding: BufferEncoding, callback: (error?: Error | null) => void) {
     this.data.push(chunk)
     this.length += chunk.length
 
     callback()
   }
 
-  _destroy(error: Error | null, callback: (error?: (Error | null)) => void) {
+  _destroy(error: Error | null, callback: (error?: Error | null) => void) {
     if (error) {
       this.collectable = false
       this.data = []
@@ -65,7 +65,7 @@ export class Streamer extends Writable {
     callback(null)
   }
 
-  _final(callback: (error?: (Error | null)) => void) {
+  _final(callback: (error?: Error | null) => void) {
     this.collectable = true
     callback()
   }
@@ -83,9 +83,9 @@ export class UndiciCall<T> extends Call<Promise<T>> {
 
   execute(): Promise<T> {
     return new Promise<StreamerResult>((resolve, reject) => {
-      this.client.stream(toUndiciRequest(this.request, new Streamer(resolve, reject)),
-        (factory) =>
-          (factory.opaque as Streamer).setResponse(factory.statusCode, factory.headers) as Writable,
+      this.client.stream(
+        toUndiciRequest(this.request, new Streamer(resolve, reject)),
+        factory => (factory.opaque as Streamer).setResponse(factory.statusCode, factory.headers) as Writable,
         (err, data) => {
           if (err) {
             reject(err)
@@ -96,7 +96,8 @@ export class UndiciCall<T> extends Call<Promise<T>> {
 
           stream.addTrailers(data.trailers as Record<string, string>)
           stream.finish()
-        })
+        }
+      )
     })
       .then(res => new Response(res.data, { status: res.status, headers: res.headers, url: this.request.url }))
       .then(response => {

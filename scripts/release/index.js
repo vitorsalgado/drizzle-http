@@ -29,7 +29,7 @@ program
   .command('publish')
   .description('Publishes all packages to NPM')
   .option('-t, --tag <tag>', 'Tag', 'latest')
-  .action(async (options) => {
+  .action(async options => {
     Logger.info('--> Publishing Packages\n')
 
     const changed = JSON.parse(execSync('lerna changed --json').toString())
@@ -64,7 +64,7 @@ program
       FsExt.copySync(Path.join(pkgPath, 'package.json'), Path.join(pkgPath, 'temp', 'package.json'))
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
 
-      execSync(`npm publish --tag=${options.tag} --dry-run`, { cwd: pkgPath })
+      execSync(`npm publish --tag=${options.tag}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
       FsExt.copySync(Path.join(pkgPath, 'temp', 'package.json'), Path.join(pkgPath, 'package.json'))
@@ -120,4 +120,4 @@ async function run() {
   await program.parseAsync(argv)
 }
 
-(async () => await run())()
+run().catch(Logger.error)

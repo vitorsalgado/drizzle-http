@@ -24,8 +24,10 @@
  *  \}
  */
 export function theTypes(
-  type: { new(...args: any[]): any | void }, genericType?: { new(...args: any[]): any | void } | null | undefined,
-  ...args: any[]): any {
+  type: { new (...args: any[]): any | void },
+  genericType?: { new (...args: any[]): any | void } | null | undefined,
+  ...args: any[]
+): any {
   return [type, genericType]
 }
 
@@ -46,8 +48,9 @@ export function theTypes(
  *  \}
  */
 export function callbackTypes(
-  genericType?: { new(...args: any[]): any | void } | null | undefined,
-  ...args: any[]): any {
+  genericType?: { new (...args: any[]): any | void } | null | undefined,
+  ...args: any[]
+): any {
   return [null, genericType]
 }
 

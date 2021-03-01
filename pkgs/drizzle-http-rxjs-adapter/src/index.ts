@@ -19,7 +19,11 @@ class RxJsCallAdapter<T> implements CallAdapter<Promise<T>, Observable<T>> {
 export class RxJsCallAdapterFactory extends CallAdapterFactory {
   static INSTANCE: RxJsCallAdapterFactory = new RxJsCallAdapterFactory()
 
-  provideCallAdapter(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provideCallAdapter(
+    drizzle: Drizzle,
+    method: string,
+    requestFactory: RequestFactory
+  ): CallAdapter<unknown, unknown> | null {
     if (requestFactory.returnType && requestFactory.returnType.name === 'Observable') {
       return RxJsCallAdapter.INSTANCE
     }

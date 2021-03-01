@@ -10,7 +10,10 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 
  * @param httpMethod - HTTP verb of the request
  * @param path - request path that will be concatenated with the base url
  */
-export function decorateWithHttpMethod(httpMethod: HttpMethod, path = '/'): (target: any, method: string, descriptor: PropertyDescriptor) => void {
+export function decorateWithHttpMethod(
+  httpMethod: HttpMethod,
+  path = '/'
+): (target: any, method: string, descriptor: PropertyDescriptor) => void {
   return function (target: any, method: string, descriptor: PropertyDescriptor): any {
     if (!path.startsWith('/')) {
       throw new InvalidRequestMethodConfigurationError(method, 'Path must start with a /')
