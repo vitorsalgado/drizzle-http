@@ -14,7 +14,19 @@ class Api {
   }
 }
 
-describe('Fetch Client', () => {
+describe('Fetch Client Init', function () {
+  it('should load correctly', () => {
+    const api = DrizzleBuilder.newBuilder()
+      .baseUrl('http://localhost:3001/')
+      .callFactory(FetchCallFactory.DEFAULT)
+      .build()
+      .create(Api)
+
+    expect(api).not.toBeNull()
+  })
+})
+
+describe.skip('Fetch Client', () => {
   let browser: any = null
 
   beforeAll(async () => {
@@ -32,16 +44,6 @@ describe('Fetch Client', () => {
 
     StaticServer.close()
     RestServer.close()
-  })
-
-  it('should load correctly', () => {
-    const api = DrizzleBuilder.newBuilder()
-      .baseUrl('http://localhost:3001/')
-      .callFactory(FetchCallFactory.DEFAULT)
-      .build()
-      .create(Api)
-
-    expect(api).not.toBeNull()
   })
 
   it.skip('should work with transpiled Typescript', async () => {

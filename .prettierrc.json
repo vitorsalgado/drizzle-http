@@ -7,5 +7,5 @@
   "quoteProps": "as-needed",
   "bracketSpacing": true,
   "proseWrap": "never",
-  "endOfLine": "lf"
+  "endOfLine": "auto"
 }
