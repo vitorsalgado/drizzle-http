@@ -22,7 +22,7 @@ describe('Fetch Client', () => {
     RestServer.close()
   })
 
-  it('should work with transpiled Typescript', async () => {
+  it.skip('should work with transpiled Typescript', async () => {
     const page = await browser.newPage()
     await page.goto('http://localhost:3002/ts.html')
 
@@ -35,7 +35,7 @@ describe('Fetch Client', () => {
     expect(val).toEqual('success')
   }, 10000)
 
-  it('should work with transpiled Javascript', async () => {
+  it.skip('should work with transpiled Javascript', async () => {
     const page = await browser.newPage()
     await page.goto('http://localhost:3002/ts.html')
 
