@@ -1,6 +1,6 @@
 {
   "name": "drizzle-http",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.0",
   "description": "Drizzle-HTTP default packages for Node.js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,11 +38,11 @@
     "retrofit"
   ],
   "dependencies": {
-    "@drizzle-http/core": "0.0.1",
-    "@drizzle-http/fetch": "0.0.1",
-    "@drizzle-http/logging-interceptor": "0.0.1",
-    "@drizzle-http/rxjs-adapter": "0.0.1",
-    "@drizzle-http/undici": "0.0.1"
+    "@drizzle-http/core": "^0.0.1-alpha.0",
+    "@drizzle-http/fetch": "^0.0.1-alpha.0",
+    "@drizzle-http/logging-interceptor": "^0.0.1-alpha.0",
+    "@drizzle-http/rxjs-adapter": "^0.0.1-alpha.0",
+    "@drizzle-http/undici": "^0.0.1-alpha.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "0.0.1"
