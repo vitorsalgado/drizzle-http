@@ -34,14 +34,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache Yarn
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-yarn
-        with:
-          path: ~/.yarn/berry/cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-
       - name: Config Yarn
         run: |
           yarn set version berry
@@ -49,11 +41,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          yarn install --immutable
-
-      - name: Build
-        run: |
-          yarn build
+          yarn
 
       - name: Lint
         run: |
