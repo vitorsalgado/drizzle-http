@@ -11,10 +11,11 @@
   },
   "scripts": {
     "pretest": "yarn build:test",
-    "build": "tsc --build && yarn build:test",
-    "build:test": "webpack --config ./build/webpack.config.js && rm -rf ./dist/test && (node ./node_modules/puppeteer/install.js || true)",
+    "build": "tsc --build && yarn build:test && rm -rf ./dist/test",
+    "build:test": "webpack --config ./build/webpack.config.js",
     "postinstall": "yarn build",
-    "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\""
+    "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\"",
+    "install:puppeteer": "node_modules/puppeteer/install.js"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
