@@ -26,8 +26,12 @@
   "keywords": [
     "drizzle-http",
     "rxjs",
+    "rx",
+    "reactive",
     "http",
-    "api"
+    "http client",
+    "api",
+    "typescript"
   ],
   "dependencies": {
     "@drizzle-http/core": "^0.0.1-alpha.0",

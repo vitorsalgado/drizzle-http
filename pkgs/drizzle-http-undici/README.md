@@ -1,13 +1,13 @@
-# Undici Client for Drizzle-HTTP
+# Undici Client &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/undici) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
-![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
-
-HTTP Call client implementation based on [Undici](https://github.com/nodejs/undici).
+[Drizzle-Http](https://github.com/vitorsalgado/drizzle-http) client implementation based
+on [Undici](https://github.com/nodejs/undici).
 
 ## Installation
 
-The main package, _**drizzle-http**_, already contains this module.  
-To install it individually, use:
+The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
+If you are installing each package individually, make sure to install
+first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
 
 ### NPM
 

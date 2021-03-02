@@ -3,14 +3,12 @@
 # Drizzle HTTP
 
 ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
-![npm](https://img.shields.io/npm/v/drizzle-http?color=light%20green) 
+![npm](https://img.shields.io/npm/v/drizzle-http)
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Decorator based HTTP client written in **Typescript**.  
 Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).
-
-This library is still experimental.
 
 ---
 
@@ -27,6 +25,7 @@ It takes performance in consideration and request configurations are pre-process
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Overview](#overview)
+- [Examples](#examples)
 - [Benchmarks](#benchmarks)
 - [Contributing](#contributing)
 
@@ -158,9 +157,13 @@ We have some usage examples available in this [directory](examples).
 
 ## Benchmarks
 
+### Run
+
 ```
 yarn benchmark
 ```
+
+### Results
 
 ```
 Machine: MacBook Pro (13-inch, 2019)
@@ -184,6 +187,7 @@ connections.
 ## Contributing
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8af30859a8e2c939517/maintainability)](https://codeclimate.com/github/vitorsalgado/drizzle-http/maintainability)
 
 See [CONTRIBUTING](CONTRIBUTING.md) for more details.
 

@@ -1,13 +1,12 @@
-# RxJs Call Adapter
-
-![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
+# RxJs Call Adapter &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/rxjs-adapter) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
 [RxJs](https://rxjs-dev.firebaseapp.com/) call adapter implementation for Drizzle-HTTP.
 
 ## Installation
 
-The main package, _**drizzle-http**_, already contains this module.  
-To install it individually, use:
+The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
+If you are installing each package individually, make sure to install
+first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
 
 ### NPM
 

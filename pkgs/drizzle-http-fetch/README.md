@@ -1,8 +1,6 @@
-# Fetch Client for Drizzle-HTTP
+# Fetch Client &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/fetch) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
-![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
-
-Fetch based HTTP client implementation for Drizzle-HTTP.  
+Fetch based HTTP client implementation for [Drizzle-Http](https://github.com/vitorsalgado/drizzle-http).  
 This library contains several decorators to facilitate the definition of some request parameters for Fetch. See list
 below.
 
@@ -10,8 +8,9 @@ By default, responses with error status code will be returned on `then()`.
 
 ## Installation
 
-The main package, _**drizzle-http**_, already contains this module.  
-To install it individually, use:
+The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
+If you are installing each package individually, make sure to install
+first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
 
 ### NPM
 
@@ -68,7 +67,7 @@ class ApiJs {
 
 ```
 
-### Minimum Babel Setup
+### Minimum Babel Setup for Javascript
 
 ```
 {
