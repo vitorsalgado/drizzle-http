@@ -44,6 +44,6 @@ module.exports = {
   stats: 'errors-only',
   output: {
     filename: '[name].js',
-    path: Path.resolve(__dirname, 'src', 'test', 'dist')
+    path: Path.join(process.cwd(), 'src', 'test', 'dist')
   }
 }
