@@ -1,4 +1,4 @@
-import { AsJson, DrizzleBuilder, GET, HttpError, Param, theTypes } from '@drizzle-http/core'
+import { AsJson, DrizzleBuilder, GET, HttpError, Param, Response, theTypes } from '@drizzle-http/core'
 import { Observable } from 'rxjs'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { RxJs, RxJsCallAdapterFactory } from './index'
@@ -17,6 +17,11 @@ export class API {
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   nowhere(): Observable<TestResult<TestId>> {}
+
+  @GET('/{id}/projects')
+  nonRx(@Param('id') id: string): Promise<Response> {
+    return theTypes(Promise, Response)
+  }
 }
 
 describe('RxJs Call Adapter', () => {
@@ -57,5 +62,21 @@ describe('RxJs Call Adapter', () => {
         done()
       }
     })
+  })
+
+  it('should not use rxjs adapter when response type is not Observable', () => {
+    expect.assertions(3)
+
+    return api
+      .nonRx('test-id')
+      .then(response => {
+        expect(response.status).toEqual(200)
+        expect(response.ok).toBeTruthy()
+
+        return response.json()
+      })
+      .then((json: any) => {
+        expect(json.params).toHaveProperty('id')
+      })
   })
 })
