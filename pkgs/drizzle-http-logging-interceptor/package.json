@@ -26,9 +26,12 @@
   "keywords": [
     "drizzle-http",
     "interceptor",
+    "pino",
+    "logger",
     "log",
     "http",
-    "api"
+    "api",
+    "debug"
   ],
   "dependencies": {
     "@drizzle-http/core": "^0.0.1-alpha.0",

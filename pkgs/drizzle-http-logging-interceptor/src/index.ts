@@ -105,7 +105,7 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
 
         if (isUtf8) {
           this.logger.info((request.body as Buffer).toString('utf-8'))
-          this.logger.info('--> END ' + request.method + ' (' + request.body.length + '-byte)')
+          this.logger.info('--> END ' + request.method + ' (' + request.body.length + '-byte(s))')
         } else {
           this.logger.info('--> END ' + request.method + ' (' + request.body.length + '-byte body omitted)')
         }
@@ -206,7 +206,7 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
   private static ms(): number {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (!process && !process.hrtime) {
+    if (!process || !process.hrtime) {
       return Date.now()
     }
 
