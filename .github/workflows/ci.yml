@@ -6,6 +6,8 @@ on:
       - main
       - v[0-9]+.x-alpha
       - v[0-9]+.x
+    tags:
+      - '*'
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -54,3 +56,16 @@ jobs:
           yarn coverage:upload
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: contains(github.ref, '-rc')
