@@ -18,7 +18,7 @@ import { Readable } from 'stream'
 describe('Logging Interceptor', function () {
   let address = ''
 
-  function * txt() {
+  function* txt() {
     yield 'start'
     yield '-'
     yield 'end'
