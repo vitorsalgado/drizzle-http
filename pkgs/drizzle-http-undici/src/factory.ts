@@ -47,7 +47,7 @@ export class UndiciCallFactory extends CallFactory {
     if (requestFactory.getConfig(ConfigIsStream)) {
       const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
 
-      if (streamToIndex === null || typeof streamToIndex === 'undefined' || streamToIndex < 0) {
+      if (streamToIndex < 0) {
         throw new InvalidRequestMethodConfigurationError(
           'Method is decorated with @Streaming but there is no argument decorated with @StreamTo().',
           method

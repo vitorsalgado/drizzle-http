@@ -287,4 +287,13 @@ describe('Undici Call', function () {
   it('should init stream result', function () {
     expect(() => new StreamToResult('http://www.test.com.br/', 200, new Headers({}), new Writable())).not.toThrowError()
   })
+
+  it('should call the registered shutdown hook', async () => {
+    const drizzle = DrizzleBuilder.newBuilder()
+      .baseUrl(new URL('/testing/join', address).href)
+      .callFactory(UndiciCallFactory.DEFAULT)
+      .build()
+
+    await drizzle.shutdown()
+  })
 })
