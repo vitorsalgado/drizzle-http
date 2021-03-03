@@ -8,7 +8,6 @@ const Path = require('path')
 const FsExt = require('fs-extra')
 const Pino = require('pino')
 const Globby = require('globby')
-const PkgMain = require('../../package.json')
 const { execSync } = require('child_process')
 const { program } = require('commander')
 
@@ -49,64 +48,18 @@ program
       Logger.info('Package: ' + pkg.name)
       Logger.info('Path: ' + pkgPath)
 
-      const temp = Path.join(pkgPath, 'temp')
-
       FsExt.copySync(Path.join(process.cwd(), 'LICENSE'), Path.join(pkgPath, 'LICENSE'))
-      FsExt.mkdirpSync(temp)
-      FsExt.copySync(Path.join(pkgPath, 'package.json'), Path.join(pkgPath, 'temp', 'package.json'))
-      FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
 
       execSync(`npm publish --access public --tag=${options.tag}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
-      FsExt.copySync(Path.join(pkgPath, 'temp', 'package.json'), Path.join(pkgPath, 'package.json'))
       FsExt.removeSync(Path.join(pkgPath, 'LICENSE'))
-      FsExt.removeSync(temp)
 
       Logger.info(`Package "${pkg.name}" published!\n`)
     }
 
     Logger.info('<-- Packages Published')
   })
-
-const rewritePkg = (pkg, mainPkg) => {
-  const newPkg = {}
-  const fieldsToKeep = [
-    'name',
-    'version',
-    'description',
-    'peerDependencies',
-    'dependencies',
-    'optionalDependencies',
-    'repository',
-    'homepage',
-    'keywords',
-    'author',
-    'license',
-    'engines',
-    'browser',
-    'main',
-    'types',
-    'exports',
-    'bin'
-  ]
-
-  fieldsToKeep.forEach(field => {
-    if (typeof pkg[field] !== 'undefined') {
-      newPkg[field] = pkg[field]
-    }
-  })
-
-  if (!newPkg.engines) {
-    newPkg.engines = mainPkg.engines
-  }
-
-  if (!newPkg.bugs) {
-    newPkg.bugs = mainPkg.bugs
-  }
-
-  return newPkg
-}
 
 async function run() {
   await program.parseAsync(argv)

@@ -21,12 +21,18 @@
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
+  "engines": {
+    "node": ">=12.4.0"
+  },
   "license": "MIT",
   "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-fetch",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
     "directory": "pkgs/drizzle-http-fetch"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",

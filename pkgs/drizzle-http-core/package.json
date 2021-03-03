@@ -12,6 +12,9 @@
     "build": "tsc --build",
     "postinstall": "yarn build"
   },
+  "engines": {
+    "node": ">=12.4.0"
+  },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
@@ -22,6 +25,9 @@
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
     "directory": "pkgs/drizzle-http-core"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",
