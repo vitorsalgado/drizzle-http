@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v0.0.1-alpha.0...v1.0.0) (2021-03-03)
+
+
+### Bug Fixes
+
+* fetch package test build ([1ef0aa6](https://github.com/vitorsalgado/drizzle-http/commit/1ef0aa64d9a8970ece2c791ed394a10451ef9dcd))
+* **dependabot:** fix wrong setup ([5e9b8e0](https://github.com/vitorsalgado/drizzle-http/commit/5e9b8e02236d85d2cda0be99562d34718db5e962))
+* apply fixes to versions and release script ([c5e0fe2](https://github.com/vitorsalgado/drizzle-http/commit/c5e0fe2ee6056e42d2866a7fc9ebe229ba446bc0))
+
+
+
+
+
 ## 0.0.1-alpha.0 (2021-03-01)
 
 

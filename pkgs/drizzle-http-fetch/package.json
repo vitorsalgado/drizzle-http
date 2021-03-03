@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/fetch",
-  "version": "0.0.1-alpha.0",
+  "version": "1.0.0",
   "description": "Browser Fetch HTTP client for Drizzle-HTTP",
   "main": "./dist/index.js",
   "browser": "./dist/index.js",
@@ -42,7 +42,7 @@
     "api"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^0.0.1-alpha.0",
+    "@drizzle-http/core": "^1.0.0",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
