@@ -6,8 +6,6 @@ on:
       - main
       - v[0-9]+.x-alpha
       - v[0-9]+.x
-    tags:
-      - '*'
     paths-ignore:
       - 'docs/**'
       - '*.md'
