@@ -96,7 +96,7 @@ interface Project {
 }
 
 @HeaderMap({ 'Global-Header': 'Value' })
-@Timeout(5, 5)
+@Timeout(2500, 2500)
 class API {
   @GET('/group/{id}/owner/{name}/projects')
   @HeaderMap({ 'Method-Level-Fixed-Header': 'Other-Value' })
