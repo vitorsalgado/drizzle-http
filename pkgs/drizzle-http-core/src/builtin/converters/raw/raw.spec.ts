@@ -3,19 +3,48 @@ import CommonHeaders from '../../../http.common.headers'
 import MediaTypes from '../../../http.media.types'
 import { Response } from '../../../response'
 import {
+  FullResponse,
   RawRequestConverter,
   RawRequestConverterFactory,
   RawResponseConverter,
   RawResponseConverterFactory
 } from './index'
-import { DrizzleBuilder } from '../../../drizzle.builder'
+import { DrizzleBuilder, initDrizzleHttp } from '../../../drizzle.builder'
 import { TestCallFactory } from '../../../internal/http/test'
+import { Body, ContentType, POST } from '../../../decorators'
+import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
+
+class API {
+  @POST('/raw-test')
+  @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @FullResponse()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  test(@Body() data: string): Promise<Response> {}
+}
 
 describe('Raw Converter', function () {
+  let address = ''
+
   const drizzle = DrizzleBuilder.newBuilder()
     .baseUrl('http://www.test.com.br')
     .callFactory(new TestCallFactory())
     .build()
+
+  beforeAll(() => {
+    setupTestServer(fastify => {
+      fastify.post('/raw-test', (req, res) => {
+        res.status(200).send({ test: 'ok' })
+      })
+    })
+
+    return startTestServer().then((addr: string) => {
+      address = addr
+    })
+  })
+
+  afterAll(() => closeTestServer())
 
   it('should return raw response converter when generic return type is Response', function () {
     const requestFactory = new RequestFactory()
@@ -65,5 +94,16 @@ describe('Raw Converter', function () {
     const converter = factory.requestConverter(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(RawRequestConverter)
+  })
+
+  it('should set full response when using @FullResponse() decorator', () => {
+    expect.assertions(2)
+
+    const api: API = initDrizzleHttp().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
+
+    return api.test('text').then(response => {
+      expect(response.ok).toBeTruthy()
+      expect(response.status).toEqual(200)
+    })
   })
 })

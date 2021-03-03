@@ -1,16 +1,27 @@
 import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
 
+import FastifyFormBody from 'fastify-formbody'
+
 const fastify = Fastify({ logger: false })
+
+fastify.register(FastifyFormBody)
 
 // Routes
 // ----------
 
 fastify.setErrorHandler(function (error: any, _request, reply) {
   this.log.error(error)
-  reply.status(500).send({ ok: false, error })
+  reply.status(500).send({
+    ok: false,
+    error
+  })
 })
 
 fastify.get('/', (request, reply) => {
+  reply.send(respond(request, { ok: true }))
+})
+
+fastify.post('/', (request, reply) => {
   reply.send(respond(request, { ok: true }))
 })
 

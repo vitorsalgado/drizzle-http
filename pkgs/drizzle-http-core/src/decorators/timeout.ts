@@ -5,20 +5,20 @@ import { DrizzleMeta } from '../drizzle.meta'
  * It assumes that the HTTP client configured supports timeouts for a specific request.
  * Target: method
  *
- * @param readTimeout - timeout value before receiving complete body
- * @param connectTimeout - timeout value before receiving complete params
+ * @param readTimeoutInMs - timeout value before receiving complete body - MILLISECONDS
+ * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
-export function Timeout(readTimeout = 30, connectTimeout = 30) {
+export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
   return <TFunction extends Function>(target: any | TFunction, method?: string): void => {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
-      requestFactory.readTimeout = readTimeout
-      requestFactory.connectTimeout = connectTimeout
+      requestFactory.readTimeout = readTimeoutInMs
+      requestFactory.connectTimeout = connectTimeoutInMs
       return
     }
 
     const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.readTimeout = readTimeout
-    apiInstanceMeta.connectTimeout = connectTimeout
+    apiInstanceMeta.readTimeout = readTimeoutInMs
+    apiInstanceMeta.connectTimeout = connectTimeoutInMs
   }
 }

@@ -82,7 +82,7 @@ describe('Form Converter', function () {
     const arr = [
       ['name', 'the name'],
       ['description', 'some description'],
-      ['age', '32']
+      ['age', 32]
     ]
 
     converter?.convert(requestFactory, rv, arr)

@@ -141,8 +141,10 @@ export class Drizzle {
   /**
    * Executes all registered shutdown hooks
    */
-  shutdown(): Promise<unknown> {
-    return Promise.all(this.shutdownHooks)
+  async shutdown(): Promise<void> {
+    for (const hook of this.shutdownHooks) {
+      await hook()
+    }
   }
 
   /**

@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@OPTIONS('/relative/path')
  *  example(): Promise<any>
  */
-export const OPTIONS = (path = '') => decorateWithHttpMethod('OPTIONS', path)
+export const OPTIONS = (path: string) => decorateWithHttpMethod('OPTIONS', path)

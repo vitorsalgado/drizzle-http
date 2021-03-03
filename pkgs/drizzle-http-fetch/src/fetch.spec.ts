@@ -1,8 +1,24 @@
 import * as StaticServer from './test/server_static'
 import * as RestServer from './test/server'
 import Puppeteer from 'puppeteer'
-import { CORS, FetchCallFactory, KeepAlive } from './'
-import { ContentType, DrizzleBuilder, GET, Response, theTypes } from '@drizzle-http/core'
+import {
+  Cache,
+  CORS,
+  Credentials,
+  FetchCallFactory,
+  Integrity,
+  KeepAlive,
+  Mode,
+  Navigate,
+  NoCORS,
+  Redirect,
+  Referrer,
+  ReferrerPolicy,
+  SameOrigin
+} from './'
+import { ContentType, DrizzleBuilder, GET, MediaTypes, POST, Response, theTypes } from '@drizzle-http/core'
+import NodeFetch from 'node-fetch'
+import { closeTestServer, startTestServer } from '@drizzle-http/test-utils'
 
 class Api {
   @GET('/')
@@ -12,17 +28,59 @@ class Api {
   test(): Promise<Response> {
     return theTypes(Promise, Response)
   }
+
+  @POST('/')
+  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+  @Mode('cors')
+  @NoCORS()
+  @SameOrigin()
+  @Integrity('hash')
+  @ReferrerPolicy('same-origin')
+  @Referrer('ref')
+  @Redirect('manual')
+  @Credentials('include')
+  @Cache('force-cache')
+  @Navigate()
+  all(): Promise<Response> {
+    return theTypes(Promise, Response)
+  }
 }
 
-describe('Fetch Client Init', function () {
-  it('should load correctly', () => {
-    const api = DrizzleBuilder.newBuilder()
-      .baseUrl('http://localhost:3001/')
-      .callFactory(FetchCallFactory.DEFAULT)
-      .build()
-      .create(Api)
+describe('Fetch Client (Node-Fetch)', function () {
+  let address: string
+
+  beforeAll(() =>
+    startTestServer().then((addr: string) => {
+      address = addr
+    })
+  )
+
+  afterAll(() => closeTestServer())
+
+  it('should perform request with patched global fetch', function () {
+    expect.assertions(3)
+
+    if (!globalThis.fetch) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      globalThis.fetch = NodeFetch
+    }
+
+    const drizzle = DrizzleBuilder.newBuilder().baseUrl(address).callFactory(FetchCallFactory.DEFAULT).build()
+
+    const api: Api = drizzle.create(Api)
 
     expect(api).not.toBeNull()
+
+    return api
+      .test()
+      .then(response => {
+        expect(response.status).toEqual(200)
+        expect(response.ok).toBeTruthy()
+      })
+      .finally(() => {
+        return drizzle.shutdown()
+      })
   })
 })
 

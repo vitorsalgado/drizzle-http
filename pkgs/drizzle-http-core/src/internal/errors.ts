@@ -44,14 +44,6 @@ export class NoRequestConverterError extends DrizzleError {
   }
 }
 
-export class NoResponseConverterError extends DrizzleError {
-  constructor(method: string) {
-    super(`No Response Converter found for ${method}`, 'DRIZZLE_HTTP_ERR_NO_RESPONSE_CONVERTER')
-    Error.captureStackTrace(this, NoResponseConverterError)
-    this.name = 'NoResponseConverterError'
-  }
-}
-
 export class MethodNotSupportedError extends DrizzleError {
   constructor(method: string) {
     super(`Method ${method} is not supported by Drizzle ${method}`, 'DRIZZLE_HTTP_ERR_METHOD_NOT_SUPPORTED')

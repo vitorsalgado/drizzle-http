@@ -1,4 +1,10 @@
-import { fixedEncodeURIComponent, isAbsolute, isEncoded } from './url.utils'
+import {
+  encodeFormFieldIfNecessary,
+  encodeIfNecessary,
+  fixedEncodeURIComponent,
+  isAbsolute,
+  isEncoded
+} from './url.utils'
 
 describe('URL Utils', () => {
   it('should detect when value is encoded and not encoded', () => {
@@ -16,5 +22,17 @@ describe('URL Utils', () => {
   it('should validate if url is absolute or not', () => {
     expect(isAbsolute('http://www.test.com.br')).toBeTruthy()
     expect(isAbsolute('/test/ok')).toBeFalsy()
+  })
+
+  it('should return the same value when form field value is already encoded', function () {
+    const val = 'name%2Bage%2Baddress'
+
+    expect(encodeFormFieldIfNecessary(val)).toEqual(val)
+  })
+
+  it('should return the same value when value is already encoded', function () {
+    const val = 'name%2Bage%2Baddress'
+
+    expect(encodeIfNecessary(val)).toEqual(val)
   })
 })

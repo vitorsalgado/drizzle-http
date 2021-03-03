@@ -1,9 +1,6 @@
 import { DrizzleError } from './errors'
 
 export class Check {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
-
   /**
    * Throws an {@link DrizzleError} if parameter value is null or undefined
    *
@@ -21,20 +18,6 @@ export class Check {
   static emptyStr(value: string, message: string): void {
     if (!value) {
       throw new DrizzleError(message)
-    }
-  }
-
-  static checkIf(fn: (() => boolean) | boolean, error: Error): void {
-    if (typeof fn === 'function') {
-      if (!fn()) {
-        throw error
-      }
-
-      return
-    }
-
-    if (!fn) {
-      throw error
     }
   }
 }

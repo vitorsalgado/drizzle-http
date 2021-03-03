@@ -2,26 +2,6 @@ import { Check } from './check'
 import { DrizzleError } from './errors'
 
 describe('Check', () => {
-  describe('checkIf', function () {
-    it('should return error when predicate evaluates to false', () => {
-      const msg = 'test'
-
-      try {
-        Check.checkIf(() => false, new DrizzleError(msg))
-      } catch (e) {
-        expect(e).toBeInstanceOf(DrizzleError)
-        expect(e.message).toContain(msg)
-        return
-      }
-
-      throw new Error('should not reach here')
-    })
-
-    it('should do nothing when predicate evaluates to true', () => {
-      Check.checkIf(() => true, new DrizzleError('test'))
-    })
-  })
-
   describe('emptyStr', function () {
     it('should throw error when string is empty', () => {
       const msg = 'test'

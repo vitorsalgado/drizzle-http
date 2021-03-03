@@ -3,7 +3,7 @@
     "outDir": "dist",
     "baseUrl": ".",
 
-    "lib": ["esnext.asynciterable", "dom"],
+    "lib": ["esnext.asynciterable", "es2018.promise", "dom"],
     "module": "CommonJS",
     "target": "ES2018",
     "moduleResolution": "node",

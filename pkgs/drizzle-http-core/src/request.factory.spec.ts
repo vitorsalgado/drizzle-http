@@ -13,9 +13,8 @@ import { pathParameterRegex } from './internal'
 import { MediaTypes } from './http.media.types'
 import EventEmitter from 'events'
 import { DrizzleBuilder } from './drizzle.builder'
-import { CallFactory, CallProvider } from './call'
-import { Drizzle } from './drizzle'
 import { TestCallFactory } from './internal/http/test'
+import { Response } from './response'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -82,6 +81,54 @@ describe('Request Factory', () => {
     expect(requestFactory.allConfigs().get(key)).toEqual(value)
   })
 
+  it('should fill url with all provided values', () => {
+    const requestFactory = new RequestFactory()
+    requestFactory.method = 'example'
+    requestFactory.httpMethod = 'GET'
+    requestFactory.path = '/groups/{id}/projects'
+    requestFactory.addDefaultHeaders({
+      'x-id': '100',
+      'content-type': MediaTypes.APPLICATION_JSON_UTF8
+    })
+    requestFactory.addParameter(new HeaderParameter('x-id', 2))
+    requestFactory.addParameters(
+      new PathParameter('id', pathParameterRegex('id'), 0),
+      new PathParameter('version', pathParameterRegex('version'), 1)
+    )
+    requestFactory.addParameters(new QueryParameter('filter', 3), new QueryParameter('active', 4))
+    requestFactory.addParameters(new QueryNameParameter(5), new QueryNameParameter(6))
+
+    const instanceMeta = new ApiInstanceMeta()
+    instanceMeta.connectTimeout = 10
+    instanceMeta.readTimeout = 5
+    instanceMeta.addDefaultHeaders({ 'x-client-id': '666' })
+    instanceMeta.setPath('api/{version}')
+
+    requestFactory.mergeWithInstanceMeta(instanceMeta)
+    requestFactory.preProcessAndValidate(drizzle)
+
+    const requestBuilder = requestFactory.requestBuilder(drizzle)
+    const request = requestBuilder.toRequest([
+      50,
+      '1.0',
+      '8bc',
+      ['all', 'completed'],
+      true,
+      'sendTo(boss)',
+      'pages(10)'
+    ])
+
+    expect(request.url).toEqual(
+      '/api/1.0/groups/50/projects?filter=all&filter=completed&active=true&sendTo%28boss%29&pages%2810%29'
+    )
+    expect(request.method).toEqual('GET')
+    expect(request.bodyTimeout).toEqual(5)
+    expect(request.headersTimeout).toEqual(10)
+    expect(request.headers.get('x-id')).toEqual('100,8bc')
+    expect(request.headers.get('x-client-id')).toEqual('666')
+    expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
+  })
+
   describe('Invalid instances', () => {
     it('should fail if validate() is called before preProcess()', () => {
       expect(() => new RequestFactory().validate()).toThrowError()
@@ -99,7 +146,7 @@ describe('Request Factory', () => {
       const requestFactory = new RequestFactory()
       requestFactory.preProcess(drizzle)
 
-      expect(() => new RequestFactory().validate()).toThrowError()
+      expect(() => requestFactory.validate()).toThrowError()
     })
 
     it('should fail when there is a query parameter without key', () => {
@@ -357,6 +404,105 @@ describe('Request Factory', () => {
       expect(requestBuilder).toBeInstanceOf(NoParametersRequestBuilder)
       expect(req1).toStrictEqual(req2)
     })
+
+    it('should accept path as a absolute url with path', () => {
+      const d = DrizzleBuilder.newBuilder()
+        .baseUrl('https://www.test.com.br/path/other-path')
+        .callFactory(new TestCallFactory())
+        .build()
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'GET'
+      requestFactory.path = '/last'
+
+      requestFactory.preProcessAndValidate(d)
+
+      expect(requestFactory.path).toEqual('/path/other-path/last')
+    })
+
+    it('should do nothing when merging with empty instance meta', function () {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'GET'
+      requestFactory.path = '/path'
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      requestFactory.mergeWithInstanceMeta(null)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      requestFactory.mergeWithInstanceMeta(undefined)
+      requestFactory.preProcessAndValidate(drizzle)
+    })
+
+    it('should convert text body', async () => {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'POST'
+      requestFactory.path = '/test'
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
+      })
+      requestFactory.addParameter(new BodyParameter(0))
+
+      requestFactory.preProcessAndValidate(drizzle)
+
+      const requestBuilder = requestFactory.requestBuilder(drizzle)
+      const request = requestBuilder.toRequest(['nice txt'])
+      const body = await request.text()
+
+      expect(request.url).toEqual('/test')
+      expect(request.method).toEqual('POST')
+      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
+      expect(body).toStrictEqual('nice txt')
+    })
+
+    it('should ignore body when it is undefined', async () => {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'POST'
+      requestFactory.path = '/test'
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
+      })
+      requestFactory.addParameter(new BodyParameter(0))
+
+      requestFactory.preProcessAndValidate(drizzle)
+
+      const requestBuilder = requestFactory.requestBuilder(drizzle)
+      const request = requestBuilder.toRequest([undefined])
+      const body = await request.text()
+
+      expect(request.url).toEqual('/test')
+      expect(request.method).toEqual('POST')
+      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
+      expect(body).toStrictEqual('')
+    })
+
+    it('should ignore body when it is null', async () => {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'POST'
+      requestFactory.path = '/test'
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
+      })
+      requestFactory.addParameter(new BodyParameter(0))
+
+      requestFactory.preProcessAndValidate(drizzle)
+
+      const requestBuilder = requestFactory.requestBuilder(drizzle)
+      const request = requestBuilder.toRequest([null])
+      const body = await request.text()
+
+      expect(request.url).toEqual('/test')
+      expect(request.method).toEqual('POST')
+      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
+      expect(body).toStrictEqual('')
+    })
   })
 
   describe('application/x-www-form-urlencoded', () => {
@@ -365,7 +511,10 @@ describe('Request Factory', () => {
       requestFactory.method = 'example'
       requestFactory.httpMethod = 'POST'
       requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({ 'x-id': '100', 'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8 })
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
+      })
       requestFactory.addParameters(new FormParameter('name', 0), new FormParameter('age', 1))
 
       requestFactory.preProcessAndValidate(drizzle)
@@ -388,7 +537,10 @@ describe('Request Factory', () => {
       requestFactory.method = 'example'
       requestFactory.httpMethod = 'POST'
       requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({ 'x-id': '100', 'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8 })
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
+      })
       requestFactory.addParameter(new BodyParameter(0))
 
       requestFactory.preProcessAndValidate(drizzle)
@@ -408,7 +560,10 @@ describe('Request Factory', () => {
       requestFactory.method = 'example'
       requestFactory.httpMethod = 'POST'
       requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({ 'x-id': '100', 'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8 })
+      requestFactory.addDefaultHeaders({
+        'x-id': '100',
+        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
+      })
       requestFactory.addParameter(new BodyParameter(0))
 
       requestFactory.preProcessAndValidate(drizzle)
@@ -442,7 +597,10 @@ describe('Request Factory', () => {
 
       requestFactory.preProcessAndValidate(drizzle)
 
-      const obj = { test: 'ok', context: 'lib' }
+      const obj = {
+        test: 'ok',
+        context: 'lib'
+      }
       const requestBuilder = requestFactory.requestBuilder(drizzle)
       const request = requestBuilder.toRequest([obj])
       const body = await request.json()
@@ -463,7 +621,10 @@ describe('Request Factory', () => {
 
       requestFactory.preProcessAndValidate(drizzle)
 
-      const obj = { test: 'ok', context: 'lib' }
+      const obj = {
+        test: 'ok',
+        context: 'lib'
+      }
       const str = JSON.stringify(obj)
       const requestBuilder = requestFactory.requestBuilder(drizzle)
       const request = requestBuilder.toRequest([str])
@@ -485,7 +646,10 @@ describe('Request Factory', () => {
 
       requestFactory.preProcessAndValidate(drizzle)
 
-      const obj = { test: 'ok', context: 'lib' }
+      const obj = {
+        test: 'ok',
+        context: 'lib'
+      }
       const str = JSON.stringify(obj)
       const requestBuilder = requestFactory.requestBuilder(drizzle)
       const request = requestBuilder.toRequest([Readable.from(str, { objectMode: false })])
@@ -498,48 +662,37 @@ describe('Request Factory', () => {
     })
   })
 
-  it('should fill url with all provided values', () => {
-    const requestFactory = new RequestFactory()
-    requestFactory.method = 'example'
-    requestFactory.httpMethod = 'GET'
-    requestFactory.path = '/groups/{id}/projects'
-    requestFactory.addDefaultHeaders({ 'x-id': '100', 'content-type': MediaTypes.APPLICATION_JSON_UTF8 })
-    requestFactory.addParameter(new HeaderParameter('x-id', 2))
-    requestFactory.addParameters(
-      new PathParameter('id', pathParameterRegex('id'), 0),
-      new PathParameter('version', pathParameterRegex('version'), 1)
-    )
-    requestFactory.addParameters(new QueryParameter('filter', 3), new QueryParameter('active', 4))
-    requestFactory.addParameters(new QueryNameParameter(5), new QueryNameParameter(6))
+  describe('utils', function () {
+    it('should return true when default header is set', function () {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'GET'
+      requestFactory.path = '/path'
 
-    const instanceMeta = new ApiInstanceMeta()
-    instanceMeta.connectTimeout = 10
-    instanceMeta.readTimeout = 5
-    instanceMeta.addDefaultHeaders({ 'x-client-id': '666' })
-    instanceMeta.setPath('api/{version}')
+      expect(requestFactory.hasHeader('test')).toBeFalsy()
+      expect(requestFactory.hasHeaderWithValue('test', 'value')).toBeFalsy()
 
-    requestFactory.mergeWithInstanceMeta(instanceMeta)
-    requestFactory.preProcessAndValidate(drizzle)
+      requestFactory.addDefaultHeader('test', 'value')
 
-    const requestBuilder = requestFactory.requestBuilder(drizzle)
-    const request = requestBuilder.toRequest([
-      50,
-      '1.0',
-      '8bc',
-      ['all', 'completed'],
-      true,
-      'sendTo(boss)',
-      'pages(10)'
-    ])
+      expect(requestFactory.hasHeader('test')).toBeTruthy()
+      expect(requestFactory.hasHeaderWithValue('test', 'value')).toBeTruthy()
+    })
 
-    expect(request.url).toEqual(
-      '/api/1.0/groups/50/projects?filter=all&filter=completed&active=true&sendTo%28boss%29&pages%2810%29'
-    )
-    expect(request.method).toEqual('GET')
-    expect(request.bodyTimeout).toEqual(5)
-    expect(request.headersTimeout).toEqual(10)
-    expect(request.headers.get('x-id')).toEqual('100,8bc')
-    expect(request.headers.get('x-client-id')).toEqual('666')
-    expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
+    it('should return true when return type is equal to the provided parameter', function () {
+      const requestFactory = new RequestFactory()
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'GET'
+      requestFactory.path = '/path'
+      requestFactory.returnType = Response
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(requestFactory.isReturnTypeOf(undefined)).toBeFalsy()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(requestFactory.isReturnTypeOf(null)).toBeFalsy()
+      expect(requestFactory.isReturnTypeOf(String)).toBeFalsy()
+      expect(requestFactory.isReturnTypeOf(Response)).toBeTruthy()
+    })
   })
 })

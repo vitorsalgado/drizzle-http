@@ -16,7 +16,7 @@ export function FormUrlEncoded() {
   return function <TFunction extends Function>(target: any | TFunction, method?: string): void {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
-      requestFactory.defaultHeaders.append(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+      requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
       return
     }
 
