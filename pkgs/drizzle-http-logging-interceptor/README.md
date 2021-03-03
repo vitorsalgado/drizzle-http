@@ -1,4 +1,4 @@
-# Logging Interceptor &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/logging-interceptor) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
+# Logging Interceptor &middot; [![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions) [![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/logging-interceptor)](https://www.npmjs.com/package/@drizzle-http/logging-interceptor) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
 [Drizzle-Http](https://github.com/vitorsalgado/drizzle-http) interceptor that logs HTTP requests and responses.  
 The default Logger implementation uses [Pino](https://getpino.io/).

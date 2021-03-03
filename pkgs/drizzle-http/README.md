@@ -1,4 +1,4 @@
-# Drizzle-HTTP &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm](https://img.shields.io/npm/v/drizzle-http) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
+# Drizzle-HTTP &middot; [[![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions)](https://github.com/vitorsalgado/drizzle-http/actions) [![npm](https://img.shields.io/npm/v/drizzle-http)](https://www.npmjs.com/package/drizzle-http) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
 Decorator based HTTP client written in **Typescript**.  
 Inspired by [Retrofit](https://github.com/square/retrofit) and [Feign](https://github.com/OpenFeign/feign).

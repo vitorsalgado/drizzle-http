@@ -2,8 +2,8 @@
 
 # Drizzle HTTP
 
-![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)
-![npm](https://img.shields.io/npm/v/drizzle-http)
+[![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions)
+[![npm](https://img.shields.io/npm/v/drizzle-http)](https://www.npmjs.com/package/drizzle-http)
 [![codecov](https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH)](https://codecov.io/gh/vitorsalgado/drizzle-http)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 

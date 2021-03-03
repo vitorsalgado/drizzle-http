@@ -1,4 +1,4 @@
-# Fetch Client &middot; ![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/fetch) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
+# Fetch Client &middot; [![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions) [![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/fetch)](https://www.npmjs.com/package/@drizzle-http/fetch) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
 Fetch based HTTP client implementation for [Drizzle-Http](https://github.com/vitorsalgado/drizzle-http).  
 This library contains several decorators to facilitate the definition of some request parameters for Fetch. See list
