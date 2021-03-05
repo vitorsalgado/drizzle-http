@@ -43,6 +43,7 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^1.0.1",
+    "node-fetch": "^2.6.1",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
@@ -64,7 +65,6 @@
     "bops": "^1.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^6.0.0",
-    "node-fetch": "^2.6.1",
     "puppeteer": "^7.1.0",
     "querystring-es3": "^0.2.1",
     "reflect-metadata": "^0.1.13",

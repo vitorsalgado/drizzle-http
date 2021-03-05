@@ -16,8 +16,17 @@ import {
   ReferrerPolicy,
   SameOrigin
 } from './'
-import { ContentType, DrizzleBuilder, GET, MediaTypes, POST, Response, theTypes } from '@drizzle-http/core'
-import NodeFetch from 'node-fetch'
+import {
+  ContentType,
+  Drizzle,
+  DrizzleBuilder,
+  GET,
+  HttpError,
+  MediaTypes,
+  POST,
+  Response,
+  theTypes
+} from '@drizzle-http/core'
 import { closeTestServer, startTestServer } from '@drizzle-http/test-utils'
 
 class Api {
@@ -26,6 +35,14 @@ class Api {
   @CORS()
   @KeepAlive(true)
   test(): Promise<Response> {
+    return theTypes(Promise, Response)
+  }
+
+  @GET('/nowhere')
+  @ContentType('application/json;charset=utf-8')
+  @CORS()
+  @KeepAlive(true)
+  err404(): Promise<Response> {
     return theTypes(Promise, Response)
   }
 
@@ -46,31 +63,26 @@ class Api {
   }
 }
 
-describe('Fetch Client (Node-Fetch)', function () {
+describe('Fetch Client (Node.js)', function () {
   let address: string
+  let drizzle: Drizzle
+  let api: Api
 
   beforeAll(() =>
     startTestServer().then((addr: string) => {
       address = addr
+      drizzle = DrizzleBuilder.newBuilder().baseUrl(address).callFactory(FetchCallFactory.DEFAULT).build()
+      api = drizzle.create(Api)
     })
   )
 
-  afterAll(() => closeTestServer())
+  afterAll(async () => {
+    await closeTestServer()
+    await drizzle.shutdown()
+  })
 
   it('should perform request with patched global fetch', function () {
-    expect.assertions(3)
-
-    if (!globalThis.fetch) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      globalThis.fetch = NodeFetch
-    }
-
-    const drizzle = DrizzleBuilder.newBuilder().baseUrl(address).callFactory(FetchCallFactory.DEFAULT).build()
-
-    const api: Api = drizzle.create(Api)
-
-    expect(api).not.toBeNull()
+    expect.assertions(2)
 
     return api
       .test()
@@ -78,8 +90,17 @@ describe('Fetch Client (Node-Fetch)', function () {
         expect(response.status).toEqual(200)
         expect(response.ok).toBeTruthy()
       })
-      .finally(() => {
-        return drizzle.shutdown()
+  })
+
+  it('should return error on .catch() instead of on .then()', function () {
+    expect.assertions(3)
+
+    return api
+      .err404()
+      .catch(err => {
+        expect(err).toBeInstanceOf(HttpError)
+        expect(err.response.status).toEqual(404)
+        expect(err.response.ok).toBeFalsy()
       })
   })
 })

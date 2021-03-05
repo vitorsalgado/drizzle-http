@@ -2037,7 +2037,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/core@0.0.1-alpha.0, @drizzle-http/core@^0.0.1-alpha.0, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
+"@drizzle-http/core@^1.0.1, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/core@workspace:pkgs/drizzle-http-core"
   dependencies:
@@ -2049,6 +2049,16 @@ __metadata:
     undici: ^3.3.3
   languageName: unknown
   linkType: soft
+
+"@drizzle-http/core@npm:0.0.1-alpha.0, @drizzle-http/core@npm:^0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "@drizzle-http/core@npm:0.0.1-alpha.0"
+  dependencies:
+    reflect-metadata: ^0.1.13
+    tslib: ^2.1.0
+  checksum: 26d4b54f521c233c46c9bd69f362732a9066816f2a5f564b98883a24452414d41bc82bb0e5e08cc9e0b9c3a047ec2f98bbba5669cb635f260afe67f7d97ef94b
+  languageName: node
+  linkType: hard
 
 "@drizzle-http/example-javascript@workspace:examples/javascript":
   version: 0.0.0-use.local
@@ -2133,7 +2143,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/fetch@0.0.1-alpha.0, @drizzle-http/fetch@^0.0.1-alpha.0, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
+"@drizzle-http/fetch@^1.0.1, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch"
   dependencies:
@@ -2147,7 +2157,7 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.13.9
     "@babel/preset-env": ^7.13.9
     "@babel/runtime": ^7.13.9
-    "@drizzle-http/core": ^0.0.1-alpha.0
+    "@drizzle-http/core": ^1.0.1
     "@drizzle-http/test-utils": 0.0.1
     "@types/node-fetch": ^2.5.8
     "@types/puppeteer": ^5.4.3
@@ -2170,13 +2180,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/logging-interceptor@^0.0.1-alpha.0, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
+"@drizzle-http/fetch@npm:0.0.1-alpha.0, @drizzle-http/fetch@npm:^0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "@drizzle-http/fetch@npm:0.0.1-alpha.0"
+  dependencies:
+    "@drizzle-http/core": ^0.0.1-alpha.0
+    tslib: ^2.1.0
+  checksum: f00772c31a9e6ea41ab39fdc7688805c74d259d20334ec53ab6401fb61c982b34858e39a5f6d8110e56dea508f1aa4fa758b908da67e6f3ec8f9a80f39b5e6ab
+  languageName: node
+  linkType: hard
+
+"@drizzle-http/logging-interceptor@^1.0.1, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor"
   dependencies:
-    "@drizzle-http/core": ^0.0.1-alpha.0
+    "@drizzle-http/core": ^1.0.1
     "@drizzle-http/test-utils": 0.0.1
-    "@drizzle-http/undici": ^0.0.1-alpha.0
+    "@drizzle-http/undici": ^1.0.1
     "@types/pino": ^6.3.6
     pino: ^6.11.1
     pino-pretty: ^4.6.0
@@ -2184,6 +2204,18 @@ __metadata:
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
+
+"@drizzle-http/logging-interceptor@npm:^0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "@drizzle-http/logging-interceptor@npm:0.0.1-alpha.0"
+  dependencies:
+    "@drizzle-http/core": ^0.0.1-alpha.0
+    pino: ^6.11.1
+    pino-pretty: ^4.5.0
+    tslib: ^2.1.0
+  checksum: 94ba7edc02edd35aba30284fdfcfff3d2cf22dbd9e14d40abb2e004ca06b979831a609afad5643dfef329ad487b147d4396f928c6015a97c4f7f8156120e20b6
+  languageName: node
+  linkType: hard
 
 "@drizzle-http/monorepo@workspace:.":
   version: 0.0.0-use.local
@@ -2217,18 +2249,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/rxjs-adapter@^0.0.1-alpha.0, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
+"@drizzle-http/rxjs-adapter@^1.0.1, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter"
   dependencies:
-    "@drizzle-http/core": ^0.0.1-alpha.0
+    "@drizzle-http/core": ^1.0.1
     "@drizzle-http/test-utils": 0.0.1
-    "@drizzle-http/undici": ^0.0.1-alpha.0
+    "@drizzle-http/undici": ^1.0.1
     rxjs: ^6.6.6
     tslib: ^2.1.0
     typescript: ^4.1.5
   languageName: unknown
   linkType: soft
+
+"@drizzle-http/rxjs-adapter@npm:^0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "@drizzle-http/rxjs-adapter@npm:0.0.1-alpha.0"
+  dependencies:
+    "@drizzle-http/core": ^0.0.1-alpha.0
+    rxjs: ^6.6.3
+    tslib: ^2.1.0
+  checksum: 0bc00000e3fd0b273e9ab67c20b4d84b8dd580a0d474fe9c4a375a87508ca2fb932e9fa59570c854ed7339be3867a88df5c6a234cf72dc525dd6d56128b0c080
+  languageName: node
+  linkType: hard
 
 "@drizzle-http/test-utils@0.0.1, @drizzle-http/test-utils@workspace:internal/test-utils":
   version: 0.0.0-use.local
@@ -2242,17 +2285,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/undici@0.0.1-alpha.0, @drizzle-http/undici@^0.0.1-alpha.0, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
+"@drizzle-http/undici@^1.0.1, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/undici@workspace:pkgs/drizzle-http-undici"
   dependencies:
-    "@drizzle-http/core": ^0.0.1-alpha.0
+    "@drizzle-http/core": ^1.0.1
     "@drizzle-http/test-utils": 0.0.1
     tslib: ^2.1.0
     typescript: ^4.1.5
     undici: ^3.3.3
   languageName: unknown
   linkType: soft
+
+"@drizzle-http/undici@npm:0.0.1-alpha.0, @drizzle-http/undici@npm:^0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "@drizzle-http/undici@npm:0.0.1-alpha.0"
+  dependencies:
+    "@drizzle-http/core": ^0.0.1-alpha.0
+    tslib: ^2.1.0
+    undici: ^3.3.3
+  checksum: 3008e11a8b51de8f07f493df9ed5bd9e9810bdeb6b4d48fdca0d879ea2585a738992cfca1c16a3300eac40f983e78b3c2b29298cf95bb615e94b3e8f0062a935
+  languageName: node
+  linkType: hard
 
 "@eslint/eslintrc@npm:^0.4.0":
   version: 0.4.0
@@ -8880,16 +8934,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-http@0.0.1-alpha.0, drizzle-http@workspace:pkgs/drizzle-http":
-  version: 0.0.0-use.local
-  resolution: "drizzle-http@workspace:pkgs/drizzle-http"
+"drizzle-http@npm:0.0.1-alpha.0":
+  version: 0.0.1-alpha.0
+  resolution: "drizzle-http@npm:0.0.1-alpha.0"
   dependencies:
     "@drizzle-http/core": ^0.0.1-alpha.0
     "@drizzle-http/fetch": ^0.0.1-alpha.0
     "@drizzle-http/logging-interceptor": ^0.0.1-alpha.0
     "@drizzle-http/rxjs-adapter": ^0.0.1-alpha.0
-    "@drizzle-http/test-utils": 0.0.1
     "@drizzle-http/undici": ^0.0.1-alpha.0
+  checksum: 270cd4196ba4b4b62fbf14b5a5c77db6a6c9ccebadb7c61cce1e857ebf6a1631af58ede4200ad990ce5b1bd761a0e9cbfa33152961b9b137ac0c08a6d5ebbaf7
+  languageName: node
+  linkType: hard
+
+"drizzle-http@workspace:pkgs/drizzle-http":
+  version: 0.0.0-use.local
+  resolution: "drizzle-http@workspace:pkgs/drizzle-http"
+  dependencies:
+    "@drizzle-http/core": ^1.0.1
+    "@drizzle-http/fetch": ^1.0.1
+    "@drizzle-http/logging-interceptor": ^1.0.1
+    "@drizzle-http/rxjs-adapter": ^1.0.1
+    "@drizzle-http/test-utils": 0.0.1
+    "@drizzle-http/undici": ^1.0.1
   languageName: unknown
   linkType: soft
 
@@ -16017,7 +16084,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:^4.6.0":
+"pino-pretty@npm:^4.5.0, pino-pretty@npm:^4.6.0":
   version: 4.6.0
   resolution: "pino-pretty@npm:4.6.0"
   dependencies:
