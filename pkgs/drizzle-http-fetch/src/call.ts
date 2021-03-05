@@ -1,11 +1,13 @@
 import { Call, HttpError, isAbsolute, Request, Response, ResponseConverter } from '@drizzle-http/core'
 import NodeFetch from 'node-fetch'
+import { FetchInit } from './meta'
 
 export class FetchCall<T> extends Call<Promise<T>> {
   constructor(
     private readonly url: URL,
     private readonly requestInit: RequestInit,
     private readonly responseConverter: ResponseConverter<Response, T>,
+    private readonly options: FetchInit,
     request: Request,
     argv: any[]
   ) {
@@ -23,18 +25,20 @@ export class FetchCall<T> extends Call<Promise<T>> {
   }
 
   execute(): Promise<T> {
-    return fetch(this.request.url, FetchCall.requestInit(this.requestInit, this.request))
-      .then(response => {
+    return fetch(this.request.url, FetchCall.requestInit(this.requestInit, this.options, this.request)).then(
+      response => {
         if (response.ok) {
           return this.responseConverter.convert(response as any)
         }
 
         throw new HttpError(this.request, response as any)
-      })
+      }
+    )
   }
 
-  static requestInit(requestInit: RequestInit, request: Request): RequestInit {
+  static requestInit(requestInit: RequestInit, options: FetchInit, request: Request): FetchInit {
     return {
+      ...options,
       ...requestInit,
       method: request.method,
       headers: (request.headers as unknown) as Headers,

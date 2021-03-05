@@ -3,9 +3,12 @@ import * as RestServer from './test/server'
 import Puppeteer from 'puppeteer'
 import {
   Cache,
+  Compress,
   CORS,
   Credentials,
   FetchCallFactory,
+  Follow,
+  HighWaterMark,
   Integrity,
   KeepAlive,
   Mode,
@@ -14,9 +17,11 @@ import {
   Redirect,
   Referrer,
   ReferrerPolicy,
-  SameOrigin
+  SameOrigin,
+  Size
 } from './'
 import {
+  Body,
   ContentType,
   Drizzle,
   DrizzleBuilder,
@@ -27,7 +32,13 @@ import {
   Response,
   theTypes
 } from '@drizzle-http/core'
-import { closeTestServer, startTestServer } from '@drizzle-http/test-utils'
+import { closeTestServer, startTestServer, TestResult } from '@drizzle-http/test-utils'
+import http from 'http'
+
+const httpAgent = new http.Agent({
+  keepAlive: true,
+  maxSockets: 1
+})
 
 class Api {
   @GET('/')
@@ -58,8 +69,12 @@ class Api {
   @Credentials('include')
   @Cache('force-cache')
   @Navigate()
-  all(): Promise<Response> {
-    return theTypes(Promise, Response)
+  @Compress(true)
+  @Follow(10)
+  @HighWaterMark(1024)
+  @Size(15)
+  all(@Body() data: any): Promise<TestResult<any>> {
+    return theTypes(Promise)
   }
 }
 
@@ -71,7 +86,10 @@ describe('Fetch Client (Node.js)', function () {
   beforeAll(() =>
     startTestServer().then((addr: string) => {
       address = addr
-      drizzle = DrizzleBuilder.newBuilder().baseUrl(address).callFactory(FetchCallFactory.DEFAULT).build()
+      drizzle = DrizzleBuilder.newBuilder()
+        .baseUrl(address)
+        .callFactory(new FetchCallFactory({ agent: httpAgent }))
+        .build()
       api = drizzle.create(Api)
     })
   )
@@ -84,24 +102,29 @@ describe('Fetch Client (Node.js)', function () {
   it('should perform request with patched global fetch', function () {
     expect.assertions(2)
 
-    return api
-      .test()
-      .then(response => {
-        expect(response.status).toEqual(200)
-        expect(response.ok).toBeTruthy()
-      })
+    return api.test().then(response => {
+      expect(response.status).toEqual(200)
+      expect(response.ok).toBeTruthy()
+    })
   })
 
   it('should return error on .catch() instead of on .then()', function () {
     expect.assertions(3)
 
-    return api
-      .err404()
-      .catch(err => {
-        expect(err).toBeInstanceOf(HttpError)
-        expect(err.response.status).toEqual(404)
-        expect(err.response.ok).toBeFalsy()
-      })
+    return api.err404().catch(err => {
+      expect(err).toBeInstanceOf(HttpError)
+      expect(err.response.status).toEqual(404)
+      expect(err.response.ok).toBeFalsy()
+    })
+  })
+
+  it('should POST and read JSON data', function () {
+    expect.assertions(2)
+
+    return api.all({ test: 'hi' }).then(response => {
+      expect(response.body.test).toEqual('hi')
+      expect(response.result.ok).toBeTruthy()
+    })
   })
 })
 

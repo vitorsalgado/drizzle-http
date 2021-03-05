@@ -99,3 +99,6 @@ constapiJs = DrizzleBuilder.newBuilder()
 | @ReferrerPolicy()         | Configure RequestInit.referrerPolicy      | Method |
 | @KeepAlive()         | Configure RequestInit.keepAlive      | Method |
 | @Integrity()         | Configure RequestInit.integrity      | Method |
+| @Follow()         | Configure Node-Fetch **follow** option | Method |
+| @Compress()         | Configure Node-Fetch **compress** option      | Method |
+| @Size()         | Configure Node-Fetch **size** option       | Method |
