@@ -2169,7 +2169,6 @@ __metadata:
     node-fetch: ^2.6.1
     puppeteer: ^7.1.0
     querystring-es3: ^0.2.1
-    reflect-metadata: ^0.1.13
     stream-browserify: ^3.0.0
     ts-loader: ^8.0.17
     tslib: ^2.1.0
