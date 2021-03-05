@@ -129,4 +129,8 @@ describe('Drizzle Builder', function () {
 
     expect(drizzle.headers.has('user-agent')).toBeFalsy()
   })
+
+  it('should contain to string tag symbol', function () {
+    expect(initDrizzleHttp()[Symbol.toStringTag]).toEqual('DrizzleBuilder')
+  })
 })

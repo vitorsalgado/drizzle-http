@@ -252,6 +252,10 @@ export class DrizzleBuilder {
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
   }
 
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
+  }
+
   /**
    * Builds a new {@link Drizzle} instance using the configured values.
    */

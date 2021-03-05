@@ -191,4 +191,22 @@ describe('Headers', function () {
     expect(values[1]).toEqual(['description', 'none'])
     expect(values[2]).toEqual(['age', '32'])
   })
+
+  it('should return all headers on .toString()', function () {
+    const h = new Headers({
+      name: 'test',
+      description: 'none',
+      age: '32'
+    })
+
+    const str = h.toString()
+
+    expect(str).toContain('name: test')
+    expect(str).toContain('description: none')
+    expect(str).toContain('age: 32')
+  })
+
+  it('should contain symbol toStringTag equal to Headers', function () {
+    expect(new Headers({})[Symbol.toStringTag]).toStrictEqual('Headers')
+  })
 })

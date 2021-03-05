@@ -6,7 +6,7 @@
 import { HttpBody } from './http.body'
 import { BodyType } from './types'
 import { Headers } from './http.headers'
-import { Readable } from 'stream'
+import { Readable, Stream } from 'stream'
 
 export interface RequestInit {
   url: string
@@ -69,6 +69,14 @@ export class Request extends HttpBody {
     if (!this.headers.has('content-length') && !(this.body instanceof Readable) && this.body !== null) {
       this.headers.append('content-length', String(this.body.length))
     }
+
+    if (this.body instanceof Stream) {
+      this.headers.set('Transfer-Encoding', 'chunked')
+    }
+
+    if (!this.headers.has('accept')) {
+      this.headers.set('Accept', '*/*')
+    }
   }
 
   clone(): Request {
@@ -77,6 +85,10 @@ export class Request extends HttpBody {
     }
 
     return new Request(this)
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
   }
 }
 

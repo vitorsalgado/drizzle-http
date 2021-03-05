@@ -1,6 +1,5 @@
 import { CallAdapter, CallAdapterFactory } from './call.adapter'
 import { RequestBodyConverter, RequestConverterFactory } from './request.body.converter'
-import { DrizzleBuilder } from './drizzle.builder'
 import { serviceInvoker } from './drizzle.api.invoker'
 import { ResponseConverter, ResponseConverterFactory } from './response.converter'
 import { RequestFactory } from './request.factory'
@@ -145,6 +144,10 @@ export class Drizzle {
     for (const hook of this.shutdownHooks) {
       await hook()
     }
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
   }
 
   /**

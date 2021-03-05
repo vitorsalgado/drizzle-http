@@ -53,12 +53,32 @@ export class Headers {
     return this[sHeaders].entries()
   }
 
+  forEach(callback: (value: string, key: string, map: Map<string, string>) => void, thisArg?: any): void {
+    for (const [key, value] of this[sHeaders]) {
+      callback.call(thisArg, value, key, this[sHeaders])
+    }
+  }
+
   get size(): number {
     return this[sHeaders].size
   }
 
   [Symbol.iterator](): IterableIterator<[string, string]> {
     return this[sHeaders][Symbol.iterator]()
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
+  }
+
+  toString(): string {
+    const str = []
+
+    for (const [key, value] of this.entries()) {
+      str.push(key + ': ' + value)
+    }
+
+    return str.join('\n')
   }
 
   // region Utils

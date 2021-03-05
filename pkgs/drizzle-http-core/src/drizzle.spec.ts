@@ -294,6 +294,10 @@ describe('Drizzle Http', () => {
         })
         .finally(() => d.shutdown())
     })
+
+    it('should contain to string tag symbol', function () {
+      expect(drizzle[Symbol.toStringTag]).toEqual('Drizzle')
+    })
   })
 
   describe('GET', function () {

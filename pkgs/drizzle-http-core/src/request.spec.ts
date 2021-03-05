@@ -10,7 +10,7 @@ describe('Request', function () {
 
     expect(request.method).toStrictEqual('GET')
     expect(request.url).toStrictEqual(url)
-    expect(request.headers).toStrictEqual(new Headers({}))
+    expect(request.headers.size).toEqual(1)
     expect(request.headersTimeout).toBeUndefined()
     expect(request.bodyTimeout).toBeUndefined()
     expect(request.body).toBeNull()
@@ -52,7 +52,7 @@ describe('Request', function () {
 
     expect(request.method).toStrictEqual('GET')
     expect(request.url).toStrictEqual(url)
-    expect(request.headers).toStrictEqual(new Headers({}))
+    expect(request.headers.size).toEqual(1)
     expect(request.headersTimeout).toBeUndefined()
     expect(request.bodyTimeout).toBeUndefined()
     expect(request.body).toBeNull()
@@ -68,7 +68,12 @@ describe('Request', function () {
 
     expect(clone.method).toStrictEqual('POST')
     expect(clone.url).toStrictEqual(url)
-    expect(clone.headers).toStrictEqual(new Headers({ header: 'value' }))
+    expect(clone.headers).toStrictEqual(
+      new Headers({
+        header: 'value',
+        accept: '*/*'
+      })
+    )
     expect(clone.headersTimeout).toBeUndefined()
     expect(clone.bodyTimeout).toBeUndefined()
     expect(clone.body).toBeNull()
@@ -90,5 +95,9 @@ describe('Request', function () {
     await request.text()
 
     expect(() => request.clone()).toThrowError()
+  })
+
+  it('should contain symbol to string tag', () => {
+    expect(new Request('txt')[Symbol.toStringTag]).toEqual('Request')
   })
 })
