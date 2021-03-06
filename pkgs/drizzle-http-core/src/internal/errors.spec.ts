@@ -1,5 +1,6 @@
 import {
   DrizzleError,
+  InvalidArgumentError,
   InvalidRequestMethodConfigurationError,
   MethodNotSupportedError,
   NoParameterHandlerFoundForType,
@@ -19,6 +20,7 @@ describe('Errors', function () {
     const noRequestConverterError = new NoRequestConverterError('method')
     const methodNotSupportedError = new MethodNotSupportedError('method')
     const noParameterHandlerFoundForType = new NoParameterHandlerFoundForType('type', 'method', 1)
+    const invalidArgumentError = new InvalidArgumentError('bad arg', 'ctx')
 
     // DrizzleError
     expect(drizzleError.code).not.toBeNull()
@@ -75,6 +77,17 @@ describe('Errors', function () {
     expect(noParameterHandlerFoundForType.message).not.toBeNull()
     expect(noParameterHandlerFoundForType.message).not.toBeUndefined()
     expect(noParameterHandlerFoundForType.message.length).toBeGreaterThan(0)
+
+    // InvalidArgumentError
+    expect(invalidArgumentError.code).not.toBeNull()
+    expect(invalidArgumentError.code).not.toBeUndefined()
+    expect(invalidArgumentError.code.startsWith(codeStart))
+    expect(invalidArgumentError.message).not.toBeNull()
+    expect(invalidArgumentError.message).not.toBeUndefined()
+    expect(invalidArgumentError.message.length).toBeGreaterThan(0)
+    expect(invalidArgumentError.context).not.toBeNull()
+    expect(invalidArgumentError.context).not.toBeUndefined()
+    expect(invalidArgumentError.context.length).toBeGreaterThan(0)
   })
 
   it('should accept null method', function () {

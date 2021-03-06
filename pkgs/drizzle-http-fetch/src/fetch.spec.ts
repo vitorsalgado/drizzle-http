@@ -21,19 +21,25 @@ import {
   Size
 } from './'
 import {
+  Abort,
   Body,
   ContentType,
   Drizzle,
   DrizzleBuilder,
   GET,
   HttpError,
+  InvalidArgumentError,
   MediaTypes,
   POST,
   Response,
-  theTypes
+  theTypes,
+  Timeout
 } from '@drizzle-http/core'
-import { closeTestServer, startTestServer, TestResult } from '@drizzle-http/test-utils'
+import { closeTestServer, setupTestServer, startTestServer, TestResult } from '@drizzle-http/test-utils'
 import http from 'http'
+import EventEmitter from 'events'
+import AbortController from 'abort-controller'
+import { RequestAbortedError } from './err'
 
 const httpAgent = new http.Agent({
   keepAlive: true,
@@ -45,6 +51,7 @@ class Api {
   @ContentType('application/json;charset=utf-8')
   @CORS()
   @KeepAlive(true)
+  @Timeout(5000)
   test(): Promise<Response> {
     return theTypes(Promise, Response)
   }
@@ -55,6 +62,15 @@ class Api {
   @KeepAlive(true)
   err404(): Promise<Response> {
     return theTypes(Promise, Response)
+  }
+
+  @GET('/long-running')
+  @ContentType('application/json;charset=utf-8')
+  @CORS()
+  @KeepAlive(true)
+  @Timeout(1500)
+  slow(@Abort() abort: EventEmitter | AbortSignal): Promise<Response> {
+    return theTypes(Promise, Response, abort)
   }
 
   @POST('/')
@@ -83,8 +99,14 @@ describe('Fetch Client (Node.js)', function () {
   let drizzle: Drizzle
   let api: Api
 
-  beforeAll(() =>
-    startTestServer().then((addr: string) => {
+  beforeAll(() => {
+    setupTestServer(fastify => {
+      fastify.get('/long-running', (req, res) => {
+        setTimeout(() => res.status(200).send({ ok: true }), 5000)
+      })
+    })
+
+    return startTestServer().then((addr: string) => {
       address = addr
       drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(address)
@@ -92,7 +114,7 @@ describe('Fetch Client (Node.js)', function () {
         .build()
       api = drizzle.create(Api)
     })
-  )
+  })
 
   afterAll(async () => {
     await closeTestServer()
@@ -126,6 +148,61 @@ describe('Fetch Client (Node.js)', function () {
       expect(response.result.ok).toBeTruthy()
     })
   })
+
+  it('should fail after timeout', function () {
+    expect.assertions(1)
+
+    const evt = new EventEmitter()
+
+    return api.slow(evt).catch((err: RequestAbortedError) => {
+      expect(err).toBeInstanceOf(RequestAbortedError)
+    })
+  })
+
+  it('should abort when requested by an event emitter', () => {
+    expect.assertions(1)
+
+    const evt = new EventEmitter()
+    const timer = setTimeout(() => evt.emit('abort'), 1000)
+
+    return api
+      .slow(evt)
+      .catch((err: RequestAbortedError) => {
+        expect(err).toBeInstanceOf(RequestAbortedError)
+      })
+      .finally(() => clearTimeout(timer))
+  }, 2500)
+
+  it('should abort when requested by an abort signal', () => {
+    expect.assertions(1)
+
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 1000)
+
+    return api
+      .slow(controller.signal)
+      .catch((err: RequestAbortedError) => {
+        expect(err).toBeInstanceOf(RequestAbortedError)
+      })
+      .finally(() => clearTimeout(timer))
+  }, 2500)
+
+  it('should fail when signal is not an event emitter or abortController.signal', async () => {
+    expect.assertions(1)
+
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 1000)
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await api.slow(controller)
+    } catch (ex) {
+      expect(ex).toBeInstanceOf(InvalidArgumentError)
+    } finally {
+      clearTimeout(timer)
+    }
+  }, 2500)
 })
 
 describe('Fetch Client', () => {

@@ -42,6 +42,7 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^1.0.1",
+    "abort-controller": "^3.0.0",
     "node-fetch": "^2.6.1",
     "tslib": "^2.1.0"
   },
