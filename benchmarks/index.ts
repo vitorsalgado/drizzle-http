@@ -22,6 +22,8 @@ import {
   theTypes,
   UndiciCallFactory
 } from 'drizzle-http'
+import { FetchCallFactory, KeepAlive } from '../pkgs/drizzle-http-fetch/src'
+import { initDrizzleHttp } from '../pkgs/drizzle-http-core/src'
 
 const suite = new Benchmark.Suite()
 
@@ -95,13 +97,23 @@ class API {
   }
 }
 
-const drizzle = DrizzleBuilder.newBuilder()
-  .baseUrl(target.url)
-  .useDefaults()
-  .callFactory(new UndiciCallFactory(options))
-  .build()
+@ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+class ApiFetch {
+  @POST('/{id}')
+  @KeepAlive(true)
+  post(@Param('id') _id: string, @Query('filter') _filter: string, @Body() _data: any): Promise<Response> {
+    return theTypes(Promise, Response)
+  }
+}
+
+const drizzle = DrizzleBuilder.newBuilder().baseUrl(target.url).callFactory(new UndiciCallFactory(options)).build()
 
 const api: API = drizzle.create(API)
+const apiFetch: ApiFetch = initDrizzleHttp()
+  .callFactory(new FetchCallFactory({ agent: httpAgent }))
+  .baseUrl(target.url)
+  .build()
+  .create(ApiFetch)
 
 const data = {
   id: 100,
@@ -118,6 +130,17 @@ suite
       Promise.all(
         Array.from(Array(parallelRequests)).map(() =>
           api.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
+        )
+      ).then(() => deferred.resolve())
+    }
+  })
+
+  .add('drizzle-http - fetch', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          apiFetch.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
         )
       ).then(() => deferred.resolve())
     }

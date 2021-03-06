@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "0.0.1",
-    "@drizzle-http/undici": "^1.0.1",
-    "typescript": "^4.1.5"
+    "@drizzle-http/undici": "^1.0.1"
   }
 }
