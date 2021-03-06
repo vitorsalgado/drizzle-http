@@ -15,11 +15,16 @@ const templateParameters = () => Config.vars
 
 module.exports = {
   mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   entry: Path.resolve(__dirname, '../src/index.jsx'),
-  watch: true,
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    fallback: {
+      querystring: require.resolve('querystring-es3'),
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('bops'),
+      url: require.resolve('url/')
+    }
   },
   devServer: {
     contentBase: paths.build,
@@ -59,13 +64,6 @@ module.exports = {
         }
       }
     ]
-  },
-  node: {
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty'
   },
   performance: {
     hints: 'warning'
