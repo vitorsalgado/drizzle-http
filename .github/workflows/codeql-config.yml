@@ -1,0 +1,15 @@
+name: "CodeQL Config"
+
+queries:
+  - uses: security-and-quality
+
+paths:
+  - pkgs
+paths-ignore:
+  - node_modules
+  - benchmarks
+  - examples
+  - internal
+  - scripts
+  - '**/*.spec.js'
+  - '**/*.spec.ts'  
