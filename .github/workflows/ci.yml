@@ -49,7 +49,8 @@ jobs:
         run: |
           yarn --immutable
 
-      - run: |
+      - name: Lint
+        run: |
           yarn lint
           yarn prettier:ci
 
@@ -105,8 +106,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        if: startsWith(github.ref, 'refs/tags/v')
 
-      - name: Create Release
+      - name: Use Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          node-version: 14.x
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get Yarn Cache
+        id: yarn-cache
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Yarn Cache
+        uses: actions/cache@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn2-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn2-
+
+      - name: Deps
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          yarn --immutable
+
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn pkg:publish
+
+      - name: Release
         uses: actions/create-release@v1
         if: startsWith(github.ref, 'refs/tags/v')
         env:

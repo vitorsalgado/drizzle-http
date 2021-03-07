@@ -9,8 +9,8 @@ const FsExt = require('fs-extra')
 const Pino = require('pino')
 const Globby = require('globby')
 const PkgMain = require('../../package.json')
-const { execSync } = require('child_process')
-const { program } = require('commander')
+const ExecSync = require('child_process').execSync
+const Program = require('commander').program
 
 const argv = process.argv
 if (argv.length <= 2) argv.push('--help')
@@ -25,13 +25,44 @@ const Logger = Pino({
   }
 })
 
-program
-  .command('publish')
+Program.command('prepare')
+  .description('Prepare release')
+  .option('-v, --version <version>', 'Version')
+  .action(options => {
+    Logger.info('--> Preparing ...')
+    Logger.info('Version: ' + options.version)
+
+    Logger.info('Building ...')
+    ExecSync('yarn build')
+
+    Logger.info('Lerna Version ...')
+    ExecSync(
+      `lerna version ${options.version} --conventional-commits --no-push --force-publish --no-git-tag-version --yes`
+    )
+
+    Logger.info('Updating yarn.lock ...')
+    ExecSync('yarn')
+
+    Logger.info('Reading Lerna JSON ...')
+    const lerna = FsExt.readJsonSync('./lerna.json')
+    const newVersion = lerna.version
+
+    Logger.info('Tag: ' + newVersion)
+
+    Logger.info('Commit and Tagging ...')
+    ExecSync('git add .')
+    ExecSync(`git commit -m "chore(release): publish v${newVersion}"`)
+    ExecSync(`git tag v${newVersion} -m v${newVersion}`)
+
+    Logger.info('<-- Preparation Finished')
+  })
+
+Program.command('publish')
   .description('Publishes all packages to NPM')
-  .option('-t, --tag <tag>', 'Tag', 'latest')
-  .action(async options => {
+  .action(async () => {
     Logger.info('--> Publishing Packages\n')
 
+    const preid = preid()
     const criteria = 'pkgs/**/package.json'
     const pkgRefs = await Globby(criteria, {
       cwd: process.cwd(),
@@ -41,6 +72,7 @@ program
 
     Logger.info('Context:')
     Logger.info('Pwd: ' + process.cwd())
+    Logger.info('Tag: ' + preid)
 
     for (const pkgRef of pkgRefs) {
       const pkg = require(pkgRef)
@@ -49,6 +81,12 @@ program
       Logger.info('Package: ' + pkg.name)
       Logger.info('Path: ' + pkgPath)
 
+      if (!FsExt.pathExistsSync(Path.join(pkgPath, 'dist'))) {
+        Logger.error(`Package ${pkg.name} does not have a "dist" path to be published.`)
+        process.exit(1)
+        return
+      }
+
       const temp = Path.join(pkgPath, 'temp')
 
       FsExt.copySync(Path.join(process.cwd(), 'LICENSE'), Path.join(pkgPath, 'LICENSE'))
@@ -56,7 +94,7 @@ program
       FsExt.copySync(Path.join(pkgPath, 'package.json'), Path.join(pkgPath, 'temp', 'package.json'))
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
 
-      execSync(`npm publish --access public --tag=${options.tag}`, { cwd: pkgPath })
+      ExecSync(`npm publish --access public --tag=${preid}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
       FsExt.copySync(Path.join(pkgPath, 'temp', 'package.json'), Path.join(pkgPath, 'package.json'))
@@ -108,8 +146,19 @@ const rewritePkg = (pkg, mainPkg) => {
   return newPkg
 }
 
+const preid = () => {
+  const tag = ExecSync('git describe --abbrev=0 --tags').toString()
+  const pos = tag.indexOf('-')
+
+  if (pos > -1) {
+    return tag.substring(pos + 1, tag.length)
+  }
+
+  return 'latest'
+}
+
 async function run() {
-  await program.parseAsync(argv)
+  await Program.parseAsync(argv)
 }
 
 run().catch(Logger.error)

@@ -11,12 +11,14 @@
     "lint": "eslint --ext .ts .",
     "prettier": "prettier 'pkgs/**' 'internal/**' 'examples/**' 'benchmarks/**' 'scripts/**' --write --ignore-unknown",
     "prettier:ci": "prettier --check 'pkgs/**' 'internal/**' 'examples/**' 'benchmarks/**' 'scripts/**' --ignore-unknown",
-    "build": "lerna exec --ignore \"@drizzle-http/example-*\" -- yarn build",
+    "build": "yarn workspaces foreach run build",
     "release": "node scripts/release/index.js publish",
     "clean": "lerna clean && yarn clean:dist",
     "clean:dist": "lerna exec -- rm -rf dist && lerna exec -- rm -rf out && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "pkg:prepare": "node scripts/release/index.js prepare",
+    "pkg:publish": "node scripts/release/index.js publish"
   },
   "engines": {
     "node": ">=12.4.0"
