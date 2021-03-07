@@ -10,7 +10,9 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "postinstall": "yarn build"
+    "postinstall": "yarn build",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "engines": {
     "node": ">=12.4.0"

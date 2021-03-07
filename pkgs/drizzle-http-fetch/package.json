@@ -14,7 +14,9 @@
     "build:test": "webpack --config ./build/webpack.config.js && rm -rf ./dist/test",
     "postinstall": "yarn build",
     "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\"",
-    "install:puppeteer": "node_modules/puppeteer/install.js"
+    "install:puppeteer": "node_modules/puppeteer/install.js",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
