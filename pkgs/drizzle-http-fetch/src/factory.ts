@@ -1,6 +1,7 @@
 import { Call, CallFactory, CallProvider, Drizzle, Request, RequestFactory } from '@drizzle-http/core'
 import { FetchCall } from './call'
 import { ConfigKeyRequestInit, FetchInit } from './meta'
+import NodeFetch from 'node-fetch'
 
 export class FetchCallFactory extends CallFactory {
   static DEFAULT: FetchCallFactory = new FetchCallFactory({})
@@ -9,8 +10,13 @@ export class FetchCallFactory extends CallFactory {
     super()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup(drizzle: Drizzle): void {}
+  setup(drizzle: Drizzle): void {
+    if (!globalThis.fetch) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      globalThis.fetch = NodeFetch
+    }
+  }
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     const responseConverter = drizzle.responseBodyConverter(method, requestFactory)

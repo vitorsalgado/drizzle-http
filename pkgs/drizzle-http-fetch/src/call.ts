@@ -8,7 +8,6 @@ import {
   ResponseConverter
 } from '@drizzle-http/core'
 import { FetchInit } from './meta'
-import NodeFetch from 'node-fetch'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
 import { RequestAbortedError } from './err'
@@ -23,12 +22,6 @@ export class FetchCall<T> extends Call<Promise<T>> {
     argv: any[]
   ) {
     super(request, argv)
-
-    if (!globalThis.fetch) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      globalThis.fetch = NodeFetch
-    }
 
     if (!isAbsolute(request.url)) {
       request.url = new URL(request.url, url).href
