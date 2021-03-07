@@ -9,7 +9,6 @@
     "examples/*"
   ],
   "ignoreChanges": [
-    "assets",
     "docs",
     "**/__fixtures__/**",
     "**/__tests__/**",
@@ -19,7 +18,6 @@
     "publish": {
       "ignoreChanges": [
         "docs",
-        "assets",
         "*.md"
       ],
       "message": "chore(release): publish %s"
