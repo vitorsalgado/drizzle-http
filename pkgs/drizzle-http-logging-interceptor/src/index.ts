@@ -56,7 +56,7 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
   ) {}
 
   redactHeader(...names: string[]): void {
-    if (names === null || names.length === 0) {
+    if (names.length === 0) {
       throw new TypeError('Parameter "names" must not be null or empty.')
     }
 

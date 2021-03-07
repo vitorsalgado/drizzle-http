@@ -192,15 +192,10 @@ describe('Logging Interceptor', function () {
     return api.execute('test', 'proj', Readable.from(txt(), { objectMode: false }))
   })
 
-  it('should fail when redact header with null or undefined name', function () {
+  it('should fail when redact a header empty varargs', function () {
     const interceptor = new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY)
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    expect(() => interceptor.redactHeader(null)).toThrowError()
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    expect(() => interceptor.redactHeader(undefined)).toThrowError()
+    expect(() => interceptor.redactHeader()).toThrowError()
   })
 
   it('should not log when level is NONE', () => {
