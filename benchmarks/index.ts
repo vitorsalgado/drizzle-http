@@ -5,12 +5,16 @@ import Benchmark from 'benchmark'
 import Axios from 'axios'
 import NodeFetch from 'node-fetch'
 import fetch from 'undici-fetch'
+import got from 'got'
 import {
   Body,
   ContentType,
   DrizzleBuilder,
+  FetchCallFactory,
   GET,
   Headers,
+  initDrizzleHttp,
+  KeepAlive,
   MediaTypes,
   Param,
   POST,
@@ -22,8 +26,6 @@ import {
   theTypes,
   UndiciCallFactory
 } from 'drizzle-http'
-import { FetchCallFactory, KeepAlive } from '../pkgs/drizzle-http-fetch/src'
-import { initDrizzleHttp } from '../pkgs/drizzle-http-core/src'
 
 const suite = new Benchmark.Suite()
 
@@ -78,6 +80,11 @@ const options = {
 }
 const pool = new Pool(target.url, options)
 
+const gotOpts = {
+  agent: { http: httpAgent },
+  retry: 0
+}
+
 @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
 class API {
   @GET('/')
@@ -124,7 +131,7 @@ const data = {
 
 suite
 
-  .add('drizzle-http', {
+  .add('drizzle-http - undici', {
     defer: true,
     fn: (deferred: any) => {
       Promise.all(
@@ -141,32 +148,6 @@ suite
       Promise.all(
         Array.from(Array(parallelRequests)).map(() =>
           apiFetch.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
-        )
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('drizzle-http - no args', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(() => api.getArgLess().then((response: Response) => response.json()))
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('drizzle-http - stream', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(() =>
-          api.streaming(
-            new Writable({
-              write(_chunk, _encoding, callback) {
-                callback()
-              }
-            })
-          )
         )
       ).then(() => deferred.resolve())
     }
@@ -203,53 +184,6 @@ suite
                     })
                 )
             })
-        )
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('undici - pool - request - no args', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(
-          () =>
-            new Promise<void>(resolve => {
-              const d: Buffer[] = []
-              pool.request(undiciOptions).then(({ body }) =>
-                body
-                  .pipe(
-                    new Writable({
-                      write(_chunk, _encoding, callback) {
-                        d.push(_chunk)
-                        callback()
-                      }
-                    })
-                  )
-                  .on('finish', () => {
-                    resolve(JSON.parse(Buffer.concat(d).toString()) as any)
-                  })
-              )
-            })
-        )
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('undici - stream', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(() =>
-          pool.stream(
-            undiciOptions,
-            () =>
-              new Writable({
-                write(_chunk, _encoding, callback) {
-                  callback()
-                }
-              })
-          )
         )
       ).then(() => deferred.resolve())
     }
@@ -298,6 +232,21 @@ suite
     }
   })
 
+  .add('got', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          got.post(target.url, {
+            ...gotOpts,
+            headers: { 'Content-Type': 'application/json' },
+            responseType: 'json'
+          })
+        )
+      ).then(() => deferred.resolve())
+    }
+  })
+
   .add('undici-fetch', {
     defer: true,
     fn: (deferred: any) => {
@@ -324,6 +273,42 @@ suite
             body: JSON.stringify(data),
             agent: nodeFetchAgent
           } as any).then(res => res.json())
+        )
+      ).then(() => deferred.resolve())
+    }
+  })
+
+  .add('drizzle-http - stream', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          api.streaming(
+            new Writable({
+              write(_chunk, _encoding, callback) {
+                callback()
+              }
+            })
+          )
+        )
+      ).then(() => deferred.resolve())
+    }
+  })
+
+  .add('undici - stream', {
+    defer: true,
+    fn: (deferred: any) => {
+      Promise.all(
+        Array.from(Array(parallelRequests)).map(() =>
+          pool.stream(
+            undiciOptions,
+            () =>
+              new Writable({
+                write(_chunk, _encoding, callback) {
+                  callback()
+                }
+              })
+          )
         )
       ).then(() => deferred.resolve())
     }

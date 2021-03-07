@@ -171,14 +171,16 @@ Processor: 2,8 GHz Quad-Core Intel Core i7
 Memory: 16 GB 2133 MHz LPDDR3
 Node: 15
 
-drizzle-http x 1,248 ops/sec ±1.25% (77 runs sampled)
-drizzle-http no args x 1,347 ops/sec ±0.93% (76 runs sampled)
-undici pool request x 1,259 ops/sec ±1.26% (78 runs sampled)
-undici pool request no args x 1,324 ops/sec ±1.09% (76 runs sampled)
-http x 1,235 ops/sec ±1.76% (74 runs sampled)
-axios x 1,015 ops/sec ±5.29% (71 runs sampled)
-undici-fetch x 1,335 ops/sec ±1.27% (78 runs sampled)
-node-fetch x 1,156 ops/sec ±1.36% (78 runs sampled)
+drizzle-http - undici x 1,263 ops/sec ±1.13% (76 runs sampled)
+drizzle-http - fetch x 1,034 ops/sec ±2.21% (74 runs sampled)
+undici - pool - request x 1,225 ops/sec ±1.08% (74 runs sampled)
+http x 1,254 ops/sec ±1.41% (75 runs sampled)
+axios x 1,026 ops/sec ±2.04% (78 runs sampled)
+got x 1,054 ops/sec ±1.56% (75 runs sampled)
+undici-fetch x 1,339 ops/sec ±1.47% (79 runs sampled)
+node-fetch x 1,147 ops/sec ±1.42% (78 runs sampled)
+drizzle-http - stream x 3,516 ops/sec ±2.47% (73 runs sampled)
+undici - stream x 3,560 ops/sec ±2.00% (74 runs sampled)
 ```
 
 This benchmark consists in different clients performing calls to server that responds a 80kb JSON with multiple
