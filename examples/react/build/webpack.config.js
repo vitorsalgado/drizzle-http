@@ -9,8 +9,8 @@ const WebPack = require('webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 const Config = require('../config')
-const { paths } = Config
 
+const { paths } = Config
 const templateParameters = () => Config.vars
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
     fallback: {
       querystring: require.resolve('querystring-es3'),
       stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('bops'),
+      buffer: require.resolve('buffer/'),
       url: require.resolve('url/')
     }
   },
@@ -38,8 +38,7 @@ module.exports = {
     pathinfo: false,
     filename: 'static/js/bundle.js',
     chunkFilename: 'static/js/[name].chunk.js',
-    publicPath: '/',
-    devtoolModuleFilenameTemplate: info => Path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')
+    publicPath: '/'
   },
   plugins: [
     new CleanPlugin(),
