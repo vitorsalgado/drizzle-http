@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v1.0.1...v2.0.0) (2021-03-07)
+
+
+### Bug Fixes
+
+* **logger-interceptor:** fix response log entries + fix browser support ([4217938](https://github.com/vitorsalgado/drizzle-http/commit/42179387c7a6584087bb2f28d5162baf10d63830))
+
+
+
+
+
 ## [1.0.1](https://github.com/vitorsalgado/drizzle-http/compare/v1.0.0...v1.0.1) (2021-03-03)
 
 **Note:** Version bump only for package @drizzle-http/logging-interceptor

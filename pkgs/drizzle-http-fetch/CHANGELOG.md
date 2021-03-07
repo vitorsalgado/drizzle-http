@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v1.0.1...v2.0.0) (2021-03-07)
+
+
+### Features
+
+* **fetch:** add support for timeout on fetch client ([9195c9b](https://github.com/vitorsalgado/drizzle-http/commit/9195c9be9026e09fc774519c211af5e627e628f6))
+* add better support for Node-Fetch ([2838660](https://github.com/vitorsalgado/drizzle-http/commit/2838660103e9f1c976c6bb33057270cab9c457ee))
+* add decorators to cover Node-Fetch options ([638e127](https://github.com/vitorsalgado/drizzle-http/commit/638e127f16e573bc199af52c9ce36a06be54da9a))
+* **fetch:** handle errors on catch + add Node-Fetch ([6129e41](https://github.com/vitorsalgado/drizzle-http/commit/6129e41cdb3d2debd9ca401ef94fd80fe21ec6e4))
+
+
+
+
+
 ## [1.0.1](https://github.com/vitorsalgado/drizzle-http/compare/v1.0.0...v1.0.1) (2021-03-03)
 
 **Note:** Version bump only for package @drizzle-http/fetch
