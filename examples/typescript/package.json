@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "1.0.1",
-    "@drizzle-http/undici": "1.0.1"
+    "@drizzle-http/core": "2.0.0",
+    "@drizzle-http/undici": "2.0.0"
   }
 }
