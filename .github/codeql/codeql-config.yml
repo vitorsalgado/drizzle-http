@@ -7,9 +7,11 @@ paths:
   - pkgs
 paths-ignore:
   - node_modules
+  - pkgs/**/node_modules
+  - pkgs/**/dist
   - benchmarks
   - examples
   - internal
   - scripts
   - '**/*.spec.js'
-  - '**/*.spec.ts'  
+  - '**/*.spec.ts'
