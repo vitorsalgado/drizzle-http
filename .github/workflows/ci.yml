@@ -31,11 +31,6 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Node Version
-        id: node-version
-        run: |
-          echo "::set-output name=version::$(node --version)"
-
       - name: Setup Yarn
         run: |
           yarn set version berry
@@ -44,9 +39,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: './.yarn/cache'
-          key: ${{ runner.os }}-${{ steps.node-version.outputs.version }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-14.x-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ steps.node-version.outputs.version }}-yarn-
+            ${{ runner.os }}-14.x-yarn-
 
       - name: Deps
         run: |
