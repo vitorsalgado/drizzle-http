@@ -97,7 +97,7 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
 
     if (!logBody || request.body === null) {
       this.logger.info('--> END ' + request.method)
-    } else if (request.body instanceof Stream) {
+    } else if (LoggingInterceptor.isStream(request.body)) {
       this.logger.info('--> END ' + request.method + ' (stream request body omitted)')
     } else {
       if (Buffer.isBuffer(request.body)) {
@@ -140,21 +140,21 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
 
         if (!logBody || response.body === null) {
           this.logger.info('<-- END HTTP')
-        } else if (response.body instanceof Stream) {
-          this.logger.info('<-- END HTTP' + request.method + ' (stream response body omitted)')
+        } else if (LoggingInterceptor.isStream(response.body)) {
+          this.logger.info('<-- END HTTP ' + request.method + ' (stream response body omitted)')
         } else {
           if (Buffer.isBuffer(response.body)) {
             const isUtf8 = typeof contentType !== 'undefined' && contentType.toLowerCase().indexOf('utf-8') > -1
 
             if (isUtf8) {
               this.logger.info((response.body as Buffer).toString('utf-8'))
-              this.logger.info('--> END ' + request.method + ' (' + response.body.length + '-byte(s))')
+              this.logger.info('<-- END ' + request.method + ' (' + response.body.length + '-byte(s))')
             } else {
-              this.logger.info('--> END ' + request.method + ' (' + response.body.length + '-byte(s) body omitted)')
+              this.logger.info('<-- END ' + request.method + ' (' + response.body.length + '-byte(s) body omitted)')
             }
           } else {
             this.logger.info(response.body.toString())
-            this.logger.info('--> END ' + request.method)
+            this.logger.info('<-- END ' + request.method)
           }
         }
 
@@ -204,14 +204,20 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
   }
 
   private static ms(): number {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (!process || !process.hrtime) {
+    if (typeof process === 'undefined') {
       return Date.now()
     }
 
     const hrTime = process.hrtime()
 
     return (hrTime[0] * 1000000 + hrTime[1] / 1000) / 1000
+  }
+
+  private static isStream(body: any): boolean {
+    return (
+      body instanceof Stream ||
+      // eslint-disable-next-line no-undef
+      (typeof ReadableStream !== 'undefined' && body instanceof ReadableStream)
+    )
   }
 }
