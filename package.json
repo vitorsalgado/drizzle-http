@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --detectOpenHandles --logHeapUsage",
     "test:coverage": "yarn test --coverage",
-    "test:ci": "yarn test --coverage --ci",
+    "test:ci": "yarn test --colors --coverage --ci",
     "test:failures": "yarn test --onlyFailures",
     "coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts .",
@@ -80,6 +80,6 @@
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.3",
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.5"
+    "typescript": "^4.2.3"
   }
 }
