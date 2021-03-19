@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "0.0.1",
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.35",
     "undici": "^3.3.3"
   }
 }

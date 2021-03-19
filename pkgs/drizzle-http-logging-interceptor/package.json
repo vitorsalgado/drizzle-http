@@ -43,8 +43,8 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.0.0",
-    "pino": "^6.11.1",
-    "pino-pretty": "^4.7.0",
+    "pino": "^6.11.2",
+    "pino-pretty": "^4.7.1",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
