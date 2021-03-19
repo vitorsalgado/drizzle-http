@@ -180,7 +180,8 @@ describe('Logging Interceptor', function () {
 
     const spy: jest.Mock = jest.fn()
     const fake = new SpyLogger(spy)
-    const interceptor = new LoggingInterceptor(fake, Level.BODY)
+    const interceptor = new LoggingInterceptor(fake)
+    interceptor.setLevel(Level.BODY)
 
     const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
@@ -210,7 +211,8 @@ describe('Logging Interceptor', function () {
     const spy: jest.Mock = jest.fn()
     const fake = new SpyLogger(spy)
 
-    const interceptor = new LoggingInterceptor(fake, Level.NONE)
+    const interceptor = new LoggingInterceptor(fake)
+    interceptor.level = Level.NONE
 
     const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)

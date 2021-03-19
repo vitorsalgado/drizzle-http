@@ -51,9 +51,13 @@ export class LoggingInterceptor implements Interceptor<Request, Response> {
 
   constructor(
     private readonly logger: Logger = PinoLogger.DEFAULT,
-    private level: Level = Level.BASIC,
+    public level: Level = Level.BASIC,
     private readonly headersToRedact: Set<string> = new Set<string>()
   ) {}
+
+  setLevel(level: Level): void {
+    this.level = level
+  }
 
   redactHeader(...names: string[]): void {
     if (names.length === 0) {
