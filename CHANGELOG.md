@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.0.0...v2.1.0) (2021-03-20)
+
+
+### Features
+
+* **logger:** expose level and add setLevel method ([56ae69b](https://github.com/vitorsalgado/drizzle-http/commit/56ae69b21e0b19cc78c350af27841fed97c51b76))
+
+
+
+
+
 # [2.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v1.0.1...v2.0.0) (2021-03-07)
 
 

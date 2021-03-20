@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/undici",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Undici HTTP client for Drizzle-Http",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,11 +38,11 @@
     "api"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.0.0",
+    "@drizzle-http/core": "^2.1.0",
     "tslib": "^2.1.0",
     "undici": "^3.3.3"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "0.0.1"
+    "@drizzle-http/test-utils": "^2.1.0"
   }
 }
