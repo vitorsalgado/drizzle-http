@@ -110,6 +110,8 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v2
         if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           node-version: 14.x
           registry-url: 'https://registry.npmjs.org'
