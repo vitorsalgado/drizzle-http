@@ -62,7 +62,7 @@ Program.command('publish')
   .action(async () => {
     Logger.info('--> Publishing Packages\n')
 
-    const preid = preid()
+    const preid = getPreid()
     const criteria = 'pkgs/**/package.json'
     const pkgRefs = await Globby(criteria, {
       cwd: process.cwd(),
@@ -146,7 +146,7 @@ const rewritePkg = (pkg, mainPkg) => {
   return newPkg
 }
 
-const preid = () => {
+const getPreid = () => {
   const tag = ExecSync('git describe --abbrev=0 --tags').toString()
   const pos = tag.indexOf('-')
 
