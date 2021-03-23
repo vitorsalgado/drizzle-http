@@ -1,0 +1,51 @@
+name: Dependabot
+
+on:
+  push:
+    branches: [ dependabot/npm_and_yarn/** ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Use Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Autofix Lock File
+        run: |
+          cd .`git log -1 --pretty=%s | awk '{ print $9 }'`
+
+          git checkout HEAD^ -- yarn.lock
+          git diff --name-only HEAD^ HEAD | grep -q 'package.json' || yarn up `git log -1 --pretty=%s | awk '{ print $3 }'`
+          git checkout HEAD -- package.json
+
+          yarn
+          yarn dedupe
+
+      - name: Config Git
+        run: |
+          # use personal access token to allow triggering new workflow
+          BASIC_AUTH=$(echo -n "x-access-token:$GITHUB_TOKEN" | base64)
+          echo "::add-mask::$BASIC_AUTH"
+          git config --global user.name '${{ github.event.commits[0].author.name }}'
+          git config --global user.email '${{ github.event.commits[0].author.email }}'
+          git config --local http.$GITHUB_SERVER_URL/.extraheader "AUTHORIZATION: basic $BASIC_AUTH"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Changes
+        run: |
+          cd .`git log -1 --pretty=%s | awk '{ print $9 }'` # ditto
+          git add yarn.lock
+          git commit -m "build: dependabot autofix"
+          git push
