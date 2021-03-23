@@ -1,4 +1,4 @@
-name: Dependabot
+name: Deps
 
 on:
   push:
@@ -34,14 +34,9 @@ jobs:
 
       - name: Config Git
         run: |
-          # use personal access token to allow triggering new workflow
-          BASIC_AUTH=$(echo -n "x-access-token:$GITHUB_TOKEN" | base64)
-          echo "::add-mask::$BASIC_AUTH"
-          git config --global user.name '${{ github.event.commits[0].author.name }}'
-          git config --global user.email '${{ github.event.commits[0].author.email }}'
-          git config --local http.$GITHUB_SERVER_URL/.extraheader "AUTHORIZATION: basic $BASIC_AUTH"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --global user.name 'Vitor Salgado'
+          git config --global user.email 'vitorsalgado@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
 
       - name: Commit Changes
         run: |
