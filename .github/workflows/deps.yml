@@ -15,6 +15,9 @@ jobs:
           fetch-depth: 2
           persist-credentials: false
 
+      - name: Config Git
+        run: |
+
       - name: Use Node
         id: setup-node
         uses: actions/setup-node@v2
@@ -23,6 +26,10 @@ jobs:
 
       - name: Autofix Lock File
         run: |
+          git config --global user.name 'vitorsalgado'
+          git config --global user.email 'vitorsalgado@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+
           cd .`git log -1 --pretty=%s | awk '{ print $9 }'`
 
           git checkout HEAD^ -- yarn.lock
@@ -32,15 +39,6 @@ jobs:
           yarn
           yarn dedupe
 
-      - name: Config Git
-        run: |
-          git config --global user.name 'Vitor Salgado'
-          git config --global user.email 'vitorsalgado@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-
-      - name: Commit Changes
-        run: |
-          cd .`git log -1 --pretty=%s | awk '{ print $9 }'` # ditto
           git add yarn.lock
-          git commit -m "build: dependabot autofix"
+          git commit -m "build(dependabot): autofix yarn.lock"
           git push
