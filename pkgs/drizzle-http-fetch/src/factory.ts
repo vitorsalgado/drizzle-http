@@ -19,13 +19,12 @@ export class FetchCallFactory extends CallFactory {
   }
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
-    const responseConverter = drizzle.responseBodyConverter(method, requestFactory)
     const requestInit = requestFactory.getConfig(ConfigKeyRequestInit) as RequestInit
     const url = new URL(drizzle.baseUrl)
     const opts = this.options
 
     return function (request: Request, args: any[]): Call<unknown> {
-      return new FetchCall(url, requestInit, responseConverter, opts, request, args)
+      return new FetchCall(url, requestInit, opts, request, args)
     }
   }
 }

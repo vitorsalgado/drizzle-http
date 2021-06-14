@@ -9,6 +9,7 @@ export const ConfigStreamToIndex = 'dh:undici:stream_index'
 export function Streaming() {
   return (target: any, method: string) => {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+    requestFactory.ignoreResponseConverter()
     requestFactory.addConfig(ConfigIsStream, true)
     requestFactory.returnGenericType = StreamToResult
   }
@@ -17,6 +18,7 @@ export function Streaming() {
 export function StreamTo() {
   return function (target: any, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+    requestFactory.ignoreResponseConverter()
     requestFactory.addConfig(ConfigStreamToIndex, index)
   }
 }

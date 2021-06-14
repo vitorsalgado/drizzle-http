@@ -41,8 +41,6 @@ export class UndiciCallFactory extends CallFactory {
       throw new TypeError('Undici Pool must not be null.')
     }
 
-    const responseConverter = drizzle.responseBodyConverter(method, requestFactory)
-
     // stream to
     if (requestFactory.getConfig(ConfigIsStream)) {
       const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
@@ -69,7 +67,7 @@ export class UndiciCallFactory extends CallFactory {
     }
 
     return function (request: Request, args: any[]): Call<unknown> {
-      return new UndiciCall(self._pool, responseConverter, request, args)
+      return new UndiciCall(self._pool, request, args)
     }
   }
 }

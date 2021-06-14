@@ -1,22 +1,13 @@
-import {
-  Call,
-  HttpError,
-  InvalidArgumentError,
-  isAbsolute,
-  Request,
-  Response,
-  ResponseConverter
-} from '@drizzle-http/core'
+import { Call, HttpError, InvalidArgumentError, isAbsolute, Request } from '@drizzle-http/core'
 import { FetchInit } from './meta'
 import AbortController from 'abort-controller'
 import EventEmitter from 'events'
 import { RequestAbortedError } from './err'
 
-export class FetchCall<T> extends Call<Promise<T>> {
+export class FetchCall extends Call<Promise<Response>> {
   constructor(
     private readonly url: URL,
     private readonly requestInit: RequestInit,
-    private readonly responseConverter: ResponseConverter<Response, T>,
     private readonly options: FetchInit,
     request: Request,
     argv: any[]
@@ -28,7 +19,7 @@ export class FetchCall<T> extends Call<Promise<T>> {
     }
   }
 
-  execute(): Promise<T> {
+  execute(): Promise<Response> {
     const timeout = this.request.bodyTimeout ?? 30e3
     const controller = new AbortController()
 
@@ -50,7 +41,7 @@ export class FetchCall<T> extends Call<Promise<T>> {
     )
       .then(response => {
         if (response.ok) {
-          return this.responseConverter.convert(response as any)
+          return response
         }
 
         throw new HttpError(this.request, response as any)

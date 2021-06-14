@@ -1,7 +1,6 @@
 import { Call, CallFactory, CallProvider } from '../../../call'
 import { RequestFactory } from '../../../request.factory'
 import { Drizzle } from '../../../drizzle'
-import { ResponseConverter } from '../../../response.converter'
 import { HttpError, Response } from '../../../response'
 import { Request } from '../../../request'
 import { request } from 'undici'
@@ -20,13 +19,8 @@ export class NoopCallFactory implements CallFactory {
   setup(drizzle: Drizzle): void {}
 }
 
-class TestCall<T> extends Call<Promise<T>> {
-  constructor(
-    readonly url: URL,
-    private responseConverter: ResponseConverter<Response, T>,
-    public readonly request: Request,
-    public readonly argv: any[]
-  ) {
+class TestCall extends Call<Promise<Response>> {
+  constructor(readonly url: URL, public readonly request: Request, public readonly argv: any[]) {
     super(request, argv)
 
     if (!isAbsolute(this.request.url)) {
@@ -34,19 +28,17 @@ class TestCall<T> extends Call<Promise<T>> {
     }
   }
 
-  async execute(): Promise<T> {
+  async execute(): Promise<Response> {
     return request(this.request.url, {
       ...toRequest(this.request),
       path: undefined
     } as any).then(res => {
       if (Response.isOK(res.statusCode)) {
-        return this.responseConverter.convert(
-          new Response(res.body, {
-            status: res.statusCode,
-            headers: new Headers(res.headers as Record<string, string>),
-            url: this.request.url
-          })
-        )
+        return new Response(res.body, {
+          status: res.statusCode,
+          headers: new Headers(res.headers as Record<string, string>),
+          url: this.request.url
+        })
       }
 
       throw new HttpError(
@@ -66,12 +58,7 @@ export class TestCallFactory implements CallFactory {
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     return function (request, args) {
-      return new TestCall(
-        new URL(drizzle.baseUrl),
-        drizzle.responseBodyConverter(method, requestFactory),
-        request,
-        args
-      )
+      return new TestCall(new URL(drizzle.baseUrl), request, args)
     }
   }
 

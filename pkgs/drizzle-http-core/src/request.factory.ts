@@ -46,6 +46,7 @@ export class RequestFactory {
   parameterHandlers!: ParameterHandler<any, unknown>[]
   parameters: Parameter[]
   signal: EventEmitter | any
+  noResponseConverter: boolean
 
   // This holds generic values used by additional adapters, converters and callers
   private readonly bag: Map<string, any>
@@ -68,6 +69,7 @@ export class RequestFactory {
     this.parameterHandlers = []
     this.parameters = []
     this.signal = null
+    this.noResponseConverter = false
   }
 
   /**
@@ -487,6 +489,14 @@ export class RequestFactory {
    */
   isFormUrlEncoded(): boolean {
     return this.contentTypeContains(MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+  }
+
+  /**
+   * Skip response converters for a request.
+   * @param value - yes/no to ignore response converters. defaults to true
+   */
+  ignoreResponseConverter(value = true): void {
+    this.noResponseConverter = value
   }
 
   private invalidArgErr(message: string): InvalidRequestMethodConfigurationError {

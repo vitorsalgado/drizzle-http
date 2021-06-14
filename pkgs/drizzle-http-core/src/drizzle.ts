@@ -115,6 +115,10 @@ export class Drizzle {
    *  {@link RawResponseConverter} when none is found.
    */
   responseBodyConverter<F, T>(method: string, requestFactory: RequestFactory): ResponseConverter<F, T> {
+    if (requestFactory.noResponseConverter) {
+      return (RawResponseConverter.INSTANCE as unknown) as ResponseConverter<F, T>
+    }
+
     for (const factory of this.responseConverterFactories) {
       const converter = factory.responseBodyConverter(this, method, requestFactory)
 

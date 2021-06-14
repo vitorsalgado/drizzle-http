@@ -1,4 +1,4 @@
-import { Call, Headers, HttpError, Request, Response, ResponseConverter } from '@drizzle-http/core'
+import { Call, Headers, HttpError, Request, Response } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { toUndiciRequest } from './utils'
 import { Writable } from 'stream'
@@ -71,17 +71,12 @@ export class Streamer extends Writable {
   }
 }
 
-export class UndiciCall<T> extends Call<Promise<T>> {
-  constructor(
-    private readonly client: Pool,
-    private readonly responseConverter: ResponseConverter<Response, T>,
-    request: Request,
-    argv: any[]
-  ) {
+export class UndiciCall extends Call<Promise<Response>> {
+  constructor(private readonly client: Pool, request: Request, argv: any[]) {
     super(request, argv)
   }
 
-  execute(): Promise<T> {
+  execute(): Promise<Response> {
     return new Promise<StreamerResult>((resolve, reject) => {
       this.client.stream(
         toUndiciRequest(this.request, new Streamer(resolve, reject)),
@@ -101,11 +96,11 @@ export class UndiciCall<T> extends Call<Promise<T>> {
     })
       .then(res => new Response(res.data, { status: res.status, headers: res.headers, url: this.request.url }))
       .then(response => {
-        if (response.ok) {
-          return this.responseConverter.convert(response)
+        if (!response.ok) {
+          throw new HttpError(this.request, response)
         }
 
-        throw new HttpError(this.request, response)
+        return response
       })
   }
 }

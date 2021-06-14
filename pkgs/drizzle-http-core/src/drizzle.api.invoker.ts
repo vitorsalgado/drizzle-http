@@ -35,6 +35,7 @@ export function serviceInvoker(
     const callProvider = callFactory.prepareCall(drizzle, method, requestFactory)
     const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)
     const requestBuilder = requestFactory.requestBuilder(drizzle)
+    const responseConverter = drizzle.responseBodyConverter(method, requestFactory)
     const interceptors = drizzle.interceptors()
 
     interceptors.push(new HttpExecInterceptor(callProvider))
@@ -42,7 +43,7 @@ export function serviceInvoker(
     // if method does not contain dynamic arguments, you don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
-      const call = new BridgeCall(interceptors, requestBuilder.toRequest([]), [])
+      const call = new BridgeCall(responseConverter, interceptors, requestBuilder.toRequest([]), [])
 
       if (callAdapter !== null) {
         return function (): T {
@@ -63,7 +64,7 @@ export function serviceInvoker(
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: any[]): T {
-      const call = new BridgeCall(interceptors, requestBuilder.toRequest(args), args)
+      const call = new BridgeCall(responseConverter, interceptors, requestBuilder.toRequest(args), args)
 
       if (callAdapter === null) {
         return call.execute() as T

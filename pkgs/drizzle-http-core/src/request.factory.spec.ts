@@ -503,6 +503,17 @@ describe('Request Factory', () => {
       expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
       expect(body).toStrictEqual('')
     })
+
+    it('should set noResponseConverter to FALSE as the default for new instances', () => {
+      const requestFactory = new RequestFactory()
+      expect(requestFactory.noResponseConverter).toBeFalsy()
+    })
+
+    it('should set noResponseConverter to TRUE when calling ignoreResponseConverter without value', () => {
+      const requestFactory = new RequestFactory()
+      requestFactory.ignoreResponseConverter()
+      expect(requestFactory.noResponseConverter).toBeTruthy()
+    })
   })
 
   describe('application/x-www-form-urlencoded', () => {

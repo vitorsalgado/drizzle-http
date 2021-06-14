@@ -11,6 +11,7 @@ import {
   FormUrlEncoded,
   GET,
   H,
+  HEAD,
   Header,
   HeaderMap,
   initDrizzleHttp,
@@ -41,7 +42,6 @@ import {
 } from '@drizzle-http/test-utils'
 import { TestCallFactory } from './internal/http/test'
 import EventEmitter from 'events'
-import { HEAD } from './decorators/head'
 
 const cancellation = new EventEmitter()
 const cancellationInMethod = new EventEmitter()

@@ -1,11 +1,13 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import {
+  Accept,
   AsJson,
   Body,
   ContentType,
   DrizzleBuilder,
   GET,
   HeaderMap,
+  MediaTypes,
   Param,
   POST,
   Response,
@@ -24,8 +26,12 @@ describe('Logging Interceptor', function () {
     yield 'end'
   }
 
+  interface TestRes {
+    test: string
+  }
+
   class SpyLogger implements Logger {
-    constructor(private readonly spy: jest.Mock<any, any>) {}
+    constructor(private readonly spy: jest.Mock) {}
 
     error(message: string, error?: Error): void {
       this.spy(message, error)
@@ -39,6 +45,10 @@ describe('Logging Interceptor', function () {
   beforeAll(() => {
     setupTestServer(fastify => {
       fastify.post('/test-logging', (req, res) => {
+        res.status(200).send({ test: 'ok' })
+      })
+
+      fastify.get('/get-logging', (req, res) => {
         res.status(200).send({ test: 'ok' })
       })
     })
@@ -67,6 +77,26 @@ describe('Logging Interceptor', function () {
       .create(API)
 
     return api.execute('test', 'proj', { name: 'test' })
+  })
+
+  it('should log without errors', () => {
+    class API {
+      @GET('/get-logging')
+      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+      @Accept(MediaTypes.APPLICATION_JSON_UTF8)
+      execute(): Promise<TestRes> {
+        return theTypes(Promise)
+      }
+    }
+
+    const api = DrizzleBuilder.newBuilder()
+      .baseUrl(address)
+      .callFactory(UndiciCallFactory.DEFAULT)
+      .addInterceptor(new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY))
+      .build()
+      .create(API)
+
+    return api.execute()
   })
 
   it('should log without errors when logging headers and body', () => {
