@@ -43,13 +43,13 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.1.0",
-    "pino": "^6.11.2",
-    "pino-pretty": "^4.7.1",
-    "tslib": "^2.1.0"
+    "pino": "^6.11.3",
+    "pino-pretty": "^4.8.0",
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.1.0",
     "@drizzle-http/undici": "^2.1.0",
-    "@types/pino": "^6.3.6"
+    "@types/pino": "^6.3.8"
   }
 }

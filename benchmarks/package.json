@@ -21,12 +21,12 @@
     "got": "^11.8.2",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
-    "undici": "^3.3.3",
-    "undici-fetch": "^0.1.1"
+    "undici": "^3.3.6",
+    "undici-fetch": "^1.0.0-rc.1"
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.0",
-    "@types/node-fetch": "^2.5.8",
-    "@types/superagent": "^4.1.10"
+    "@types/node-fetch": "^2.5.10",
+    "@types/superagent": "^4.1.11"
   }
 }

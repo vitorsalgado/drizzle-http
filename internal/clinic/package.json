@@ -21,7 +21,7 @@
   "dependencies": {
     "@drizzle-http/core": "^2.1.0",
     "@drizzle-http/undici": "^2.1.0",
-    "autocannon": "^7.0.5",
-    "clinic": "^8.0.1"
+    "autocannon": "^7.3.0",
+    "clinic": "^9.0.0"
   }
 }

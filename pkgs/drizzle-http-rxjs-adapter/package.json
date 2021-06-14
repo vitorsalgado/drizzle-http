@@ -44,7 +44,7 @@
   "dependencies": {
     "@drizzle-http/core": "^2.1.0",
     "rxjs": "^6.6.6",
-    "tslib": "^2.1.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.1.0",

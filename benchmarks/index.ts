@@ -4,7 +4,6 @@ import http from 'http'
 import Benchmark from 'benchmark'
 import Axios from 'axios'
 import NodeFetch from 'node-fetch'
-import fetch from 'undici-fetch'
 import got from 'got'
 import {
   Body,
@@ -242,21 +241,6 @@ suite
             headers: { 'Content-Type': 'application/json' },
             responseType: 'json'
           })
-        )
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('undici-fetch', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(() =>
-          fetch(target.url, {
-            method: 'post',
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            body: Readable.from(JSON.stringify(data), { objectMode: false })
-          } as any).then(res => res.json())
         )
       ).then(() => deferred.resolve())
     }
