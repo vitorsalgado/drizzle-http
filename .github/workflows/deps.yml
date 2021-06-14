@@ -1,4 +1,4 @@
-name: Deps
+name: deps
 
 on:
   push:
@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
