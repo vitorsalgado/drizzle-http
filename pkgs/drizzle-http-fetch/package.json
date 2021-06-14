@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/fetch",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Browser Fetch HTTP client for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -43,7 +43,7 @@
     "api"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.1.0",
+    "@drizzle-http/core": "^2.2.0",
     "abort-controller": "^3.0.0",
     "node-fetch": "^2.6.1",
     "tslib": "^2.3.0"
@@ -59,7 +59,7 @@
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/preset-env": "^7.14.5",
     "@babel/runtime": "^7.14.5",
-    "@drizzle-http/test-utils": "^2.1.0",
+    "@drizzle-http/test-utils": "^2.2.0",
     "@types/node-fetch": "^2.5.10",
     "@types/puppeteer": "^5.4.3",
     "babel-loader": "^8.2.2",

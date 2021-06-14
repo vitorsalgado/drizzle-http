@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.1.0...v2.2.0) (2021-06-14)
+
+
+### Bug Fixes
+
+* **core:** remove response converter from callers and add the possibility to ignore it ([564ea5d](https://github.com/vitorsalgado/drizzle-http/commit/564ea5d01d91a42515b91459e9a24b5e13974d1d))
+
+
+
+
+
 # [2.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.0.0...v2.1.0) (2021-03-20)
 
 

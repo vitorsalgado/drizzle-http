@@ -2827,7 +2827,7 @@ __metadata:
     "@types/superagent": ^4.1.11
     axios: ^0.21.1
     benchmark: ^2.1.4
-    drizzle-http: ^2.1.0
+    drizzle-http: ^2.2.0
     got: ^11.8.2
     node-fetch: ^2.6.1
     superagent: ^6.1.0
@@ -2840,18 +2840,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/clinic-test@workspace:internal/clinic"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
     autocannon: ^7.3.0
     clinic: ^9.0.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/core@^2.1.0, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
+"@drizzle-http/core@^2.2.0, @drizzle-http/core@workspace:pkgs/drizzle-http-core":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/core@workspace:pkgs/drizzle-http-core"
   dependencies:
-    "@drizzle-http/test-utils": ^2.1.0
+    "@drizzle-http/test-utils": ^2.2.0
     "@types/node": ^15.12.2
     reflect-metadata: ^0.1.13
     tslib: ^2.3.0
@@ -2873,8 +2873,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.14.5
     "@babel/preset-env": ^7.14.5
     "@babel/runtime": ^7.14.5
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
     babel-loader: ^8.2.2
     babel-plugin-parameter-decorator: ^1.0.16
     bops: ^1.0.1
@@ -2905,10 +2905,10 @@ __metadata:
     "@babel/preset-env": ^7.14.5
     "@babel/preset-react": ^7.14.5
     "@babel/runtime": ^7.14.5
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/fetch": ^2.1.0
-    "@drizzle-http/logging-interceptor": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/fetch": ^2.2.0
+    "@drizzle-http/logging-interceptor": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
     "@types/react": ^17.0.11
     "@types/react-dom": ^17.0.7
     "@types/react-router-dom": ^5.1.7
@@ -2942,12 +2942,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/example-typescript@workspace:examples/typescript"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/fetch@^2.1.0, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
+"@drizzle-http/fetch@^2.2.0, @drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/fetch@workspace:pkgs/drizzle-http-fetch"
   dependencies:
@@ -2961,8 +2961,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.14.5
     "@babel/preset-env": ^7.14.5
     "@babel/runtime": ^7.14.5
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/test-utils": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/test-utils": ^2.2.0
     "@types/node-fetch": ^2.5.10
     "@types/puppeteer": ^5.4.3
     abort-controller: ^3.0.0
@@ -2983,13 +2983,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/logging-interceptor@^2.1.0, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
+"@drizzle-http/logging-interceptor@^2.2.0, @drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/logging-interceptor@workspace:pkgs/drizzle-http-logging-interceptor"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/test-utils": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
     "@types/pino": ^6.3.8
     pino: ^6.11.3
     pino-pretty: ^4.8.0
@@ -3032,19 +3032,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/rxjs-adapter@^2.1.0, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
+"@drizzle-http/rxjs-adapter@^2.2.0, @drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/rxjs-adapter@workspace:pkgs/drizzle-http-rxjs-adapter"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/test-utils": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
     rxjs: ^6.6.6
     tslib: ^2.3.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/test-utils@^2.1.0, @drizzle-http/test-utils@workspace:internal/test-utils":
+"@drizzle-http/test-utils@^2.2.0, @drizzle-http/test-utils@workspace:internal/test-utils":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/test-utils@workspace:internal/test-utils"
   dependencies:
@@ -3055,12 +3055,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/undici@^2.1.0, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
+"@drizzle-http/undici@^2.2.0, @drizzle-http/undici@workspace:pkgs/drizzle-http-undici":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/undici@workspace:pkgs/drizzle-http-undici"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/test-utils": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/test-utils": ^2.2.0
     tslib: ^2.3.0
     undici: ^3.3.6
   languageName: unknown
@@ -9590,16 +9590,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-http@^2.1.0, drizzle-http@workspace:pkgs/drizzle-http":
+"drizzle-http@^2.2.0, drizzle-http@workspace:pkgs/drizzle-http":
   version: 0.0.0-use.local
   resolution: "drizzle-http@workspace:pkgs/drizzle-http"
   dependencies:
-    "@drizzle-http/core": ^2.1.0
-    "@drizzle-http/fetch": ^2.1.0
-    "@drizzle-http/logging-interceptor": ^2.1.0
-    "@drizzle-http/rxjs-adapter": ^2.1.0
-    "@drizzle-http/test-utils": ^2.1.0
-    "@drizzle-http/undici": ^2.1.0
+    "@drizzle-http/core": ^2.2.0
+    "@drizzle-http/fetch": ^2.2.0
+    "@drizzle-http/logging-interceptor": ^2.2.0
+    "@drizzle-http/rxjs-adapter": ^2.2.0
+    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/undici": ^2.2.0
   languageName: unknown
   linkType: soft
 

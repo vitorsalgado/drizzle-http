@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.1.0...v2.2.0) (2021-06-14)
+
+
+### Bug Fixes
+
+* **core:** remove response converter from callers and add the possibility to ignore it ([564ea5d](https://github.com/vitorsalgado/drizzle-http/commit/564ea5d01d91a42515b91459e9a24b5e13974d1d))
+* **lint:** apply prettier fixes ([4c50502](https://github.com/vitorsalgado/drizzle-http/commit/4c505027341f69e10b8ec6e80ee1df10d531d078))
+
+
+
+
+
 # [2.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.0.0...v2.1.0) (2021-03-20)
 
 **Note:** Version bump only for package @drizzle-http/fetch

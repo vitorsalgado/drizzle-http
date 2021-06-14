@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/clinic-test",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Simple Clinic.js setup",
   "private": true,
   "main": "./dist/index.js",
@@ -19,8 +19,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "^2.1.0",
-    "@drizzle-http/undici": "^2.1.0",
+    "@drizzle-http/core": "^2.2.0",
+    "@drizzle-http/undici": "^2.2.0",
     "autocannon": "^7.3.0",
     "clinic": "^9.0.0"
   }
