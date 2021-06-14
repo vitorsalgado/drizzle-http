@@ -105,7 +105,7 @@ export class Drizzle {
       }
     }
 
-    return (RawRequestConverter.INSTANCE as unknown) as RequestBodyConverter<R>
+    return RawRequestConverter.INSTANCE as unknown as RequestBodyConverter<R>
   }
 
   /**
@@ -116,7 +116,7 @@ export class Drizzle {
    */
   responseBodyConverter<F, T>(method: string, requestFactory: RequestFactory): ResponseConverter<F, T> {
     if (requestFactory.noResponseConverter) {
-      return (RawResponseConverter.INSTANCE as unknown) as ResponseConverter<F, T>
+      return RawResponseConverter.INSTANCE as unknown as ResponseConverter<F, T>
     }
 
     for (const factory of this.responseConverterFactories) {
@@ -127,7 +127,7 @@ export class Drizzle {
       }
     }
 
-    return (RawResponseConverter.INSTANCE as unknown) as ResponseConverter<F, T>
+    return RawResponseConverter.INSTANCE as unknown as ResponseConverter<F, T>
   }
 
   /**
