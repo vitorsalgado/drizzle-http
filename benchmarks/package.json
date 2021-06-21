@@ -21,7 +21,7 @@
     "got": "^11.8.2",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
-    "undici": "^3.3.6",
+    "undici": "^4.0.0",
     "undici-fetch": "^1.0.0-rc.1"
   },
   "devDependencies": {

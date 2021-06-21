@@ -44,6 +44,6 @@
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.2.0",
     "@types/node": "^15.12.2",
-    "undici": "^3.3.6"
+    "undici": "^4.0.0"
   }
 }
