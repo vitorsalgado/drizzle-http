@@ -1,0 +1,38 @@
+name: dependabot-yarn2-autofix
+
+on:
+  push:
+    branches: [ dependabot/npm_and_yarn/** ]
+
+env:
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Deps Autofix
+        run: |
+          git checkout HEAD^ -- yarn.lock
+
+          PKG=$(yarn dependabot:utils pkg ${{ github.event.pull_request.title }})
+          FROM=$(yarn dependabot:utils from ${{ github.event.pull_request.title }})
+          TO=$(yarn dependabot:utils to ${{ github.event.pull_request.title }})
+          TYPE_AND_SCOPE=$(yarn dependabot:utils type-and-scope ${{ github.event.pull_request.title }})
+
+          yarn up $PKG $FROM@$TO
+
+          git add yarn.lock package.json
+          git commit -m "$TYPE_AND_SCOPE: fix bump $PKG from $FROM to $TO"
+          git push
