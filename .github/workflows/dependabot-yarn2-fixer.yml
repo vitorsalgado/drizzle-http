@@ -28,15 +28,16 @@ jobs:
 
       - name: Deps Autofix
         run: |
-          git checkout HEAD^ -- yarn.lock
-
           LAST_COMMIT=$(git log -1 --pretty=format:"%s")
+
+          git checkout $(git log -n1 --skip 1 --oneline yarn.lock | awk '{print $1;}') -- yarn.lock
+
           PKG=$(yarn dependabot:utils pkg --title $LAST_COMMIT)
           FROM=$(yarn dependabot:utils from --title $LAST_COMMIT)
           TO=$(yarn dependabot:utils to --title $LAST_COMMIT)
           TYPE_AND_SCOPE=$(yarn dependabot:utils type-and-scope --title $LAST_COMMIT)
 
-          yarn up $PKG $FROM@$TO
+          yarn up $PKG $FROM@$^TO
 
           git add yarn.lock package.json
           git commit -m "$TYPE_AND_SCOPE: fix bump $PKG from $FROM to $TO"
