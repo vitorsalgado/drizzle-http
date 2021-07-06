@@ -38,6 +38,7 @@ jobs:
           TYPE_AND_SCOPE=$(yarn dependabot:utils type-and-scope --title $LAST_COMMIT)
 
           yarn up $PKG $FROM@$^TO
+          yarn
 
           git add yarn.lock package.json
           git commit -m "$TYPE_AND_SCOPE: fix bump $PKG from $FROM to $TO"
