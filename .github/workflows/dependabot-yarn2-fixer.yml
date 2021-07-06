@@ -30,10 +30,11 @@ jobs:
         run: |
           git checkout HEAD^ -- yarn.lock
 
-          PKG=$(yarn dependabot:utils pkg ${{ github.event.pull_request.title }})
-          FROM=$(yarn dependabot:utils from ${{ github.event.pull_request.title }})
-          TO=$(yarn dependabot:utils to ${{ github.event.pull_request.title }})
-          TYPE_AND_SCOPE=$(yarn dependabot:utils type-and-scope ${{ github.event.pull_request.title }})
+          LAST_COMMIT=$(git log -1 --pretty=format:"%s")
+          PKG=$(yarn dependabot:utils pkg --title $LAST_COMMIT)
+          FROM=$(yarn dependabot:utils from --title $LAST_COMMIT)
+          TO=$(yarn dependabot:utils to --title $LAST_COMMIT)
+          TYPE_AND_SCOPE=$(yarn dependabot:utils type-and-scope --title $LAST_COMMIT)
 
           yarn up $PKG $FROM@$TO
 
