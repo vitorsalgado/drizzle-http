@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Use Node
         id: setup-node
@@ -26,7 +28,7 @@ jobs:
 
       - name: Deps Autofix
         run: |
-          git checkout $(git rev-parse HEAD~1) yarn.lock
+          git checkout HEAD^ -- yarn.lock
 
           PKG=$(yarn dependabot:utils pkg ${{ github.event.pull_request.title }})
           FROM=$(yarn dependabot:utils from ${{ github.event.pull_request.title }})
