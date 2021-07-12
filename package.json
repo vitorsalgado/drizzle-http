@@ -19,7 +19,7 @@
     "postinstall": "husky install",
     "pkg:prepare": "node scripts/release/index.js prepare",
     "pkg:publish": "node scripts/release/index.js publish",
-    "dependabot:utils": "node scripts/dependabot-utils/index.js"
+    "deps-utils": "node scripts/dependabot-utils/index.js"
   },
   "engines": {
     "node": ">=12.4.0"

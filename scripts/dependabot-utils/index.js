@@ -7,7 +7,7 @@ Commander.option('-t, --title <title>', 'PR Title')
 Commander.command('pkg').action(() => print(extractPackage(Commander.opts().title)))
 Commander.command('from').action(() => print(extractFromVersion(Commander.opts().title)))
 Commander.command('to').action(() => print(extractToVersion(Commander.opts().title)))
-Commander.command('type-and-scope').action(() => print(extractCommitTypeAndScope(Commander.opts().title)))
+Commander.command('type').action(() => print(extractCommitTypeAndScope(Commander.opts().title)))
 
 const extractPackage = title => title.substring(title.indexOf(': bump ') + 7, title.indexOf(' from ')).trim()
 const extractFromVersion = title => title.substring(title.indexOf(' from ') + 5, title.indexOf(' to ')).trim()

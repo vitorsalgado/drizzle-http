@@ -19,6 +19,45 @@ env:
   CI: true
 
 jobs:
+  dependabot-fixer:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Get Prior Commit
+        run: |
+          echo "GIT_PRIOR_COMMIT=$(git log -1 --pretty=format:"%s")" >> $GITHUB_ENV
+
+      - name: Rollback Yarn Lock
+        run: |
+          git checkout $(git log -n1 --skip 1 --oneline yarn.lock | awk '{print $1;}') -- yarn.lock
+          yarn
+
+      - name: Deps Autofix
+        run: |
+          PKG=$(yarn deps-utils pkg)
+          FROM=$(yarn deps-utils from)
+          TO=$(yarn deps-utils to)
+          TYPE_AND_SCOPE=$(yarn deps-utils type)
+
+          echo "Update will be: $PKG from $FROM to $TO"
+
+          yarn up "$PKG@^$TO"
+          yarn
+
+          git add yarn.lock package.json
+          git commit -m "$TYPE_AND_SCOPE: fix bump $PKG from $FROM to $TO"
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +90,6 @@ jobs:
         run: |
           yarn lint
           yarn prettier:ci
-
 
   build:
     name: Node v${{ matrix.node_version }} on ${{ matrix.os }}
@@ -147,3 +185,15 @@ jobs:
           body_path: CHANGELOG.md
           draft: false
           prerelease: contains(github.ref, '-rc')
+
+  automerge:
+    runs-on: ubuntu-latest
+    needs:
+      - dependabot-fixer
+      - lint
+      - build
+
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v2.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
