@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Get Prior Commit
+      - name: Get Commit Message
         run: |
           echo "GIT_PRIOR_COMMIT=$(git log -1 --pretty=format:"%s")" >> $GITHUB_ENV
 
