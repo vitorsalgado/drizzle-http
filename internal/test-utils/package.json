@@ -20,6 +20,6 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@types/node": "^15.12.2"
+    "@types/node": "^16.6.1"
   }
 }
