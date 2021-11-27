@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
     "postinstall": "yarn build",
     "run:receiver": "node dist/receiver.js",
     "run:doctor": "clinic doctor -- node dist/sender.js",

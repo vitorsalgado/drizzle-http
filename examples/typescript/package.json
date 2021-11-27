@@ -4,7 +4,7 @@
   "description": "Typescript example",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc --build"
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"
   },
   "private": true,
   "author": {

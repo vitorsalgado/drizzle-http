@@ -18,7 +18,7 @@ class API {
     @H('code') code: number,
     @Abort() abort: EventEmitter
   ): Promise<TestResult<TestId>> {
-    return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
+    return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code, abort)
   }
 }
 
