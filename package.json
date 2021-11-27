@@ -18,8 +18,7 @@
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/server.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
     "postinstall": "husky install",
     "pkg:prepare": "node scripts/release/index.js prepare",
-    "pkg:publish": "node scripts/release/index.js publish",
-    "deps-utils": "node scripts/dependabot-utils/index.js"
+    "pkg:publish": "node scripts/release/index.js publish"
   },
   "engines": {
     "node": ">=12.4.0"
