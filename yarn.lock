@@ -2811,6 +2811,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cspotcode/source-map-consumer@npm:0.8.0":
+  version: 0.8.0
+  resolution: "@cspotcode/source-map-consumer@npm:0.8.0"
+  checksum: fc32215a353c7b3d039f5d4b93329200264daeabb0739dcf53eb78f779e37e5f5c281aad281f86781c930011d354612aafab887304451a46f16b10f0f919297f
+  languageName: node
+  linkType: hard
+
+"@cspotcode/source-map-support@npm:0.7.0":
+  version: 0.7.0
+  resolution: "@cspotcode/source-map-support@npm:0.7.0"
+  dependencies:
+    "@cspotcode/source-map-consumer": 0.8.0
+  checksum: 3a0093418424729e9ab0a0f032f16946cb1cd7659bdee7d017e564189a8447eda961e5f7bed370699e94d5228f3b8cd84cb366af5fd38518b2ce833c3e138cb6
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.5.0":
   version: 0.5.2
   resolution: "@discoveryjs/json-ext@npm:0.5.2"
@@ -3008,6 +3024,7 @@ __metadata:
     codecov: ^3.8.2
     commander: ^7.2.0
     concurrently: ^6.2.0
+    dotenv: ^10.0.0
     eslint: ^7.28.0
     eslint-config-prettier: ^8.3.0
     eslint-config-standard: ^16.0.3
@@ -3027,7 +3044,7 @@ __metadata:
     pinst: ^2.1.6
     prettier: ^2.3.1
     ts-jest: ^27.0.3
-    ts-node: ^10.0.0
+    ts-node: ^10.4.0
     typescript: 4.3.2
   languageName: unknown
   linkType: soft
@@ -4810,10 +4827,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node16@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@tsconfig/node16@npm:1.0.1"
-  checksum: c389a4a81c291a27b96705de7fbe46d29aa4eb771450a41dfc075d89e1fdd63141898043a0d9f627460a1c409d06635a044dc4b3a4516173769a7d0a1558c51d
+"@tsconfig/node16@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@tsconfig/node16@npm:1.0.2"
+  checksum: 57310e88858be59b36603e5d9bd7bd1714d16402ef1e536c01521ad3b207833a2fc64d260d362cae07bf4e50759a3aba3958c2faf9c42b52c4c817be60a93123
   languageName: node
   linkType: hard
 
@@ -5687,6 +5704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"acorn-walk@npm:^8.1.1":
+  version: 8.2.0
+  resolution: "acorn-walk@npm:8.2.0"
+  checksum: 93ffbdb8b35dda04313f1d6a94bdfdf8f929337f742e3a6d51b3026ced8471feb6a522646240809da44b0f576f4902ff2fa0c64292b3216478992aefcbde3278
+  languageName: node
+  linkType: hard
+
 "acorn@npm:^7.0.0, acorn@npm:^7.1.1, acorn@npm:^7.4.0":
   version: 7.4.1
   resolution: "acorn@npm:7.4.1"
@@ -5702,6 +5726,15 @@ __metadata:
   bin:
     acorn: bin/acorn
   checksum: 51d8d3ec3e33dcf325e5887909a1ac36afb351522b0179afadcb44ae8eb612417c6db1bcd4abdfaff58fea969d272baf8e809801075e15b5d5993933139ea2f9
+  languageName: node
+  linkType: hard
+
+"acorn@npm:^8.4.1":
+  version: 8.6.0
+  resolution: "acorn@npm:8.6.0"
+  bin:
+    acorn: bin/acorn
+  checksum: 49d1e51a43e747656daf1d4cffbc089b664d96303e87ce3bb235134563f8e572b033dbef728c6236d3421fb9c9672f1962e6e9cb99a99902d2c7693c8d54a112
   languageName: node
   linkType: hard
 
@@ -19428,7 +19461,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:0.5.19, source-map-support@npm:^0.5.17, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.19":
+"source-map-support@npm:0.5.19, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.19":
   version: 0.5.19
   resolution: "source-map-support@npm:0.5.19"
   dependencies:
@@ -20694,23 +20727,25 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "ts-node@npm:10.0.0"
+"ts-node@npm:^10.4.0":
+  version: 10.4.0
+  resolution: "ts-node@npm:10.4.0"
   dependencies:
+    "@cspotcode/source-map-support": 0.7.0
     "@tsconfig/node10": ^1.0.7
     "@tsconfig/node12": ^1.0.7
     "@tsconfig/node14": ^1.0.0
-    "@tsconfig/node16": ^1.0.1
+    "@tsconfig/node16": ^1.0.2
+    acorn: ^8.4.1
+    acorn-walk: ^8.1.1
     arg: ^4.1.0
     create-require: ^1.1.0
     diff: ^4.0.1
     make-error: ^1.1.1
-    source-map-support: ^0.5.17
     yn: 3.1.1
   peerDependencies:
-    "@swc/core": ">=1.2.45"
-    "@swc/wasm": ">=1.2.45"
+    "@swc/core": ">=1.2.50"
+    "@swc/wasm": ">=1.2.50"
     "@types/node": "*"
     typescript: ">=2.7"
   peerDependenciesMeta:
@@ -20724,7 +20759,7 @@ resolve@~1.19.0:
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: dc461e2b9b931b00ff065530a0247f86da1d035e72a7ef6d7ed072dd8e6b236d1879f113dcc73a354d240c81b6b845445c3d32b16eeb68022ed27ab6d130c049
+  checksum: 3c2797b6ca6a3811c04b194f9423f98db0ef218504f5246306ab2b45efe95f494a6e4b3b7f6ffdca97faee53b9a07568cb2a3fb9b7cc0f5d49e7e522646412dc
   languageName: node
   linkType: hard
 
