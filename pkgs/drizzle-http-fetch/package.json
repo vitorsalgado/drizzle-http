@@ -9,8 +9,8 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "pretest": "yarn build:test",
-    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json && yarn build:test",
+    "pretest": "npm run build:test",
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json && npm run build:test",
     "build:test": "webpack --config ./build/webpack.config.js && rm -rf ./dist/test",
     "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\"",
     "install:puppeteer": "node_modules/puppeteer/install.js",
