@@ -9,8 +9,10 @@ describe('Check', () => {
       try {
         Check.emptyStr('', msg)
       } catch (e) {
-        expect(e).toBeInstanceOf(DrizzleError)
-        expect(e.message).toContain(msg)
+        const error = e as DrizzleError
+
+        expect(error).toBeInstanceOf(DrizzleError)
+        expect(error.message).toContain(msg)
         return
       }
 
@@ -29,16 +31,20 @@ describe('Check', () => {
       try {
         Check.nullOrUndefined(null, msg)
       } catch (e) {
-        expect(e).toBeInstanceOf(DrizzleError)
-        expect(e.message).toContain(msg)
+        const error = e as DrizzleError
+
+        expect(error).toBeInstanceOf(DrizzleError)
+        expect(error.message).toContain(msg)
         return
       }
 
       try {
         Check.nullOrUndefined(undefined, msg)
       } catch (e) {
-        expect(e).toBeInstanceOf(DrizzleError)
-        expect(e.message).toContain(msg)
+        const error = e as DrizzleError
+
+        expect(error).toBeInstanceOf(DrizzleError)
+        expect(error.message).toContain(msg)
         return
       }
 

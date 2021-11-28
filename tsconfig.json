@@ -8,8 +8,9 @@
     "target": "ES2018",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "resolveJsonModule": true,
     "sourceMap": true,
     "declaration": true,
@@ -35,6 +36,7 @@
     ".changeset",
     ".github",
     ".yarn",
-    "assets"
+    "assets",
+    "coverage"
   ]
 }

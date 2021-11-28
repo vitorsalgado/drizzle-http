@@ -6,8 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build --force",
-    "postinstall": "yarn build"
+    "build": "tsc --build --force"
   },
   "author": {
     "name": "Vitor Hugo Salgado",

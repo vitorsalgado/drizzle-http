@@ -10,7 +10,6 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "postinstall": "yarn build",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },

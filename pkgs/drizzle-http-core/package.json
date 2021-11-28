@@ -10,7 +10,6 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "postinstall": "yarn build",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
@@ -38,8 +37,7 @@
     "api"
   ],
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
-    "tslib": "^2.3.0"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.2.0",

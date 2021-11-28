@@ -12,7 +12,6 @@
     "pretest": "yarn build:test",
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json && yarn build:test",
     "build:test": "webpack --config ./build/webpack.config.js && rm -rf ./dist/test",
-    "postinstall": "yarn build",
     "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node src/test/server_static.ts\" \"node -e 'setTimeout(() => {}, 1000)' && jest src/fetch.spec.ts\"",
     "install:puppeteer": "node_modules/puppeteer/install.js",
     "prepublishOnly": "pinst --disable",
@@ -45,8 +44,7 @@
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
     "abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.1",
-    "tslib": "^2.3.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",

@@ -6,8 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "postinstall": "yarn build"
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
@@ -16,8 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "fastify": "^3.17.0",
-    "fastify-formbody": "^5.0.0",
-    "tslib": "^2.3.0"
+    "fastify-formbody": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^15.12.2"

@@ -1,20 +1,18 @@
-'use strict'
+import type { Config as JestConfig } from '@jest/types'
+import 'dotenv/config'
 
-module.exports = {
+const config: JestConfig.InitialOptions = {
   verbose: true,
   collectCoverage: false,
   restoreMocks: true,
+  resetMocks: true,
+  projects: ['<rootDir>'],
   transform: { '^.+\\.tsx?$': 'ts-jest' },
-  testEnvironment: 'node',
-  rootDir: __dirname,
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.test.json'
     }
   },
-  reporters: ['default'],
-  watchPathIgnorePatterns: ['coverage'],
-  projects: ['<rootDir>'],
   collectCoverageFrom: [
     '**/pkgs/*/**/*.ts',
     '!**/pkgs/*/**/*.js',
@@ -54,3 +52,5 @@ module.exports = {
     '/scripts/'
   ]
 }
+
+export default config
