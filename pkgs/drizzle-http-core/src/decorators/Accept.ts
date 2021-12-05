@@ -8,7 +8,7 @@ import CommonHeaders from '../http.common.headers'
  * @param value - accept header value
  */
 export function Accept(value: string) {
-  return function <TFunction extends Function>(target: any | TFunction, method?: string): void {
+  return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
       requestFactory.defaultHeaders.append(CommonHeaders.ACCEPT, value)

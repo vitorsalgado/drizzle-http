@@ -13,7 +13,7 @@ import { PathParameter } from '../request.parameters'
  *  example(\@Param('id') id: string): Promise<any>
  */
 export function Param(key: string) {
-  return function (target: any, method: string, index: number): void {
+  return function (target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     const regex = pathParameterRegex(key)
 
@@ -22,7 +22,7 @@ export function Param(key: string) {
 }
 
 /**
- * Short-hand version of {@link Param} decorator.
+ * Shorthand version of {@link Param} decorator.
  * This decorator will use the method parameter name as the key and will be encoded by default.
  */
 export const P = Param

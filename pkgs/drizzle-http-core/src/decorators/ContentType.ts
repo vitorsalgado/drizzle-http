@@ -8,7 +8,7 @@ import CommonHeaders from '../http.common.headers'
  * @param value - content type header value
  */
 export function ContentType(value: string) {
-  return function <TFunction extends Function>(target: any | TFunction, method?: string): any {
+  return function <TFunction extends Function>(target: object | TFunction, method?: string): any {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
       requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, value)

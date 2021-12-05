@@ -1,9 +1,9 @@
 import { DrizzleMeta } from '../drizzle.meta'
 import { SignalParameter } from '../request.parameters'
 
-export function Abort(value: string | any | null = null) {
+export function Abort(value: string | unknown | null = null) {
   return function <TFunction extends Function>(
-    target: any | TFunction,
+    target: object | TFunction,
     method?: string,
     desc?: number | PropertyDescriptor
   ): void {

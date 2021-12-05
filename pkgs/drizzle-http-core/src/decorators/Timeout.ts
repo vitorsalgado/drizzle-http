@@ -9,7 +9,7 @@ import { DrizzleMeta } from '../drizzle.meta'
  * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
-  return <TFunction extends Function>(target: any | TFunction, method?: string): void => {
+  return <TFunction extends Function>(target: object | TFunction, method?: string): void => {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
       requestFactory.readTimeout = readTimeoutInMs

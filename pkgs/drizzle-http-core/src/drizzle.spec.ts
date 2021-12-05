@@ -1,7 +1,7 @@
 import {
   Abort,
   Accept,
-  AsJson,
+  JSON,
   Body,
   ContentType,
   DELETE,
@@ -56,7 +56,7 @@ class API {
 
   @GET('/')
   @HeaderMap({ 'X-Env': 'Test' })
-  @AsJson()
+  @JSON()
   testGET(): Promise<TestResult<Ok>> {
     return theTypes(Promise, TestResult)
   }
@@ -220,7 +220,7 @@ describe('Drizzle Http', () => {
     it('should allow AsJSON() and @Accept() on class level', function () {
       expect.assertions(3)
 
-      @AsJson()
+      @JSON()
       @Accept(MediaTypes.APPLICATION_JSON)
       class InnerAPI {
         @GET('/')

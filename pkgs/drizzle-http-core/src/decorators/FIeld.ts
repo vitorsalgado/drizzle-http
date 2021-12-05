@@ -15,14 +15,14 @@ import { FormParameter } from '../request.parameters'
  *  example(\@Field('name') name: string, \@Field('id') id: string): Promise<Result>
  */
 export function Field(key: string) {
-  return function (target: any, method: string, index: number): void {
+  return function (target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     requestFactory.addParameter(new FormParameter(key, index))
   }
 }
 
 /**
- * Short-hand version for {@link Field} decorator.
+ * Shorthand version for {@link Field} decorator.
  * This decorator will use the method parameter name as the key and will be encoded by default.
  */
 export const F = Field

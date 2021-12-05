@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@GET('/relative/path/to/:id')
  *  example(\@Param('id') id: string): Promise<any>
  */
-export const GET = (path: string): any => decorateWithHttpMethod('GET', path)
+export const GET = (path: string) => decorateWithHttpMethod('GET', path)

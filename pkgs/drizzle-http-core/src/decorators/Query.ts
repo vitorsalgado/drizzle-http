@@ -12,14 +12,14 @@ import { QueryParameter } from '../request.parameters'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function Query(key: string) {
-  return function (target: any, method: string, index: number): void {
+  return function (target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     requestFactory.addParameter(new QueryParameter(key, index))
   }
 }
 
 /**
- * Short-hand version of {@link Query} decorator.
+ * Shorthand version of {@link Query} decorator.
  * This decorator will use the method parameter name as the key and will be encoded by default.
  */
 export const Q = Query

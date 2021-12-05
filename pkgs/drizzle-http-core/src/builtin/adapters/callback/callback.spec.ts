@@ -1,4 +1,4 @@
-import { AsJson, GET, Param } from '../../../decorators'
+import { JSON, GET, Param } from '../../../decorators'
 import { Callback } from './index'
 import { any, callbackTypes } from '../../../response.type.detector'
 import { Drizzle } from '../../../drizzle'
@@ -9,7 +9,7 @@ import { DrizzleBuilder } from '../../../drizzle.builder'
 
 class API {
   @GET('/{id}/projects')
-  @AsJson()
+  @JSON()
   @Callback()
   getCallback(@Param('id') id: string, callback: (err: Error, data: TestResult<TestId>) => void): void {
     return callbackTypes(TestResult, id, callback)

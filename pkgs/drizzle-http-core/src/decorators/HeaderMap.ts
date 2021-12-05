@@ -14,7 +14,7 @@ import { DrizzleMeta } from '../drizzle.meta'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function HeaderMap(headers: Record<string, string>) {
-  return function <TFunction extends Function>(target: any | TFunction, method?: string): void {
+  return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     // is method decorator
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)

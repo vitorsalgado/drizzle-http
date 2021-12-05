@@ -1,8 +1,7 @@
-import { DrizzleMeta } from '../drizzle.meta'
-import { RequestFactory } from '../request.factory'
-import { extractArgumentTypes, extractReturnType, InvalidRequestMethodConfigurationError } from '../internal'
-
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
+import { extractArgumentTypes, extractReturnType, InvalidRequestMethodConfigurationError } from '../../internal'
+import { HttpMethod } from './HttpMethod'
+import { RequestFactory } from '../../request.factory'
+import DrizzleMeta from '../../drizzle.meta'
 
 /**
  * Configure a method to perform a HTTP request
@@ -13,8 +12,8 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 
 export function decorateWithHttpMethod(
   httpMethod: HttpMethod,
   path = '/'
-): (target: any, method: string, descriptor: PropertyDescriptor) => void {
-  return function (target: any, method: string, descriptor: PropertyDescriptor): any {
+): (target: Object, method: string, descriptor: PropertyDescriptor) => void {
+  return function (target: Object, method: string, descriptor: PropertyDescriptor): void {
     if (!path.startsWith('/')) {
       throw new InvalidRequestMethodConfigurationError(method, 'Path must start with a /')
     }

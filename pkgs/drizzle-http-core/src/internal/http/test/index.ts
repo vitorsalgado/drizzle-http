@@ -1,10 +1,9 @@
+import { request } from 'undici'
 import { Call, CallFactory, CallProvider } from '../../../call'
 import { RequestFactory } from '../../../request.factory'
 import { Drizzle } from '../../../drizzle'
 import { HttpError, Response } from '../../../response'
 import { Request } from '../../../request'
-import { request } from 'undici'
-import { RequestOptions } from 'undici/types/client'
 import { isAbsolute } from '../../url.utils'
 import { Headers } from '../../../http.headers'
 
@@ -66,7 +65,7 @@ export class TestCallFactory implements CallFactory {
   setup(_drizzle: Drizzle): void {}
 }
 
-export function toRequest(request: Request): RequestOptions {
+export function toRequest(request: Request): any {
   return {
     path: request.url,
     method: request.method,

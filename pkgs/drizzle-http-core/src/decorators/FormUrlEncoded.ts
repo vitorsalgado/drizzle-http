@@ -13,7 +13,7 @@ import CommonHeaders from '../http.common.headers'
  *  example(\@Field('name') name: string, \@Field('id') id: string): Promise<Result>
  */
 export function FormUrlEncoded() {
-  return function <TFunction extends Function>(target: any | TFunction, method?: string): void {
+  return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
       const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
       requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)

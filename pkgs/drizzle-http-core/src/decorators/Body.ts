@@ -10,7 +10,7 @@ import { BodyParameter } from '../request.parameters'
  *  example(\@Body() data: object): Promise<Result>
  */
 export function Body() {
-  return function (target: any, method: string, index: number): void {
+  return function (target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     requestFactory.addParameter(new BodyParameter(index))
   }

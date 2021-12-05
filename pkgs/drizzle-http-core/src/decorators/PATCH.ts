@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@PATCH('/relative/path/to/:id')
  *  example(\@Param('id') entryId: string): Promise<Result>
  */
-export const PATCH = (path: string): any => decorateWithHttpMethod('PATCH', path)
+export const PATCH = (path: string) => decorateWithHttpMethod('PATCH', path)

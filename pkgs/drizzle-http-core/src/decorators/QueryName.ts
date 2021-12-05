@@ -14,14 +14,14 @@ import { QueryNameParameter } from '../request.parameters'
  *
  */
 export function QueryName() {
-  return function QueryName(target: any, method: string, index: number): void {
+  return function QueryName(target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     requestFactory.addParameter(new QueryNameParameter(index))
   }
 }
 
 /**
- * Short-hand version of {@link QueryName} decorator.
+ * Shorthand version of {@link QueryName} decorator.
  * The value will be encoded by default.
  */
 export const Qn = QueryName
