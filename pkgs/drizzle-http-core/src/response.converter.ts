@@ -2,7 +2,7 @@ import { Drizzle } from './drizzle'
 import { RequestFactory } from './request.factory'
 
 /**
- * Converts a value from its HTTP representation to another handledType
+ * Converts a value from its HTTP representation to another type
  */
 export interface ResponseConverter<F, T> {
   convert(from: F): T

@@ -154,7 +154,7 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Adds {@link RequestConverterFactory} for converting request body to another handledType.
+   * Adds {@link RequestConverterFactory} for converting request body to another type.
    * You can add multiple factories.
    *
    * @param requestConverterFactory - {@link RequestConverterFactory} instance
@@ -173,7 +173,7 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Adds {@link ResponseConverterFactory} for converting response body to another handledType.
+   * Adds {@link ResponseConverterFactory} for converting response body to another type.
    * You can add multiple factories.
    *
    * @param responseConverterFactory - {@link ResponseConverterFactory}

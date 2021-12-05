@@ -19,7 +19,7 @@ export class ExecutorChain<TReq, TRes> implements Chain<TReq, TRes> {
     private readonly _argv: unknown[]
   ) {}
 
-  static First<TReq, TRes>(
+  static first<TReq, TRes>(
     interceptors: Interceptor<TReq, TRes>[],
     request: TReq,
     argv: unknown[]

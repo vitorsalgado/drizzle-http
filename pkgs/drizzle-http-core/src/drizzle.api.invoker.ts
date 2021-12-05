@@ -41,7 +41,7 @@ export function serviceInvoker(
 
     interceptors.push(new HttpExecInterceptor(callProvider))
 
-    // if method does not contain dynamic arguments, you don't need to resolve the Call<> instance on each method call.
+    // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
       const call = new BridgeCall(responseConverter, interceptors, requestBuilder.toRequest([]), [])

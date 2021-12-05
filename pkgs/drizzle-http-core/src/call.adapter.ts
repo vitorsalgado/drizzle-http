@@ -3,9 +3,9 @@ import { Call } from './call'
 import { Drizzle } from './drizzle'
 
 /**
- * Adapts a {@link Call} with response F to a handledType of V
+ * Adapts a {@link Call} with response F to a type of V
  *
- * @typeParam F - {@link Call} response handledType to convert from
+ * @typeParam F - {@link Call} response type to convert from
  * @typeParam V - Type destination
  */
 export interface CallAdapter<F, T> {

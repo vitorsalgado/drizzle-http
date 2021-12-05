@@ -10,7 +10,7 @@ import { DzResponse } from './DzResponse'
  * Represents a single HTTP call.
  * New HTTP client implementations should extend this class.
  *
- * @typeParam V - handledType of the response
+ * @typeParam V - type of the response
  */
 export abstract class Call<T> {
   protected constructor(readonly request: DzRequest, readonly argv: unknown[]) {}
@@ -32,6 +32,7 @@ export abstract class CallFactory {
    * Additional setupTestServer like register a shutdown hook
    * @param drizzle - Drizzle instance
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setup(drizzle: Drizzle): void {
     // Overwrite to perform specific client setup
   }
@@ -64,7 +65,7 @@ export class BridgeCall<T> extends Call<T> {
   ) {
     super(request, argv)
     this.responseConverter = responseConverter
-    this.chain = ExecutorChain.First(interceptors, request, argv)
+    this.chain = ExecutorChain.first(interceptors, request, argv)
   }
 
   execute(): T {
