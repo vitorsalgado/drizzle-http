@@ -1,19 +1,19 @@
 import { RequestFactory } from './request.factory'
 import { Drizzle } from './drizzle'
-import { Request } from './request'
 import { ExecutorChain } from './interceptor.http'
 import { Interceptor } from './interceptor'
 import { ResponseConverter } from './response.converter'
 import { Response } from './response'
+import { DzRequest } from './DzRequest'
 
 /**
  * Represents a single HTTP call.
- * New HTTP client implementations should extends this class.
+ * New HTTP client implementations should extend this class.
  *
  * @typeParam V - handledType of the response
  */
 export abstract class Call<T> {
-  protected constructor(readonly request: Request, readonly argv: any[]) {}
+  protected constructor(readonly request: DzRequest, readonly argv: unknown[]) {}
 
   /**
    * Executes the HTTP request
@@ -21,11 +21,11 @@ export abstract class Call<T> {
   abstract execute(): T
 }
 
-export type CallProvider = (request: Request, args: any[]) => Call<unknown>
+export type CallProvider = (request: DzRequest, args: unknown[]) => Call<unknown>
 
 /**
  * Builds a {@link Call} for a request.
- * Call<V> instances are created in the context of a HTTP request.
+ * Call<V> instances are created in the context of an HTTP request.
  */
 export abstract class CallFactory {
   /**
@@ -46,7 +46,7 @@ export abstract class CallFactory {
 }
 
 /**
- * Bridge from {@link Call} to the a chain of {@link Interceptor}
+ * Bridge from {@link Call} to the chain of {@link Interceptor}
  *
  * @typeParam V - Type of the response
  */
@@ -57,8 +57,8 @@ export class BridgeCall<T> extends Call<T> {
   constructor(
     responseConverter: ResponseConverter<Response, T>,
     interceptors: Interceptor<unknown, unknown>[],
-    request: Request,
-    argv: any[]
+    request: DzRequest,
+    argv: unknown[]
   ) {
     super(request, argv)
     this.responseConverter = responseConverter
@@ -66,6 +66,8 @@ export class BridgeCall<T> extends Call<T> {
   }
 
   execute(): T {
-    return this.chain.proceed(this.request).then(response => this.responseConverter.convert(response as any)) as any
+    return this.chain
+      .proceed(this.request)
+      .then(response => this.responseConverter.convert(response as Response)) as unknown as T
   }
 }

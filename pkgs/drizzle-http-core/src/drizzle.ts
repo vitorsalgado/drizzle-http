@@ -9,7 +9,7 @@ import { Interceptor } from './interceptor'
 import { RawRequestConverter, RawResponseConverter } from './builtin'
 import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
 import { NoParameterHandlerFoundForType } from './internal'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
 /**
  * Drizzle adapts a class to perform HTTP calls by using the decorators on the declared methods
@@ -29,7 +29,7 @@ export class Drizzle {
 
   constructor(
     public readonly baseUrl: string,
-    public readonly headers: Headers,
+    public readonly headers: DzHeaders,
     public readonly callFactory: CallFactory,
     private readonly _interceptors: Interceptor<unknown, unknown>[],
     private readonly callAdapterFactories: Set<CallAdapterFactory>,

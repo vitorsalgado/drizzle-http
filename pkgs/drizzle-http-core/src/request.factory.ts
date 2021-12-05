@@ -1,5 +1,5 @@
+import EventEmitter from 'events'
 import { BodyType, ReturnType } from './types'
-import { Request, RequestBuilder } from './request'
 import { Drizzle } from './drizzle'
 import { Check, InvalidRequestMethodConfigurationError } from './internal'
 import { RequestBodyConverter } from './request.body.converter'
@@ -18,38 +18,39 @@ import {
   QueryParameter,
   QueryParameterType
 } from './request.parameters'
-import { RequestValues } from './request.values'
+import { RequestParameterization } from './request.parameterization'
 import { MediaTypes } from './http.media.types'
-import { Headers } from './http.headers'
-import EventEmitter from 'events'
+import { DzHeaders } from './http.headers'
 import CommonHeaders from './http.common.headers'
+import { DzRequest } from './DzRequest'
+import { RequestBuilder } from './request.builder'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
 
 /**
- * Holds values extracted from a decorated method to build a HTTP request.
- * This class values are not changed so, validations and pre process should be made outside a request context.
+ * Holds values extracted from a decorated method to build an HTTP request.
+ * This class values are not changed so, validations and pre-process should be made outside a request context.
  */
 export class RequestFactory {
   method: string
   httpMethod: string
   path: string
   argLen: number
-  argTypes: any[]
+  argTypes: unknown[]
   bodyIndex: number
-  defaultHeaders: Headers
+  defaultHeaders: DzHeaders
   readTimeout?: number
   connectTimeout?: number
   returnType: ReturnType | null | undefined
   returnGenericType: ReturnType | null | undefined
-  parameterHandlers!: ParameterHandler<any, unknown>[]
+  parameterHandlers!: ParameterHandler<Parameter, unknown>[]
   parameters: Parameter[]
-  signal: EventEmitter | any
+  signal: EventEmitter | unknown
   noResponseConverter: boolean
 
   // This holds generic values used by additional adapters, converters and callers
-  private readonly bag: Map<string, any>
+  private readonly bag: Map<string, unknown>
   private preProcessed: boolean
 
   constructor() {
@@ -59,12 +60,12 @@ export class RequestFactory {
     this.argLen = 0
     this.argTypes = []
     this.bodyIndex = -1
-    this.defaultHeaders = new Headers({})
+    this.defaultHeaders = new DzHeaders()
     this.readTimeout = undefined
     this.connectTimeout = undefined
     this.returnType = undefined
     this.returnGenericType = undefined
-    this.bag = new Map<string, any>()
+    this.bag = new Map<string, unknown>()
     this.preProcessed = false
     this.parameterHandlers = []
     this.parameters = []
@@ -83,7 +84,7 @@ export class RequestFactory {
 
   /**
    * Validates a RequestFactory instance.
-   * This should be called outside of a request context.
+   * This should be called outside a request context.
    */
   validate(): void {
     if (!this.preProcessed) {
@@ -166,7 +167,7 @@ export class RequestFactory {
   }
 
   /**
-   * Pre process the RequestFactory instance values to improve request build task.
+   * Pre-process the RequestFactory instance values to improve request build task.
    * Should be called outside request context.
    *
    * @param drizzle - Drizzle instance
@@ -265,7 +266,7 @@ export class RequestFactory {
    *
    * @throws {@link DrizzleError}
    */
-  addConfig(key: string, value: any): void {
+  addConfig(key: string, value: unknown): void {
     Check.emptyStr(key, 'Parameters "key" cannot be null or empty.')
     Check.nullOrUndefined(value, 'Parameters "value" cannot be null.')
 
@@ -289,8 +290,8 @@ export class RequestFactory {
    * Get all configurations
    * @returns configurations map
    */
-  allConfigs(): Map<string, any> {
-    return new Map<string, any>(this.bag)
+  allConfigs(): Map<string, unknown> {
+    return new Map<string, unknown>(this.bag)
   }
 
   /**
@@ -351,7 +352,7 @@ export class RequestFactory {
   }
 
   /**
-   * Add request parameter. Eg.: {@link QueryParameter}, {@link PathParameter}.
+   * Add request parameter. E.g.: {@link QueryParameter}, {@link PathParameter}.
    * The parameter must have a registered {@link ParameterHandler}
    *
    * @param parameter - {@link Parameter} instance or extended class
@@ -373,7 +374,7 @@ export class RequestFactory {
   }
 
   /**
-   * Add request parameters. Eg.: {@link QueryParameter}, {@link PathParameter}.
+   * Add request parameters. E.g.: {@link QueryParameter}, {@link PathParameter}.
    * The parameter must have a registered {@link ParameterHandler}
    *
    * @param parameters - array of {@link Parameter}
@@ -520,28 +521,30 @@ export class RequestFactory {
 
 /**
  * NoParametersRequestBuilder is simpler and faster and
- * should be used for requests that doesn't contains dynamic parameters.
+ * should be used for requests that doesn't contain dynamic parameters.
  */
 export class NoParametersRequestBuilder implements RequestBuilder {
-  private readonly request: Request
+  private readonly request: DzRequest
 
   constructor(requestFactory: RequestFactory) {
-    this.request = new Request(requestFactory.path, {
+    this.request = new DzRequest({
+      url: requestFactory.path,
       method: requestFactory.httpMethod,
       headers: requestFactory.defaultHeaders,
       headersTimeout: requestFactory.connectTimeout,
       bodyTimeout: requestFactory.readTimeout,
-      signal: requestFactory.signal
+      signal: requestFactory.signal,
+      body: null
     })
   }
 
-  toRequest(): Request {
+  toRequest(): DzRequest {
     return this.request
   }
 }
 
 /**
- * DynamicParametrizedRequestBuilder handles all aspects of a HTTP request
+ * DynamicParametrizedRequestBuilder handles all aspects of an HTTP request
  */
 export class DynamicParametrizedRequestBuilder implements RequestBuilder {
   constructor(
@@ -549,8 +552,8 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
     private readonly requestBodyConverter: RequestBodyConverter<BodyType>
   ) {}
 
-  toRequest(args: any[]): Request {
-    const requestValues = new RequestValues(
+  toRequest(args: unknown[]): DzRequest {
+    const requestParameterization = new RequestParameterization(
       args,
       this.requestFactory.path,
       [],
@@ -562,20 +565,25 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
 
     for (let i = 0; i < this.requestFactory.parameterHandlers.length; i++) {
       const ph = this.requestFactory.parameterHandlers[i]
-      ph.apply(requestValues, args[ph.parameter.index])
+      ph.apply(requestParameterization, args[ph.parameter.index])
     }
 
-    if (requestValues.body === null && this.requestFactory.hasBody()) {
-      this.requestBodyConverter.convert(this.requestFactory, requestValues, args[this.requestFactory.bodyIndex])
+    if (requestParameterization.body === null && this.requestFactory.hasBody()) {
+      this.requestBodyConverter.convert(
+        this.requestFactory,
+        requestParameterization,
+        args[this.requestFactory.bodyIndex] as BodyType
+      )
     }
 
-    return new Request(requestValues.buildPath(), {
-      headers: requestValues.headers,
+    return new DzRequest({
+      url: requestParameterization.buildPath(),
+      headers: requestParameterization.headers,
       method: this.requestFactory.httpMethod,
-      body: requestValues.buildBody(),
+      body: requestParameterization.buildBody(),
       headersTimeout: this.requestFactory.connectTimeout,
       bodyTimeout: this.requestFactory.readTimeout,
-      signal: requestValues.signal
+      signal: requestParameterization.signal
     })
   }
 }

@@ -1,9 +1,9 @@
 const sHeaders = Symbol('headers')
 
-export class Headers {
+export class DzHeaders {
   private readonly [sHeaders]: Map<string, string>
 
-  constructor(init: [string, string] | Record<string, string> | string[][] | null) {
+  constructor(init: [string, string] | Record<string, string> | string[][] | null = {}) {
     this[sHeaders] = new Map<string, string>()
     this.initialize(init)
   }
@@ -16,7 +16,7 @@ export class Headers {
     const existing = this.get(name)
     const newValue = existing ? existing + ',' + value : value
 
-    this.set(Headers.normalizeHeaderName(name), newValue)
+    this.set(DzHeaders.normalizeHeaderName(name), newValue)
   }
 
   set(name: string, value: string): this {
@@ -24,21 +24,21 @@ export class Headers {
       throw new TypeError('Header name must not be null or empty.')
     }
 
-    this[sHeaders].set(Headers.normalizeHeaderName(name), value)
+    this[sHeaders].set(DzHeaders.normalizeHeaderName(name), value)
 
     return this
   }
 
   get(key: string): string | undefined {
-    return this[sHeaders].get(Headers.normalizeHeaderName(key))
+    return this[sHeaders].get(DzHeaders.normalizeHeaderName(key))
   }
 
   delete(key: string): boolean {
-    return this[sHeaders].delete(Headers.normalizeHeaderName(key))
+    return this[sHeaders].delete(DzHeaders.normalizeHeaderName(key))
   }
 
   has(key: string): boolean {
-    return this[sHeaders].has(Headers.normalizeHeaderName(key))
+    return this[sHeaders].has(DzHeaders.normalizeHeaderName(key))
   }
 
   keys(): IterableIterator<string> {
@@ -53,7 +53,7 @@ export class Headers {
     return this[sHeaders].entries()
   }
 
-  forEach(callback: (value: string, key: string, map: Map<string, string>) => void, thisArg?: any): void {
+  forEach(callback: (value: string, key: string, map: Map<string, string>) => void, thisArg?: unknown): void {
     for (const [key, value] of this[sHeaders]) {
       callback.call(thisArg, value, key, this[sHeaders])
     }
@@ -87,7 +87,7 @@ export class Headers {
     return Array.from(this[sHeaders]).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {})
   }
 
-  merge(headers: Headers): void {
+  merge(headers: DzHeaders): void {
     for (const [name, value] of headers) {
       if (!this.has(name)) {
         this.set(name, value)
@@ -113,7 +113,7 @@ export class Headers {
     return name.toLowerCase()
   }
 
-  private initialize(init: any): void {
+  private initialize(init: [string, string] | Record<string, string> | string[][] | null): void {
     if (init !== null) {
       if (Array.isArray(init)) {
         for (let i = 0; i < init.length; i++) {

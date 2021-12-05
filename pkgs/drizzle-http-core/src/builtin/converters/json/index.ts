@@ -3,13 +3,13 @@ import { RequestFactory } from '../../../request.factory'
 import { ResponseConverter, ResponseConverterFactory } from '../../../response.converter'
 import { Drizzle } from '../../../drizzle'
 import { Response } from '../../../response'
-import { RequestValues } from '../../../request.values'
+import { RequestParameterization } from '../../../request.parameterization'
 import MediaTypes from '../../../http.media.types'
 
 export class JsonRequestConverter implements RequestBodyConverter<string> {
   static INSTANCE: JsonRequestConverter = new JsonRequestConverter()
 
-  convert(requestFactory: RequestFactory, requestValues: RequestValues, value: string): void {
+  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: string): void {
     if (value.constructor === Object || Array.isArray(value)) {
       requestValues.body = JSON.stringify(value)
       return

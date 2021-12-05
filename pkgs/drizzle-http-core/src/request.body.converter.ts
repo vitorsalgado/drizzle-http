@@ -1,12 +1,12 @@
 import { Drizzle } from './drizzle'
 import { RequestFactory } from './request.factory'
-import { RequestValues } from './request.values'
+import { RequestParameterization } from './request.parameterization'
 
 /**
  * Converts a value to a HTTP representation format
  */
 export interface RequestBodyConverter<T> {
-  convert(requestFactory: RequestFactory, requestValues: RequestValues, value: T): void
+  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: T): void
 }
 
 /**

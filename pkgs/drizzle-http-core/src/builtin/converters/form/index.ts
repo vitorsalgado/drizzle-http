@@ -2,13 +2,13 @@ import { Drizzle } from '../../../drizzle'
 import { RequestBodyConverter, RequestConverterFactory } from '../../../request.body.converter'
 import { RequestFactory } from '../../../request.factory'
 import { encodeFormFieldIfNecessary, RequestBodyTypeNotAllowed } from '../../../internal'
-import { RequestValues } from '../../../request.values'
+import { RequestParameterization } from '../../../request.parameterization'
 import { MediaTypes } from '../../../http.media.types'
 
 export class FormRequestConverter implements RequestBodyConverter<any> {
   static INSTANCE: FormRequestConverter = new FormRequestConverter()
 
-  convert(requestFactory: RequestFactory, requestValues: RequestValues, value: any): void {
+  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: any): void {
     if (value.constructor === Object) {
       const res: string[] = []
 

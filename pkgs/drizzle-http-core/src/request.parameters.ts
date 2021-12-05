@@ -4,7 +4,7 @@ import { RequestFactory } from './request.factory'
 import { Drizzle } from './drizzle'
 import { BodyType } from './types'
 import { RequestBodyConverter } from './request.body.converter'
-import { RequestValues } from './request.values'
+import { RequestParameterization } from './request.parameterization'
 
 // region Query
 
@@ -17,7 +17,7 @@ export class QueryParameter extends Parameter {
 }
 
 export class QueryParameterHandler extends ParameterHandler<QueryParameter, string | string[]> {
-  apply(requestValues: RequestValues, value: string | string[]): void {
+  apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -61,7 +61,7 @@ export class QueryNameParameter extends Parameter {
 }
 
 export class QueryNameParameterHandler extends ParameterHandler<QueryNameParameter, string | string[]> {
-  apply(requestValues: RequestValues, value: string | string[]): void {
+  apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (typeof value === 'string') {
       requestValues.query.push(encodeIfNecessary(value))
     } else if (Array.isArray(value)) {
@@ -99,7 +99,7 @@ export class PathParameter extends Parameter {
 }
 
 export class PathParameterHandler extends ParameterHandler<PathParameter, string | string[]> {
-  apply(requestValues: RequestValues, value: string | string[]): void {
+  apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       throw new TypeError(`Path parameter "${this.parameter.key}" must not be null or undefined.`)
     }
@@ -145,7 +145,7 @@ export class FormParameter extends Parameter {
 }
 
 export class FormParameterHandler extends ParameterHandler<FormParameter, string | string[]> {
-  apply(requestValues: RequestValues, value: string | string[]): void {
+  apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -189,7 +189,7 @@ export class HeaderParameter extends Parameter {
 }
 
 export class HeaderParameterHandler extends ParameterHandler<HeaderParameter, string | string[]> {
-  apply(requestValues: RequestValues, value: string | string[]): void {
+  apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -239,7 +239,7 @@ export class BodyParameterHandler extends ParameterHandler<BodyParameter, BodyTy
     super(parameter)
   }
 
-  apply(requestValues: RequestValues, value: BodyType): void {
+  apply(requestValues: RequestParameterization, value: BodyType): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -279,7 +279,7 @@ export class SignalParameter extends Parameter {
 }
 
 export class SignalParameterHandler extends ParameterHandler<SignalParameter, any> {
-  apply(requestValues: RequestValues, value: any): void {
+  apply(requestValues: RequestParameterization, value: any): void {
     if (value === null || typeof value === 'undefined') {
       throw new TypeError(`Signal parameter must not be null or undefined. (Index: ${this.parameter.index})`)
     }

@@ -1,6 +1,6 @@
 import { Drizzle } from './drizzle'
 import { RequestFactory } from './request.factory'
-import { RequestValues } from './request.values'
+import { RequestParameterization } from './request.parameterization'
 
 export class Parameter {
   constructor(public readonly index: number, public readonly type: string) {}
@@ -9,7 +9,7 @@ export class Parameter {
 export abstract class ParameterHandler<P extends Parameter, V> {
   constructor(public readonly parameter: P) {}
 
-  abstract apply(requestValues: RequestValues, value: V): void
+  abstract apply(requestValues: RequestParameterization, value: V): void
 }
 
 export abstract class ParameterHandlerFactory<P extends Parameter, R> {

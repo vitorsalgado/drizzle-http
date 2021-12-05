@@ -6,6 +6,8 @@ import { DrizzleMeta } from '../../../drizzle.meta'
 
 const KEY_IS_CALLBACK = 'callback:is_callback'
 
+type Fn = (error: Error | null, response: unknown) => void
+
 export function Callback() {
   return function (target: any, method: string) {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
@@ -19,8 +21,8 @@ class CallbackCallAdapter implements CallAdapter<Promise<unknown>, void> {
   adapt(action: Call<Promise<unknown>>): void {
     action
       .execute()
-      .then(response => action.argv[action.argv.length - 1](null, response))
-      .catch(error => action.argv[action.argv.length - 1](error, null))
+      .then(response => (action.argv[action.argv.length - 1] as Fn)(null, response))
+      .catch(error => (action.argv[action.argv.length - 1] as Fn)(error, null))
   }
 }
 

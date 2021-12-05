@@ -1,6 +1,6 @@
+import EventEmitter from 'events'
 import { NoParametersRequestBuilder, RequestFactory } from './request.factory'
 import { ApiInstanceMeta } from './drizzle.meta'
-import { Readable } from 'stream'
 import {
   BodyParameter,
   FormParameter,
@@ -11,7 +11,6 @@ import {
 } from './request.parameters'
 import { pathParameterRegex } from './internal'
 import { MediaTypes } from './http.media.types'
-import EventEmitter from 'events'
 import { DrizzleBuilder } from './drizzle.builder'
 import { TestCallFactory } from './internal/http/test'
 import { Response } from './response'
@@ -44,7 +43,7 @@ describe('Request Factory', () => {
     expect(requestFactory.returnGenericType).toBeUndefined()
     expect(requestFactory.parameterHandlers).toHaveLength(0)
     expect(requestFactory.signal).toEqual(null)
-    expect(requestFactory.allConfigs()).toStrictEqual(new Map<string, any>())
+    expect(requestFactory.allConfigs()).toStrictEqual(new Map<string, unknown>())
     expect(requestFactory.hasQuery()).toBeFalsy()
     expect(requestFactory.hasQueryNames()).toBeFalsy()
     expect(requestFactory.hasFormFields()).toBeFalsy()
@@ -435,75 +434,6 @@ describe('Request Factory', () => {
       requestFactory.preProcessAndValidate(drizzle)
     })
 
-    it('should convert text body', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
-      })
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest(['nice txt'])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
-      expect(body).toStrictEqual('nice txt')
-    })
-
-    it('should ignore body when it is undefined', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
-      })
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([undefined])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
-      expect(body).toStrictEqual('')
-    })
-
-    it('should ignore body when it is null', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.TEXT_PLAIN_UTF8
-      })
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([null])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.TEXT_PLAIN_UTF8)
-      expect(body).toStrictEqual('')
-    })
-
     it('should set noResponseConverter to FALSE as the default for new instances', () => {
       const requestFactory = new RequestFactory()
       expect(requestFactory.noResponseConverter).toBeFalsy()
@@ -513,163 +443,6 @@ describe('Request Factory', () => {
       const requestFactory = new RequestFactory()
       requestFactory.ignoreResponseConverter()
       expect(requestFactory.noResponseConverter).toBeTruthy()
-    })
-  })
-
-  describe('application/x-www-form-urlencoded', () => {
-    it('should get a valid form-url-encoded request with values from @Field() args', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
-      })
-      requestFactory.addParameters(new FormParameter('name', 0), new FormParameter('age', 1))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest(['nice coder', 32])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.bodyTimeout).toBeUndefined()
-      expect(request.headersTimeout).toBeUndefined()
-      expect(request.headers.get('x-id')).toEqual('100')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
-      expect(body).toStrictEqual('name=nice+coder&age=32')
-    })
-
-    it('should get a valid form-url-encoded request with values from @Body() string arg', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
-      })
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest(['name=nice+coder&age=32'])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
-      expect(body).toStrictEqual('name=nice+coder&age=32')
-    })
-
-    it('should get a valid form-url-encoded request with values from @Body() Readable', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({
-        'x-id': '100',
-        'Content-Type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
-      })
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      function* b() {
-        yield 'name=nice+coder'
-        yield '&'
-        yield 'age=32'
-      }
-
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([Readable.from(b())])
-      const body = await request.text()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
-      expect(body).toStrictEqual('name=nice+coder&age=32')
-    })
-  })
-
-  describe('JSON', () => {
-    it('should get a valid json request with @Body() object', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeader('Content-Type', MediaTypes.APPLICATION_JSON_UTF8)
-      requestFactory.addParameter(new BodyParameter(0))
-      requestFactory.bodyIndex = 0
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const obj = {
-        test: 'ok',
-        context: 'lib'
-      }
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([obj])
-      const body = await request.json()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
-      expect(body).toStrictEqual(obj)
-    })
-
-    it('should get a valid json request with @Body() string', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeader('Content-Type', MediaTypes.APPLICATION_JSON_UTF8)
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const obj = {
-        test: 'ok',
-        context: 'lib'
-      }
-      const str = JSON.stringify(obj)
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([str])
-      const body = await request.json()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
-      expect(body).toStrictEqual(obj)
-    })
-
-    it('should get a valid json request with @Body() Readable', async () => {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'POST'
-      requestFactory.path = '/test'
-      requestFactory.addDefaultHeader('Content-Type', MediaTypes.APPLICATION_JSON_UTF8)
-      requestFactory.addParameter(new BodyParameter(0))
-
-      requestFactory.preProcessAndValidate(drizzle)
-
-      const obj = {
-        test: 'ok',
-        context: 'lib'
-      }
-      const str = JSON.stringify(obj)
-      const requestBuilder = requestFactory.requestBuilder(drizzle)
-      const request = requestBuilder.toRequest([Readable.from(str, { objectMode: false })])
-      const body = await request.json()
-
-      expect(request.url).toEqual('/test')
-      expect(request.method).toEqual('POST')
-      expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
-      expect(body).toStrictEqual(obj)
     })
   })
 

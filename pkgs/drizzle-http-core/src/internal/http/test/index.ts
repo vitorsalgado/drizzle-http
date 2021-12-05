@@ -1,11 +1,14 @@
 import { request } from 'undici'
+import { RequestOptions } from 'undici/types/dispatcher'
+import { HttpMethod } from 'undici/types/dispatcher'
 import { Call, CallFactory, CallProvider } from '../../../call'
 import { RequestFactory } from '../../../request.factory'
 import { Drizzle } from '../../../drizzle'
-import { HttpError, Response } from '../../../response'
-import { Request } from '../../../request'
+import { Response } from '../../../response'
 import { isAbsolute } from '../../url.utils'
-import { Headers } from '../../../http.headers'
+import { DzHeaders } from '../../../http.headers'
+import { HttpError } from '../../../http.error'
+import { DzRequest } from '../../../DzRequest'
 
 export class NoopCallFactory implements CallFactory {
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
@@ -19,24 +22,28 @@ export class NoopCallFactory implements CallFactory {
 }
 
 class TestCall extends Call<Promise<Response>> {
-  constructor(readonly url: URL, public readonly request: Request, public readonly argv: any[]) {
+  private readonly url: string
+
+  constructor(readonly baseUrl: URL, public readonly request: DzRequest, public readonly argv: any[]) {
     super(request, argv)
 
     if (!isAbsolute(this.request.url)) {
-      this.request.url = new URL(request.url, url.href).href
+      this.url = new URL(request.url, baseUrl.href).href
+    } else {
+      this.url = request.url
     }
   }
 
   async execute(): Promise<Response> {
-    return request(this.request.url, {
-      ...toRequest(this.request),
+    return request(this.url, {
+      ...toRequest(this.url, this.request),
       path: undefined
     } as any).then(res => {
       if (Response.isOK(res.statusCode)) {
         return new Response(res.body, {
           status: res.statusCode,
-          headers: new Headers(res.headers as Record<string, string>),
-          url: this.request.url
+          headers: new DzHeaders(res.headers as Record<string, string>),
+          url: this.url
         })
       }
 
@@ -44,8 +51,8 @@ class TestCall extends Call<Promise<Response>> {
         this.request,
         new Response(res.body, {
           status: res.statusCode,
-          headers: new Headers(res.headers as Record<string, string>),
-          url: this.request.url
+          headers: new DzHeaders(res.headers as Record<string, string>),
+          url: this.url
         })
       )
     })
@@ -65,10 +72,10 @@ export class TestCallFactory implements CallFactory {
   setup(_drizzle: Drizzle): void {}
 }
 
-export function toRequest(request: Request): any {
+export function toRequest(url: string, request: DzRequest): RequestOptions {
   return {
-    path: request.url,
-    method: request.method,
+    path: url,
+    method: request.method as HttpMethod,
     body: request.body,
     headers: request.headers.toObject(),
     bodyTimeout: request.bodyTimeout,

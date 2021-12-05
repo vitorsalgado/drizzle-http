@@ -1,6 +1,6 @@
 import { Response } from './response'
 import { Readable } from 'stream'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
 describe('Response', function () {
   function* txt() {
@@ -39,7 +39,7 @@ describe('Response', function () {
   it('should init with provided values', () => {
     const status = 404
     const statusText = 'Not Found'
-    const headers = new Headers({ 'content-type': 'application/json', 'x-id': '100' })
+    const headers = new DzHeaders({ 'content-type': 'application/json', 'x-id': '100' })
     const type = 'type'
     const url = 'http://www.test.com/path'
 

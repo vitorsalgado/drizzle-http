@@ -1,12 +1,12 @@
-import { Request } from './request'
 import { Response } from './response'
 import { CallProvider } from './call'
 import { Chain, Interceptor } from './interceptor'
+import { DzRequest } from './DzRequest'
 
-export class HttpExecInterceptor implements Interceptor<Request, Response> {
+export class HttpExecInterceptor implements Interceptor<DzRequest, Response> {
   constructor(private readonly callProvider: CallProvider) {}
 
-  async intercept(chain: Chain<Request, Response>): Promise<Response> {
+  async intercept(chain: Chain<DzRequest, Response>): Promise<Response> {
     return this.callProvider(chain.request(), chain.argv()).execute() as Response
   }
 }
@@ -16,13 +16,13 @@ export class ExecutorChain<TReq, TRes> implements Chain<TReq, TRes> {
     private readonly _index: number,
     private readonly _interceptors: Interceptor<TReq, TRes>[],
     private readonly _request: TReq,
-    private readonly _argv: any[]
+    private readonly _argv: unknown[]
   ) {}
 
   static First<TReq, TRes>(
     interceptors: Interceptor<TReq, TRes>[],
     request: TReq,
-    argv: any[]
+    argv: unknown[]
   ): ExecutorChain<TReq, TRes> {
     return new ExecutorChain<TReq, TRes>(0, interceptors, request, argv)
   }
@@ -35,7 +35,7 @@ export class ExecutorChain<TReq, TRes> implements Chain<TReq, TRes> {
     return this._request
   }
 
-  argv(): any[] {
+  argv(): unknown[] {
     return this._argv
   }
 

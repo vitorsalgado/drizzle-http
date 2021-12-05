@@ -4,7 +4,7 @@ import { ResponseConverter, ResponseConverterFactory } from '../../../response.c
 import { Drizzle } from '../../../drizzle'
 import { Response } from '../../../response'
 import { BodyType } from '../../../types'
-import { RequestValues } from '../../../request.values'
+import { RequestParameterization } from '../../../request.parameterization'
 import { DrizzleMeta } from '../../../drizzle.meta'
 
 /**
@@ -29,7 +29,7 @@ export class RawResponseConverter implements ResponseConverter<Response, Promise
 export class RawRequestConverter implements RequestBodyConverter<BodyType> {
   static INSTANCE: RawRequestConverter = new RawRequestConverter()
 
-  convert(requestFactory: RequestFactory, requestValues: RequestValues, value: BodyType): void {
+  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: BodyType): void {
     requestValues.body = value
   }
 }

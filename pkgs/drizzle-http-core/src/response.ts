@@ -1,11 +1,9 @@
 import { BodyType } from './types'
 import { HttpBody } from './http.body'
-import { Request } from './request'
-import { DrizzleError } from './internal'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
 export interface ResponseInit {
-  headers: Headers | Record<string, string>
+  headers: DzHeaders | Record<string, string>
   status: number
   statusText?: string
   type?: string
@@ -14,7 +12,7 @@ export interface ResponseInit {
 }
 
 export class Response extends HttpBody {
-  readonly headers: Headers
+  readonly headers: DzHeaders
   readonly status: number
   readonly statusText?: string
   readonly type: string
@@ -26,7 +24,7 @@ export class Response extends HttpBody {
 
     this.status = init.status ?? 200
     this.statusText = init.statusText ?? ''
-    this.headers = init.headers instanceof Headers ? init.headers : new Headers(init.headers)
+    this.headers = init.headers instanceof DzHeaders ? init.headers : new DzHeaders(init.headers)
     this.type = init.type ?? 'basic'
     this.url = init.url ?? ''
     this.redirected = init.redirected ?? false
@@ -64,7 +62,7 @@ export class Response extends HttpBody {
     }
 
     return new Response(null, {
-      headers: new Headers({ location: new URL(url).toString() }),
+      headers: new DzHeaders({ location: new URL(url).toString() }),
       redirected: true,
       status
     })
@@ -77,12 +75,4 @@ export class Response extends HttpBody {
   }
 
   // endregion
-}
-
-export class HttpError extends DrizzleError {
-  constructor(public readonly request: Request, public readonly response: Response) {
-    super(`Request failed with status code: ${response.status}`, 'DRIZZLE_HTTP_ERR_HTTP')
-    Error.captureStackTrace(this, HttpError)
-    this.name = 'DrizzleHttpError'
-  }
 }

@@ -23,7 +23,7 @@ import {
   QueryParameterHandlerFactory,
   SignalParameterHandlerFactory
 } from './request.parameters'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
@@ -38,7 +38,7 @@ export function initDrizzleHttp(): DrizzleBuilder {
  */
 export class DrizzleBuilder {
   private _baseURL!: string
-  private readonly _headers: Headers
+  private readonly _headers: DzHeaders
   private _callFactory!: CallFactory
   private readonly _interceptors: Interceptor<unknown, unknown>[]
   private readonly _callAdapterFactories: CallAdapterFactory[]
@@ -49,7 +49,7 @@ export class DrizzleBuilder {
   private _useDefaults: boolean
 
   constructor() {
-    this._headers = new Headers({})
+    this._headers = new DzHeaders({})
     this._interceptors = []
     this._callAdapterFactories = []
     this._parameterHandlerFactories = []

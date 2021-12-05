@@ -1,15 +1,15 @@
 import { BodyType } from './types'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
-export class RequestValues {
+export class RequestParameterization {
   constructor(
-    public readonly argv: any[],
+    public readonly argv: unknown[],
     public path: string = '',
     public readonly query: string[] = [],
-    public readonly headers: Headers = new Headers({}),
+    public readonly headers: DzHeaders = new DzHeaders({}),
     public readonly formFields: string[] = [],
     public body: BodyType = null,
-    public signal: any | null = null
+    public signal: unknown | null = null
   ) {}
 
   buildPath(): string {

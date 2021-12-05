@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { RequestFactory } from './request.factory'
 import { Check } from './internal'
-import { Headers } from './http.headers'
+import { DzHeaders } from './http.headers'
 
 const KeyApiInstanceMeta = 'drizzle:i'
 const KeyRequestFactory = 'drizzle:ri'
@@ -10,14 +10,14 @@ const KeyRegisteredMethods = 'drizzle:m'
 
 export class ApiInstanceMeta {
   private path?: string
-  defaultHeaders: Headers
+  defaultHeaders: DzHeaders
   readTimeout?: number
   connectTimeout?: number
   signal: any | null
 
   constructor() {
     this.path = undefined
-    this.defaultHeaders = new Headers({})
+    this.defaultHeaders = new DzHeaders({})
     this.connectTimeout = undefined
     this.readTimeout = undefined
     this.signal = null

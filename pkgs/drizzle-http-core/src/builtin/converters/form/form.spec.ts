@@ -5,7 +5,7 @@ import { BodyParameter } from '../../../request.parameters'
 import CommonHeaders from '../../../http.common.headers'
 import { DrizzleBuilder } from '../../../drizzle.builder'
 import { TestCallFactory } from '../../../internal/http/test'
-import { RequestValues } from '../../../request.values'
+import { RequestParameterization } from '../../../request.parameterization'
 
 describe('Form Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -55,7 +55,7 @@ describe('Form Converter', function () {
 
     const factory = new FormRequestConverterFactory()
     const converter = factory.requestConverter(drizzle, 'test', requestFactory)
-    const rv = new RequestValues([])
+    const rv = new RequestParameterization([])
     const obj = {
       name: 'the name',
       description: 'some description',
@@ -78,7 +78,7 @@ describe('Form Converter', function () {
 
     const factory = new FormRequestConverterFactory()
     const converter = factory.requestConverter(drizzle, 'test', requestFactory)
-    const rv = new RequestValues([])
+    const rv = new RequestParameterization([])
     const arr = [
       ['name', 'the name'],
       ['description', 'some description'],
@@ -101,7 +101,7 @@ describe('Form Converter', function () {
 
     const factory = new FormRequestConverterFactory()
     const converter = factory.requestConverter(drizzle, 'test', requestFactory)
-    const rv = new RequestValues([])
+    const rv = new RequestParameterization([])
     const arr = ['test', 'some other value']
 
     expect(() => converter?.convert(requestFactory, rv, arr)).toThrowError()
