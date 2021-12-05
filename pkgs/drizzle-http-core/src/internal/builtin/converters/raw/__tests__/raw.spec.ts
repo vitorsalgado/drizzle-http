@@ -13,15 +13,15 @@ import {
   RawResponseConverter,
   RawResponseConverterFactory
 } from '..'
+import { noop } from '../../../../../noop'
 
 class API {
   @POST('/raw-test')
   @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
   @FullResponse()
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  test(@Body() data: string): Promise<DzResponse> {}
+  test(@Body() data: string): Promise<DzResponse> {
+    return noop(data)
+  }
 }
 
 describe('Raw Converter', function () {
