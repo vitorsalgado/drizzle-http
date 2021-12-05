@@ -1,13 +1,13 @@
-import { Response } from './response'
 import { CallProvider } from './call'
 import { Chain, Interceptor } from './interceptor'
 import { DzRequest } from './DzRequest'
+import { DzResponse } from './DzResponse'
 
-export class HttpExecInterceptor implements Interceptor<DzRequest, Response> {
+export class HttpExecInterceptor implements Interceptor<DzRequest, DzResponse> {
   constructor(private readonly callProvider: CallProvider) {}
 
-  async intercept(chain: Chain<DzRequest, Response>): Promise<Response> {
-    return this.callProvider(chain.request(), chain.argv()).execute() as Response
+  async intercept(chain: Chain<DzRequest, DzResponse>): Promise<DzResponse> {
+    return this.callProvider(chain.request(), chain.argv()).execute() as DzResponse
   }
 }
 

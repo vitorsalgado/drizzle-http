@@ -1,3 +1,15 @@
+import EventEmitter from 'events'
+import {
+  closeTestServer,
+  Data,
+  Ok,
+  setupTestServer,
+  startTestServer,
+  TestId,
+  TestResult
+} from '@drizzle-http/test-utils'
+import { noop } from './noop'
+import { TestCallFactory } from './internal/http/test'
 import {
   Abort,
   Accept,
@@ -26,22 +38,11 @@ import {
   Q,
   Query,
   QueryName,
-  Response,
-  ReturnTypes,
   theTypes,
   Timeout
-} from './'
-import {
-  closeTestServer,
-  Data,
-  Ok,
-  setupTestServer,
-  startTestServer,
-  TestId,
-  TestResult
-} from '@drizzle-http/test-utils'
-import { TestCallFactory } from './internal/http/test'
-import EventEmitter from 'events'
+} from '.'
+import { DzResponse } from '.'
+import { FullResponse } from '.'
 
 const cancellation = new EventEmitter()
 const cancellationInMethod = new EventEmitter()
@@ -63,8 +64,8 @@ class API {
 
   @GET('/txt')
   @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
-  txt(): Promise<Response> {
-    return theTypes(Promise, Response)
+  txt(): Promise<DzResponse> {
+    return noop()
   }
 
   @GET('/group/{id}/owner/{name}/projects')
@@ -80,14 +81,14 @@ class API {
     @H('code') code: number,
     @Abort() abort: EventEmitter
   ): Promise<TestResult<TestId>> {
-    return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
+    return noop(id, name, filter, sort, prop, cache, code, abort)
   }
 
   @GET('/{id}/projects')
   @Accept(MediaTypes.APPLICATION_JSON_UTF8)
   @Abort(cancellationInMethod)
-  getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<Response> {
-    return theTypes(Promise, Response, id, orderBy)
+  getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<DzResponse> {
+    return noop()
   }
 
   // endregion
@@ -115,8 +116,8 @@ class API {
   // region DELETE
 
   @DELETE('/delete/{id}')
-  testDELETE(@Param('id') id: string): Promise<Response> {
-    return theTypes(Promise, Response)
+  testDELETE(@Param('id') id: string): Promise<DzResponse> {
+    return noop()
   }
 
   // endregion
@@ -124,8 +125,8 @@ class API {
   // region PATCH
 
   @PATCH('/patch/{id}')
-  testPATCH(@Param('id') id: string): Promise<Response> {
-    return theTypes(Promise, Response)
+  testPATCH(@Param('id') id: string): Promise<DzResponse> {
+    return noop(Promise, DzResponse)
   }
 
   // endregion
@@ -133,8 +134,8 @@ class API {
   // region OPTIONS
 
   @OPTIONS('/options')
-  testOPTIONS(): Promise<Response> {
-    return theTypes(Promise, Response)
+  testOPTIONS(): Promise<DzResponse> {
+    return noop(Promise, DzResponse)
   }
 
   // endregion
@@ -142,8 +143,8 @@ class API {
   // region HEAD
 
   @HEAD('/head')
-  testHEAD(): Promise<Response> {
-    return theTypes(Promise, Response)
+  testHEAD(): Promise<DzResponse> {
+    return noop(Promise, DzResponse)
   }
 
   // endregion
@@ -235,10 +236,10 @@ describe('Drizzle Http', () => {
 
       return api
         .test()
-        .then(response => {
-          expect(response.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-          expect(response.headers).toHaveProperty('accept', MediaTypes.APPLICATION_JSON)
-          expect(response.result.ok).toBeTruthy()
+        .then(DzResponse => {
+          expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(DzResponse.headers).toHaveProperty('accept', MediaTypes.APPLICATION_JSON)
+          expect(DzResponse.result.ok).toBeTruthy()
         })
         .finally(() => d.shutdown())
     })
@@ -260,9 +261,9 @@ describe('Drizzle Http', () => {
 
       return api
         .test()
-        .then(response => {
-          expect(response.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-          expect(response.result.ok).toBeTruthy()
+        .then(DzResponse => {
+          expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(DzResponse.result.ok).toBeTruthy()
         })
         .finally(() => d.shutdown())
     })
@@ -273,11 +274,11 @@ describe('Drizzle Http', () => {
       @FormUrlEncoded()
       class InnerAPI {
         @POST('/')
-        @ReturnTypes(Promise, Response)
+        @FullResponse()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        test(@Field('value') val: string): Promise<Response> {}
+        test(@Field('value') val: string): Promise<DzResponse> {}
       }
 
       const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
@@ -286,8 +287,8 @@ describe('Drizzle Http', () => {
 
       return api
         .test('test')
-        .then(response => {
-          return response.json<TestResult<Ok>>()
+        .then(DzResponse => {
+          return DzResponse.json<TestResult<Ok>>()
         })
         .then(result => {
           expect(result.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
@@ -301,13 +302,13 @@ describe('Drizzle Http', () => {
   })
 
   describe('GET', function () {
-    it('should GET / and parse JSON response', () => {
+    it('should GET / and parse JSON DzResponse', () => {
       expect.assertions(3)
 
-      return api.testGET().then(response => {
-        expect(response.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-        expect(response.headers).toHaveProperty('x-env', 'Test')
-        expect(response.result.ok).toBeTruthy()
+      return api.testGET().then(DzResponse => {
+        expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(DzResponse.headers).toHaveProperty('x-env', 'Test')
+        expect(DzResponse.result.ok).toBeTruthy()
       })
     })
 
@@ -316,23 +317,23 @@ describe('Drizzle Http', () => {
 
       return api
         .txt()
-        .then(response => {
-          expect(response.status).toEqual(200)
-          expect(response.ok).toBeTruthy()
+        .then(DzResponse => {
+          expect(DzResponse.status).toEqual(200)
+          expect(DzResponse.ok).toBeTruthy()
 
-          return response.text()
+          return DzResponse.text()
         })
         .then(txt => expect(txt).toEqual('ok'))
     })
 
-    it('should return raw http response when return type is Response', () => {
+    it('should return raw http DzResponse when return type is DzResponse', () => {
       const id = 'test'
       const orderBy = 'desc'
-      return api.getRaw(id, orderBy).then(response => {
-        expect(response.ok).toBeTruthy()
-        expect(response.status).toEqual(200)
+      return api.getRaw(id, orderBy).then(DzResponse => {
+        expect(DzResponse.ok).toBeTruthy()
+        expect(DzResponse.status).toEqual(200)
 
-        return response.json<TestResult<TestId>>().then(parsed => {
+        return DzResponse.json<TestResult<TestId>>().then(parsed => {
           expect(parsed.result.id).toEqual(id)
           expect(parsed.params.id).toEqual(id)
           expect(parsed.query).toHaveProperty('sort', orderBy)
@@ -350,17 +351,17 @@ describe('Drizzle Http', () => {
       const code = 666
       const ee = new EventEmitter()
 
-      return api.projects(id, name, filter, sort, prop, cache, code, ee).then(response => {
-        expect(response.result.id).toEqual(id)
-        expect(response.query).toHaveProperty('filter', filter)
-        expect(response.query).toHaveProperty('sort', sort)
-        expect(response.query).toHaveProperty(prop)
-        expect(response.params).toHaveProperty('id', id)
-        expect(response.params).toHaveProperty('name', name)
-        expect(response.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-        expect(response.headers).toHaveProperty('cache', String(cache))
-        expect(response.headers).toHaveProperty('code', String(code))
-        expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
+      return api.projects(id, name, filter, sort, prop, cache, code, ee).then(DzResponse => {
+        expect(DzResponse.result.id).toEqual(id)
+        expect(DzResponse.query).toHaveProperty('filter', filter)
+        expect(DzResponse.query).toHaveProperty('sort', sort)
+        expect(DzResponse.query).toHaveProperty(prop)
+        expect(DzResponse.params).toHaveProperty('id', id)
+        expect(DzResponse.params).toHaveProperty('name', name)
+        expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(DzResponse.headers).toHaveProperty('cache', String(cache))
+        expect(DzResponse.headers).toHaveProperty('code', String(code))
+        expect(DzResponse.url.substring(DzResponse.url.length - 1)).not.toEqual('&')
       })
     })
   })
@@ -378,9 +379,9 @@ describe('Drizzle Http', () => {
         }
       }
 
-      return api.testPOST(id, project, body).then(response => {
-        expect(response.result.ok).toBeTruthy()
-        expect(response.body).toEqual(body)
+      return api.testPOST(id, project, body).then(DzResponse => {
+        expect(DzResponse.result.ok).toBeTruthy()
+        expect(DzResponse.body).toEqual(body)
       })
     })
   })
@@ -389,8 +390,8 @@ describe('Drizzle Http', () => {
     it('should PUT', function () {
       expect.assertions(1)
 
-      return api.testPUT({ value: 'some-value' }).then(response => {
-        expect(response).toEqual({
+      return api.testPUT({ value: 'some-value' }).then(DzResponse => {
+        expect(DzResponse).toEqual({
           test: 'ok',
           type: 'put',
           data: { value: 'some-value' }
@@ -403,9 +404,9 @@ describe('Drizzle Http', () => {
     it('should DELETE', function () {
       expect.assertions(2)
 
-      return api.testDELETE('to-delete').then(response => {
-        expect(response.status).toEqual(204)
-        expect(response.ok).toBeTruthy()
+      return api.testDELETE('to-delete').then(DzResponse => {
+        expect(DzResponse.status).toEqual(204)
+        expect(DzResponse.ok).toBeTruthy()
       })
     })
   })
@@ -414,9 +415,9 @@ describe('Drizzle Http', () => {
     it('should PATCH', function () {
       expect.assertions(2)
 
-      return api.testDELETE('patch-me').then(response => {
-        expect(response.status).toEqual(204)
-        expect(response.ok).toBeTruthy()
+      return api.testDELETE('patch-me').then(DzResponse => {
+        expect(DzResponse.status).toEqual(204)
+        expect(DzResponse.ok).toBeTruthy()
       })
     })
   })
@@ -425,10 +426,10 @@ describe('Drizzle Http', () => {
     it('should OPTIONS', function () {
       expect.assertions(3)
 
-      return api.testOPTIONS().then(response => {
-        expect(response.status).toEqual(204)
-        expect(response.ok).toBeTruthy()
-        expect(response.headers.get('options')).toEqual('all')
+      return api.testOPTIONS().then(DzResponse => {
+        expect(DzResponse.status).toEqual(204)
+        expect(DzResponse.ok).toBeTruthy()
+        expect(DzResponse.headers.get('options')).toEqual('all')
       })
     })
   })
@@ -437,10 +438,10 @@ describe('Drizzle Http', () => {
     it('should HEAD', function () {
       expect.assertions(3)
 
-      return api.testHEAD().then(response => {
-        expect(response.status).toEqual(204)
-        expect(response.ok).toBeTruthy()
-        expect(response.headers.get('head')).toEqual('none')
+      return api.testHEAD().then(DzResponse => {
+        expect(DzResponse.status).toEqual(204)
+        expect(DzResponse.ok).toBeTruthy()
+        expect(DzResponse.headers.get('head')).toEqual('none')
       })
     })
   })

@@ -44,6 +44,7 @@ export class RequestFactory {
   connectTimeout?: number
   returnType: ReturnType | null | undefined
   returnGenericType: ReturnType | null | undefined
+  returnIdentifier: string | null
   parameterHandlers!: ParameterHandler<Parameter, unknown>[]
   parameters: Parameter[]
   signal: EventEmitter | unknown
@@ -65,6 +66,7 @@ export class RequestFactory {
     this.connectTimeout = undefined
     this.returnType = undefined
     this.returnGenericType = undefined
+    this.returnIdentifier = ''
     this.bag = new Map<string, unknown>()
     this.preProcessed = false
     this.parameterHandlers = []
@@ -298,7 +300,7 @@ export class RequestFactory {
    * Check if defaultHeaders property contains a Header Content-Type containing the argument value.
    * Note: this will not take in consideration getHeaderParameters as they are resolved on each method call context.
    *
-   * @param value - content-handledType
+   * @param value - content-type
    */
   contentTypeContains(value: string): boolean {
     const h = this.defaultHeaders.get(CommonHeaders.CONTENT_TYPE)
@@ -332,16 +334,16 @@ export class RequestFactory {
   }
 
   /**
-   * Validate return handledType
-   * @param type - return class handledType
+   * Validate return type
+   * @param type - return class type
    */
   isReturnTypeOf(type: ReturnType): boolean {
     return this.returnType !== null && typeof this.returnType !== 'undefined' && this.returnType === type
   }
 
   /**
-   * Validate the generic return handledType
-   * @param type - return class handledType
+   * Validate the generic return type
+   * @param type - return class type
    */
   isGenericReturnTypeOf(type: ReturnType): boolean {
     return (
@@ -349,6 +351,16 @@ export class RequestFactory {
       typeof this.returnGenericType !== 'undefined' &&
       this.returnGenericType === type
     )
+  }
+
+  /**
+   * Validate the return type identifier.
+   * Used when unable to identify the return type of api function and return type is set via a string identifier.
+   *
+   * @param identifier - return type identifier
+   */
+  isReturnIdentifier(identifier: string): boolean {
+    return this.returnIdentifier === identifier
   }
 
   /**

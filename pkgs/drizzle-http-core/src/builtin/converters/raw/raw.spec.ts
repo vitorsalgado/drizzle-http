@@ -1,18 +1,18 @@
+import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { RequestFactory } from '../../../request.factory'
 import CommonHeaders from '../../../http.common.headers'
 import MediaTypes from '../../../http.media.types'
-import { Response } from '../../../response'
+import { DrizzleBuilder, initDrizzleHttp } from '../../../drizzle.builder'
+import { TestCallFactory } from '../../../internal/http/test'
+import { Body, ContentType, POST } from '../../../decorators'
+import { DzResponse } from '../../../DzResponse'
 import {
   FullResponse,
   RawRequestConverter,
   RawRequestConverterFactory,
   RawResponseConverter,
   RawResponseConverterFactory
-} from './index'
-import { DrizzleBuilder, initDrizzleHttp } from '../../../drizzle.builder'
-import { TestCallFactory } from '../../../internal/http/test'
-import { Body, ContentType, POST } from '../../../decorators'
-import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
+} from '.'
 
 class API {
   @POST('/raw-test')
@@ -21,7 +21,7 @@ class API {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  test(@Body() data: string): Promise<Response> {}
+  test(@Body() data: string): Promise<DzResponse> {}
 }
 
 describe('Raw Converter', function () {
@@ -53,7 +53,7 @@ describe('Raw Converter', function () {
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
     requestFactory.returnType = Promise
-    requestFactory.returnGenericType = Response
+    requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -86,7 +86,7 @@ describe('Raw Converter', function () {
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
     requestFactory.returnType = Promise
-    requestFactory.returnGenericType = Response
+    requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)
 

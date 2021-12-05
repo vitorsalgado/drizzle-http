@@ -3,8 +3,8 @@ import { Drizzle } from './drizzle'
 import { ExecutorChain } from './interceptor.http'
 import { Interceptor } from './interceptor'
 import { ResponseConverter } from './response.converter'
-import { Response } from './response'
 import { DzRequest } from './DzRequest'
+import { DzResponse } from './DzResponse'
 
 /**
  * Represents a single HTTP call.
@@ -51,11 +51,11 @@ export abstract class CallFactory {
  * @typeParam V - Type of the response
  */
 export class BridgeCall<T> extends Call<T> {
-  private readonly responseConverter: ResponseConverter<Response, T>
+  private readonly responseConverter: ResponseConverter<DzResponse, T>
   private readonly chain: ExecutorChain<unknown, unknown>
 
   constructor(
-    responseConverter: ResponseConverter<Response, T>,
+    responseConverter: ResponseConverter<DzResponse, T>,
     interceptors: Interceptor<unknown, unknown>[],
     request: DzRequest,
     argv: unknown[]
@@ -68,6 +68,6 @@ export class BridgeCall<T> extends Call<T> {
   execute(): T {
     return this.chain
       .proceed(this.request)
-      .then(response => this.responseConverter.convert(response as Response)) as unknown as T
+      .then(response => this.responseConverter.convert(response as DzResponse)) as unknown as T
   }
 }

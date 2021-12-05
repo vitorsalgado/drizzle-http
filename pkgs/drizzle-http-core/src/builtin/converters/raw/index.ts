@@ -2,10 +2,12 @@ import { RequestBodyConverter, RequestConverterFactory } from '../../../request.
 import { RequestFactory } from '../../../request.factory'
 import { ResponseConverter, ResponseConverterFactory } from '../../../response.converter'
 import { Drizzle } from '../../../drizzle'
-import { Response } from '../../../response'
 import { BodyType } from '../../../types'
 import { RequestParameterization } from '../../../request.parameterization'
 import { DrizzleMeta } from '../../../drizzle.meta'
+import { DzResponse } from '../../../DzResponse'
+
+const ReturnIdentifier = 'raw'
 
 /**
  * Use this to return the full response, including status code, headers, unprocessed body.
@@ -14,14 +16,14 @@ import { DrizzleMeta } from '../../../drizzle.meta'
 export function FullResponse() {
   return function (target: any, method: string) {
     const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.returnGenericType = Response
+    requestFactory.returnIdentifier = ReturnIdentifier
   }
 }
 
-export class RawResponseConverter implements ResponseConverter<Response, Promise<Response>> {
+export class RawResponseConverter implements ResponseConverter<DzResponse, Promise<DzResponse>> {
   static INSTANCE: RawResponseConverter = new RawResponseConverter()
 
-  async convert(from: Response): Promise<Response> {
+  async convert(from: DzResponse): Promise<DzResponse> {
     return from
   }
 }
@@ -54,12 +56,8 @@ export class RawResponseConverterFactory extends ResponseConverterFactory {
     _drizzle: Drizzle,
     _method: string,
     requestFactory: RequestFactory
-  ): ResponseConverter<Response, Promise<Response>> | null {
-    // the return V is the internal Response, similar to Fetch API
-    if (requestFactory.isGenericReturnTypeOf(Response)) {
-      return RawResponseConverter.INSTANCE
-      // attempt to check if return handledType is a Fetch Response
-    } else if (requestFactory.returnType?.prototype[Symbol.toStringTag] === 'Response') {
+  ): ResponseConverter<DzResponse, Promise<DzResponse>> | null {
+    if (requestFactory.isReturnIdentifier(ReturnIdentifier)) {
       return RawResponseConverter.INSTANCE
     }
 

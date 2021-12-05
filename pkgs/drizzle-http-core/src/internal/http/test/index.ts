@@ -1,14 +1,15 @@
 import { request } from 'undici'
+import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
 import { HttpMethod } from 'undici/types/dispatcher'
 import { Call, CallFactory, CallProvider } from '../../../call'
 import { RequestFactory } from '../../../request.factory'
 import { Drizzle } from '../../../drizzle'
-import { Response } from '../../../response'
 import { isAbsolute } from '../../url.utils'
-import { DzHeaders } from '../../../http.headers'
 import { HttpError } from '../../../http.error'
 import { DzRequest } from '../../../DzRequest'
+import { DzResponse } from '../../../DzResponse'
+import { DzHeaders } from '../../../http.headers'
 
 export class NoopCallFactory implements CallFactory {
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
@@ -21,7 +22,7 @@ export class NoopCallFactory implements CallFactory {
   setup(drizzle: Drizzle): void {}
 }
 
-class TestCall extends Call<Promise<Response>> {
+class TestCall extends Call<Promise<DzResponse>> {
   private readonly url: string
 
   constructor(readonly baseUrl: URL, public readonly request: DzRequest, public readonly argv: any[]) {
@@ -34,27 +35,16 @@ class TestCall extends Call<Promise<Response>> {
     }
   }
 
-  async execute(): Promise<Response> {
+  async execute(): Promise<DzResponse> {
     return request(this.url, {
       ...toRequest(this.url, this.request),
       path: undefined
     } as any).then(res => {
-      if (Response.isOK(res.statusCode)) {
-        return new Response(res.body, {
-          status: res.statusCode,
-          headers: new DzHeaders(res.headers as Record<string, string>),
-          url: this.url
-        })
+      if (TestDzResponse.isOK(res.statusCode)) {
+        return new TestDzResponse(this.url, res)
       }
 
-      throw new HttpError(
-        this.request,
-        new Response(res.body, {
-          status: res.statusCode,
-          headers: new DzHeaders(res.headers as Record<string, string>),
-          url: this.url
-        })
-      )
+      throw new HttpError(this.request, new TestDzResponse(this.url, res))
     })
   }
 }
@@ -81,5 +71,41 @@ export function toRequest(url: string, request: DzRequest): RequestOptions {
     bodyTimeout: request.bodyTimeout,
     headersTimeout: request.headersTimeout,
     signal: request.signal
+  }
+}
+
+class TestDzResponse extends DzResponse<Dispatcher.ResponseData> {
+  constructor(url: string, response: Dispatcher.ResponseData) {
+    super({
+      url: url,
+      headers: new DzHeaders(response.headers as Record<string, string>),
+      body: response.body,
+      status: response.statusCode,
+      original: response
+    })
+  }
+
+  arrayBuffer(): Promise<ArrayBuffer> {
+    return this.original().body.arrayBuffer()
+  }
+
+  blob(): Promise<unknown> {
+    return this.original().body.blob()
+  }
+
+  get bodyUsed(): boolean {
+    return this.original().body.bodyUsed
+  }
+
+  formData(): Promise<unknown> {
+    return this.original().body.formData()
+  }
+
+  json<T>(): Promise<T> {
+    return this.original().body.json()
+  }
+
+  text(): Promise<string> {
+    return this.original().body.text()
   }
 }

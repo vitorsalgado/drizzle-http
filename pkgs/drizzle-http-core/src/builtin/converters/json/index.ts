@@ -2,9 +2,9 @@ import { RequestBodyConverter, RequestConverterFactory } from '../../../request.
 import { RequestFactory } from '../../../request.factory'
 import { ResponseConverter, ResponseConverterFactory } from '../../../response.converter'
 import { Drizzle } from '../../../drizzle'
-import { Response } from '../../../response'
 import { RequestParameterization } from '../../../request.parameterization'
 import MediaTypes from '../../../http.media.types'
+import { DzResponse } from '../../../DzResponse'
 
 export class JsonRequestConverter implements RequestBodyConverter<string> {
   static INSTANCE: JsonRequestConverter = new JsonRequestConverter()
@@ -19,10 +19,10 @@ export class JsonRequestConverter implements RequestBodyConverter<string> {
   }
 }
 
-export class JsonResponseConverter<T> implements ResponseConverter<Response, Promise<T>> {
+export class JsonResponseConverter<T> implements ResponseConverter<DzResponse, Promise<T>> {
   static INSTANCE: JsonResponseConverter<unknown> = new JsonResponseConverter<unknown>()
 
-  convert<T>(from: Response): Promise<T> {
+  convert<T>(from: DzResponse): Promise<T> {
     return from.json()
   }
 }
@@ -50,7 +50,7 @@ export class JsonResponseConverterFactory extends ResponseConverterFactory {
     _drizzle: Drizzle,
     _method: string,
     requestFactory: RequestFactory
-  ): ResponseConverter<Response, Promise<T>> | null {
+  ): ResponseConverter<DzResponse, Promise<T>> | null {
     if (requestFactory.contentTypeContains(MediaTypes.APPLICATION_JSON)) {
       return JsonResponseConverter.INSTANCE
     }

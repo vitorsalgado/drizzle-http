@@ -13,7 +13,7 @@ import { pathParameterRegex } from './internal'
 import { MediaTypes } from './http.media.types'
 import { DrizzleBuilder } from './drizzle.builder'
 import { TestCallFactory } from './internal/http/test'
-import { Response } from './response'
+import { DzHeaders } from './http.headers'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -467,7 +467,7 @@ describe('Request Factory', () => {
       requestFactory.method = 'example'
       requestFactory.httpMethod = 'GET'
       requestFactory.path = '/path'
-      requestFactory.returnType = Response
+      requestFactory.returnType = DzHeaders
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -476,7 +476,7 @@ describe('Request Factory', () => {
       // @ts-ignore
       expect(requestFactory.isReturnTypeOf(null)).toBeFalsy()
       expect(requestFactory.isReturnTypeOf(String)).toBeFalsy()
-      expect(requestFactory.isReturnTypeOf(Response)).toBeTruthy()
+      expect(requestFactory.isReturnTypeOf(DzHeaders)).toBeTruthy()
     })
   })
 })
