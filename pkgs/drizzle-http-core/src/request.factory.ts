@@ -75,6 +75,20 @@ export class RequestFactory {
     this.noResponseConverter = false
   }
 
+  private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
+    for (const param of params) {
+      if (!param.key || !param.regex) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
+    return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
+  }
+
   /**
    * Pre Process and validate in sequence
    * @param drizzle - Drizzle instance associated with this RequestFactory
@@ -514,20 +528,6 @@ export class RequestFactory {
 
   private invalidArgErr(message: string): InvalidRequestMethodConfigurationError {
     return new InvalidRequestMethodConfigurationError(this.method ?? '', message)
-  }
-
-  private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
-    for (const param of params) {
-      if (!param.key || !param.regex) {
-        return false
-      }
-    }
-
-    return true
-  }
-
-  private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
-    return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
   }
 }
 

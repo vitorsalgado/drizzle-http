@@ -1,5 +1,5 @@
-import { RequestParameterization } from './request.parameterization'
-import { DzHeaders } from './http.headers'
+import { RequestParameterization } from '../request.parameterization'
+import { DzHeaders } from '../http.headers'
 
 describe('RequestValues', function () {
   it('should init with default values', function () {

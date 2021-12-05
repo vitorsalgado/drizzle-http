@@ -85,16 +85,16 @@ class TestDzResponse extends DzResponse<Dispatcher.ResponseData> {
     })
   }
 
+  get bodyUsed(): boolean {
+    return this.original().body.bodyUsed
+  }
+
   arrayBuffer(): Promise<ArrayBuffer> {
     return this.original().body.arrayBuffer()
   }
 
   blob(): Promise<unknown> {
     return this.original().body.blob()
-  }
-
-  get bodyUsed(): boolean {
-    return this.original().body.bodyUsed
   }
 
   formData(): Promise<unknown> {

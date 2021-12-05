@@ -10,11 +10,11 @@ interface DzResponseInit<R> {
 }
 
 export abstract class DzResponse<R = unknown, BLOB = unknown, FORM_DATA = unknown> {
-  private readonly _original: R
-  private readonly _body: BodyType
   readonly headers: DzHeaders
   readonly status: number
   readonly url: string
+  private readonly _original: R
+  private readonly _body: BodyType
 
   protected constructor(init: DzResponseInit<R>) {
     this._original = init.original
@@ -28,15 +28,19 @@ export abstract class DzResponse<R = unknown, BLOB = unknown, FORM_DATA = unknow
     return DzResponse.isOK(this.status)
   }
 
-  original(): R {
-    return this._original
-  }
-
   get body(): BodyType {
     return this._body
   }
 
   abstract get bodyUsed(): boolean
+
+  static isOK(statusCode: number): boolean {
+    return statusCode >= 200 && statusCode <= 299
+  }
+
+  original(): R {
+    return this._original
+  }
 
   abstract arrayBuffer(): Promise<ArrayBuffer>
 
@@ -47,8 +51,4 @@ export abstract class DzResponse<R = unknown, BLOB = unknown, FORM_DATA = unknow
   abstract blob(): Promise<BLOB>
 
   abstract formData(): Promise<FORM_DATA>
-
-  static isOK(statusCode: number): boolean {
-    return statusCode >= 200 && statusCode <= 299
-  }
 }

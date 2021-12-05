@@ -1,15 +1,15 @@
-import MediaTypes from '../../../../http.media.types'
-import { RequestFactory } from '../../../../request.factory'
-import { BodyParameter } from '../../../../request.parameters'
-import CommonHeaders from '../../../../http.common.headers'
-import { DrizzleBuilder } from '../../../../drizzle.builder'
-import { TestCallFactory } from '../../../http/test'
+import MediaTypes from '../../../../../http.media.types'
+import { RequestFactory } from '../../../../../request.factory'
+import { BodyParameter } from '../../../../../request.parameters'
+import CommonHeaders from '../../../../../http.common.headers'
+import { DrizzleBuilder } from '../../../../../drizzle.builder'
+import { TestCallFactory } from '../../../../http/test'
 import {
   JsonRequestConverter,
   JsonRequestConverterFactory,
   JsonResponseConverter,
   JsonResponseConverterFactory
-} from '.'
+} from '..'
 
 describe('JSON Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()

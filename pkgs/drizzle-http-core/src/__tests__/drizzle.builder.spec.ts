@@ -1,4 +1,4 @@
-import { initDrizzleHttp } from './drizzle.builder'
+import { initDrizzleHttp } from '../drizzle.builder'
 import {
   BodyParameterHandlerFactory,
   FormParameterHandlerFactory,
@@ -7,8 +7,8 @@ import {
   QueryNameParameterHandlerFactory,
   QueryParameterHandlerFactory,
   SignalParameterHandlerFactory
-} from './request.parameters'
-import { TestCallFactory } from './internal/http/test'
+} from '../request.parameters'
+import { TestCallFactory } from '../internal/http/test'
 
 describe('Drizzle Builder', function () {
   it('should remove end back slash from url', function () {

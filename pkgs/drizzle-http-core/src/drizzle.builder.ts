@@ -59,6 +59,10 @@ export class DrizzleBuilder {
     this._useDefaults = true
   }
 
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
+  }
+
   static newBuilder(): DrizzleBuilder {
     return new DrizzleBuilder()
   }
@@ -231,31 +235,6 @@ export class DrizzleBuilder {
     return this
   }
 
-  private setDefaults(): void {
-    this.addCallAdapterFactories(new CallbackCallAdapterFactory())
-
-    this.addParameterHandlerFactory(QueryParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(QueryNameParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(PathParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(HeaderParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(FormParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE)
-
-    this.addRequestConverterFactories(
-      new JsonRequestConverterFactory(),
-      new FormRequestConverterFactory(),
-      new RawRequestConverterFactory()
-    )
-
-    this._responseConverterFactories.unshift(new RawResponseConverterFactory())
-    this.addResponseConverterFactories(new JsonResponseConverterFactory())
-  }
-
-  get [Symbol.toStringTag](): string {
-    return this.constructor.name
-  }
-
   /**
    * Builds a new {@link Drizzle} instance using the configured values.
    */
@@ -292,5 +271,26 @@ export class DrizzleBuilder {
       new Set<RequestConverterFactory>(this._requestConverterFactories),
       new Set<ResponseConverterFactory>(this._responseConverterFactories)
     )
+  }
+
+  private setDefaults(): void {
+    this.addCallAdapterFactories(new CallbackCallAdapterFactory())
+
+    this.addParameterHandlerFactory(QueryParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(QueryNameParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(PathParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(HeaderParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(FormParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE)
+
+    this.addRequestConverterFactories(
+      new JsonRequestConverterFactory(),
+      new FormRequestConverterFactory(),
+      new RawRequestConverterFactory()
+    )
+
+    this._responseConverterFactories.unshift(new RawResponseConverterFactory())
+    this.addResponseConverterFactories(new JsonResponseConverterFactory())
   }
 }

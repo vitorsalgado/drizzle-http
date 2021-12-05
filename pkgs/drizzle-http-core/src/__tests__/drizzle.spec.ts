@@ -8,8 +8,8 @@ import {
   TestId,
   TestResult
 } from '@drizzle-http/test-utils'
-import { noop } from './noop'
-import { TestCallFactory } from './internal/http/test'
+import { noop } from '../noop'
+import { TestCallFactory } from '../internal/http/test'
 import {
   Abort,
   Accept,
@@ -40,9 +40,9 @@ import {
   QueryName,
   theTypes,
   Timeout
-} from '.'
-import { DzResponse } from '.'
-import { FullResponse } from '.'
+} from '..'
+import { DzResponse } from '..'
+import { FullResponse } from '..'
 
 const cancellation = new EventEmitter()
 const cancellationInMethod = new EventEmitter()

@@ -4,7 +4,7 @@ import {
   fixedEncodeURIComponent,
   isAbsolute,
   isEncoded
-} from './url.utils'
+} from '../url.utils'
 
 describe('URL Utils', () => {
   it('should detect when value is encoded and not encoded', () => {

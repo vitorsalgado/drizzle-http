@@ -8,6 +8,18 @@ export class DzHeaders {
     this.initialize(init)
   }
 
+  get size(): number {
+    return this[sHeaders].size
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
+  }
+
+  private static normalizeHeaderName(name: string): string {
+    return name.toLowerCase()
+  }
+
   append(name: string, value: string): void {
     if (!name || name.length === 0) {
       throw new TypeError('Header name must not be null or empty.')
@@ -59,17 +71,11 @@ export class DzHeaders {
     }
   }
 
-  get size(): number {
-    return this[sHeaders].size
-  }
-
   [Symbol.iterator](): IterableIterator<[string, string]> {
     return this[sHeaders][Symbol.iterator]()
   }
 
-  get [Symbol.toStringTag](): string {
-    return this.constructor.name
-  }
+  // region Utils
 
   toString(): string {
     const str = []
@@ -80,8 +86,6 @@ export class DzHeaders {
 
     return str.join('\n')
   }
-
-  // region Utils
 
   toObject(): Record<string, string> {
     return Array.from(this[sHeaders]).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {})
@@ -103,14 +107,10 @@ export class DzHeaders {
     }
   }
 
-  isEmpty(): boolean {
-    return this[sHeaders].size === 0
-  }
-
   // endregion
 
-  private static normalizeHeaderName(name: string): string {
-    return name.toLowerCase()
+  isEmpty(): boolean {
+    return this[sHeaders].size === 0
   }
 
   private initialize(init: [string, string] | Record<string, string> | string[][] | null): void {

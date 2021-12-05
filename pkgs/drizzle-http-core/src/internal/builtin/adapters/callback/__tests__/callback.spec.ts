@@ -1,11 +1,11 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { any, callbackTypes } from '../../../../response.type.detector'
-import { Drizzle } from '../../../../drizzle'
-import { AsJSON, GET, Param } from '../../../../decorators'
-import { TestCallFactory } from '../../../http/test'
-import { DrizzleBuilder } from '../../../../drizzle.builder'
-import { HttpError } from '../../../../http.error'
-import { Callback } from '.'
+import { any, callbackTypes } from '../../../../../response.type.detector'
+import { Drizzle } from '../../../../../drizzle'
+import { AsJSON, GET, Param } from '../../../../../decorators'
+import { TestCallFactory } from '../../../../http/test'
+import { DrizzleBuilder } from '../../../../../drizzle.builder'
+import { HttpError } from '../../../../../http.error'
+import { Callback } from '..'
 
 class API {
   @GET('/{id}/projects')

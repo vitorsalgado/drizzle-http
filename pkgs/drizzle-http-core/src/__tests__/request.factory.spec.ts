@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
-import { NoParametersRequestBuilder, RequestFactory } from './request.factory'
-import { ApiInstanceMeta } from './drizzle.meta'
+import { NoParametersRequestBuilder, RequestFactory } from '../request.factory'
+import { ApiInstanceMeta } from '../drizzle.meta'
 import {
   BodyParameter,
   FormParameter,
@@ -8,12 +8,12 @@ import {
   PathParameter,
   QueryNameParameter,
   QueryParameter
-} from './request.parameters'
-import { pathParameterRegex } from './internal'
-import { MediaTypes } from './http.media.types'
-import { DrizzleBuilder } from './drizzle.builder'
-import { TestCallFactory } from './internal/http/test'
-import { DzHeaders } from './http.headers'
+} from '../request.parameters'
+import { pathParameterRegex } from '../internal'
+import { MediaTypes } from '../http.media.types'
+import { DrizzleBuilder } from '../drizzle.builder'
+import { TestCallFactory } from '../internal/http/test'
+import { DzHeaders } from '../http.headers'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()

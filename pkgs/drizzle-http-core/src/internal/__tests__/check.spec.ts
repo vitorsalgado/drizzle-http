@@ -1,5 +1,5 @@
-import { Check } from './check'
-import { DrizzleError } from './errors'
+import { Check } from '../check'
+import { DrizzleError } from '../errors'
 
 describe('Check', () => {
   describe('emptyStr', function () {

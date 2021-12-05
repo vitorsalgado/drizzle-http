@@ -7,8 +7,8 @@ import { DrizzleMeta } from './drizzle.meta'
 import { CallFactory } from './call'
 import { Interceptor } from './interceptor'
 import { RawRequestConverter, RawResponseConverter } from './internal'
-import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
 import { NoParameterHandlerFoundForType } from './internal'
+import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
 import { DzHeaders } from './http.headers'
 
 /**
@@ -38,6 +38,10 @@ export class Drizzle {
     private readonly responseConverterFactories: Set<ResponseConverterFactory>
   ) {
     this.shutdownHooks = []
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name
   }
 
   /**
@@ -148,10 +152,6 @@ export class Drizzle {
     for (const hook of this.shutdownHooks) {
       await hook()
     }
-  }
-
-  get [Symbol.toStringTag](): string {
-    return this.constructor.name
   }
 
   /**

@@ -1,4 +1,4 @@
-import { DzHeaders } from './http.headers'
+import { DzHeaders } from '../http.headers'
 
 describe('Headers', function () {
   it('should init with object/2d array/null', () => {

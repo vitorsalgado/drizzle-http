@@ -7,7 +7,7 @@ import {
   NoRequestConverterError,
   PrematureServerResponseCloseError,
   RequestBodyTypeNotAllowed
-} from './errors'
+} from '../errors'
 
 describe('Errors', function () {
   it('should contain basic fields name and code', function () {

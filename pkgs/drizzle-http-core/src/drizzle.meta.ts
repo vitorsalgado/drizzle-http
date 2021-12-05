@@ -9,11 +9,11 @@ const KeyRequestFactory = 'drizzle:ri'
 const KeyRegisteredMethods = 'drizzle:m'
 
 export class ApiInstanceMeta {
-  private path?: string
   defaultHeaders: DzHeaders
   readTimeout?: number
   connectTimeout?: number
   signal: unknown | null
+  private path?: string
 
   constructor() {
     this.path = undefined
