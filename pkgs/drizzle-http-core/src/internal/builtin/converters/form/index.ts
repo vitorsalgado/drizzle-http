@@ -4,7 +4,7 @@ import { RequestFactory } from '../../../../request.factory'
 import { encodeFormFieldIfNecessary, RequestBodyTypeNotAllowed } from '../../..'
 import { RequestParameterization } from '../../../../request.parameterization'
 import { MediaTypes } from '../../../../http.media.types'
-import { BodyType } from '../../../../types'
+import { BodyType } from '../../../types'
 
 export class FormRequestConverter implements RequestBodyConverter<unknown> {
   static INSTANCE: FormRequestConverter = new FormRequestConverter()

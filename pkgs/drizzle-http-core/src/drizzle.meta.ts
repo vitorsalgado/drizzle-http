@@ -1,6 +1,6 @@
 import { RequestFactory } from './request.factory'
-import { Check } from './internal'
 import { DzHeaders } from './http.headers'
+import { notNull } from './internal'
 
 export class ApiInstanceMeta {
   defaultHeaders: DzHeaders
@@ -28,7 +28,7 @@ export class ApiInstanceMeta {
   }
 
   setPath(value: string): void {
-    Check.nullOrUndefined(value, 'Parameter "value" cannot be null.')
+    notNull(value, 'Parameter "value" cannot be null.')
 
     if (!value.startsWith('/')) {
       value = '/' + value

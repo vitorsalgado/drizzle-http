@@ -28,26 +28,6 @@ export function encodeURIComponentForForm(str: string): string {
     .replace(REGEX_ENCODED_SPACE, '+')
 }
 
-function isUnreserved(c: string): boolean {
-  return (
-    (c >= 'a' && c <= 'z') ||
-    (c >= 'A' && c <= 'Z') ||
-    (c >= '0' && c <= '9') ||
-    c === '-' ||
-    c === '.' ||
-    c === '_' ||
-    c === '~'
-  )
-}
-
-export function pathParameterRegex(key: string): RegExp {
-  return new RegExp('{' + key + '}', 'g')
-}
-
-export function isAbsolute(u: string): boolean {
-  return u.indexOf('http://') === 0 || u.indexOf('https://') === 0
-}
-
 export function encodeIfNecessary(value: string): string {
   if (isEncoded(value)) {
     return value
@@ -62,4 +42,16 @@ export function encodeFormFieldIfNecessary(value: string): string {
   }
 
   return encodeURIComponentForForm(value)
+}
+
+function isUnreserved(c: string): boolean {
+  return (
+    (c >= 'a' && c <= 'z') ||
+    (c >= 'A' && c <= 'Z') ||
+    (c >= '0' && c <= '9') ||
+    c === '-' ||
+    c === '.' ||
+    c === '_' ||
+    c === '~'
+  )
 }

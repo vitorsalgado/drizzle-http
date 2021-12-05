@@ -1,10 +1,7 @@
-import {
-  encodeFormFieldIfNecessary,
-  encodeIfNecessary,
-  fixedEncodeURIComponent,
-  isAbsolute,
-  isEncoded
-} from '../url.utils'
+import { isEncoded } from '..'
+import { fixedEncodeURIComponent } from '..'
+import { encodeFormFieldIfNecessary } from '..'
+import { encodeIfNecessary } from '..'
 
 describe('URL Utils', () => {
   it('should detect when value is encoded and not encoded', () => {
@@ -17,11 +14,6 @@ describe('URL Utils', () => {
 
     expect(encodedExpected).toEqual(fixedEncodeURIComponent(encoded))
     expect(unencoded).toEqual(fixedEncodeURIComponent(unencoded))
-  })
-
-  it('should validate if url is absolute or not', () => {
-    expect(isAbsolute('http://www.test.com.br')).toBeTruthy()
-    expect(isAbsolute('/test/ok')).toBeFalsy()
   })
 
   it('should return the same value when form field value is already encoded', function () {

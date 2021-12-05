@@ -1,5 +1,5 @@
 import { DzHeaders } from './http.headers'
-import { BodyType } from './types'
+import { BodyType } from './internal'
 
 interface DzResponseInit<R> {
   original: R

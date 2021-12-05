@@ -5,11 +5,11 @@ import { HttpMethod } from 'undici/types/dispatcher'
 import { Call, CallFactory, CallProvider } from '../../../call'
 import { RequestFactory } from '../../../request.factory'
 import { Drizzle } from '../../../drizzle'
-import { isAbsolute } from '../../url.utils'
 import { HttpError } from '../../../http.error'
 import { DzRequest } from '../../../DzRequest'
 import { DzResponse } from '../../../DzResponse'
 import { DzHeaders } from '../../../http.headers'
+import { isAbsolute } from '../../url'
 
 class TestCall extends Call<Promise<DzResponse>> {
   private readonly url: string

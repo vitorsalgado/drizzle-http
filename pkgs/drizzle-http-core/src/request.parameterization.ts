@@ -1,5 +1,5 @@
-import { BodyType } from './types'
 import { DzHeaders } from './http.headers'
+import { BodyType } from './internal'
 
 export class RequestParameterization {
   constructor(

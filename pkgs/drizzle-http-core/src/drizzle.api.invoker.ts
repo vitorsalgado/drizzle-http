@@ -2,7 +2,8 @@ import { Drizzle } from './drizzle'
 import { RequestFactory } from './request.factory'
 import { BridgeCall } from './call'
 import { HttpExecInterceptor } from './interceptor.http'
-import { Check } from './internal'
+import { notNull } from './internal'
+import { notBlank } from './internal'
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on
@@ -15,7 +16,7 @@ import { Check } from './internal'
 export function serviceInvoker(
   drizzle: Drizzle
 ): <T>(requestFactory: RequestFactory, method: string) => (...args: unknown[]) => T {
-  Check.nullOrUndefined(drizzle, 'Drizzle instance cannot be null.')
+  notNull(drizzle, 'Drizzle instance cannot be null.')
 
   const callFactory = drizzle.callFactory
   callFactory.setup(drizzle)
@@ -29,8 +30,8 @@ export function serviceInvoker(
    * @returns The function that will execute the HTTP request
    */
   return function <T>(requestFactory: RequestFactory, method: string): (...args: unknown[]) => T {
-    Check.nullOrUndefined(requestFactory, 'RequestFactory instance cannot be null.')
-    Check.emptyStr(method, 'Method cannot be null or empty.')
+    notNull(requestFactory, 'RequestFactory instance cannot be null.')
+    notBlank(method, 'Method cannot be null or empty.')
 
     const callProvider = callFactory.prepareCall(drizzle, method, requestFactory)
     const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)

@@ -2,10 +2,10 @@ import { RequestBodyConverter, RequestConverterFactory } from '../../../../reque
 import { RequestFactory } from '../../../../request.factory'
 import { ResponseConverter, ResponseConverterFactory } from '../../../../response.converter'
 import { Drizzle } from '../../../../drizzle'
-import { BodyType } from '../../../../types'
 import { RequestParameterization } from '../../../../request.parameterization'
 import { DrizzleMeta } from '../../../../drizzle.meta'
 import { DzResponse } from '../../../../DzResponse'
+import { BodyType } from '../../../types'
 
 const ReturnIdentifier = 'raw'
 

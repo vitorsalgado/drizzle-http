@@ -1,6 +1,5 @@
-import { BodyType } from './types'
 import { Drizzle } from './drizzle'
-import { Check, InvalidRequestMethodConfigurationError } from './internal'
+import { InvalidRequestMethodConfigurationError } from './internal'
 import { RequestBodyConverter } from './request.body.converter'
 import { ApiInstanceMeta } from './drizzle.meta'
 import { Parameter, ParameterHandler } from './request.parameter.handler'
@@ -23,6 +22,9 @@ import { DzHeaders } from './http.headers'
 import CommonHeaders from './http.common.headers'
 import { DzRequest } from './DzRequest'
 import { RequestBuilder } from './request.builder'
+import { notNull } from './internal'
+import { notBlank } from './internal'
+import { BodyType } from './internal'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
@@ -80,10 +82,6 @@ export class RequestFactory {
 
   private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
     return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
-  }
-
-  isPreProcessed(): boolean {
-    return this.preProcessed
   }
 
   /**
@@ -280,8 +278,8 @@ export class RequestFactory {
    * @throws {@link DrizzleError}
    */
   addConfig(key: string, value: unknown): void {
-    Check.emptyStr(key, 'Parameters "key" cannot be null or empty.')
-    Check.nullOrUndefined(value, 'Parameters "value" cannot be null.')
+    notBlank(key, 'Parameters "key" cannot be null or empty.')
+    notNull(value, 'Parameters "value" cannot be null.')
 
     this.bag.set(key, value)
   }
@@ -294,7 +292,7 @@ export class RequestFactory {
    * @throws {@link DrizzleError}
    */
   getConfig<R>(key: string): R {
-    Check.emptyStr(key, 'Parameter "key" cannot be null or empty.')
+    notBlank(key, 'Parameter "key" cannot be null or empty.')
 
     return this.bag.get(key) as R
   }

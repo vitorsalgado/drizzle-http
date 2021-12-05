@@ -2,9 +2,9 @@ import { encodeFormFieldIfNecessary, encodeIfNecessary } from './internal'
 import { Parameter, ParameterHandler, ParameterHandlerFactory } from './request.parameter.handler'
 import { RequestFactory } from './request.factory'
 import { Drizzle } from './drizzle'
-import { BodyType } from './types'
 import { RequestBodyConverter } from './request.body.converter'
 import { RequestParameterization } from './request.parameterization'
+import { BodyType } from './internal'
 
 // region Query
 
