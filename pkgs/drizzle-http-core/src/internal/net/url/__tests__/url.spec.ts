@@ -1,4 +1,4 @@
-import { isAbsolute } from '..'
+import { isAbsolute } from '../index'
 
 describe('URL Utils', () => {
   it('should validate if url is absolute or not', () => {

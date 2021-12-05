@@ -2,7 +2,7 @@ import MediaTypes from '../../../../../http.media.types'
 import { RequestFactory } from '../../../../../request.factory'
 import CommonHeaders from '../../../../../http.common.headers'
 import { DrizzleBuilder } from '../../../../../drizzle.builder'
-import { TestCallFactory } from '../../../../http/test'
+import { TestCallFactory } from '../../../../net/http/test'
 import {
   JsonRequestConverter,
   JsonRequestConverterFactory,

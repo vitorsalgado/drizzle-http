@@ -297,6 +297,15 @@ export class RequestFactory {
   }
 
   /**
+   * Check if config key exists
+   *
+   * @param key - configuration key
+   */
+  hasConfig(key: string): boolean {
+    return this.bag.has(key)
+  }
+
+  /**
    * Get all configurations
    * @returns configurations map
    */

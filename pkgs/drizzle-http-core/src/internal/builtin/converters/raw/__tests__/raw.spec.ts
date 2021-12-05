@@ -3,7 +3,7 @@ import { RequestFactory } from '../../../../../request.factory'
 import CommonHeaders from '../../../../../http.common.headers'
 import MediaTypes from '../../../../../http.media.types'
 import { DrizzleBuilder, initDrizzleHttp } from '../../../../../drizzle.builder'
-import { TestCallFactory } from '../../../../http/test'
+import { TestCallFactory } from '../../../../net/http/test'
 import { Body, ContentType, POST } from '../../../../../decorators'
 import { DzResponse } from '../../../../../DzResponse'
 import {

@@ -9,7 +9,7 @@ import {
   TestResult
 } from '@drizzle-http/test-utils'
 import { noop } from '../noop'
-import { TestCallFactory } from '../internal/http/test'
+import { TestCallFactory } from '../internal/net/http/test'
 import {
   Abort,
   Accept,

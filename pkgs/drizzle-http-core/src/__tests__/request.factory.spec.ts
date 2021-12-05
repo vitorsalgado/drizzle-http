@@ -10,7 +10,7 @@ import { PathParameter } from '../internal'
 import { FormParameter } from '../internal'
 import { MediaTypes } from '../http.media.types'
 import { DrizzleBuilder } from '../drizzle.builder'
-import { TestCallFactory } from '../internal/http/test'
+import { TestCallFactory } from '../internal/net/http/test'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -55,6 +55,7 @@ describe('Request Factory', () => {
     const cfg = requestFactory.getConfig(key)
 
     expect(cfg).toEqual(value)
+    expect(requestFactory.hasConfig(key))
     expect(requestFactory.allConfigs().size).toEqual(1)
     expect(requestFactory.allConfigs().get(key)).toEqual(value)
   })
