@@ -278,8 +278,8 @@ export class SignalParameter extends Parameter {
   }
 }
 
-export class SignalParameterHandler extends ParameterHandler<SignalParameter, any> {
-  apply(requestValues: RequestParameterization, value: any): void {
+export class SignalParameterHandler extends ParameterHandler<SignalParameter, unknown> {
+  apply(requestValues: RequestParameterization, value: unknown): void {
     if (value === null || typeof value === 'undefined') {
       throw new TypeError(`Signal parameter must not be null or undefined. (Index: ${this.parameter.index})`)
     }
@@ -288,7 +288,7 @@ export class SignalParameterHandler extends ParameterHandler<SignalParameter, an
   }
 }
 
-export class SignalParameterHandlerFactory extends ParameterHandlerFactory<SignalParameter, any> {
+export class SignalParameterHandlerFactory extends ParameterHandlerFactory<SignalParameter, unknown> {
   static INSTANCE: SignalParameterHandlerFactory = new SignalParameterHandlerFactory()
 
   handledType = (): string => SignalParameterType
@@ -297,7 +297,7 @@ export class SignalParameterHandlerFactory extends ParameterHandlerFactory<Signa
     drizzle: Drizzle,
     requestFactory: RequestFactory,
     p: SignalParameter
-  ): ParameterHandler<SignalParameter, any> {
+  ): ParameterHandler<SignalParameter, unknown> {
     return new SignalParameterHandler(p)
   }
 }

@@ -4,15 +4,16 @@ import { RequestFactory } from '../../../../request.factory'
 import { encodeFormFieldIfNecessary, RequestBodyTypeNotAllowed } from '../../..'
 import { RequestParameterization } from '../../../../request.parameterization'
 import { MediaTypes } from '../../../../http.media.types'
+import { BodyType } from '../../../../types'
 
-export class FormRequestConverter implements RequestBodyConverter<any> {
+export class FormRequestConverter implements RequestBodyConverter<unknown> {
   static INSTANCE: FormRequestConverter = new FormRequestConverter()
 
-  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: any): void {
-    if (value.constructor === Object) {
+  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: unknown): void {
+    if ((value as object).constructor === Object) {
       const res: string[] = []
 
-      for (const [prop, v] of Object.entries(value)) {
+      for (const [prop, v] of Object.entries(value as object)) {
         if (typeof v === 'string') {
           res.push(prop + '=' + encodeFormFieldIfNecessary(v))
         } else {
@@ -42,7 +43,7 @@ export class FormRequestConverter implements RequestBodyConverter<any> {
       return
     }
 
-    requestValues.body = value
+    requestValues.body = value as BodyType
   }
 }
 

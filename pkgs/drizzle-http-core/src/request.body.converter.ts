@@ -3,7 +3,7 @@ import { RequestFactory } from './request.factory'
 import { RequestParameterization } from './request.parameterization'
 
 /**
- * Converts a value to a HTTP representation format
+ * Converts a value to an HTTP representation format
  */
 export interface RequestBodyConverter<T> {
   convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: T): void

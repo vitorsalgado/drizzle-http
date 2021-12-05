@@ -1,10 +1,10 @@
 import { extractArgumentTypes, extractReturnType, InvalidRequestMethodConfigurationError } from '../../internal'
-import { HttpMethod } from './HttpMethod'
 import { RequestFactory } from '../../request.factory'
 import DrizzleMeta from '../../drizzle.meta'
+import { HttpMethod } from './HttpMethod'
 
 /**
- * Configure a method to perform a HTTP request
+ * Configure a method to perform an HTTP request
  *
  * @param httpMethod - HTTP verb of the request
  * @param path - request path that will be concatenated with the base url

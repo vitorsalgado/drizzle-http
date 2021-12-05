@@ -14,7 +14,7 @@ import { Check } from './internal'
  */
 export function serviceInvoker(
   drizzle: Drizzle
-): <T>(requestFactory: RequestFactory, method: string) => (...args: any[]) => T {
+): <T>(requestFactory: RequestFactory, method: string) => (...args: unknown[]) => T {
   Check.nullOrUndefined(drizzle, 'Drizzle instance cannot be null.')
 
   const callFactory = drizzle.callFactory
@@ -28,7 +28,7 @@ export function serviceInvoker(
    * @param method - caller method name
    * @returns The function that will execute the HTTP request
    */
-  return function <T>(requestFactory: RequestFactory, method: string): (...args: any[]) => T {
+  return function <T>(requestFactory: RequestFactory, method: string): (...args: unknown[]) => T {
     Check.nullOrUndefined(requestFactory, 'RequestFactory instance cannot be null.')
     Check.emptyStr(method, 'Method cannot be null or empty.')
 
@@ -63,7 +63,7 @@ export function serviceInvoker(
      * @param args - function arguments usually decorated
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
-    return function (...args: any[]): T {
+    return function (...args: unknown[]): T {
       const call = new BridgeCall(responseConverter, interceptors, requestBuilder.toRequest(args), args)
 
       if (callAdapter === null) {

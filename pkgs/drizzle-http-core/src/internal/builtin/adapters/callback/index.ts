@@ -9,7 +9,7 @@ const KEY_IS_CALLBACK = 'callback:is_callback'
 type Fn = (error: Error | null, response: unknown) => void
 
 export function Callback() {
-  return function (target: any, method: string) {
+  return function (target: object, method: string) {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
     requestFactory.addConfig(KEY_IS_CALLBACK, true)
   }

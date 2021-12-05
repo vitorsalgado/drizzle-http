@@ -7,13 +7,13 @@ import {
   JsonResponseConverterFactory,
   RawRequestConverterFactory,
   RawResponseConverterFactory
-} from './internal/builtin'
+} from './internal'
+import { Check, DrizzleError } from './internal'
 import { CallAdapterFactory } from './call.adapter'
 import { ResponseConverterFactory } from './response.converter'
 import { CallFactory } from './call'
 import { Interceptor } from './interceptor'
-import { Check, DrizzleError } from './internal'
-import { ParameterHandlerFactory } from './request.parameter.handler'
+import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
 import {
   BodyParameterHandlerFactory,
   FormParameterHandlerFactory,
@@ -42,7 +42,7 @@ export class DrizzleBuilder {
   private _callFactory!: CallFactory
   private readonly _interceptors: Interceptor<unknown, unknown>[]
   private readonly _callAdapterFactories: CallAdapterFactory[]
-  private readonly _parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[]
+  private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[]
   private readonly _requestConverterFactories: RequestConverterFactory[]
   private readonly _responseConverterFactories: ResponseConverterFactory[]
   private _enableDrizzleUserAgent: boolean
@@ -114,7 +114,7 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Adds {@link CallAdapterFactory} for adapting method responses other then Promise<V>.
+   * Adds {@link CallAdapterFactory} for adapting method responses other than Promise<V>.
    * You can add multiple factories at once.
    * The order is relevant for the resolution of the adapter to the request.
    *
@@ -140,7 +140,7 @@ export class DrizzleBuilder {
    * @param factory - {@link ParameterHandlerFactory} instance
    * @returns Same {@link DrizzleBuilder} instance
    */
-  addParameterHandlerFactory(factory: ParameterHandlerFactory<any, unknown>): this {
+  addParameterHandlerFactory(factory: ParameterHandlerFactory<Parameter, unknown>): this {
     Check.nullOrUndefined(factory, 'Parameter "factory" must not be null.')
 
     this._parameterHandlerFactories.push(factory)

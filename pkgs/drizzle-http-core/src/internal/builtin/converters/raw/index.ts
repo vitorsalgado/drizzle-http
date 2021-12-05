@@ -14,7 +14,7 @@ const ReturnIdentifier = 'raw'
  * The {@link Response} is similar to Fetch response implementation
  */
 export function FullResponse() {
-  return function (target: any, method: string) {
+  return function (target: object, method: string) {
     const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.returnIdentifier = ReturnIdentifier
   }

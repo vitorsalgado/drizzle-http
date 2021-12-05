@@ -6,7 +6,7 @@ import { RequestFactory } from './request.factory'
 import { DrizzleMeta } from './drizzle.meta'
 import { CallFactory } from './call'
 import { Interceptor } from './interceptor'
-import { RawRequestConverter, RawResponseConverter } from './internal/builtin'
+import { RawRequestConverter, RawResponseConverter } from './internal'
 import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
 import { NoParameterHandlerFoundForType } from './internal'
 import { DzHeaders } from './http.headers'
@@ -33,7 +33,7 @@ export class Drizzle {
     public readonly callFactory: CallFactory,
     private readonly _interceptors: Interceptor<unknown, unknown>[],
     private readonly callAdapterFactories: Set<CallAdapterFactory>,
-    private readonly _parameterHandlerFactories: ParameterHandlerFactory<any, unknown>[],
+    private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
     private readonly requestConverterFactories: Set<RequestConverterFactory>,
     private readonly responseConverterFactories: Set<ResponseConverterFactory>
   ) {
@@ -51,7 +51,7 @@ export class Drizzle {
   /**
    * Get all registered {@link ParameterHandlerFactory} instances
    */
-  parameterHandlerFactories(): ParameterHandlerFactory<any, unknown>[] {
+  parameterHandlerFactories(): ParameterHandlerFactory<Parameter, unknown>[] {
     return [...this._parameterHandlerFactories]
   }
 
@@ -86,7 +86,7 @@ export class Drizzle {
       throw new NoParameterHandlerFoundForType(parameter.type, requestFactory.method, parameter.index)
     }
 
-    return factory
+    return factory as ParameterHandlerFactory<P, R>
   }
 
   /**
@@ -161,6 +161,7 @@ export class Drizzle {
    * @param TargetApi - the target API class with decorated methods
    * @returns A proxy instance of the target API class
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   create<T extends { new (...args: any[]): any }>(TargetApi: T) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
@@ -170,6 +171,7 @@ export class Drizzle {
     // decorators and Drizzle instance
     class ExtendedTargetApi extends TargetApi {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       constructor(..._args: any[]) {
         super()
 

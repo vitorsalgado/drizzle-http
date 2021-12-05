@@ -25,7 +25,7 @@ export class NoopCallFactory implements CallFactory {
 class TestCall extends Call<Promise<DzResponse>> {
   private readonly url: string
 
-  constructor(readonly baseUrl: URL, public readonly request: DzRequest, public readonly argv: any[]) {
+  constructor(readonly baseUrl: URL, public readonly request: DzRequest, public readonly argv: unknown[]) {
     super(request, argv)
 
     if (!isAbsolute(this.request.url)) {

@@ -9,7 +9,7 @@ export class Check {
    *
    * @throws {@link DrizzleError}
    */
-  static nullOrUndefined(value: any, message: string): void {
+  static nullOrUndefined(value: unknown, message: string): void {
     if (value === null || typeof value === 'undefined') {
       throw new DrizzleError(message)
     }

@@ -13,7 +13,7 @@ export class ApiInstanceMeta {
   defaultHeaders: DzHeaders
   readTimeout?: number
   connectTimeout?: number
-  signal: any | null
+  signal: unknown | null
 
   constructor() {
     this.path = undefined
@@ -54,11 +54,11 @@ export class ApiInstanceMeta {
 
 export const DrizzleMeta = {
   /**
-   * Get or create a {@link ApiInstanceMeta} instance associated with a API class and method
+   * Get or create a {@link ApiInstanceMeta} instance associated with an API class and method
    *
    * @param target - api target where {@link ApiInstanceMeta} is stored
    */
-  provideInstanceMetadata: (target: any): ApiInstanceMeta => {
+  provideInstanceMetadata: (target: object): ApiInstanceMeta => {
     let instanceMeta = Reflect.getMetadata(KeyApiInstanceMeta, target)
 
     if (instanceMeta !== null && typeof instanceMeta !== 'undefined') {
@@ -73,9 +73,9 @@ export const DrizzleMeta = {
   },
 
   /**
-   * Get or create a {@link RequestFactory} instance associated with a API class and method
+   * Get or create a {@link RequestFactory} instance associated with an API class and method
    */
-  provideRequestFactory: (target: any, method: string): RequestFactory => {
+  provideRequestFactory: (target: object, method: string): RequestFactory => {
     let requestFactory = Reflect.getMetadata(KeyRequestFactory, target, method)
 
     if (requestFactory !== null && typeof requestFactory !== 'undefined') {
@@ -89,14 +89,14 @@ export const DrizzleMeta = {
     return requestFactory
   },
 
-  registeredMethods: (target: any): Set<string> => {
+  registeredMethods: (target: object): Set<string> => {
     return Reflect.getMetadata(KeyRegisteredMethods, target) || new Set<string>()
   },
 
   /**
    * Registers a method that performs HTTP calls
    */
-  registerMethod: (target: any, method: string): void => {
+  registerMethod: (target: object, method: string): void => {
     const register = DrizzleMeta.registeredMethods(target)
     register.add(method)
     Reflect.defineMetadata(KeyRegisteredMethods, register, target)
@@ -106,15 +106,15 @@ export const DrizzleMeta = {
 export default DrizzleMeta
 
 /**
- * Get or create a method register for a API class
+ * Get or create a method register for an API class
  */
-function storeApiInstanceMeta(am: ApiInstanceMeta, target: any): void {
+function storeApiInstanceMeta(am: ApiInstanceMeta, target: object): void {
   Reflect.defineMetadata(KeyApiInstanceMeta, am, target)
 }
 
 /**
- * Stores the requestFactory associated with a API class and method
+ * Stores the requestFactory associated with an API class and method
  */
-function storeRequestFactory(rf: RequestFactory, target: any, method: string | symbol): void {
+function storeRequestFactory(rf: RequestFactory, target: object, method: string | symbol): void {
   Reflect.defineMetadata(KeyRequestFactory, rf, target, method)
 }

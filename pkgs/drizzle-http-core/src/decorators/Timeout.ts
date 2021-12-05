@@ -1,7 +1,7 @@
 import { DrizzleMeta } from '../drizzle.meta'
 
 /**
- * Set the timeouts for a HTTP request.
+ * Set the timeouts for an HTTP request.
  * It assumes that the HTTP client configured supports timeouts for a specific request.
  * Target: method
  *

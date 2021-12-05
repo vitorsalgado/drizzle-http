@@ -1,7 +1,7 @@
 export interface Chain<TReq, TRes> {
   request(): TReq
 
-  argv(): any[]
+  argv(): unknown[]
 
   proceed(request: TReq): Promise<TRes>
 }

@@ -107,7 +107,7 @@ class API {
 
   @PUT('/test-put')
   @ContentType(MediaTypes.APPLICATION_JSON)
-  testPUT(@Body() data: any): Promise<TestResult<Ok>> {
+  testPUT(@Body() data: unknown): Promise<TestResult<Ok>> {
     return theTypes(Promise, TestResult)
   }
 

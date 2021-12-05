@@ -17,7 +17,7 @@ class API {
 
   @GET('/nowhere')
   @Callback()
-  err(callback: (err: HttpError, data: any) => void): void {
+  err(callback: (err: HttpError, data: unknown) => void): void {
     return any(callback)
   }
 }

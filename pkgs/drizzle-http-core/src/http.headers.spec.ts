@@ -138,11 +138,6 @@ describe('Headers', function () {
 
   it('should merge two headers', () => {
     const h1 = new DzHeaders([])
-    const obj = {
-      name: 'test',
-      age: '32'
-    }
-
     h1.set('accept', 'everything')
     h1.set('cache', 'always')
     h1.set('server-status', 'exploded')

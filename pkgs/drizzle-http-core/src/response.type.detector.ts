@@ -14,7 +14,7 @@
  * You can also provide the list of arguments to avoid link warnings.
  *
  * @param type - response type
- * @param genericType - response generic type. if generic type is a interface, provide null or undefined.
+ * @param genericType - response generic type. if generic type is an interface, provide null or undefined.
  * @param args - method arguments. used just to avoid lint errors
  *
  * @example
@@ -37,7 +37,7 @@ export function theTypes(
  * You can also provide the list of arguments to avoid link warnings.
  * This is specific to functions with callback return type.
  *
- * @param genericType - response generic type. if generic type is a interface, provide null or undefined.
+ * @param genericType - response generic type. if generic type is an interface, provide null or undefined.
  * @param args - method arguments. used just to avoid lint errors
  *
  * @example
@@ -57,7 +57,7 @@ export function callbackTypes(
 /**
  * Utility function used just to avoid lint problems on API methods that returns something,
  * like a Promise.
- * For methods with a generic return type that is not a Interface, use {@link theTypes}
+ * For methods with a generic return type that is not an Interface, use {@link theTypes}
  *
  * @param _args - method arguments. used just to avoid lint errors
  */
