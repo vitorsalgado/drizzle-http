@@ -94,13 +94,15 @@ describe('Raw Converter', function () {
   })
 
   it('should set full response when using @FullResponse() decorator', () => {
-    expect.assertions(2)
+    expect.assertions(3)
 
     const api: API = initDrizzleHttp().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
 
     return api.test('text').then(response => {
       expect(response.ok).toBeTruthy()
       expect(response.status).toEqual(200)
+
+      return response.text().then(txt => expect(txt).toContain('ok'))
     })
   })
 })

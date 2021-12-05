@@ -235,10 +235,10 @@ describe('Drizzle Http', () => {
 
       return api
         .test()
-        .then(DzResponse => {
-          expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-          expect(DzResponse.headers).toHaveProperty('accept', MediaTypes.APPLICATION_JSON)
-          expect(DzResponse.result.ok).toBeTruthy()
+        .then(res => {
+          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(res.headers).toHaveProperty('accept', MediaTypes.APPLICATION_JSON)
+          expect(res.result.ok).toBeTruthy()
         })
         .finally(() => d.shutdown())
     })
@@ -260,9 +260,9 @@ describe('Drizzle Http', () => {
 
       return api
         .test()
-        .then(DzResponse => {
-          expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-          expect(DzResponse.result.ok).toBeTruthy()
+        .then(res => {
+          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(res.result.ok).toBeTruthy()
         })
         .finally(() => d.shutdown())
     })
@@ -285,8 +285,8 @@ describe('Drizzle Http', () => {
 
       return api
         .test('test')
-        .then(DzResponse => {
-          return DzResponse.json<TestResult<Ok>>()
+        .then(res => {
+          return res.json<TestResult<Ok>>()
         })
         .then(result => {
           expect(result.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
@@ -300,13 +300,13 @@ describe('Drizzle Http', () => {
   })
 
   describe('GET', function () {
-    it('should GET / and parse JSON DzResponse', () => {
+    it('should GET / and parse JSON response', () => {
       expect.assertions(3)
 
-      return api.testGET().then(DzResponse => {
-        expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-        expect(DzResponse.headers).toHaveProperty('x-env', 'Test')
-        expect(DzResponse.result.ok).toBeTruthy()
+      return api.testGET().then(res => {
+        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(res.headers).toHaveProperty('x-env', 'Test')
+        expect(res.result.ok).toBeTruthy()
       })
     })
 
@@ -315,23 +315,23 @@ describe('Drizzle Http', () => {
 
       return api
         .txt()
-        .then(DzResponse => {
-          expect(DzResponse.status).toEqual(200)
-          expect(DzResponse.ok).toBeTruthy()
+        .then(res => {
+          expect(res.status).toEqual(200)
+          expect(res.ok).toBeTruthy()
 
-          return DzResponse.text()
+          return res.text()
         })
         .then(txt => expect(txt).toEqual('ok'))
     })
 
-    it('should return raw http DzResponse when return type is DzResponse', () => {
+    it('should return raw http res when return type is response', () => {
       const id = 'test'
       const orderBy = 'desc'
-      return api.getRaw(id, orderBy).then(DzResponse => {
-        expect(DzResponse.ok).toBeTruthy()
-        expect(DzResponse.status).toEqual(200)
+      return api.getRaw(id, orderBy).then(res => {
+        expect(res.ok).toBeTruthy()
+        expect(res.status).toEqual(200)
 
-        return DzResponse.json<TestResult<TestId>>().then(parsed => {
+        return res.json<TestResult<TestId>>().then(parsed => {
           expect(parsed.result.id).toEqual(id)
           expect(parsed.params.id).toEqual(id)
           expect(parsed.query).toHaveProperty('sort', orderBy)
@@ -349,17 +349,17 @@ describe('Drizzle Http', () => {
       const code = 666
       const ee = new EventEmitter()
 
-      return api.projects(id, name, filter, sort, prop, cache, code, ee).then(DzResponse => {
-        expect(DzResponse.result.id).toEqual(id)
-        expect(DzResponse.query).toHaveProperty('filter', filter)
-        expect(DzResponse.query).toHaveProperty('sort', sort)
-        expect(DzResponse.query).toHaveProperty(prop)
-        expect(DzResponse.params).toHaveProperty('id', id)
-        expect(DzResponse.params).toHaveProperty('name', name)
-        expect(DzResponse.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
-        expect(DzResponse.headers).toHaveProperty('cache', String(cache))
-        expect(DzResponse.headers).toHaveProperty('code', String(code))
-        expect(DzResponse.url.substring(DzResponse.url.length - 1)).not.toEqual('&')
+      return api.projects(id, name, filter, sort, prop, cache, code, ee).then(res => {
+        expect(res.result.id).toEqual(id)
+        expect(res.query).toHaveProperty('filter', filter)
+        expect(res.query).toHaveProperty('sort', sort)
+        expect(res.query).toHaveProperty(prop)
+        expect(res.params).toHaveProperty('id', id)
+        expect(res.params).toHaveProperty('name', name)
+        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(res.headers).toHaveProperty('cache', String(cache))
+        expect(res.headers).toHaveProperty('code', String(code))
+        expect(res.url.substring(res.url.length - 1)).not.toEqual('&')
       })
     })
   })
@@ -377,9 +377,9 @@ describe('Drizzle Http', () => {
         }
       }
 
-      return api.testPOST(id, project, body).then(DzResponse => {
-        expect(DzResponse.result.ok).toBeTruthy()
-        expect(DzResponse.body).toEqual(body)
+      return api.testPOST(id, project, body).then(res => {
+        expect(res.result.ok).toBeTruthy()
+        expect(res.body).toEqual(body)
       })
     })
   })
@@ -388,8 +388,8 @@ describe('Drizzle Http', () => {
     it('should PUT', function () {
       expect.assertions(1)
 
-      return api.testPUT({ value: 'some-value' }).then(DzResponse => {
-        expect(DzResponse).toEqual({
+      return api.testPUT({ value: 'some-value' }).then(res => {
+        expect(res).toEqual({
           test: 'ok',
           type: 'put',
           data: { value: 'some-value' }
@@ -402,9 +402,9 @@ describe('Drizzle Http', () => {
     it('should DELETE', function () {
       expect.assertions(2)
 
-      return api.testDELETE('to-delete').then(DzResponse => {
-        expect(DzResponse.status).toEqual(204)
-        expect(DzResponse.ok).toBeTruthy()
+      return api.testDELETE('to-delete').then(res => {
+        expect(res.status).toEqual(204)
+        expect(res.ok).toBeTruthy()
       })
     })
   })
@@ -413,9 +413,9 @@ describe('Drizzle Http', () => {
     it('should PATCH', function () {
       expect.assertions(2)
 
-      return api.testDELETE('patch-me').then(DzResponse => {
-        expect(DzResponse.status).toEqual(204)
-        expect(DzResponse.ok).toBeTruthy()
+      return api.testDELETE('patch-me').then(res => {
+        expect(res.status).toEqual(204)
+        expect(res.ok).toBeTruthy()
       })
     })
   })
@@ -424,10 +424,10 @@ describe('Drizzle Http', () => {
     it('should OPTIONS', function () {
       expect.assertions(3)
 
-      return api.testOPTIONS().then(DzResponse => {
-        expect(DzResponse.status).toEqual(204)
-        expect(DzResponse.ok).toBeTruthy()
-        expect(DzResponse.headers.get('options')).toEqual('all')
+      return api.testOPTIONS().then(res => {
+        expect(res.status).toEqual(204)
+        expect(res.ok).toBeTruthy()
+        expect(res.headers.get('options')).toEqual('all')
       })
     })
   })
@@ -436,10 +436,10 @@ describe('Drizzle Http', () => {
     it('should HEAD', function () {
       expect.assertions(3)
 
-      return api.testHEAD().then(DzResponse => {
-        expect(DzResponse.status).toEqual(204)
-        expect(DzResponse.ok).toBeTruthy()
-        expect(DzResponse.headers.get('head')).toEqual('none')
+      return api.testHEAD().then(res => {
+        expect(res.status).toEqual(204)
+        expect(res.ok).toBeTruthy()
+        expect(res.headers.get('head')).toEqual('none')
       })
     })
   })

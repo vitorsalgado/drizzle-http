@@ -11,17 +11,6 @@ import { DzRequest } from '../../../DzRequest'
 import { DzResponse } from '../../../DzResponse'
 import { DzHeaders } from '../../../http.headers'
 
-export class NoopCallFactory implements CallFactory {
-  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return undefined
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup(drizzle: Drizzle): void {}
-}
-
 class TestCall extends Call<Promise<DzResponse>> {
   private readonly url: string
 
@@ -36,20 +25,26 @@ class TestCall extends Call<Promise<DzResponse>> {
   }
 
   async execute(): Promise<DzResponse> {
-    return request(this.url, {
+    const res = await request(this.url, {
       ...toRequest(this.url, this.request),
-      path: undefined
-    } as any).then(res => {
-      if (TestDzResponse.isOK(res.statusCode)) {
-        return new TestDzResponse(this.url, res)
-      }
+      path: undefined as unknown as string
+    } as RequestOptions)
 
-      throw new HttpError(this.request, new TestDzResponse(this.url, res))
-    })
+    if (TestDzResponse.isOK(res.statusCode)) {
+      return new TestDzResponse(this.url, res)
+    }
+
+    if (res.body) {
+      for await (const chunk of res.body) {
+        // forcing body consumption
+      }
+    }
+
+    throw new HttpError(this.request, new TestDzResponse(this.url, res))
   }
 }
 
-export class TestCallFactory implements CallFactory {
+export class TestCallFactory extends CallFactory {
   static INSTANCE: TestCallFactory = new TestCallFactory()
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
@@ -57,9 +52,6 @@ export class TestCallFactory implements CallFactory {
       return new TestCall(new URL(drizzle.baseUrl), request, args)
     }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  setup(_drizzle: Drizzle): void {}
 }
 
 export function toRequest(url: string, request: DzRequest): RequestOptions {

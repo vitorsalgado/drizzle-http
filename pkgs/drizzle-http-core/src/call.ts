@@ -32,7 +32,9 @@ export abstract class CallFactory {
    * Additional setupTestServer like register a shutdown hook
    * @param drizzle - Drizzle instance
    */
-  abstract setup(drizzle: Drizzle): void
+  setup(drizzle: Drizzle): void {
+    // Overwrite to perform specific client setup
+  }
 
   /**
    * Prepares the Call<V> that will make teh HTTP request.
