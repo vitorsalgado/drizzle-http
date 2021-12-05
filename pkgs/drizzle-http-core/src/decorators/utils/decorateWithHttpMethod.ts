@@ -1,4 +1,4 @@
-import { extractArgumentTypes, extractReturnType, InvalidRequestMethodConfigurationError } from '../../internal'
+import { InvalidRequestMethodConfigurationError } from '../../internal'
 import { RequestFactory } from '../../request.factory'
 import DrizzleMeta from '../../drizzle.meta'
 import { HttpMethod } from './HttpMethod'
@@ -18,29 +18,13 @@ export function decorateWithHttpMethod(
       throw new InvalidRequestMethodConfigurationError(method, 'Path must start with a /')
     }
 
-    DrizzleMeta.registerMethod(target.constructor, method)
+    DrizzleMeta.registerMethod(target.constructor.name, method)
 
-    const requestFactory: RequestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
-    const argTypes = extractArgumentTypes(target.constructor.prototype, method)
-    const returnType = extractReturnType(target.constructor.prototype, method)
+    const requestFactory: RequestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
 
     requestFactory.method = method
     requestFactory.path = path
     requestFactory.httpMethod = httpMethod
     requestFactory.argLen = descriptor.value.length
-    requestFactory.returnType = returnType
-    requestFactory.argTypes = argTypes
-
-    const types = descriptor.value() || []
-
-    if (types && types.length > 0) {
-      if (!requestFactory.returnType) {
-        requestFactory.returnType = types[0]
-      }
-
-      if (!requestFactory.returnGenericType) {
-        requestFactory.returnGenericType = types[1]
-      }
-    }
   }
 }

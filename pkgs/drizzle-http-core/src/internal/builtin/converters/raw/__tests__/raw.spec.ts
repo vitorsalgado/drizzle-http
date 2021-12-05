@@ -52,7 +52,6 @@ describe('Raw Converter', function () {
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
-    requestFactory.returnType = Promise
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -69,7 +68,6 @@ describe('Raw Converter', function () {
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
-    requestFactory.returnType = Promise
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -85,7 +83,6 @@ describe('Raw Converter', function () {
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
-    requestFactory.returnType = Promise
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)

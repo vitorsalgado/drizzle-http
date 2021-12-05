@@ -1,4 +1,4 @@
-import { BodyType, ReturnType } from './types'
+import { BodyType } from './types'
 import { Drizzle } from './drizzle'
 import { Check, InvalidRequestMethodConfigurationError } from './internal'
 import { RequestBodyConverter } from './request.body.converter'
@@ -36,13 +36,10 @@ export class RequestFactory {
   httpMethod: string
   path: string
   argLen: number
-  argTypes: unknown[]
   bodyIndex: number
   defaultHeaders: DzHeaders
   readTimeout?: number
   connectTimeout?: number
-  returnType: ReturnType | null | undefined
-  returnGenericType: ReturnType | null | undefined
   returnIdentifier: string | null
   parameterHandlers!: ParameterHandler<Parameter, unknown>[]
   parameters: Parameter[]
@@ -58,13 +55,10 @@ export class RequestFactory {
     this.httpMethod = ''
     this.path = ''
     this.argLen = 0
-    this.argTypes = []
     this.bodyIndex = -1
     this.defaultHeaders = new DzHeaders()
     this.readTimeout = undefined
     this.connectTimeout = undefined
-    this.returnType = undefined
-    this.returnGenericType = undefined
     this.returnIdentifier = ''
     this.bag = new Map<string, unknown>()
     this.preProcessed = false
@@ -86,6 +80,10 @@ export class RequestFactory {
 
   private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
     return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
+  }
+
+  isPreProcessed(): boolean {
+    return this.preProcessed
   }
 
   /**
@@ -344,26 +342,6 @@ export class RequestFactory {
    */
   hasHeaderWithValue(key: string, value: string | string[]): boolean {
     return this.defaultHeaders.get(key) === value
-  }
-
-  /**
-   * Validate return type
-   * @param type - return class type
-   */
-  isReturnTypeOf(type: ReturnType): boolean {
-    return this.returnType !== null && typeof this.returnType !== 'undefined' && this.returnType === type
-  }
-
-  /**
-   * Validate the generic return type
-   * @param type - return class type
-   */
-  isGenericReturnTypeOf(type: ReturnType): boolean {
-    return (
-      this.returnGenericType !== null &&
-      typeof this.returnGenericType !== 'undefined' &&
-      this.returnGenericType === type
-    )
   }
 
   /**

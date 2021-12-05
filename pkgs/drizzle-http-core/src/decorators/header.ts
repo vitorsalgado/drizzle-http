@@ -13,7 +13,7 @@ import { HeaderParameter } from '../request.parameters'
  */
 export function Header(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
     requestFactory.addParameter(new HeaderParameter(key, index))
   }
 }

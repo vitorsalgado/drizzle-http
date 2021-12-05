@@ -38,9 +38,6 @@
     "http",
     "api"
   ],
-  "dependencies": {
-    "reflect-metadata": "^0.1.13"
-  },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.2.0",
     "@types/node": "^16.11.10",

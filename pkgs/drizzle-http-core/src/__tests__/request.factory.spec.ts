@@ -13,7 +13,6 @@ import { pathParameterRegex } from '../internal'
 import { MediaTypes } from '../http.media.types'
 import { DrizzleBuilder } from '../drizzle.builder'
 import { TestCallFactory } from '../internal/http/test'
-import { DzHeaders } from '../http.headers'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -28,7 +27,6 @@ describe('Request Factory', () => {
     expect(requestFactory.httpMethod).toStrictEqual('')
     expect(requestFactory.path).toStrictEqual('')
     expect(requestFactory.argLen).toStrictEqual(0)
-    expect(requestFactory.argTypes).toEqual([])
     expect(requestFactory.getPathParameters()).toStrictEqual([])
     expect(requestFactory.getQueryParameters()).toStrictEqual([])
     expect(requestFactory.getQueryNameParameters()).toStrictEqual([])
@@ -39,8 +37,6 @@ describe('Request Factory', () => {
     expect(requestFactory.defaultHeaders.size).toStrictEqual(0)
     expect(requestFactory.readTimeout).toBeUndefined()
     expect(requestFactory.connectTimeout).toBeUndefined()
-    expect(requestFactory.returnType).toBeUndefined()
-    expect(requestFactory.returnGenericType).toBeUndefined()
     expect(requestFactory.parameterHandlers).toHaveLength(0)
     expect(requestFactory.signal).toEqual(null)
     expect(requestFactory.allConfigs()).toStrictEqual(new Map<string, unknown>())
@@ -460,23 +456,6 @@ describe('Request Factory', () => {
 
       expect(requestFactory.hasHeader('test')).toBeTruthy()
       expect(requestFactory.hasHeaderWithValue('test', 'value')).toBeTruthy()
-    })
-
-    it('should return true when return type is equal to the provided parameter', function () {
-      const requestFactory = new RequestFactory()
-      requestFactory.method = 'example'
-      requestFactory.httpMethod = 'GET'
-      requestFactory.path = '/path'
-      requestFactory.returnType = DzHeaders
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      expect(requestFactory.isReturnTypeOf(undefined)).toBeFalsy()
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      expect(requestFactory.isReturnTypeOf(null)).toBeFalsy()
-      expect(requestFactory.isReturnTypeOf(String)).toBeFalsy()
-      expect(requestFactory.isReturnTypeOf(DzHeaders)).toBeTruthy()
     })
   })
 })

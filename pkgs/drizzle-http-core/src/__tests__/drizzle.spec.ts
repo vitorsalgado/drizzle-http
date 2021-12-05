@@ -51,7 +51,7 @@ const cancellationInMethod = new EventEmitter()
 @Accept(MediaTypes.TEXT_PLAIN)
 @Abort(cancellation)
 @Path('')
-class API {
+class TestAPI {
   // region GET
 
   @GET('/')
@@ -152,7 +152,7 @@ class API {
 describe('Drizzle Http', () => {
   let drizzle: Drizzle
   let address = ''
-  let api: API
+  let api: TestAPI
 
   beforeAll(() => {
     setupTestServer(fastify => {
@@ -198,7 +198,7 @@ describe('Drizzle Http', () => {
 
       drizzle = DrizzleBuilder.newBuilder().baseUrl(addr).callFactory(TestCallFactory.INSTANCE).build()
 
-      api = drizzle.create(API)
+      api = drizzle.create(TestAPI)
     })
   })
 

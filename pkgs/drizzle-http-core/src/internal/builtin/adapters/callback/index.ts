@@ -10,7 +10,7 @@ type Fn = (error: Error | null, response: unknown) => void
 
 export function Callback() {
   return function (target: object, method: string) {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
     requestFactory.addConfig(KEY_IS_CALLBACK, true)
   }
 }

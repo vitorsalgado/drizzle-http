@@ -9,14 +9,14 @@ import CommonHeaders from '../http.common.headers'
 export function AsJSON() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      DrizzleMeta.provideRequestFactory(target.constructor, method).defaultHeaders.append(
+      DrizzleMeta.provideRequestFactory(target.constructor.name, method).defaultHeaders.append(
         CommonHeaders.CONTENT_TYPE,
         MediaTypes.APPLICATION_JSON_UTF8
       )
       return
     }
 
-    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
+    DrizzleMeta.provideInstanceMetadata((target as TFunction).name).defaultHeaders.append(
       CommonHeaders.CONTENT_TYPE,
       MediaTypes.APPLICATION_JSON_UTF8
     )

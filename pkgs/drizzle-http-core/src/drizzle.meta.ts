@@ -1,12 +1,6 @@
-import 'reflect-metadata'
-
 import { RequestFactory } from './request.factory'
 import { Check } from './internal'
 import { DzHeaders } from './http.headers'
-
-const KeyApiInstanceMeta = 'drizzle:i'
-const KeyRequestFactory = 'drizzle:ri'
-const KeyRegisteredMethods = 'drizzle:m'
 
 export class ApiInstanceMeta {
   defaultHeaders: DzHeaders
@@ -52,69 +46,73 @@ export class ApiInstanceMeta {
   }
 }
 
-export const DrizzleMeta = {
-  /**
-   * Get or create a {@link ApiInstanceMeta} instance associated with an API class and method
-   *
-   * @param target - api target where {@link ApiInstanceMeta} is stored
-   */
-  provideInstanceMetadata: (target: object): ApiInstanceMeta => {
-    let instanceMeta = Reflect.getMetadata(KeyApiInstanceMeta, target)
+interface Data {
+  meta: ApiInstanceMeta
+  requestFactories: Map<string, RequestFactory>
+}
 
-    if (instanceMeta !== null && typeof instanceMeta !== 'undefined') {
-      return instanceMeta
+class _DrizzleMeta {
+  private readonly _meta: Map<string, Data> = new Map<string, Data>()
+
+  provideInstanceMetadata(target: string): ApiInstanceMeta {
+    return this.getOrInitMetadata(target).meta
+  }
+
+  provideRequestFactory(target: string, method: string): RequestFactory {
+    const data = this.getOrInitMetadata(target)
+    let requestFactory = data.requestFactories.get(method)
+
+    if (!requestFactory) {
+      requestFactory = new RequestFactory()
+      data.requestFactories.set(method, requestFactory)
     }
-
-    instanceMeta = new ApiInstanceMeta()
-
-    storeApiInstanceMeta(instanceMeta, target)
-
-    return instanceMeta
-  },
-
-  /**
-   * Get or create a {@link RequestFactory} instance associated with an API class and method
-   */
-  provideRequestFactory: (target: object, method: string): RequestFactory => {
-    let requestFactory = Reflect.getMetadata(KeyRequestFactory, target, method)
-
-    if (requestFactory !== null && typeof requestFactory !== 'undefined') {
-      return requestFactory
-    }
-
-    requestFactory = new RequestFactory()
-
-    storeRequestFactory(requestFactory, target, method)
 
     return requestFactory
-  },
+  }
 
-  registeredMethods: (target: object): Set<string> => {
-    return Reflect.getMetadata(KeyRegisteredMethods, target) || new Set<string>()
-  },
+  registerMethod(target: string, method: string): void {
+    const data = this.getOrInitMetadata(target)
 
-  /**
-   * Registers a method that performs HTTP calls
-   */
-  registerMethod: (target: object, method: string): void => {
-    const register = DrizzleMeta.registeredMethods(target)
-    register.add(method)
-    Reflect.defineMetadata(KeyRegisteredMethods, register, target)
+    if (!data.requestFactories.has(method)) {
+      data.requestFactories.set(method, new RequestFactory())
+    }
+  }
+
+  meta(): Map<string, Data> {
+    return this._meta
+  }
+
+  metaFor(api: string): Data {
+    const data = this._meta.get(api)
+
+    if (!data) {
+      throw new TypeError(`Invalid API state. No metadata found for API definition: ${api}.`)
+    }
+
+    return data
+  }
+
+  removeMetaFor(api: string): void {
+    this._meta.delete(api)
+  }
+
+  private getOrInitMetadata(name: string): Data {
+    let data = this._meta.get(name)
+
+    if (!data) {
+      data = {
+        meta: new ApiInstanceMeta(),
+        requestFactories: new Map()
+      }
+
+      this._meta.set(name, data)
+    }
+
+    return data
   }
 }
 
+const DrizzleMeta = new _DrizzleMeta()
+
 export default DrizzleMeta
-
-/**
- * Get or create a method register for an API class
- */
-function storeApiInstanceMeta(am: ApiInstanceMeta, target: object): void {
-  Reflect.defineMetadata(KeyApiInstanceMeta, am, target)
-}
-
-/**
- * Stores the requestFactory associated with an API class and method
- */
-function storeRequestFactory(rf: RequestFactory, target: object, method: string | symbol): void {
-  Reflect.defineMetadata(KeyRequestFactory, rf, target, method)
-}
+export { DrizzleMeta }

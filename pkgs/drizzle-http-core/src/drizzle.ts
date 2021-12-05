@@ -162,7 +162,7 @@ export class Drizzle {
    * @returns A proxy instance of the target API class
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  create<T extends { new (...args: any[]): any }>(TargetApi: T) {
+  create<T extends { new (...args: any[]): any }>(TargetApi: T): InstanceType<T> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
 
@@ -178,17 +178,16 @@ export class Drizzle {
         this.name = `${TargetApi.name}_Extended`
 
         const invoker = serviceInvoker(self)
+        const meta = DrizzleMeta.metaFor(TargetApi.name)
 
-        const registeredMethods = DrizzleMeta.registeredMethods(TargetApi)
-        const instanceMeta = DrizzleMeta.provideInstanceMetadata(TargetApi)
-
-        for (const method of registeredMethods) {
-          const requestFactory = DrizzleMeta.provideRequestFactory(TargetApi, method)
-          requestFactory.mergeWithInstanceMeta(instanceMeta)
+        for (const [method, requestFactory] of meta.requestFactories) {
+          requestFactory.mergeWithInstanceMeta(meta.meta)
           requestFactory.preProcessAndValidate(self)
 
           this[method] = invoker(requestFactory, method)
         }
+
+        DrizzleMeta.removeMetaFor(TargetApi.name)
       }
     }
 

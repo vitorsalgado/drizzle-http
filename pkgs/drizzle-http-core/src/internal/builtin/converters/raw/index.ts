@@ -15,7 +15,7 @@ const ReturnIdentifier = 'raw'
  */
 export function FullResponse() {
   return function (target: object, method: string) {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
     requestFactory.returnIdentifier = ReturnIdentifier
   }
 }

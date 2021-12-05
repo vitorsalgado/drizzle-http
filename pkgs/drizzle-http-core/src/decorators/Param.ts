@@ -14,7 +14,7 @@ import { PathParameter } from '../request.parameters'
  */
 export function Param(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
     const regex = pathParameterRegex(key)
 
     requestFactory.addParameter(new PathParameter(key, regex, index))

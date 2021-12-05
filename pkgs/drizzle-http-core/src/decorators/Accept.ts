@@ -10,12 +10,12 @@ import CommonHeaders from '../http.common.headers'
 export function Accept(value: string) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
       requestFactory.defaultHeaders.append(CommonHeaders.ACCEPT, value)
       return
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
     apiInstanceMeta.defaultHeaders.append(CommonHeaders.ACCEPT, value)
   }
 }

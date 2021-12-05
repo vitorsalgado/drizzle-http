@@ -15,12 +15,12 @@ import CommonHeaders from '../http.common.headers'
 export function FormUrlEncoded() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
       requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
       return
     }
 
-    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
+    DrizzleMeta.provideInstanceMetadata((target as TFunction).name).defaultHeaders.append(
       CommonHeaders.CONTENT_TYPE,
       MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
     )
