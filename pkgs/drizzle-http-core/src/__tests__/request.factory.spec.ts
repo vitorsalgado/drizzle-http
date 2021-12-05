@@ -1,15 +1,13 @@
 import EventEmitter from 'events'
 import { NoParametersRequestBuilder, RequestFactory } from '../request.factory'
 import { ApiInstanceMeta } from '../drizzle.meta'
-import {
-  BodyParameter,
-  FormParameter,
-  HeaderParameter,
-  PathParameter,
-  QueryNameParameter,
-  QueryParameter
-} from '../request.parameters'
 import { pathParameterRegex } from '../internal'
+import { QueryNameParameter } from '../internal'
+import { QueryParameter } from '../internal'
+import { HeaderParameter } from '../internal'
+import { BodyParameter } from '../internal'
+import { PathParameter } from '../internal'
+import { FormParameter } from '../internal'
 import { MediaTypes } from '../http.media.types'
 import { DrizzleBuilder } from '../drizzle.builder'
 import { TestCallFactory } from '../internal/http/test'

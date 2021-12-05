@@ -1,30 +1,29 @@
 import { Drizzle } from './drizzle'
 import { InvalidRequestMethodConfigurationError } from './internal'
+import { notNull } from './internal'
+import { notBlank } from './internal'
+import { BodyType } from './internal'
+import { QueryParameter } from './internal'
+import { FormParameterType } from './internal'
+import { QueryNameParameterType } from './internal'
+import { BodyParameter } from './internal'
+import { PathParameter } from './internal'
+import { FormParameter } from './internal'
+import { ParameterHandler } from './internal'
+import { QueryNameParameter } from './internal'
+import { QueryParameterType } from './internal'
+import { Parameter } from './internal'
+import { HeaderParameter } from './internal'
+import { PathParameterType } from './internal'
+import { HeaderParameterType } from './internal'
 import { RequestBodyConverter } from './request.body.converter'
 import { ApiInstanceMeta } from './drizzle.meta'
-import { Parameter, ParameterHandler } from './request.parameter.handler'
-import {
-  BodyParameter,
-  FormParameter,
-  FormParameterType,
-  HeaderParameter,
-  HeaderParameterType,
-  PathParameter,
-  PathParameterType,
-  QueryNameParameter,
-  QueryNameParameterType,
-  QueryParameter,
-  QueryParameterType
-} from './request.parameters'
 import { RequestParameterization } from './request.parameterization'
 import { MediaTypes } from './http.media.types'
 import { DzHeaders } from './http.headers'
 import CommonHeaders from './http.common.headers'
 import { DzRequest } from './DzRequest'
 import { RequestBuilder } from './request.builder'
-import { notNull } from './internal'
-import { notBlank } from './internal'
-import { BodyType } from './internal'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/

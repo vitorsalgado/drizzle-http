@@ -1,29 +1,26 @@
 import { Drizzle } from './drizzle'
 import { RequestConverterFactory } from './request.body.converter'
-import {
-  CallbackCallAdapterFactory,
-  FormRequestConverterFactory,
-  JsonRequestConverterFactory,
-  JsonResponseConverterFactory,
-  RawRequestConverterFactory,
-  RawResponseConverterFactory
-} from './internal'
 import { DrizzleError } from './internal'
 import { notNull } from './internal'
+import { JsonResponseConverterFactory } from './internal'
+import { BodyParameterHandlerFactory } from './internal'
+import { ParameterHandlerFactory } from './internal'
+import { HeaderParameterHandlerFactory } from './internal'
+import { RawRequestConverterFactory } from './internal'
+import { QueryNameParameterHandlerFactory } from './internal'
+import { RawResponseConverterFactory } from './internal'
+import { FormParameterHandlerFactory } from './internal'
+import { QueryParameterHandlerFactory } from './internal'
+import { JsonRequestConverterFactory } from './internal'
+import { CallbackCallAdapterFactory } from './internal'
+import { Parameter } from './internal'
+import { FormRequestConverterFactory } from './internal'
+import { PathParameterHandlerFactory } from './internal'
+import { SignalParameterHandlerFactory } from './internal'
 import { CallAdapterFactory } from './call.adapter'
 import { ResponseConverterFactory } from './response.converter'
 import { CallFactory } from './call'
 import { Interceptor } from './interceptor'
-import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
-import {
-  BodyParameterHandlerFactory,
-  FormParameterHandlerFactory,
-  HeaderParameterHandlerFactory,
-  PathParameterHandlerFactory,
-  QueryNameParameterHandlerFactory,
-  QueryParameterHandlerFactory,
-  SignalParameterHandlerFactory
-} from './request.parameters'
 import { DzHeaders } from './http.headers'
 
 /**

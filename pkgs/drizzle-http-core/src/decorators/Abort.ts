@@ -1,5 +1,5 @@
 import { DrizzleMeta } from '../drizzle.meta'
-import { SignalParameter } from '../request.parameters'
+import { SignalParameter } from '../internal'
 
 export function Abort(value: string | unknown | null = null) {
   return function <TFunction extends Function>(

@@ -1,6 +1,5 @@
 import MediaTypes from '../../../../../http.media.types'
 import { RequestFactory } from '../../../../../request.factory'
-import { BodyParameter } from '../../../../../request.parameters'
 import CommonHeaders from '../../../../../http.common.headers'
 import { DrizzleBuilder } from '../../../../../drizzle.builder'
 import { TestCallFactory } from '../../../../http/test'
@@ -10,6 +9,7 @@ import {
   JsonResponseConverter,
   JsonResponseConverterFactory
 } from '..'
+import { BodyParameter } from '../../../parameterhandlers'
 
 describe('JSON Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()

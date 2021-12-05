@@ -1,5 +1,5 @@
 import { DrizzleMeta } from '../drizzle.meta'
-import { HeaderParameter } from '../request.parameters'
+import { HeaderParameter } from '../internal'
 
 /**
  * Named header to be added to the request.

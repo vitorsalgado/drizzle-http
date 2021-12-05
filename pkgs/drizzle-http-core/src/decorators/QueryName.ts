@@ -1,5 +1,5 @@
 import { DrizzleMeta } from '../drizzle.meta'
-import { QueryNameParameter } from '../request.parameters'
+import { QueryNameParameter } from '../internal'
 
 /**
  * Query parameter appended to the URL that has no value.

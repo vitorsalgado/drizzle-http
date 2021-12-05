@@ -1,5 +1,5 @@
 import { DrizzleMeta } from '../drizzle.meta'
-import { BodyParameter } from '../request.parameters'
+import { BodyParameter } from '../internal'
 
 /**
  * Use this decorator to mark that a method parameter must be sent as the HTTP Request body

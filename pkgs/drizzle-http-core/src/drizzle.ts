@@ -8,7 +8,7 @@ import { CallFactory } from './call'
 import { Interceptor } from './interceptor'
 import { RawRequestConverter, RawResponseConverter } from './internal'
 import { NoParameterHandlerFoundForType } from './internal'
-import { Parameter, ParameterHandlerFactory } from './request.parameter.handler'
+import { Parameter, ParameterHandlerFactory } from './internal'
 import { DzHeaders } from './http.headers'
 
 /**

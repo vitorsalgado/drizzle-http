@@ -1,6 +1,6 @@
 import { DrizzleMeta } from '../drizzle.meta'
 import { pathParameterRegex } from '../internal'
-import { PathParameter } from '../request.parameters'
+import { PathParameter } from '../internal'
 
 /**
  * Named replacement for a URL path segment

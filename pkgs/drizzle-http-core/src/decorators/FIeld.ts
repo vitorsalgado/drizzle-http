@@ -1,5 +1,5 @@
 import { DrizzleMeta } from '../drizzle.meta'
-import { FormParameter } from '../request.parameters'
+import { FormParameter } from '../internal'
 
 /**
  * Named form parameter for a form url-encode request.
