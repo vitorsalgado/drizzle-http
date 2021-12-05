@@ -7,7 +7,7 @@ import {
   JsonResponseConverterFactory,
   RawRequestConverterFactory,
   RawResponseConverterFactory
-} from './builtin'
+} from './internal/builtin'
 import { CallAdapterFactory } from './call.adapter'
 import { ResponseConverterFactory } from './response.converter'
 import { CallFactory } from './call'

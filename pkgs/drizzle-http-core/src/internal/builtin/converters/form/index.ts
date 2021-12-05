@@ -1,9 +1,9 @@
-import { Drizzle } from '../../../drizzle'
-import { RequestBodyConverter, RequestConverterFactory } from '../../../request.body.converter'
-import { RequestFactory } from '../../../request.factory'
-import { encodeFormFieldIfNecessary, RequestBodyTypeNotAllowed } from '../../../internal'
-import { RequestParameterization } from '../../../request.parameterization'
-import { MediaTypes } from '../../../http.media.types'
+import { Drizzle } from '../../../../drizzle'
+import { RequestBodyConverter, RequestConverterFactory } from '../../../../request.body.converter'
+import { RequestFactory } from '../../../../request.factory'
+import { encodeFormFieldIfNecessary, RequestBodyTypeNotAllowed } from '../../..'
+import { RequestParameterization } from '../../../../request.parameterization'
+import { MediaTypes } from '../../../../http.media.types'
 
 export class FormRequestConverter implements RequestBodyConverter<any> {
   static INSTANCE: FormRequestConverter = new FormRequestConverter()

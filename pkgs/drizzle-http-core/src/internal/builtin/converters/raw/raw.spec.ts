@@ -1,11 +1,11 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
-import { RequestFactory } from '../../../request.factory'
-import CommonHeaders from '../../../http.common.headers'
-import MediaTypes from '../../../http.media.types'
-import { DrizzleBuilder, initDrizzleHttp } from '../../../drizzle.builder'
-import { TestCallFactory } from '../../../internal/http/test'
-import { Body, ContentType, POST } from '../../../decorators'
-import { DzResponse } from '../../../DzResponse'
+import { RequestFactory } from '../../../../request.factory'
+import CommonHeaders from '../../../../http.common.headers'
+import MediaTypes from '../../../../http.media.types'
+import { DrizzleBuilder, initDrizzleHttp } from '../../../../drizzle.builder'
+import { TestCallFactory } from '../../../http/test'
+import { Body, ContentType, POST } from '../../../../decorators'
+import { DzResponse } from '../../../../DzResponse'
 import {
   FullResponse,
   RawRequestConverter,

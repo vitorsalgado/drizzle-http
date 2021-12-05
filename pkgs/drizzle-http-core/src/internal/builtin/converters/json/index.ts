@@ -1,10 +1,10 @@
-import { RequestBodyConverter, RequestConverterFactory } from '../../../request.body.converter'
-import { RequestFactory } from '../../../request.factory'
-import { ResponseConverter, ResponseConverterFactory } from '../../../response.converter'
-import { Drizzle } from '../../../drizzle'
-import { RequestParameterization } from '../../../request.parameterization'
-import MediaTypes from '../../../http.media.types'
-import { DzResponse } from '../../../DzResponse'
+import { RequestBodyConverter, RequestConverterFactory } from '../../../../request.body.converter'
+import { RequestFactory } from '../../../../request.factory'
+import { ResponseConverter, ResponseConverterFactory } from '../../../../response.converter'
+import { Drizzle } from '../../../../drizzle'
+import { RequestParameterization } from '../../../../request.parameterization'
+import MediaTypes from '../../../../http.media.types'
+import { DzResponse } from '../../../../DzResponse'
 
 export class JsonRequestConverter implements RequestBodyConverter<string> {
   static INSTANCE: JsonRequestConverter = new JsonRequestConverter()
