@@ -1,4 +1,3 @@
-import EventEmitter from 'events'
 import { BodyType, ReturnType } from './types'
 import { Drizzle } from './drizzle'
 import { Check, InvalidRequestMethodConfigurationError } from './internal'
@@ -47,7 +46,7 @@ export class RequestFactory {
   returnIdentifier: string | null
   parameterHandlers!: ParameterHandler<Parameter, unknown>[]
   parameters: Parameter[]
-  signal: EventEmitter | unknown
+  signal: unknown
   noResponseConverter: boolean
 
   // This holds generic values used by additional adapters, converters and callers
