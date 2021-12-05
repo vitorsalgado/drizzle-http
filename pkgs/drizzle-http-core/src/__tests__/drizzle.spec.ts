@@ -38,7 +38,6 @@ import {
   Q,
   Query,
   QueryName,
-  theTypes,
   Timeout
 } from '..'
 import { DzResponse } from '..'
@@ -59,7 +58,7 @@ class API {
   @HeaderMap({ 'X-Env': 'Test' })
   @AsJSON()
   testGET(): Promise<TestResult<Ok>> {
-    return theTypes(Promise, TestResult)
+    return noop()
   }
 
   @GET('/txt')
@@ -88,7 +87,7 @@ class API {
   @Accept(MediaTypes.APPLICATION_JSON_UTF8)
   @Abort(cancellationInMethod)
   getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<DzResponse> {
-    return noop()
+    return noop(id, orderBy)
   }
 
   // endregion
@@ -98,7 +97,7 @@ class API {
   @POST('/{id}/projects/{project}')
   @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
   testPOST(@Param('id') id: string, @Param('project') project: string, @Body() data: Data): Promise<TestResult<Ok>> {
-    return theTypes(Promise, TestResult, id, project, data)
+    return noop(id, project, data)
   }
 
   // endregion
@@ -108,7 +107,7 @@ class API {
   @PUT('/test-put')
   @ContentType(MediaTypes.APPLICATION_JSON)
   testPUT(@Body() data: unknown): Promise<TestResult<Ok>> {
-    return theTypes(Promise, TestResult)
+    return noop(data)
   }
 
   // endregion
@@ -117,7 +116,7 @@ class API {
 
   @DELETE('/delete/{id}')
   testDELETE(@Param('id') id: string): Promise<DzResponse> {
-    return noop()
+    return noop(id)
   }
 
   // endregion
@@ -126,7 +125,7 @@ class API {
 
   @PATCH('/patch/{id}')
   testPATCH(@Param('id') id: string): Promise<DzResponse> {
-    return noop(Promise, DzResponse)
+    return noop(id)
   }
 
   // endregion
@@ -226,7 +225,7 @@ describe('Drizzle Http', () => {
       class InnerAPI {
         @GET('/')
         test(): Promise<TestResult<Ok>> {
-          return theTypes(Promise, TestResult)
+          return noop()
         }
       }
 
@@ -251,7 +250,7 @@ describe('Drizzle Http', () => {
       class InnerAPI {
         @GET('/')
         test(): Promise<TestResult<Ok>> {
-          return theTypes(Promise, TestResult)
+          return noop()
         }
       }
 
@@ -275,10 +274,9 @@ describe('Drizzle Http', () => {
       class InnerAPI {
         @POST('/')
         @FullResponse()
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        test(@Field('value') val: string): Promise<DzResponse> {}
+        test(@Field('value') val: string): Promise<DzResponse> {
+          return noop(val)
+        }
       }
 
       const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()

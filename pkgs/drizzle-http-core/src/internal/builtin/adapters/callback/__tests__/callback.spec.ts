@@ -1,24 +1,24 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { any, callbackTypes } from '../../../../../response.type.detector'
 import { Drizzle } from '../../../../../drizzle'
 import { AsJSON, GET, Param } from '../../../../../decorators'
 import { TestCallFactory } from '../../../../http/test'
 import { DrizzleBuilder } from '../../../../../drizzle.builder'
 import { HttpError } from '../../../../../http.error'
 import { Callback } from '..'
+import { noop } from '../../../../../noop'
 
 class API {
   @GET('/{id}/projects')
   @AsJSON()
   @Callback()
   getCallback(@Param('id') id: string, callback: (err: Error, data: TestResult<TestId>) => void): void {
-    return callbackTypes(TestResult, id, callback)
+    return noop(id, callback)
   }
 
   @GET('/nowhere')
   @Callback()
   err(callback: (err: HttpError, data: unknown) => void): void {
-    return any(callback)
+    return noop(callback)
   }
 }
 
