@@ -1,23 +1,25 @@
 'use strict'
 
-import { DrizzleBuilder, GET, Query, theTypes } from '@drizzle-http/core'
+import { AsJSON, ContentType, DrizzleBuilder, FullResponse, GET, MediaTypes, noop, Query } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '@drizzle-http/fetch'
-import { Level, LoggingInterceptor, PinoLogger } from '@drizzle-http/logging-interceptor'
+import { Level, LoggingInterceptor } from '@drizzle-http/logging-interceptor'
 
 const PORT = process.env.PORT || 3001
 
 class PartiesClientAPI {
   @GET('/')
+  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
   @CORS()
   @KeepAlive(true)
+  @AsJSON()
   parties(@Query('acronym') acronym) {
-    return theTypes(Promise)
+    return noop(Promise)
   }
 }
 
 export const deputiesApi = DrizzleBuilder.newBuilder()
   .baseUrl(`http://localhost:${PORT}`)
   .callFactory(FetchCallFactory.DEFAULT)
-  .addInterceptor(new LoggingInterceptor(PinoLogger.DEFAULT, Level.BODY))
+  .addInterceptor(new LoggingInterceptor(Level.BODY))
   .build()
   .create(PartiesClientAPI)

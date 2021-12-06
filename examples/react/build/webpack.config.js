@@ -27,12 +27,17 @@ module.exports = {
     }
   },
   devServer: {
-    contentBase: paths.build,
-    inline: true,
-    clientLogLevel: 'none',
     host: '0.0.0.0',
     port: Config.devServer.port,
-    historyApiFallback: true
+    historyApiFallback: true,
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false
+      },
+      progress: true
+    },
+    open: true
   },
   output: {
     pathinfo: false,

@@ -2,8 +2,10 @@
 
 /* eslint-disable */
 
-import { DrizzleBuilder, GET, Query, theTypes } from '@drizzle-http/core'
+import { DrizzleBuilder, GET, Query } from '@drizzle-http/core'
+import { noop } from '@drizzle-http/core'
 import { Streaming, StreamTo, StreamToHttpError, UndiciCallFactory } from '@drizzle-http/undici'
+import { StreamToResult } from '@drizzle-http/undici'
 import { createServer } from 'http'
 import { Writable } from 'stream'
 import url from 'url'
@@ -11,20 +13,22 @@ import url from 'url'
 class PartiesAPI {
   @GET('/partidos')
   @Streaming()
-  parties(@Query('sigla') acronym: string, @StreamTo() target: Writable) {
-    return theTypes(Promise)
+  parties(@Query('sigla') acronym: string, @StreamTo() target: Writable): Promise<StreamToResult> {
+    return noop(Promise)
   }
 }
 
 const partiesAPI = DrizzleBuilder.newBuilder()
   .baseUrl('https://dadosabertos.camara.leg.br/api/v2/')
-  .callFactory(UndiciCallFactory.DEFAULT)
+  .callFactory(new UndiciCallFactory())
   .build()
   .create(PartiesAPI)
 
 const port = parseInt(String(process.env.PORT || 3001))
 
 createServer((req, res) => {
+  console.log('REQUEST RECEIVED')
+
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
@@ -46,7 +50,7 @@ createServer((req, res) => {
   res.writeHead(200, { ...header, ...cors })
 
   partiesAPI
-    .parties(query.acronym, res)
+    .parties(query.acronym as string, res)
     .then(() => {
       if (res.headersSent) {
         return res.end()
