@@ -61,7 +61,7 @@ export class FetchCall extends Call<Promise<Response>> {
       ...options,
       ...requestInit,
       method: request.method,
-      headers: request.headers as unknown as Headers,
+      headers: new Headers([...request.headers.entries()]),
       body: request.body as BodyInit,
       signal: signal
     }
