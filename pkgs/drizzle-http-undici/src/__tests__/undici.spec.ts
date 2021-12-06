@@ -1,81 +1,84 @@
-import {
-  Abort,
-  AsJson,
-  Cancellation,
-  ContentType,
-  Drizzle,
-  DrizzleBuilder,
-  GET,
-  H,
-  Header,
-  HeaderMap,
-  Headers,
-  HttpError,
-  MediaTypes,
-  P,
-  Param,
-  Q,
-  Query,
-  QueryName,
-  Response,
-  theTypes,
-  Timeout
-} from '@drizzle-http/core'
-import { Streaming, StreamTo, StreamToHttpError, StreamToResult, UndiciCallFactory, UndiciOptionsBuilder } from './'
-import { closeTestServer, Ok, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { Writable } from 'stream'
 import EventEmitter from 'events'
 import { URL } from 'url'
+import { closeTestServer, Ok, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
+import { ContentType } from '@drizzle-http/core'
+import { Query } from '@drizzle-http/core'
+import { Drizzle } from '@drizzle-http/core'
+import { Timeout } from '@drizzle-http/core'
+import { H } from '@drizzle-http/core'
+import { DrizzleBuilder } from '@drizzle-http/core'
+import { QueryName } from '@drizzle-http/core'
+import { Q } from '@drizzle-http/core'
+import { Abort } from '@drizzle-http/core'
+import { HeaderMap } from '@drizzle-http/core'
+import { Header } from '@drizzle-http/core'
+import { GET } from '@drizzle-http/core'
+import { Param } from '@drizzle-http/core'
+import { HttpError } from '@drizzle-http/core'
+import { noop } from '@drizzle-http/core'
+import { HttpResponse } from '@drizzle-http/core'
+import { P } from '@drizzle-http/core'
+import { AsJSON } from '@drizzle-http/core'
+import { MediaTypes } from '@drizzle-http/core'
+import { HttpHeaders } from '@drizzle-http/core'
+import { FullResponse } from '@drizzle-http/core'
+import { Streaming, StreamTo, StreamToHttpError, StreamToResult, UndiciCallFactory, UndiciOptionsBuilder } from '..'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()
 
-@Cancellation(evtCls)
+@Abort(evtCls)
 @Timeout(10, 10)
 class API {
   @GET('/{id}/projects')
-  execute(@Param('id') id: string): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  execute(@Param('id') id: string): Promise<HttpResponse> {
+    return noop(id)
   }
 
   @GET('/nowhere')
-  nowhere(): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  nowhere(): Promise<HttpResponse> {
+    return noop()
   }
 
   @GET('/')
   @ContentType('application/json')
   @Streaming()
   streaming(@StreamTo() target: Writable): Promise<StreamToResult> {
-    return theTypes(Promise, StreamToResult)
+    return noop(target)
   }
 
   @GET('/nowhere')
   @ContentType('application/json')
   @Streaming()
   streamingFromNowhere(@StreamTo() target: Writable): Promise<StreamToResult> {
-    return theTypes(Promise, StreamToResult)
+    return noop(target)
   }
 
   @GET('/long-running')
-  longRunning(@Abort() cancel: EventEmitter): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  longRunning(@Abort() cancel: EventEmitter): Promise<HttpResponse> {
+    return noop(cancel)
   }
 
   @GET('/long-running')
   @Abort(evtMethod)
-  longRunningMethod(): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  longRunningMethod(): Promise<HttpResponse> {
+    return noop()
   }
 
   @GET('/long-running')
-  longRunningClass(): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  longRunningClass(): Promise<HttpResponse> {
+    return noop()
   }
 
   @GET('/group/{id}/owner/{name}/projects')
   @HeaderMap({ 'x-id': '100' })
-  @AsJson()
+  @AsJSON()
   complete(
     @Param('id') id: string,
     @P('name') name: string,
@@ -85,7 +88,7 @@ class API {
     @Header('cache') cache: boolean,
     @H('code') code: number
   ): Promise<TestResult<TestId>> {
-    return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code)
+    return noop(id, name, filter, sort, prop, cache, code)
   }
 }
 
@@ -154,7 +157,7 @@ describe('Undici Call', function () {
         @GET('/{id}/projects')
         @Streaming()
         invalidStreaming(@Param('id') id: string): Promise<StreamToResult> {
-          return theTypes(Promise, StreamToResult)
+          return noop(id)
         }
       }
 
@@ -164,8 +167,8 @@ describe('Undici Call', function () {
     expect(() => {
       class FailApi {
         @GET('/{id}/projects')
-        invalidStreaming(@Param('id') id: string, @StreamTo() to: any): Promise<StreamToResult> {
-          return theTypes(Promise, StreamToResult)
+        invalidStreaming(@Param('id') id: string, @StreamTo() to: unknown): Promise<StreamToResult> {
+          return noop(id, to)
         }
       }
 
@@ -269,13 +272,13 @@ describe('Undici Call', function () {
       @GET('/base/path')
       @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
       exec(): Promise<Ok> {
-        return theTypes(Promise)
+        return noop()
       }
     }
 
     const testApi = DrizzleBuilder.newBuilder()
       .baseUrl(new URL('/testing/join', address).href)
-      .callFactory(UndiciCallFactory.DEFAULT)
+      .callFactory(new UndiciCallFactory())
       .build()
       .create(TestAPI)
 
@@ -285,13 +288,15 @@ describe('Undici Call', function () {
   })
 
   it('should init stream result', function () {
-    expect(() => new StreamToResult('http://www.test.com.br/', 200, new Headers({}), new Writable())).not.toThrowError()
+    expect(
+      () => new StreamToResult('http://www.test.com.br/', 200, new HttpHeaders({}), new Writable())
+    ).not.toThrowError()
   })
 
   it('should call the registered shutdown hook', async () => {
     const drizzle = DrizzleBuilder.newBuilder()
       .baseUrl(new URL('/testing/join', address).href)
-      .callFactory(UndiciCallFactory.DEFAULT)
+      .callFactory(new UndiciCallFactory())
       .build()
 
     await drizzle.shutdown()

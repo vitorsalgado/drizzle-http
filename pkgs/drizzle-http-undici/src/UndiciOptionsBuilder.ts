@@ -70,7 +70,6 @@ export class UndiciOptionsBuilder {
   build(): Pool.Options {
     return {
       connections: this._connections,
-      socketPath: this._socketPath,
       keepAliveTimeout: this._keepAliveTimeout,
       keepAliveMaxTimeout: this._keepAliveMaxTimeout,
       keepAliveTimeoutThreshold: this._keepAliveTimeoutThreshold,
@@ -78,8 +77,6 @@ export class UndiciOptionsBuilder {
       tls: this._tls,
       maxHeaderSize: this._maxHeaderSize,
       headersTimeout: this._headersTimeout,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       bodyTimeout: this._bodyTimeout
     }
   }

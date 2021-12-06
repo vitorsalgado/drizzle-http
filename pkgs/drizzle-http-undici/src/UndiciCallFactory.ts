@@ -1,20 +1,19 @@
+import { URL } from 'url'
 import {
   Call,
   CallFactory,
   CallProvider,
   Drizzle,
   InvalidRequestMethodConfigurationError,
-  Request,
   RequestFactory
 } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
 import { Pool } from 'undici'
-import { UndiciCall } from './call'
-import { ConfigIsStream, ConfigStreamToIndex, UndiciStreamCall } from './stream.call'
-import { URL } from 'url'
+import { UndiciStreamCall } from './UndiciStreamCall'
+import { UndiciCall } from './UndiciCall'
+import { Keys } from './Keys'
 
 export class UndiciCallFactory extends CallFactory {
-  static DEFAULT: CallFactory = new UndiciCallFactory()
-
   private _pool!: Pool
   private readonly _options?: Pool.Options
 
@@ -42,8 +41,8 @@ export class UndiciCallFactory extends CallFactory {
     }
 
     // stream to
-    if (requestFactory.getConfig(ConfigIsStream)) {
-      const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
+    if (requestFactory.getConfig(Keys.ConfigIsStream)) {
+      const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
       if (streamToIndex < 0) {
         throw new InvalidRequestMethodConfigurationError(
@@ -52,11 +51,11 @@ export class UndiciCallFactory extends CallFactory {
         )
       }
 
-      return function (request: Request, args: any[]): Call<unknown> {
+      return function (request: HttpRequest, args: unknown[]): Call<unknown> {
         return new UndiciStreamCall(self._pool, streamToIndex, request, args)
       }
     } else {
-      const streamToIndex = requestFactory.getConfig(ConfigStreamToIndex) as number
+      const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
       if (streamToIndex > -1) {
         throw new InvalidRequestMethodConfigurationError(
@@ -66,7 +65,7 @@ export class UndiciCallFactory extends CallFactory {
       }
     }
 
-    return function (request: Request, args: any[]): Call<unknown> {
+    return function (request: HttpRequest, args: unknown[]): Call<unknown> {
       return new UndiciCall(self._pool, request, args)
     }
   }

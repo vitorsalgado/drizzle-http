@@ -10,6 +10,9 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts .",
+    "prettier": "prettier 'src/**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
@@ -38,7 +41,7 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "undici": "^3.3.6"
+    "undici": "^4.10.3"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.2.0"
