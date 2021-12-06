@@ -4,7 +4,7 @@ module.exports = {
   apps: [
     {
       name: 'react-dev',
-      script: 'yarn start:dev',
+      script: 'npm run start:dev',
       instances: 1
     },
     {

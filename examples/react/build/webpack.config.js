@@ -18,13 +18,7 @@ module.exports = {
   devtool: 'source-map',
   entry: Path.resolve(__dirname, '../src/index.jsx'),
   resolve: {
-    extensions: ['.js', '.jsx'],
-    fallback: {
-      querystring: require.resolve('querystring-es3'),
-      stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('buffer/'),
-      url: require.resolve('url/')
-    }
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     host: '0.0.0.0',

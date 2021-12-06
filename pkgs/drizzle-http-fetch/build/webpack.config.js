@@ -36,14 +36,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json'],
-
-    fallback: {
-      querystring: require.resolve('querystring-es3'),
-      stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('bops'),
-      url: require.resolve('url/')
-    }
+    extensions: ['.tsx', '.ts', '.js', '.json']
   },
   performance: {
     hints: 'warning'

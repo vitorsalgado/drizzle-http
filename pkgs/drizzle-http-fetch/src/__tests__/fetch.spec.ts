@@ -1,5 +1,6 @@
 import EventEmitter from 'events'
 import Puppeteer from 'puppeteer'
+import { Browser } from 'puppeteer'
 import { Abort, Body, ContentType, GET, MediaTypes, noop, POST, Timeout } from '@drizzle-http/core'
 import { FullResponse } from '@drizzle-http/core'
 import { TestResult } from '@drizzle-http/test-utils'
@@ -69,7 +70,7 @@ class Api {
 }
 
 describe('Fetch Client', () => {
-  let browser: any = null
+  let browser!: Browser
 
   beforeAll(async () => {
     browser = await Puppeteer.launch({
@@ -96,7 +97,7 @@ describe('Fetch Client', () => {
 
     const div = await page.$('#test')
     const txt = await div?.getProperty('innerText')
-    const val = await txt.jsonValue()
+    const val = await txt?.jsonValue()
 
     expect(val).toEqual('success')
   }, 10000)
@@ -109,7 +110,7 @@ describe('Fetch Client', () => {
 
     const div = await page.$('#test')
     const txt = await div?.getProperty('innerText')
-    const val = await txt.jsonValue()
+    const val = await txt?.jsonValue()
 
     expect(val).toEqual('success')
   }, 10000)
