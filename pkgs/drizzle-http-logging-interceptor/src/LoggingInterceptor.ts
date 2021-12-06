@@ -12,6 +12,23 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
     public readonly logger: Logger = PinoLogger.DEFAULT
   ) {}
 
+  private static ms(): number {
+    if (typeof process === 'undefined') {
+      return Date.now()
+    }
+
+    const hrTime = process.hrtime()
+
+    return (hrTime[0] * 1000000 + hrTime[1] / 1000) / 1000
+  }
+
+  private static isStream(body: unknown): boolean {
+    return (
+      // eslint-disable-next-line no-undef
+      typeof ReadableStream !== 'undefined' && body instanceof ReadableStream
+    )
+  }
+
   setLevel(level: Level): void {
     this.level = level
   }
@@ -162,22 +179,5 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
         this.logger.info(name + ': ' + value)
       }
     }
-  }
-
-  private static ms(): number {
-    if (typeof process === 'undefined') {
-      return Date.now()
-    }
-
-    const hrTime = process.hrtime()
-
-    return (hrTime[0] * 1000000 + hrTime[1] / 1000) / 1000
-  }
-
-  private static isStream(body: unknown): boolean {
-    return (
-      // eslint-disable-next-line no-undef
-      typeof ReadableStream !== 'undefined' && body instanceof ReadableStream
-    )
   }
 }
