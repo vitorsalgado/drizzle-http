@@ -7,8 +7,8 @@ module.exports = {
   mode: 'production',
   bail: true,
   entry: {
-    ts: Path.resolve(__dirname, '../src/test/apiTs.ts'),
-    js: Path.resolve(__dirname, '../src/test/apiJs.js')
+    ts: Path.resolve(__dirname, '../src/__tests__/test/apiTs.ts'),
+    js: Path.resolve(__dirname, '../src/__tests__/test/apiJs.js')
   },
   devtool: 'inline-source-map',
   plugins: [new CleanPlugin()],
@@ -23,7 +23,14 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          }
+        ],
         exclude: /node_modules/
       }
     ]
@@ -44,6 +51,6 @@ module.exports = {
   stats: 'errors-only',
   output: {
     filename: '[name].js',
-    path: Path.join(process.cwd(), 'src', 'test', 'dist')
+    path: Path.join(process.cwd(), 'src', '__tests__', 'test', 'dist')
   }
 }

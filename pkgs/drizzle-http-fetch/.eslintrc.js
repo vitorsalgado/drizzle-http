@@ -13,5 +13,8 @@ module.exports = {
     RequestCredentials: true,
     RequestRedirect: true,
     ReferrerPolicy: true
+  },
+  rules: {
+    '@typescript-eslint/no-var-requires': ['off']
   }
 }
