@@ -10,7 +10,7 @@
     { "path": "../drizzle-http-logging-interceptor", "prepend": false },
     { "path": "../drizzle-http-fetch", "prepend": false },
     { "path": "../drizzle-http-rxjs-adapter", "prepend": false },
-    { "path": "../../internal/test-utils", "prepend": false }
+    { "path": "../test-utils", "prepend": false }
   ],
   "include": ["src/**/*"]
 }

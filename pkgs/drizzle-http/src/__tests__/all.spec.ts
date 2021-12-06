@@ -1,6 +1,7 @@
-import { Abort, GET, H, Header, HeaderMap, P, Param, Path, Q, Query, QueryName, theTypes, Timeout } from './'
-import { TestId, TestResult } from '@drizzle-http/test-utils'
 import EventEmitter from 'events'
+import { TestId, TestResult } from '@drizzle-http/test-utils'
+import { noop } from '@drizzle-http/core'
+import { Abort, GET, H, Header, HeaderMap, P, Param, Path, Q, Query, QueryName, Timeout } from '..'
 
 @HeaderMap({})
 @Timeout(2, 2)
@@ -18,11 +19,12 @@ class API {
     @H('code') code: number,
     @Abort() abort: EventEmitter
   ): Promise<TestResult<TestId>> {
-    return theTypes(Promise, TestResult, id, name, filter, sort, prop, cache, code, abort)
+    return noop(id, name, filter, sort, prop, cache, code, abort)
   }
 }
 
 describe('Drizzle Http', function () {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  it('should load all modules correctly', () => {})
+  it('should load all modules correctly', () => {
+    // Just test if imports and annotations work
+  })
 })
