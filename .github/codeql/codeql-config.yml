@@ -9,9 +9,10 @@ paths-ignore:
   - node_modules
   - pkgs/**/node_modules
   - pkgs/**/dist
+  - pkgs/clinic
+  - pkgs/test-utils
   - benchmarks
   - examples
-  - internal
   - scripts
   - '**/*.spec.js'
   - '**/*.spec.ts'

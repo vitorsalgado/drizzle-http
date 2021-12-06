@@ -1,20 +1,6 @@
-name: "code_ql"
+name: "CodeQL"
 
 on:
-  push:
-    branches:
-      - main
-      - '[0-9]+.x'
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
-  pull_request:
-    branches:
-      - main
-      - '[0-9]+.x'
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
   schedule:
     - cron: '0 15 * * 0'
 
@@ -43,14 +29,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Config Yarn
+    - name: Deps
       run: |
-        yarn set version berry
-        yarn --version
+        npm ci
+        npm run bootstrap
 
-    - name: Install + Build
+    - name: Build
       run: |
-        yarn
+        npm run build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
