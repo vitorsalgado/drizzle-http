@@ -2,9 +2,11 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
   extends: ['plugin:@typescript-eslint/recommended', 'standard', 'prettier'],
+  root: true,
   env: {
     jest: true,
-    node: true
+    node: true,
+    browser: true
   },
   rules: {
     'tsdoc/syntax': 'error',

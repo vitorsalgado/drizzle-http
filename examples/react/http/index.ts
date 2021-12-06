@@ -4,8 +4,9 @@
 
 import { DrizzleBuilder, GET, Query } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
-import { Streaming, StreamTo, StreamToHttpError, UndiciCallFactory } from '@drizzle-http/undici'
+import { StreamTo, StreamToHttpError, UndiciCallFactory } from '@drizzle-http/undici'
 import { StreamToResult } from '@drizzle-http/undici'
+import { Streaming } from '@drizzle-http/undici'
 import { createServer } from 'http'
 import { Writable } from 'stream'
 import url from 'url'
@@ -27,8 +28,6 @@ const partiesAPI = DrizzleBuilder.newBuilder()
 const port = parseInt(String(process.env.PORT || 3001))
 
 createServer((req, res) => {
-  console.log('REQUEST RECEIVED')
-
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
@@ -46,6 +45,12 @@ createServer((req, res) => {
   const header = { 'Content-Type': 'application/json;charset=utf-8' }
   const charset = 'utf-8'
 
+  if (req.method === 'POST') {
+    res.writeHead(405, 'Method Not Allowed', { ...header, ...cors })
+    res.write(JSON.stringify({ error: 'Method Not Allowed' }), charset)
+    res.end()
+  }
+
   res.setHeader('Content-Type', 'application/json;charset=utf-8')
   res.writeHead(200, { ...header, ...cors })
 
@@ -58,7 +63,7 @@ createServer((req, res) => {
     })
     .catch((err: StreamToHttpError) => {
       res.writeHead(500, 'Internal Server Error', { ...header, ...cors })
-      res.write(JSON.stringify({ error: err.stack }), charset)
+      res.write(JSON.stringify({ error: err.message }), charset)
       res.end()
     })
 })

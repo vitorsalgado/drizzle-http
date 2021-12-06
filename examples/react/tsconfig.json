@@ -7,7 +7,8 @@
   },
   "references": [
     { "path": "../../pkgs/drizzle-http-core", "prepend": false },
-    { "path": "../../pkgs/drizzle-http-undici", "prepend": false }
+    { "path": "../../pkgs/drizzle-http-undici", "prepend": false },
+    { "path": "../../pkgs/drizzle-http-logging-interceptor", "prepend": false }
   ],
   "include": ["http/"]
 }

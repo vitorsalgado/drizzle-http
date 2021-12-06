@@ -2,10 +2,9 @@ import { Chain, HttpError, HttpRequest, HttpResponse, Interceptor } from '@drizz
 import { Level } from './Level'
 import { Logger } from './Logger'
 import { PinoLogger } from './PinoLogger'
+import { isStream } from './isStream'
 
 export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse> {
-  static DEFAULT: LoggingInterceptor = new LoggingInterceptor()
-
   constructor(
     public level: Level = Level.BASIC,
     private readonly headersToRedact: Set<string> = new Set<string>(),
@@ -20,13 +19,6 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
     const hrTime = process.hrtime()
 
     return (hrTime[0] * 1000000 + hrTime[1] / 1000) / 1000
-  }
-
-  private static isStream(body: unknown): boolean {
-    return (
-      // eslint-disable-next-line no-undef
-      typeof ReadableStream !== 'undefined' && body instanceof ReadableStream
-    )
   }
 
   setLevel(level: Level): void {
@@ -75,7 +67,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
 
     if (!logBody || request.body === null) {
       this.logger.info('--> END ' + request.method)
-    } else if (LoggingInterceptor.isStream(request.body)) {
+    } else if (isStream(request.body)) {
       this.logger.info('--> END ' + request.method + ' (stream request body omitted)')
     } else {
       if (Buffer.isBuffer(request.body)) {
@@ -118,7 +110,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
 
         if (!logBody || response.body === null) {
           this.logger.info('<-- END HTTP')
-        } else if (LoggingInterceptor.isStream(response.body)) {
+        } else if (isStream(response.body)) {
           this.logger.info('<-- END HTTP ' + request.method + ' (stream response body omitted)')
         } else {
           if (Buffer.isBuffer(response.body)) {

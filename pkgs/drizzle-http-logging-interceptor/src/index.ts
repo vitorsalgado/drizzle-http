@@ -1,3 +1,4 @@
+export * from './BrowserLoggingInterceptor'
 export * from './Level'
 export * from './Logger'
 export * from './LoggingInterceptor'

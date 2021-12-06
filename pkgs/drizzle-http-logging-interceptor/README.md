@@ -21,14 +21,18 @@ npm i @drizzle-http/logging-interceptor
 yarn add @drizzle-http/logging-interceptor
 ```
 
-## Usage
+## Node
 
-### Default Implementation
+### Basic
 
 ```typescript
+import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+
+const interceptor = new LoggingInterceptor()
+
 const api = Drizzle.builder()
   .baseUrl(address)
-  .callFactory(UndiciCallFactory.DEFAULT)
+  .callFactory(new UndiciCallFactory())
   .addInterceptor(interceptor)
   .build()
   .create(API)
@@ -37,17 +41,36 @@ const api = Drizzle.builder()
 ### Customize
 
 ```typescript
+import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+
 const interceptor = new LoggingInterceptor(fake, Level.BODY)
 interceptor.redactHeader('x-super-secret-header')
 interceptor.redactHeaders(['x-other-secret-header', 'x-one-more-secret-header'])
 
 const api = DrizzleBuilder.newBuilder()
   .baseUrl(address)
-  .callFactory(UndiciCallFactory.DEFAULT)
+  .callFactory(new UndiciCallFactory())
   .addInterceptor(interceptor)
   .build()
   .create(API)
 ```
+
+## Browser
+
+### Basic
+
+```typescript
+import { BrowserLoggingInterceptor } from '@drizzle-http/logging-interceptor'
+
+const api = DrizzleBuilder.newBuilder()
+  .baseUrl(address)
+  .callFactory(new UndiciCallFactory())
+  .addInterceptor(new BrowserLoggingInterceptor())
+  .build()
+  .create(API)
+```
+
+> It's not possible to change the logger implementation from BrowserLoggingInterceptor. It will use console.log.
 
 ## Features
 
@@ -55,12 +78,15 @@ You can change the level using the following values: `NONE, BASIC, HEADERS, BODY
 To customize the default Pino implementation, provide a custom instance of **PinoLogger**. E.g.:
 
 ```typescript
+import { Level } from '@drizzle-http/logging-interceptor'
+import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+
 const customPinoLogger = new PinoLogger({ /* pino.LoggerOptions */ })
 
 const api = DrizzleBuilder.newBuilder()
   .baseUrl(address)
-  .callFactory(UndiciCallFactory.DEFAULT)
-  .addInterceptor(new LoggingInterceptor(customPinoLogger))
+  .callFactory(new UndiciCallFactory())
+  .addInterceptor(new LoggingInterceptor(Level.BODY, new Set(), customPinoLogger))
   .build()
   .create(API)
 ```
