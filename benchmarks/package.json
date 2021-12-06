@@ -14,18 +14,17 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "benchmark": "^2.1.4",
     "drizzle-http": "^2.2.0",
-    "got": "^11.8.2",
+    "got": "^11.8.3",
     "node-fetch": "^2.6.1",
     "superagent": "^6.1.0",
-    "undici": "^3.3.6",
-    "undici-fetch": "^1.0.0-rc.1"
+    "undici": "^4.10.3"
   },
   "devDependencies": {
-    "@types/benchmark": "^2.1.0",
-    "@types/node-fetch": "^2.5.10",
-    "@types/superagent": "^4.1.11"
+    "@types/benchmark": "^2.1.1",
+    "@types/node-fetch": "^3.0.3",
+    "@types/superagent": "^4.1.13"
   }
 }

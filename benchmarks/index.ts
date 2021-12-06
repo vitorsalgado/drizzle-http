@@ -1,30 +1,26 @@
-import { Pool } from 'undici'
-import { Readable, Writable } from 'stream'
+import { Dispatcher, Pool } from 'undici'
+import { Writable } from 'stream'
 import http from 'http'
 import Benchmark from 'benchmark'
 import Axios from 'axios'
-import NodeFetch from 'node-fetch'
+import NodeFetch, { Headers } from 'node-fetch'
 import got from 'got'
 import {
   Body,
   ContentType,
   DrizzleBuilder,
-  FetchCallFactory,
   GET,
-  Headers,
-  initDrizzleHttp,
-  KeepAlive,
   MediaTypes,
+  noop,
   Param,
   POST,
   Query,
-  Response,
   Streaming,
   StreamTo,
   StreamToResult,
-  theTypes,
   UndiciCallFactory
 } from 'drizzle-http'
+import { FullResponse } from 'drizzle-http'
 
 const suite = new Benchmark.Suite()
 
@@ -66,7 +62,7 @@ const httpOptions = {
 
 const undiciOptions = {
   path: '/',
-  method: 'GET',
+  method: 'GET' as Dispatcher.HttpMethod,
   headers: { 'Content-Type': 'application/json' },
   headersTimeout: 0,
   bodyTimeout: 0
@@ -87,39 +83,27 @@ const gotOpts = {
 @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
 class API {
   @GET('/')
+  @FullResponse()
   getArgLess(): Promise<Response> {
-    return theTypes(Promise, Response)
+    return noop()
   }
 
   @POST('/{id}')
-  post(@Param('id') _id: string, @Query('filter') _filter: string, @Body() _data: any): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  post(@Param('id') _id: string, @Query('filter') _filter: string, @Body() _data: unknown): Promise<Response> {
+    return noop(_id, _filter, _data)
   }
 
   @GET('/')
   @Streaming()
   streaming(@StreamTo() target: Writable): Promise<StreamToResult> {
-    return theTypes(Promise)
-  }
-}
-
-@ContentType(MediaTypes.APPLICATION_JSON_UTF8)
-class ApiFetch {
-  @POST('/{id}')
-  @KeepAlive(true)
-  post(@Param('id') _id: string, @Query('filter') _filter: string, @Body() _data: any): Promise<Response> {
-    return theTypes(Promise, Response)
+    return noop(target)
   }
 }
 
 const drizzle = DrizzleBuilder.newBuilder().baseUrl(target.url).callFactory(new UndiciCallFactory(options)).build()
 
 const api: API = drizzle.create(API)
-const apiFetch: ApiFetch = initDrizzleHttp()
-  .callFactory(new FetchCallFactory({ agent: httpAgent }))
-  .baseUrl(target.url)
-  .build()
-  .create(ApiFetch)
 
 const data = {
   id: 100,
@@ -136,17 +120,6 @@ suite
       Promise.all(
         Array.from(Array(parallelRequests)).map(() =>
           api.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
-        )
-      ).then(() => deferred.resolve())
-    }
-  })
-
-  .add('drizzle-http - fetch', {
-    defer: true,
-    fn: (deferred: any) => {
-      Promise.all(
-        Array.from(Array(parallelRequests)).map(() =>
-          apiFetch.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
         )
       ).then(() => deferred.resolve())
     }
