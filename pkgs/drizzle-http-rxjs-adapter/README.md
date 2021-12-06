@@ -33,7 +33,8 @@ class API {
 
 const api = DrizzleBuilder.newBuilder()
   .baseUrl(addr)
-  .addCallAdapterFactories(RxJsCallAdapterFactory.DEFAULT)
+  .addCallAdapterFactories(
+    new RxJsCallAdapterFactory(/* optional: you can pass another adapter factory */))
   .build()
   .create(API)
 ```

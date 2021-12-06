@@ -1,13 +1,54 @@
-import { AsJSON, DrizzleBuilder, GET, HttpError, HttpResponse, noop, Param } from '@drizzle-http/core'
+import {
+  AsJSON,
+  Call,
+  Drizzle,
+  DrizzleBuilder,
+  GET,
+  HttpError,
+  HttpResponse,
+  noop,
+  Param,
+  RequestFactory
+} from '@drizzle-http/core'
 import { FullResponse } from '@drizzle-http/core'
+import { CallAdapter } from '@drizzle-http/core'
+import { CallAdapterFactory } from '@drizzle-http/core'
+import { DrizzleMeta } from '@drizzle-http/core'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Observable } from 'rxjs'
 import { RxJs } from '../RxJs'
 import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
 
+function Custom() {
+  return function (target: object, method: string): void {
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    requestFactory.returnIdentifier = 'custom'
+  }
+}
+
+class CustomCallAdapter implements CallAdapter<Promise<unknown>, Promise<unknown>> {
+  adapt(action: Call<Promise<unknown>>): Promise<unknown> {
+    return action.execute().then(data => ({ id: (data as { result: { id: string } }).result.id }))
+  }
+}
+
+class CustomCallAdapterFactory extends CallAdapterFactory {
+  provideCallAdapter(
+    _drizzle: Drizzle,
+    _method: string,
+    requestFactory: RequestFactory
+  ): CallAdapter<unknown, unknown> | null {
+    if (requestFactory.returnIdentifier === 'custom') {
+      return new CustomCallAdapter()
+    }
+
+    return null
+  }
+}
+
 @AsJSON()
-export class API {
+class API {
   @GET('/{id}/projects')
   @RxJs()
   getRx(@Param('id') id: string): Observable<TestResult<TestId>> {
@@ -25,6 +66,13 @@ export class API {
   nonRx(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
+
+  @GET('/{id}/projects')
+  @RxJs()
+  @Custom()
+  decorated(@Param('id') id: string): Observable<TestId> {
+    return noop(id)
+  }
 }
 
 describe('RxJs Call Adapter', () => {
@@ -35,7 +83,7 @@ describe('RxJs Call Adapter', () => {
       api = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(new UndiciCallFactory())
-        .addCallAdapterFactories(RxJsCallAdapterFactory.INSTANCE)
+        .addCallAdapterFactories(new RxJsCallAdapterFactory(new CustomCallAdapterFactory()))
         .build()
         .create(API)
     })
@@ -79,5 +127,18 @@ describe('RxJs Call Adapter', () => {
         return response.json<TestResult<TestId>>()
       })
       .then(json => expect(json.params).toHaveProperty('id'))
+  })
+
+  it('should execute decorated adapter and return response as rxjs', done => {
+    expect.assertions(1)
+
+    api.decorated('test-id').subscribe({
+      next(x) {
+        expect(x.id).toEqual('test-id')
+      },
+      complete() {
+        done()
+      }
+    })
   })
 })
