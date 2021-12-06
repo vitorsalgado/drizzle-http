@@ -1,3 +1,4 @@
+import { Blob } from 'buffer'
 import { request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
@@ -9,8 +10,10 @@ import { Drizzle } from '../../../../Drizzle'
 import { HttpError } from '../../../../HttpError'
 import { HttpRequest } from '../../../../HttpRequest'
 import { HttpResponse } from '../../../../HttpResponse'
-import { HttpHeaders } from '../../../../HttpHeaders'
+import { isOK } from '../../../../HttpResponse'
 import { isAbsolute } from '../../url'
+import { HttpHeaders } from '../../../../HttpHeaders'
+import { BodyType } from '../../../types'
 
 class TestCall extends Call<Promise<HttpResponse>> {
   private readonly url: string
@@ -31,11 +34,12 @@ class TestCall extends Call<Promise<HttpResponse>> {
       path: undefined as unknown as string
     } as RequestOptions)
 
-    if (TestDzResponse.isOK(res.statusCode)) {
+    if (isOK(res.statusCode)) {
       return new TestDzResponse(this.url, res)
     }
 
     if (res.body) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const chunk of res.body) {
         // forcing body consumption
       }
@@ -48,7 +52,7 @@ class TestCall extends Call<Promise<HttpResponse>> {
 export class TestCallFactory extends CallFactory {
   static INSTANCE: TestCallFactory = new TestCallFactory()
 
-  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
+  prepareCall(drizzle: Drizzle, _method: string, _requestFactory: RequestFactory): CallProvider {
     return function (request, args) {
       return new TestCall(new URL(drizzle.baseUrl), request, args)
     }
@@ -67,38 +71,46 @@ export function toRequest(url: string, request: HttpRequest): RequestOptions {
   }
 }
 
-class TestDzResponse extends HttpResponse<Dispatcher.ResponseData> {
-  constructor(url: string, response: Dispatcher.ResponseData) {
-    super({
-      url: url,
-      headers: new HttpHeaders(response.headers as Record<string, string>),
-      body: response.body,
-      status: response.statusCode,
-      original: response
-    })
+class TestDzResponse implements HttpResponse<Blob, never> {
+  readonly body: BodyType
+  readonly headers: HttpHeaders
+  readonly status: number
+  readonly statusText: string
+  readonly url: string
+
+  constructor(url: string, private readonly response: Dispatcher.ResponseData) {
+    this.body = response.body
+    this.headers = new HttpHeaders(response.headers as Record<string, string>)
+    this.status = response.statusCode
+    this.statusText = ''
+    this.url = url
+  }
+
+  get ok(): boolean {
+    return isOK(this.status)
   }
 
   get bodyUsed(): boolean {
-    return this.original().body.bodyUsed
+    return this.response.body.bodyUsed
   }
 
   arrayBuffer(): Promise<ArrayBuffer> {
-    return this.original().body.arrayBuffer()
+    return this.response.body.arrayBuffer()
   }
 
-  blob(): Promise<unknown> {
-    return this.original().body.blob()
+  blob(): Promise<Blob> {
+    return this.response.body.blob()
   }
 
-  formData(): Promise<unknown> {
-    return this.original().body.formData()
+  formData(): Promise<never> {
+    return this.response.body.formData()
   }
 
   json<T>(): Promise<T> {
-    return this.original().body.json()
+    return this.response.body.json()
   }
 
   text(): Promise<string> {
-    return this.original().body.text()
+    return this.response.body.text()
   }
 }

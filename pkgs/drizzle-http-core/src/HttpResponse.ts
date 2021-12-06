@@ -1,54 +1,36 @@
 import { HttpHeaders } from './HttpHeaders'
 import { BodyType } from './internal'
 
-interface HttpResponseInit<R> {
-  original: R
-  headers: HttpHeaders
-  body: BodyType
-  status: number
-  url: string
+/**
+ * Minimum contract that every response should follow inside the framework
+ */
+export interface HttpResponse<BLOB = unknown, FORM_DATA = unknown, HEADERS = HttpHeaders> {
+  readonly headers: HEADERS
+  readonly status: number
+  readonly statusText: string
+  readonly url: string
+  readonly body: BodyType
+
+  get ok(): boolean
+
+  get bodyUsed(): boolean
+
+  arrayBuffer(): Promise<ArrayBuffer>
+
+  json<T>(): Promise<T>
+
+  text(): Promise<string>
+
+  blob(): Promise<BLOB>
+
+  formData(): Promise<FORM_DATA>
 }
 
-export abstract class HttpResponse<R = unknown, BLOB = unknown, FORM_DATA = unknown> {
-  readonly headers: HttpHeaders
-  readonly status: number
-  readonly url: string
-  private readonly _original: R
-  private readonly _body: BodyType
-
-  protected constructor(init: HttpResponseInit<R>) {
-    this._original = init.original
-    this._body = init.body
-    this.headers = init.headers
-    this.status = init.status
-    this.url = init.url
-  }
-
-  get ok(): boolean {
-    return HttpResponse.isOK(this.status)
-  }
-
-  get body(): BodyType {
-    return this._body
-  }
-
-  abstract get bodyUsed(): boolean
-
-  static isOK(statusCode: number): boolean {
-    return statusCode >= 200 && statusCode <= 299
-  }
-
-  original(): R {
-    return this._original
-  }
-
-  abstract arrayBuffer(): Promise<ArrayBuffer>
-
-  abstract json<T>(): Promise<T>
-
-  abstract text(): Promise<string>
-
-  abstract blob(): Promise<BLOB>
-
-  abstract formData(): Promise<FORM_DATA>
+/**
+ * Check if status code is within 200 and 299
+ *
+ * @param statusCode - response numeric status code
+ */
+export function isOK(statusCode: number): boolean {
+  return statusCode >= 200 && statusCode <= 299
 }

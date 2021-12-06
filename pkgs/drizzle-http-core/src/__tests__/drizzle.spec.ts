@@ -134,7 +134,7 @@ class TestAPI {
 
   @OPTIONS('/options')
   testOPTIONS(): Promise<HttpResponse> {
-    return noop(Promise, HttpResponse)
+    return noop()
   }
 
   // endregion
@@ -143,7 +143,7 @@ class TestAPI {
 
   @HEAD('/head')
   testHEAD(): Promise<HttpResponse> {
-    return noop(Promise, HttpResponse)
+    return noop()
   }
 
   // endregion
