@@ -1,10 +1,12 @@
 import { Call, CallAdapter, CallAdapterFactory, Drizzle, DrizzleMeta, RequestFactory } from '@drizzle-http/core'
 import { from, Observable } from 'rxjs'
 
+const RxJxKey = 'rxjs'
+
 export function RxJs() {
-  return function (target: any, method: string): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor, method)
-    requestFactory.returnType = Observable
+  return function (target: object, method: string): void {
+    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    requestFactory.returnIdentifier = RxJxKey
   }
 }
 
@@ -24,7 +26,7 @@ export class RxJsCallAdapterFactory extends CallAdapterFactory {
     method: string,
     requestFactory: RequestFactory
   ): CallAdapter<unknown, unknown> | null {
-    if (requestFactory.returnType && requestFactory.returnType.name === 'Observable') {
+    if (requestFactory.returnIdentifier === RxJxKey) {
       return RxJsCallAdapter.INSTANCE
     }
 

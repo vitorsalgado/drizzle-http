@@ -1,26 +1,28 @@
-import { AsJson, DrizzleBuilder, GET, HttpError, Param, Response, theTypes } from '@drizzle-http/core'
+import { AsJSON, DrizzleBuilder, GET, HttpError, HttpResponse, noop, Param } from '@drizzle-http/core'
+import { FullResponse } from '@drizzle-http/core'
 import { Observable } from 'rxjs'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { RxJs, RxJsCallAdapterFactory } from './index'
 import { UndiciCallFactory } from '@drizzle-http/undici'
+import { RxJs, RxJsCallAdapterFactory } from '.'
 
-@AsJson()
+@AsJSON()
 export class API {
   @GET('/{id}/projects')
+  @RxJs()
   getRx(@Param('id') id: string): Observable<TestResult<TestId>> {
-    return theTypes(Observable, TestResult)
+    return noop(id)
   }
 
   @GET('/nowhere')
   @RxJs()
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  nowhere(): Observable<TestResult<TestId>> {}
+  nowhere(): Observable<TestResult<TestId>> {
+    return noop()
+  }
 
   @GET('/{id}/projects')
-  nonRx(@Param('id') id: string): Promise<Response> {
-    return theTypes(Promise, Response)
+  @FullResponse()
+  nonRx(@Param('id') id: string): Promise<HttpResponse> {
+    return noop(id)
   }
 }
 
@@ -31,7 +33,7 @@ describe('RxJs Call Adapter', () => {
     startTestServer().then((addr: string) => {
       api = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
-        .callFactory(UndiciCallFactory.DEFAULT)
+        .callFactory(new UndiciCallFactory())
         .addCallAdapterFactories(RxJsCallAdapterFactory.INSTANCE)
         .build()
         .create(API)
@@ -73,10 +75,8 @@ describe('RxJs Call Adapter', () => {
         expect(response.status).toEqual(200)
         expect(response.ok).toBeTruthy()
 
-        return response.json()
+        return response.json<TestResult<TestId>>()
       })
-      .then((json: any) => {
-        expect(json.params).toHaveProperty('id')
-      })
+      .then(json => expect(json.params).toHaveProperty('id'))
   })
 })
