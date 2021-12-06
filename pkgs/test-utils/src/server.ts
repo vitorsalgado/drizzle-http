@@ -1,5 +1,4 @@
 import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
-
 import FastifyFormBody from 'fastify-formbody'
 
 const fastify = Fastify({ logger: false })
