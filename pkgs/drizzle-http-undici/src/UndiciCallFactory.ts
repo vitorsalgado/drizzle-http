@@ -33,14 +33,12 @@ export class UndiciCallFactory extends CallFactory {
   }
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this
+    const pool = this._pool
 
-    if (self._pool === null) {
+    if (pool === null) {
       throw new TypeError('Undici Pool must not be null.')
     }
 
-    // stream to
     if (requestFactory.getConfig(Keys.ConfigIsStream)) {
       const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
@@ -52,7 +50,7 @@ export class UndiciCallFactory extends CallFactory {
       }
 
       return function (request: HttpRequest, args: unknown[]): Call<unknown> {
-        return new UndiciStreamCall(self._pool, streamToIndex, request, args)
+        return new UndiciStreamCall(pool, streamToIndex, request, args)
       }
     } else {
       const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
@@ -66,7 +64,7 @@ export class UndiciCallFactory extends CallFactory {
     }
 
     return function (request: HttpRequest, args: unknown[]): Call<unknown> {
-      return new UndiciCall(self._pool, request, args)
+      return new UndiciCall(pool, request, args)
     }
   }
 }
