@@ -144,7 +144,6 @@ jobs:
   automerge:
     runs-on: ubuntu-latest
     needs:
-      - dependabot-fixer
       - lint
       - build
 
