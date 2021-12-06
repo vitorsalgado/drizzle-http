@@ -13,6 +13,7 @@ const config: JestConfig.InitialOptions = {
       tsconfig: './tsconfig.test.json'
     }
   },
+  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
     '**/pkgs/*/**/*.ts',
     '!**/pkgs/*/**/*.js',
@@ -27,7 +28,7 @@ const config: JestConfig.InitialOptions = {
   ],
   coveragePathIgnorePatterns: [
     'drizzle-http-fetch/src/test',
-    'drizzle-http-core/src/internal/http/test',
+    'drizzle-http-core/src/internal/net/http/test',
     '/node_modules/'
   ],
   modulePathIgnorePatterns: [
@@ -39,7 +40,7 @@ const config: JestConfig.InitialOptions = {
     'pkgs/.*/dist',
     'pkgs/.*/out',
     'pkgs/.*/tsconfig.*',
-    'internal/clinic/*'
+    'pkgs/clinic/*'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -48,7 +49,7 @@ const config: JestConfig.InitialOptions = {
     '/dist/',
     '/out/',
     '/pkgs/.*/dist',
-    'internal/clinic/*',
+    'pkgs/clinic/*',
     '/scripts/'
   ]
 }

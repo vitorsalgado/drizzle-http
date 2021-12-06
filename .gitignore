@@ -121,8 +121,10 @@ typings/
 .idea/
 .nvmrc
 .npmrc
-package-lock.json
+.yarn/
 temp/
+yarn.lock
+.yarnrc.yml
 
 # Dist
 dist/
