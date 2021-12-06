@@ -7,6 +7,7 @@
     "**/__fixtures__",
     "*.spec.ts",
     "*.spec.js",
-    "*.config.ts"
+    "*.config.ts",
+    "src/internal/net/http"
   ]
 }
