@@ -10,6 +10,9 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts .",
+    "prettier": "prettier 'src/**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
@@ -42,12 +45,12 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "pino": "^6.11.3",
-    "pino-pretty": "^4.8.0"
+    "pino": "^7.4.1",
+    "pino-pretty": "^7.2.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^2.2.0",
     "@drizzle-http/undici": "^2.2.0",
-    "@types/pino": "^6.3.8"
+    "@types/pino": "^7.0.5"
   }
 }
