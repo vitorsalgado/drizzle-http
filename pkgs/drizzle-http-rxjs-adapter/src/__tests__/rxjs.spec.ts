@@ -1,9 +1,10 @@
 import { AsJSON, DrizzleBuilder, GET, HttpError, HttpResponse, noop, Param } from '@drizzle-http/core'
 import { FullResponse } from '@drizzle-http/core'
-import { Observable } from 'rxjs'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { RxJs, RxJsCallAdapterFactory } from '.'
+import { Observable } from 'rxjs'
+import { RxJs } from '../RxJs'
+import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
 
 @AsJSON()
 export class API {
