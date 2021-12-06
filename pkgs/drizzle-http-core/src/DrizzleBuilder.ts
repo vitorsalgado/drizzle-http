@@ -1,5 +1,4 @@
-import { Drizzle } from './drizzle'
-import { RequestConverterFactory } from './request.body.converter'
+import { Drizzle } from './Drizzle'
 import { DrizzleError } from './internal'
 import { notNull } from './internal'
 import { JsonResponseConverterFactory } from './internal'
@@ -17,11 +16,12 @@ import { Parameter } from './internal'
 import { FormRequestConverterFactory } from './internal'
 import { PathParameterHandlerFactory } from './internal'
 import { SignalParameterHandlerFactory } from './internal'
-import { CallAdapterFactory } from './call.adapter'
-import { ResponseConverterFactory } from './response.converter'
-import { CallFactory } from './call'
-import { Interceptor } from './interceptor'
-import { DzHeaders } from './http.headers'
+import { Interceptor } from './Interceptor'
+import { HttpHeaders } from './HttpHeaders'
+import { RequestBodyConverterFactory } from './RequestBodyConverter'
+import { CallAdapterFactory } from './CallAdapter'
+import { CallFactory } from './Call'
+import { ResponseConverterFactory } from './ResponseConverter'
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
@@ -36,18 +36,18 @@ export function initDrizzleHttp(): DrizzleBuilder {
  */
 export class DrizzleBuilder {
   private _baseURL!: string
-  private readonly _headers: DzHeaders
+  private readonly _headers: HttpHeaders
   private _callFactory!: CallFactory
   private readonly _interceptors: Interceptor<unknown, unknown>[]
   private readonly _callAdapterFactories: CallAdapterFactory[]
   private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[]
-  private readonly _requestConverterFactories: RequestConverterFactory[]
+  private readonly _requestConverterFactories: RequestBodyConverterFactory[]
   private readonly _responseConverterFactories: ResponseConverterFactory[]
   private _enableDrizzleUserAgent: boolean
   private _useDefaults: boolean
 
   constructor() {
-    this._headers = new DzHeaders({})
+    this._headers = new HttpHeaders({})
     this._interceptors = []
     this._callAdapterFactories = []
     this._parameterHandlerFactories = []
@@ -151,13 +151,13 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Adds {@link RequestConverterFactory} for converting request body to another type.
+   * Adds {@link RequestBodyConverterFactory} for converting request body to another type.
    * You can add multiple factories.
    *
-   * @param requestConverterFactory - {@link RequestConverterFactory} instance
+   * @param requestConverterFactory - {@link RequestBodyConverterFactory} instance
    * @returns Same {@link DrizzleBuilder} instance
    */
-  addRequestConverterFactories(...requestConverterFactory: RequestConverterFactory[]): this {
+  addRequestConverterFactories(...requestConverterFactory: RequestBodyConverterFactory[]): this {
     notNull(requestConverterFactory, 'Parameter "requestConverterFactory" must not be null.')
 
     if (requestConverterFactory.length === 0) {
@@ -260,7 +260,7 @@ export class DrizzleBuilder {
       this._interceptors,
       new Set<CallAdapterFactory>(this._callAdapterFactories),
       this._parameterHandlerFactories,
-      new Set<RequestConverterFactory>(this._requestConverterFactories),
+      new Set<RequestBodyConverterFactory>(this._requestConverterFactories),
       new Set<ResponseConverterFactory>(this._responseConverterFactories)
     )
   }

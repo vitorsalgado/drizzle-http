@@ -1,4 +1,4 @@
-import { RequestParameterization } from '../../../request.parameterization'
+import { RequestParameterization } from '../../../RequestParameterization'
 import { Parameter } from './Parameter'
 
 export abstract class ParameterHandler<P extends Parameter, V> {

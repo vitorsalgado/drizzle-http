@@ -1,7 +1,7 @@
-import { RequestFactory } from '../../../../request.factory'
-import { RequestBodyConverter } from '../../../../request.body.converter'
+import { RequestFactory } from '../../../../RequestFactory'
+import { RequestBodyConverter } from '../../../../RequestBodyConverter'
 import { BodyType } from '../../../types'
-import { RequestParameterization } from '../../../../request.parameterization'
+import { RequestParameterization } from '../../../../RequestParameterization'
 
 export class JsonRequestConverter implements RequestBodyConverter<string> {
   static INSTANCE: JsonRequestConverter = new JsonRequestConverter()

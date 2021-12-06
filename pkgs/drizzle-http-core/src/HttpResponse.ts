@@ -1,22 +1,22 @@
-import { DzHeaders } from './http.headers'
+import { HttpHeaders } from './HttpHeaders'
 import { BodyType } from './internal'
 
-interface DzResponseInit<R> {
+interface HttpResponseInit<R> {
   original: R
-  headers: DzHeaders
+  headers: HttpHeaders
   body: BodyType
   status: number
   url: string
 }
 
-export abstract class DzResponse<R = unknown, BLOB = unknown, FORM_DATA = unknown> {
-  readonly headers: DzHeaders
+export abstract class HttpResponse<R = unknown, BLOB = unknown, FORM_DATA = unknown> {
+  readonly headers: HttpHeaders
   readonly status: number
   readonly url: string
   private readonly _original: R
   private readonly _body: BodyType
 
-  protected constructor(init: DzResponseInit<R>) {
+  protected constructor(init: HttpResponseInit<R>) {
     this._original = init.original
     this._body = init.body
     this.headers = init.headers
@@ -25,7 +25,7 @@ export abstract class DzResponse<R = unknown, BLOB = unknown, FORM_DATA = unknow
   }
 
   get ok(): boolean {
-    return DzResponse.isOK(this.status)
+    return HttpResponse.isOK(this.status)
   }
 
   get body(): BodyType {

@@ -1,4 +1,4 @@
-import { DrizzleMeta } from '../drizzle.meta'
+import { DrizzleMeta } from '../DrizzleMeta'
 
 /**
  * Sets an url path that will be concatenated with the base url and the final processed path

@@ -2,19 +2,20 @@ import { request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
 import { HttpMethod } from 'undici/types/dispatcher'
-import { Call, CallFactory, CallProvider } from '../../../../call'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
-import { HttpError } from '../../../../http.error'
-import { DzRequest } from '../../../../DzRequest'
-import { DzResponse } from '../../../../DzResponse'
-import { DzHeaders } from '../../../../http.headers'
+import { Call, CallProvider } from '../../../../Call'
+import { CallFactory } from '../../../../Call'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
+import { HttpError } from '../../../../HttpError'
+import { HttpRequest } from '../../../../HttpRequest'
+import { HttpResponse } from '../../../../HttpResponse'
+import { HttpHeaders } from '../../../../HttpHeaders'
 import { isAbsolute } from '../../url'
 
-class TestCall extends Call<Promise<DzResponse>> {
+class TestCall extends Call<Promise<HttpResponse>> {
   private readonly url: string
 
-  constructor(readonly baseUrl: URL, public readonly request: DzRequest, public readonly argv: unknown[]) {
+  constructor(readonly baseUrl: URL, public readonly request: HttpRequest, public readonly argv: unknown[]) {
     super(request, argv)
 
     if (!isAbsolute(this.request.url)) {
@@ -24,7 +25,7 @@ class TestCall extends Call<Promise<DzResponse>> {
     }
   }
 
-  async execute(): Promise<DzResponse> {
+  async execute(): Promise<HttpResponse> {
     const res = await request(this.url, {
       ...toRequest(this.url, this.request),
       path: undefined as unknown as string
@@ -54,7 +55,7 @@ export class TestCallFactory extends CallFactory {
   }
 }
 
-export function toRequest(url: string, request: DzRequest): RequestOptions {
+export function toRequest(url: string, request: HttpRequest): RequestOptions {
   return {
     path: url,
     method: request.method as HttpMethod,
@@ -66,11 +67,11 @@ export function toRequest(url: string, request: DzRequest): RequestOptions {
   }
 }
 
-class TestDzResponse extends DzResponse<Dispatcher.ResponseData> {
+class TestDzResponse extends HttpResponse<Dispatcher.ResponseData> {
   constructor(url: string, response: Dispatcher.ResponseData) {
     super({
       url: url,
-      headers: new DzHeaders(response.headers as Record<string, string>),
+      headers: new HttpHeaders(response.headers as Record<string, string>),
       body: response.body,
       status: response.statusCode,
       original: response

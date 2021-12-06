@@ -1,6 +1,6 @@
-import { RequestFactory } from './request.factory'
-import { Call } from './call'
-import { Drizzle } from './drizzle'
+import { Call } from './Call'
+import { Drizzle } from './Drizzle'
+import { RequestFactory } from './RequestFactory'
 
 /**
  * Adapts a {@link Call} with response F to a type of V

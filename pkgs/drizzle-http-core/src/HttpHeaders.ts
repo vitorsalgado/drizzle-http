@@ -1,6 +1,9 @@
 const sHeaders = Symbol('headers')
 
-export class DzHeaders {
+export class HttpHeaders {
+  public static readonly CONTENT_TYPE = 'content-type'
+  public static readonly ACCEPT = 'accept'
+
   private readonly [sHeaders]: Map<string, string>
 
   constructor(init: [string, string] | Record<string, string> | string[][] | null = {}) {
@@ -28,7 +31,7 @@ export class DzHeaders {
     const existing = this.get(name)
     const newValue = existing ? existing + ',' + value : value
 
-    this.set(DzHeaders.normalizeHeaderName(name), newValue)
+    this.set(HttpHeaders.normalizeHeaderName(name), newValue)
   }
 
   set(name: string, value: string): this {
@@ -36,21 +39,21 @@ export class DzHeaders {
       throw new TypeError('Header name must not be null or empty.')
     }
 
-    this[sHeaders].set(DzHeaders.normalizeHeaderName(name), value)
+    this[sHeaders].set(HttpHeaders.normalizeHeaderName(name), value)
 
     return this
   }
 
   get(key: string): string | undefined {
-    return this[sHeaders].get(DzHeaders.normalizeHeaderName(key))
+    return this[sHeaders].get(HttpHeaders.normalizeHeaderName(key))
   }
 
   delete(key: string): boolean {
-    return this[sHeaders].delete(DzHeaders.normalizeHeaderName(key))
+    return this[sHeaders].delete(HttpHeaders.normalizeHeaderName(key))
   }
 
   has(key: string): boolean {
-    return this[sHeaders].has(DzHeaders.normalizeHeaderName(key))
+    return this[sHeaders].has(HttpHeaders.normalizeHeaderName(key))
   }
 
   keys(): IterableIterator<string> {
@@ -91,7 +94,7 @@ export class DzHeaders {
     return Array.from(this[sHeaders]).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {})
   }
 
-  merge(headers: DzHeaders): void {
+  merge(headers: HttpHeaders): void {
     for (const [name, value] of headers) {
       if (!this.has(name)) {
         this.set(name, value)

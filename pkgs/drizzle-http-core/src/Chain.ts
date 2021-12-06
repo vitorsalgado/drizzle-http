@@ -5,7 +5,3 @@ export interface Chain<TReq, TRes> {
 
   proceed(request: TReq): Promise<TRes>
 }
-
-export interface Interceptor<TReq, TRes> {
-  intercept(chain: Chain<TReq, TRes>): Promise<TRes>
-}

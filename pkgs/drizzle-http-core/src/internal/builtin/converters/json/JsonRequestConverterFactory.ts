@@ -1,11 +1,11 @@
-import { RequestConverterFactory } from '../../../../request.body.converter'
-import { RequestBodyConverter } from '../../../../request.body.converter'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
-import MediaTypes from '../../../../http.media.types'
+import { RequestBodyConverter } from '../../../../RequestBodyConverter'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
+import MediaTypes from '../../../../MediaTypes'
+import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { JsonRequestConverter } from './JsonRequestConverter'
 
-export class JsonRequestConverterFactory extends RequestConverterFactory {
+export class JsonRequestConverterFactory extends RequestBodyConverterFactory {
   static INSTANCE: JsonRequestConverterFactory = new JsonRequestConverterFactory()
 
   requestConverter(

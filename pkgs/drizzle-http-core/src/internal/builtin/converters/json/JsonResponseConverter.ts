@@ -1,10 +1,10 @@
-import { ResponseConverter } from '../../../../response.converter'
-import { DzResponse } from '../../../../DzResponse'
+import { HttpResponse } from '../../../../HttpResponse'
+import { ResponseConverter } from '../../../../ResponseConverter'
 
-export class JsonResponseConverter<T> implements ResponseConverter<DzResponse, Promise<T>> {
+export class JsonResponseConverter<T> implements ResponseConverter<HttpResponse, Promise<T>> {
   static INSTANCE: JsonResponseConverter<unknown> = new JsonResponseConverter<unknown>()
 
-  convert<T>(from: DzResponse): Promise<T> {
+  convert<T>(from: HttpResponse): Promise<T> {
     return from.json()
   }
 }

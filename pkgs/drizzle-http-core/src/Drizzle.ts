@@ -1,15 +1,18 @@
-import { CallAdapter, CallAdapterFactory } from './call.adapter'
-import { RequestBodyConverter, RequestConverterFactory } from './request.body.converter'
-import { serviceInvoker } from './drizzle.api.invoker'
-import { ResponseConverter, ResponseConverterFactory } from './response.converter'
-import { RequestFactory } from './request.factory'
-import { DrizzleMeta } from './drizzle.meta'
-import { CallFactory } from './call'
-import { Interceptor } from './interceptor'
+import { RequestBodyConverter } from './RequestBodyConverter'
+import { serviceInvoker } from './drizzleServiceInvoker'
+import { RequestFactory } from './RequestFactory'
+import { DrizzleMeta } from './DrizzleMeta'
+import { Interceptor } from './Interceptor'
 import { RawRequestConverter, RawResponseConverter } from './internal'
 import { NoParameterHandlerFoundForType } from './internal'
 import { Parameter, ParameterHandlerFactory } from './internal'
-import { DzHeaders } from './http.headers'
+import { HttpHeaders } from './HttpHeaders'
+import { ResponseConverter } from './ResponseConverter'
+import { CallAdapter } from './CallAdapter'
+import { RequestBodyConverterFactory } from './RequestBodyConverter'
+import { CallAdapterFactory } from './CallAdapter'
+import { CallFactory } from './Call'
+import { ResponseConverterFactory } from './ResponseConverter'
 
 /**
  * Drizzle adapts a class to perform HTTP calls by using the decorators on the declared methods
@@ -29,12 +32,12 @@ export class Drizzle {
 
   constructor(
     public readonly baseUrl: string,
-    public readonly headers: DzHeaders,
+    public readonly headers: HttpHeaders,
     public readonly callFactory: CallFactory,
     private readonly _interceptors: Interceptor<unknown, unknown>[],
     private readonly callAdapterFactories: Set<CallAdapterFactory>,
     private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
-    private readonly requestConverterFactories: Set<RequestConverterFactory>,
+    private readonly requestConverterFactories: Set<RequestBodyConverterFactory>,
     private readonly responseConverterFactories: Set<ResponseConverterFactory>
   ) {
     this.shutdownHooks = []

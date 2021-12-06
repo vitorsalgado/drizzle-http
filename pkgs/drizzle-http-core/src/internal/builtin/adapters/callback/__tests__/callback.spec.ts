@@ -1,9 +1,9 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { Drizzle } from '../../../../../drizzle'
+import { Drizzle } from '../../../../../Drizzle'
 import { AsJSON, GET, Param } from '../../../../../decorators'
 import { TestCallFactory } from '../../../../net/http/test'
-import { DrizzleBuilder } from '../../../../../drizzle.builder'
-import { HttpError } from '../../../../../http.error'
+import { DrizzleBuilder } from '../../../../../DrizzleBuilder'
+import { HttpError } from '../../../../../HttpError'
 import { Callback } from '..'
 import { noop } from '../../../../../noop'
 

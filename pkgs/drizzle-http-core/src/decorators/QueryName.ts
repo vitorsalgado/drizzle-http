@@ -1,4 +1,4 @@
-import { DrizzleMeta } from '../drizzle.meta'
+import { DrizzleMeta } from '../DrizzleMeta'
 import { QueryNameParameter } from '../internal'
 
 /**

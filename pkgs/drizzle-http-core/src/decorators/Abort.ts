@@ -1,4 +1,4 @@
-import { DrizzleMeta } from '../drizzle.meta'
+import { DrizzleMeta } from '../DrizzleMeta'
 import { SignalParameter } from '../internal'
 
 export function Abort(value: string | unknown | null = null) {

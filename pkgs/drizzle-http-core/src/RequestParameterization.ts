@@ -1,4 +1,4 @@
-import { DzHeaders } from './http.headers'
+import { HttpHeaders } from './HttpHeaders'
 import { BodyType } from './internal'
 
 export class RequestParameterization {
@@ -6,7 +6,7 @@ export class RequestParameterization {
     public readonly argv: unknown[],
     public path: string = '',
     public readonly query: string[] = [],
-    public readonly headers: DzHeaders = new DzHeaders({}),
+    public readonly headers: HttpHeaders = new HttpHeaders({}),
     public readonly formFields: string[] = [],
     public body: BodyType = null,
     public signal: unknown | null = null

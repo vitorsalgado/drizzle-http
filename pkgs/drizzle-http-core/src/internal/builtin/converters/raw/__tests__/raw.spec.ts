@@ -1,11 +1,10 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
-import { RequestFactory } from '../../../../../request.factory'
-import CommonHeaders from '../../../../../http.common.headers'
-import MediaTypes from '../../../../../http.media.types'
-import { DrizzleBuilder, initDrizzleHttp } from '../../../../../drizzle.builder'
+import { RequestFactory } from '../../../../../RequestFactory'
+import MediaTypes from '../../../../../MediaTypes'
+import { DrizzleBuilder, initDrizzleHttp } from '../../../../../DrizzleBuilder'
 import { TestCallFactory } from '../../../../net/http/test'
 import { Body, ContentType, POST } from '../../../../../decorators'
-import { DzResponse } from '../../../../../DzResponse'
+import { HttpResponse } from '../../../../../HttpResponse'
 import {
   FullResponse,
   RawRequestConverter,
@@ -14,12 +13,13 @@ import {
   RawResponseConverterFactory
 } from '..'
 import { noop } from '../../../../../noop'
+import { HttpHeaders } from '../../../../../HttpHeaders'
 
 class API {
   @POST('/raw-test')
   @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
   @FullResponse()
-  test(@Body() data: string): Promise<DzResponse> {
+  test(@Body() data: string): Promise<HttpResponse> {
     return noop(data)
   }
 }
@@ -51,7 +51,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -67,7 +67,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -82,7 +82,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)

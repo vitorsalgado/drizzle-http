@@ -1,5 +1,5 @@
-import { Drizzle } from '../../../drizzle'
-import { RequestFactory } from '../../../request.factory'
+import { Drizzle } from '../../../Drizzle'
+import { RequestFactory } from '../../../RequestFactory'
 import { Parameter } from './Parameter'
 import { ParameterHandler } from './ParameterHandler'
 

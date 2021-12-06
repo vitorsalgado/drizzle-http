@@ -1,18 +1,18 @@
-import { DzHeaders } from '../http.headers'
+import { HttpHeaders } from '../HttpHeaders'
 
 describe('Headers', function () {
   it('should init with object/2d array/null', () => {
-    expect(() => new DzHeaders(null)).not.toThrowError()
-    expect(() => new DzHeaders({})).not.toThrowError()
-    expect(() => new DzHeaders([])).not.toThrowError()
+    expect(() => new HttpHeaders(null)).not.toThrowError()
+    expect(() => new HttpHeaders({})).not.toThrowError()
+    expect(() => new HttpHeaders([])).not.toThrowError()
   })
 
   it('should fail when init with unidimensional array', () => {
-    expect(() => new DzHeaders(['test', 'value'])).toThrowError()
+    expect(() => new HttpHeaders(['test', 'value'])).toThrowError()
   })
 
   it('should init with key/value object', () => {
-    const h = new DzHeaders({
+    const h = new HttpHeaders({
       name: 'test',
       description: 'none',
       age: '32'
@@ -25,7 +25,7 @@ describe('Headers', function () {
   })
 
   it('should init with 2d array', () => {
-    const h = new DzHeaders([
+    const h = new HttpHeaders([
       ['name', 'test'],
       ['description', 'none'],
       ['age', '32']
@@ -38,7 +38,7 @@ describe('Headers', function () {
   })
 
   it('should fail when header name is null or empty', function () {
-    const h = new DzHeaders({})
+    const h = new HttpHeaders({})
 
     expect(() => h.set('', '')).toThrowError()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -52,11 +52,11 @@ describe('Headers', function () {
   })
 
   it('should return isEmpty() equal to true when there is no records', () => {
-    expect(new DzHeaders({}).isEmpty()).toBeTruthy()
+    expect(new HttpHeaders({}).isEmpty()).toBeTruthy()
   })
 
   it('should set a entry with name normalized to lower case', function () {
-    const h = new DzHeaders({})
+    const h = new HttpHeaders({})
 
     const n1 = 'Content-Type'
     const v1 = 'json'
@@ -79,7 +79,7 @@ describe('Headers', function () {
   })
 
   it('should append to header value when entry already exists', function () {
-    const h = new DzHeaders({})
+    const h = new HttpHeaders({})
 
     const name = 'Accept'
     const json = 'json'
@@ -94,7 +94,7 @@ describe('Headers', function () {
   })
 
   it('should delete entry', function () {
-    const h = new DzHeaders([])
+    const h = new HttpHeaders([])
 
     h.append('test', 'value,another-value')
     const has = h.has('test')
@@ -108,7 +108,7 @@ describe('Headers', function () {
   })
 
   it('should convert to object with keys and values', () => {
-    const h = new DzHeaders([])
+    const h = new HttpHeaders([])
     h.set('name', 'test')
     h.set('age', '32')
 
@@ -119,7 +119,7 @@ describe('Headers', function () {
   })
 
   it('should merge object, ignoring', () => {
-    const h = new DzHeaders([])
+    const h = new HttpHeaders([])
     const obj = {
       name: 'test',
       age: '32'
@@ -137,12 +137,12 @@ describe('Headers', function () {
   })
 
   it('should merge two headers', () => {
-    const h1 = new DzHeaders([])
+    const h1 = new HttpHeaders([])
     h1.set('accept', 'everything')
     h1.set('cache', 'always')
     h1.set('server-status', 'exploded')
 
-    const h2 = new DzHeaders([])
+    const h2 = new HttpHeaders([])
     h2.set('content', 'none')
     h2.set('happy', '*-*')
 
@@ -160,7 +160,7 @@ describe('Headers', function () {
   })
 
   it('should return all values when calling .values()', () => {
-    const h = new DzHeaders({
+    const h = new HttpHeaders({
       name: 'test',
       description: 'none',
       age: '32'
@@ -174,7 +174,7 @@ describe('Headers', function () {
   })
 
   it('should return all entries when calling .entries()', () => {
-    const h = new DzHeaders({
+    const h = new HttpHeaders({
       name: 'test',
       description: 'none',
       age: '32'
@@ -188,7 +188,7 @@ describe('Headers', function () {
   })
 
   it('should return all headers on .toString()', function () {
-    const h = new DzHeaders({
+    const h = new HttpHeaders({
       name: 'test',
       description: 'none',
       age: '32'
@@ -201,7 +201,7 @@ describe('Headers', function () {
     expect(str).toContain('age: 32')
   })
 
-  it('should contain symbol toStringTag equal to DzHeaders', function () {
-    expect(new DzHeaders({})[Symbol.toStringTag]).toStrictEqual('DzHeaders')
+  it('should contain symbol toStringTag equal to HttpHeaders', function () {
+    expect(new HttpHeaders({})[Symbol.toStringTag]).toStrictEqual('HttpHeaders')
   })
 })

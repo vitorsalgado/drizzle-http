@@ -1,9 +1,9 @@
-import { RequestFactory } from './request.factory'
-import { DzHeaders } from './http.headers'
+import { RequestFactory } from './RequestFactory'
+import { HttpHeaders } from './HttpHeaders'
 import { notNull } from './internal'
 
 export class ApiInstanceMeta {
-  defaultHeaders: DzHeaders
+  defaultHeaders: HttpHeaders
   readTimeout?: number
   connectTimeout?: number
   signal: unknown | null
@@ -11,7 +11,7 @@ export class ApiInstanceMeta {
 
   constructor() {
     this.path = undefined
-    this.defaultHeaders = new DzHeaders({})
+    this.defaultHeaders = new HttpHeaders({})
     this.connectTimeout = undefined
     this.readTimeout = undefined
     this.signal = null

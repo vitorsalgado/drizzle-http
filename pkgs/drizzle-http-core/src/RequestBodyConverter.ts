@@ -1,6 +1,6 @@
-import { Drizzle } from './drizzle'
-import { RequestFactory } from './request.factory'
-import { RequestParameterization } from './request.parameterization'
+import { RequestFactory } from './RequestFactory'
+import { RequestParameterization } from './RequestParameterization'
+import { Drizzle } from './Drizzle'
 
 /**
  * Converts a value to an HTTP representation format
@@ -12,7 +12,7 @@ export interface RequestBodyConverter<T> {
 /**
  * Creates instances of {@link RequestBodyConverter}
  */
-export abstract class RequestConverterFactory {
+export abstract class RequestBodyConverterFactory {
   /**
    * This will be called outside the context of a request.
    * Every request will already contain a {@link RequestBodyConverter} instance ready.

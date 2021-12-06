@@ -1,9 +1,9 @@
 import { ParameterHandler } from '../ParameterHandler'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
-import { RequestParameterization } from '../../../../request.parameterization'
+import { RequestParameterization } from '../../../../RequestParameterization'
 import { encodeFormFieldIfNecessary } from '../../../encoding'
 
 export const FormParameterType = 'form_field'

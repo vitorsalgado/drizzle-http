@@ -1,4 +1,4 @@
-import { Drizzle } from './drizzle'
+import { Drizzle } from './Drizzle'
 import { InvalidRequestMethodConfigurationError } from './internal'
 import { notNull } from './internal'
 import { notBlank } from './internal'
@@ -16,17 +16,22 @@ import { Parameter } from './internal'
 import { HeaderParameter } from './internal'
 import { PathParameterType } from './internal'
 import { HeaderParameterType } from './internal'
-import { RequestBodyConverter } from './request.body.converter'
-import { ApiInstanceMeta } from './drizzle.meta'
-import { RequestParameterization } from './request.parameterization'
-import { MediaTypes } from './http.media.types'
-import { DzHeaders } from './http.headers'
-import CommonHeaders from './http.common.headers'
-import { DzRequest } from './DzRequest'
-import { RequestBuilder } from './request.builder'
+import { RequestBodyConverter } from './RequestBodyConverter'
+import { ApiInstanceMeta } from './DrizzleMeta'
+import { RequestParameterization } from './RequestParameterization'
+import { MediaTypes } from './MediaTypes'
+import { HttpHeaders } from './HttpHeaders'
+import { HttpRequest } from './HttpRequest'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
+
+/**
+ * Builds a {@link Request} instance
+ */
+interface RequestBuilder {
+  toRequest(args: unknown[]): HttpRequest
+}
 
 /**
  * Holds values extracted from a decorated method to build an HTTP request.
@@ -38,7 +43,7 @@ export class RequestFactory {
   path: string
   argLen: number
   bodyIndex: number
-  defaultHeaders: DzHeaders
+  defaultHeaders: HttpHeaders
   readTimeout?: number
   connectTimeout?: number
   returnIdentifier: string | null
@@ -57,7 +62,7 @@ export class RequestFactory {
     this.path = ''
     this.argLen = 0
     this.bodyIndex = -1
-    this.defaultHeaders = new DzHeaders()
+    this.defaultHeaders = new HttpHeaders()
     this.readTimeout = undefined
     this.connectTimeout = undefined
     this.returnIdentifier = ''
@@ -320,7 +325,7 @@ export class RequestFactory {
    * @param value - content-type
    */
   contentTypeContains(value: string): boolean {
-    const h = this.defaultHeaders.get(CommonHeaders.CONTENT_TYPE)
+    const h = this.defaultHeaders.get(HttpHeaders.CONTENT_TYPE)
 
     if (h !== null && typeof h !== 'undefined') {
       return h.indexOf(value) > -1
@@ -519,10 +524,10 @@ export class RequestFactory {
  * should be used for requests that doesn't contain dynamic parameters.
  */
 export class NoParametersRequestBuilder implements RequestBuilder {
-  private readonly request: DzRequest
+  private readonly request: HttpRequest
 
   constructor(requestFactory: RequestFactory) {
-    this.request = new DzRequest({
+    this.request = new HttpRequest({
       url: requestFactory.path,
       method: requestFactory.httpMethod,
       headers: requestFactory.defaultHeaders,
@@ -533,7 +538,7 @@ export class NoParametersRequestBuilder implements RequestBuilder {
     })
   }
 
-  toRequest(): DzRequest {
+  toRequest(): HttpRequest {
     return this.request
   }
 }
@@ -547,7 +552,7 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
     private readonly requestBodyConverter: RequestBodyConverter<BodyType>
   ) {}
 
-  toRequest(args: unknown[]): DzRequest {
+  toRequest(args: unknown[]): HttpRequest {
     const requestParameterization = new RequestParameterization(
       args,
       this.requestFactory.path,
@@ -571,7 +576,7 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       )
     }
 
-    return new DzRequest({
+    return new HttpRequest({
       url: requestParameterization.buildPath(),
       headers: requestParameterization.headers,
       method: this.requestFactory.httpMethod,

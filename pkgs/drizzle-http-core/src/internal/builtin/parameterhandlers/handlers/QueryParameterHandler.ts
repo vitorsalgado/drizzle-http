@@ -1,10 +1,10 @@
 import { ParameterHandler } from '../ParameterHandler'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { encodeIfNecessary } from '../../../encoding'
-import { RequestParameterization } from '../../../../request.parameterization'
+import { RequestParameterization } from '../../../../RequestParameterization'
 
 export const QueryParameterType = 'query'
 

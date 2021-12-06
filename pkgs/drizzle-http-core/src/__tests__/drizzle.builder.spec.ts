@@ -1,4 +1,4 @@
-import { initDrizzleHttp } from '../drizzle.builder'
+import { initDrizzleHttp } from '../DrizzleBuilder'
 import { TestCallFactory } from '../internal/net/http/test'
 import { QueryNameParameterHandlerFactory } from '../internal'
 import { FormParameterHandlerFactory } from '../internal'

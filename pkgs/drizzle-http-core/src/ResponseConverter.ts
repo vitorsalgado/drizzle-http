@@ -1,9 +1,9 @@
-import { Drizzle } from './drizzle'
-import { RequestFactory } from './request.factory'
-
 /**
  * Converts a value from its HTTP representation to another type
  */
+import { Drizzle } from './Drizzle'
+import { RequestFactory } from './RequestFactory'
+
 export interface ResponseConverter<F, T> {
   convert(from: F): T
 }

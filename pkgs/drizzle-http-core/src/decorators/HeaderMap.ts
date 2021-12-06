@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { DrizzleMeta } from '../drizzle.meta'
+import { DrizzleMeta } from '../DrizzleMeta'
 
 /**
  * Adds fixed params to the request

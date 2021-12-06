@@ -1,5 +1,5 @@
-import { CallAdapter } from '../../../../call.adapter'
-import { Call } from '../../../../call'
+import { CallAdapter } from '../../../../CallAdapter'
+import { Call } from '../../../../Call'
 
 type Fn = (error: Error | null, response: unknown) => void
 

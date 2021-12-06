@@ -1,7 +1,7 @@
-import { CallAdapter } from '../../../../call.adapter'
-import { CallAdapterFactory } from '../../../../call.adapter'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
+import { CallAdapter } from '../../../../CallAdapter'
+import { CallAdapterFactory } from '../../../../CallAdapter'
 import { CallbackCallAdapter } from './CallbackCallAdapter'
 import { KEY_IS_CALLBACK } from './Keys'
 

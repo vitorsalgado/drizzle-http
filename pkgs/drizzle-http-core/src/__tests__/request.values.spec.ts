@@ -1,5 +1,5 @@
-import { RequestParameterization } from '../request.parameterization'
-import { DzHeaders } from '../http.headers'
+import { RequestParameterization } from '../RequestParameterization'
+import { HttpHeaders } from '../HttpHeaders'
 
 describe('RequestValues', function () {
   it('should init with default values', function () {
@@ -7,7 +7,7 @@ describe('RequestValues', function () {
 
     expect(rv.argv).toEqual(['test'])
     expect(rv.path).toEqual('')
-    expect(rv.headers).toEqual(new DzHeaders({}))
+    expect(rv.headers).toEqual(new HttpHeaders({}))
     expect(rv.signal).toBeNull()
     expect(rv.query).toEqual([])
     expect(rv.formFields).toEqual([])

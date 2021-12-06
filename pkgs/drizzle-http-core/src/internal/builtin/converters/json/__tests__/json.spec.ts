@@ -1,7 +1,6 @@
-import MediaTypes from '../../../../../http.media.types'
-import { RequestFactory } from '../../../../../request.factory'
-import CommonHeaders from '../../../../../http.common.headers'
-import { DrizzleBuilder } from '../../../../../drizzle.builder'
+import MediaTypes from '../../../../../MediaTypes'
+import { RequestFactory } from '../../../../../RequestFactory'
+import { DrizzleBuilder } from '../../../../../DrizzleBuilder'
 import { TestCallFactory } from '../../../../net/http/test'
 import {
   JsonRequestConverter,
@@ -10,6 +9,7 @@ import {
   JsonResponseConverterFactory
 } from '..'
 import { BodyParameter } from '../../../parameterhandlers'
+import { HttpHeaders } from '../../../../../HttpHeaders'
 
 describe('JSON Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()
@@ -22,7 +22,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -37,7 +37,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     requestFactory.addParameter(new BodyParameter(0))
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -53,7 +53,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -68,7 +68,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     requestFactory.addParameter(new BodyParameter(0))
 
     requestFactory.preProcessAndValidate(drizzle)

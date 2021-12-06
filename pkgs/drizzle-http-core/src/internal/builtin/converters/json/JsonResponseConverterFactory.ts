@@ -1,10 +1,10 @@
-import { ResponseConverterFactory } from '../../../../response.converter'
-import { ResponseConverter } from '../../../../response.converter'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
+import MediaTypes from '../../../../MediaTypes'
+import { HttpResponse } from '../../../../HttpResponse'
+import { ResponseConverter } from '../../../../ResponseConverter'
+import { ResponseConverterFactory } from '../../../../ResponseConverter'
 import { JsonResponseConverter } from './JsonResponseConverter'
-import MediaTypes from '../../../../http.media.types'
-import { DzResponse } from '../../../../DzResponse'
 
 export class JsonResponseConverterFactory extends ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()
@@ -13,7 +13,7 @@ export class JsonResponseConverterFactory extends ResponseConverterFactory {
     _drizzle: Drizzle,
     _method: string,
     requestFactory: RequestFactory
-  ): ResponseConverter<DzResponse, Promise<T>> | null {
+  ): ResponseConverter<HttpResponse, Promise<T>> | null {
     if (requestFactory.contentTypeContains(MediaTypes.APPLICATION_JSON)) {
       return JsonResponseConverter.INSTANCE
     }

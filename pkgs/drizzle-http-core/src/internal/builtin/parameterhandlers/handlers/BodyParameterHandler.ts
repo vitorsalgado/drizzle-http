@@ -1,11 +1,11 @@
 import { ParameterHandler } from '../ParameterHandler'
-import { RequestFactory } from '../../../../request.factory'
-import { Drizzle } from '../../../../drizzle'
-import { RequestBodyConverter } from '../../../../request.body.converter'
+import { RequestFactory } from '../../../../RequestFactory'
+import { Drizzle } from '../../../../Drizzle'
+import { RequestBodyConverter } from '../../../../RequestBodyConverter'
 import { Parameter } from '../Parameter'
 import { BodyType } from '../../../types'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
-import { RequestParameterization } from '../../../../request.parameterization'
+import { RequestParameterization } from '../../../../RequestParameterization'
 
 export const BodyParameterType = 'body'
 

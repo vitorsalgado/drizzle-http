@@ -1,4 +1,4 @@
-import { DrizzleMeta } from '../drizzle.meta'
+import { DrizzleMeta } from '../DrizzleMeta'
 import { pathParameterRegex } from '../internal'
 import { PathParameter } from '../internal'
 

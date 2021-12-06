@@ -40,7 +40,7 @@ import {
   QueryName,
   Timeout
 } from '..'
-import { DzResponse } from '..'
+import { HttpResponse } from '..'
 import { FullResponse } from '..'
 
 const cancellation = new EventEmitter()
@@ -63,7 +63,7 @@ class TestAPI {
 
   @GET('/txt')
   @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
-  txt(): Promise<DzResponse> {
+  txt(): Promise<HttpResponse> {
     return noop()
   }
 
@@ -86,7 +86,7 @@ class TestAPI {
   @GET('/{id}/projects')
   @Accept(MediaTypes.APPLICATION_JSON_UTF8)
   @Abort(cancellationInMethod)
-  getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<DzResponse> {
+  getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<HttpResponse> {
     return noop(id, orderBy)
   }
 
@@ -115,7 +115,7 @@ class TestAPI {
   // region DELETE
 
   @DELETE('/delete/{id}')
-  testDELETE(@Param('id') id: string): Promise<DzResponse> {
+  testDELETE(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
@@ -124,7 +124,7 @@ class TestAPI {
   // region PATCH
 
   @PATCH('/patch/{id}')
-  testPATCH(@Param('id') id: string): Promise<DzResponse> {
+  testPATCH(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
@@ -133,8 +133,8 @@ class TestAPI {
   // region OPTIONS
 
   @OPTIONS('/options')
-  testOPTIONS(): Promise<DzResponse> {
-    return noop(Promise, DzResponse)
+  testOPTIONS(): Promise<HttpResponse> {
+    return noop(Promise, HttpResponse)
   }
 
   // endregion
@@ -142,8 +142,8 @@ class TestAPI {
   // region HEAD
 
   @HEAD('/head')
-  testHEAD(): Promise<DzResponse> {
-    return noop(Promise, DzResponse)
+  testHEAD(): Promise<HttpResponse> {
+    return noop(Promise, HttpResponse)
   }
 
   // endregion
@@ -274,7 +274,7 @@ describe('Drizzle Http', () => {
       class InnerAPI {
         @POST('/')
         @FullResponse()
-        test(@Field('value') val: string): Promise<DzResponse> {
+        test(@Field('value') val: string): Promise<HttpResponse> {
           return noop(val)
         }
       }
