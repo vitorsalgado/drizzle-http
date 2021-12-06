@@ -1,4 +1,5 @@
-import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query, theTypes } from '@drizzle-http/core'
+import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
+import { noop } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 
 interface Party {
@@ -11,13 +12,13 @@ class PartiesAPI {
   @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
   @Accept(MediaTypes.APPLICATION_JSON)
   parties(@Query('sigla') acronym: string): Promise<Party[]> {
-    return theTypes(Promise)
+    return noop(acronym)
   }
 }
 
-const partiesApi: PartiesAPI = DrizzleBuilder.newBuilder()
+const partiesApi = DrizzleBuilder.newBuilder()
   .baseUrl('https://dadosabertos.camara.leg.br/api/v2/')
-  .callFactory(UndiciCallFactory.DEFAULT)
+  .callFactory(new UndiciCallFactory())
   .build()
   .create(PartiesAPI)
 
