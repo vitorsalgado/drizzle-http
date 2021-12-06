@@ -1,4 +1,3 @@
-import { Stream } from 'stream'
 import { Chain, HttpError, HttpRequest, HttpResponse, Interceptor } from '@drizzle-http/core'
 import { Level } from './Level'
 import { Logger } from './Logger'
@@ -10,7 +9,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
   constructor(
     public level: Level = Level.BASIC,
     private readonly headersToRedact: Set<string> = new Set<string>(),
-    private readonly logger: Logger = PinoLogger.DEFAULT
+    public readonly logger: Logger = PinoLogger.DEFAULT
   ) {}
 
   setLevel(level: Level): void {
@@ -177,9 +176,8 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
 
   private static isStream(body: unknown): boolean {
     return (
-      body instanceof Stream ||
       // eslint-disable-next-line no-undef
-      (typeof ReadableStream !== 'undefined' && body instanceof ReadableStream)
+      typeof ReadableStream !== 'undefined' && body instanceof ReadableStream
     )
   }
 }
