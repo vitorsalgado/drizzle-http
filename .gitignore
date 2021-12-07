@@ -117,6 +117,7 @@ typings/
 .rollup.cache
 
 # Project
+.clinic/
 .vscode/
 .idea/
 .nvmrc

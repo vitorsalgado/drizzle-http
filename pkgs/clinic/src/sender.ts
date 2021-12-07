@@ -2,6 +2,7 @@ import { createServer, IncomingMessage, ServerResponse } from 'http'
 import { Body, DrizzleBuilder, HeaderMap, MediaTypes, Param, POST, Query } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
+import { FullResponse } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 
 const port = process.env.SENDER_PORT || 3000
@@ -9,6 +10,7 @@ const port = process.env.SENDER_PORT || 3000
 class API {
   @POST('/test/{id}')
   @HeaderMap({ 'Content-Type': MediaTypes.APPLICATION_JSON_UTF8 })
+  @FullResponse()
   test(@Param('id') id: string, @Query('filter') filter: string, @Body() data: unknown): Promise<HttpResponse> {
     return noop(id, filter, data)
   }

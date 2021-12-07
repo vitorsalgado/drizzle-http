@@ -10,6 +10,8 @@
     "run:receiver": "node dist/receiver.js",
     "run:doctor": "clinic doctor -- node dist/sender.js",
     "run:flame": "clinic flame -- node dist/sender.js",
+    "run:bubbleprof": "clinic bubbleprof -- node dist/sender.js",
+    "run:heapprofiler": "clinic heapprofiler -- node dist/sender.js",
     "run:cannon": "autocannon http://localhost:3000"
   },
   "author": {
