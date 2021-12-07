@@ -250,6 +250,20 @@ export class DrizzleBuilder {
   }
 
   /**
+   * Add a configurator function. With a configuration function its possible to apply several configurations at one time.
+   * Good to configure several lib components in one call.
+   *
+   * @param configurators - configuration functions that receive the {@link DrizzleBuilder} instance as a parameter.
+   */
+  configurer(...configurators: ((drizzleBuilder: DrizzleBuilder) => void)[]): this {
+    for (const configurer of configurators) {
+      configurer(this)
+    }
+
+    return this
+  }
+
+  /**
    * Builds a new {@link Drizzle} instance using the configured values.
    */
   build(): Drizzle {

@@ -63,6 +63,7 @@ class TestAPI {
 
   @GET('/txt')
   @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @FullResponse()
   txt(): Promise<HttpResponse> {
     return noop()
   }
@@ -86,6 +87,7 @@ class TestAPI {
   @GET('/{id}/projects')
   @Accept(MediaTypes.APPLICATION_JSON_UTF8)
   @Abort(cancellationInMethod)
+  @FullResponse()
   getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<HttpResponse> {
     return noop(id, orderBy)
   }
@@ -115,6 +117,7 @@ class TestAPI {
   // region DELETE
 
   @DELETE('/delete/{id}')
+  @FullResponse()
   testDELETE(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
@@ -124,6 +127,7 @@ class TestAPI {
   // region PATCH
 
   @PATCH('/patch/{id}')
+  @FullResponse()
   testPATCH(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
@@ -133,6 +137,7 @@ class TestAPI {
   // region OPTIONS
 
   @OPTIONS('/options')
+  @FullResponse()
   testOPTIONS(): Promise<HttpResponse> {
     return noop()
   }
@@ -142,6 +147,7 @@ class TestAPI {
   // region HEAD
 
   @HEAD('/head')
+  @FullResponse()
   testHEAD(): Promise<HttpResponse> {
     return noop()
   }
@@ -154,6 +160,8 @@ describe('Drizzle Http', () => {
   let address = ''
   let api: TestAPI
 
+  const configurerSpy = jest.fn()
+
   beforeAll(() => {
     setupTestServer(fastify => {
       fastify.all('/test', (req, res) => {
@@ -161,7 +169,7 @@ describe('Drizzle Http', () => {
       })
 
       fastify.get('/txt', (req, res) => {
-        res.status(200).send('ok')
+        res.status(200).header('x-configurer', req.headers['x-configurer']).send('ok')
       })
 
       fastify.all('/empty', (req, res) => {
@@ -196,7 +204,14 @@ describe('Drizzle Http', () => {
     return startTestServer().then((addr: string) => {
       address = addr
 
-      drizzle = DrizzleBuilder.newBuilder().baseUrl(addr).callFactory(TestCallFactory.INSTANCE).build()
+      drizzle = DrizzleBuilder.newBuilder()
+        .baseUrl(addr)
+        .callFactory(TestCallFactory.INSTANCE)
+        .configurer(
+          builder => builder.addDefaultHeader('X-Configurer', 'true'),
+          builder => configurerSpy(builder)
+        )
+        .build()
 
       api = drizzle.create(TestAPI)
     })
@@ -442,6 +457,24 @@ describe('Drizzle Http', () => {
         expect(res.ok).toBeTruthy()
         expect(res.headers.get('head')).toEqual('none')
       })
+    })
+  })
+
+  describe('Globals', function () {
+    it('should execute configurator functions and apply configurations to the builder', function () {
+      return api
+        .txt()
+        .then(res => {
+          expect(res.status).toEqual(200)
+          expect(res.ok).toBeTruthy()
+          expect(res.headers.get('X-Configurer')).toEqual('true')
+          expect(configurerSpy).toHaveBeenCalledTimes(1)
+
+          return res.text()
+        })
+        .then(txt => {
+          expect(txt).toEqual('ok')
+        })
     })
   })
 })
