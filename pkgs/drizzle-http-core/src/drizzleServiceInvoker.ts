@@ -5,7 +5,6 @@ import { notNull } from './internal'
 import { notBlank } from './internal'
 import { CallBridge } from './CallBridge'
 import { Call } from './Call'
-import { ResponseConverter } from './ResponseConverter'
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on

@@ -1,6 +1,4 @@
-import { Call, HttpError, HttpRequest, isAbsolute } from '@drizzle-http/core'
-import { HttpResponse } from '@drizzle-http/core'
-import { RequestAbortedError } from './errors/RequestAbortedError'
+import { Call, HttpRequest, isAbsolute } from '@drizzle-http/core'
 
 export class FetchCall implements Call<Promise<Response>> {
   private readonly url: string
@@ -30,22 +28,10 @@ export class FetchCall implements Call<Promise<Response>> {
 
     const timer = setTimeout(() => controller.abort(), timeout)
 
-    return fetch(this.url, FetchCall.requestInit(this.requestInit, this.options, this.request, controller.signal))
-      .then(response => {
-        if (response.ok) {
-          return response
-        }
-
-        throw new HttpError(this.request, response as unknown as HttpResponse)
-      })
-      .catch(err => {
-        if (err.name === 'AbortError') {
-          throw new RequestAbortedError(this.request, 'aborted', timeout)
-        }
-
-        throw err
-      })
-      .finally(() => clearTimeout(timer))
+    return fetch(
+      this.url,
+      FetchCall.requestInit(this.requestInit, this.options, this.request, controller.signal)
+    ).finally(() => clearTimeout(timer))
   }
 
   static requestInit(
