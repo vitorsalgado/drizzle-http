@@ -16,12 +16,15 @@ import { Parameter } from './internal'
 import { FormRequestConverterFactory } from './internal'
 import { PathParameterHandlerFactory } from './internal'
 import { SignalParameterHandlerFactory } from './internal'
+import { notEmpty } from './internal'
 import { Interceptor } from './Interceptor'
 import { HttpHeaders } from './HttpHeaders'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { CallAdapterFactory } from './CallAdapter'
 import { CallFactory } from './Call'
 import { ResponseConverterFactory } from './ResponseConverter'
+import { ResponseHandlerFactory } from './ResponseHandler'
+import { RawResponseHandlerFactory } from './internal/builtin/converters/raw/RawResponseHandlerFactory'
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
@@ -38,11 +41,12 @@ export class DrizzleBuilder {
   private _baseURL!: string
   private readonly _headers: HttpHeaders
   private _callFactory!: CallFactory
-  private readonly _interceptors: Interceptor<unknown, unknown>[]
+  private readonly _interceptors: Interceptor[]
   private readonly _callAdapterFactories: CallAdapterFactory[]
   private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[]
   private readonly _requestConverterFactories: RequestBodyConverterFactory[]
   private readonly _responseConverterFactories: ResponseConverterFactory[]
+  private readonly _responseHandlerFactories: ResponseHandlerFactory[]
   private _enableDrizzleUserAgent: boolean
   private _useDefaults: boolean
 
@@ -53,6 +57,7 @@ export class DrizzleBuilder {
     this._parameterHandlerFactories = []
     this._requestConverterFactories = []
     this._responseConverterFactories = []
+    this._responseHandlerFactories = []
     this._enableDrizzleUserAgent = true
     this._useDefaults = true
   }
@@ -98,12 +103,26 @@ export class DrizzleBuilder {
   }
 
   /**
+   * Add one or more {@link ResponseHandlerFactory}
+   *
+   * @param factories - list of {@link ResponseHandlerFactory} to be added
+   */
+  addResponseHandlerFactory(...factories: ResponseHandlerFactory[]): this {
+    notNull(factories)
+    notEmpty(factories)
+
+    this._responseHandlerFactories.push(...factories)
+
+    return this
+  }
+
+  /**
    * Adds a {@link Interceptor} to the execution chain
    *
    * @param interceptors - {@link Interceptor} instance
    * @returns Same {@link DrizzleBuilder} instance
    */
-  addInterceptor(...interceptors: Interceptor<unknown, unknown>[]): this {
+  addInterceptor(...interceptors: Interceptor[]): this {
     notNull(interceptors, 'Parameter "interceptor" must not be null.')
 
     if (interceptors.length === 0) {
@@ -261,7 +280,8 @@ export class DrizzleBuilder {
       new Set<CallAdapterFactory>(this._callAdapterFactories),
       this._parameterHandlerFactories,
       new Set<RequestBodyConverterFactory>(this._requestConverterFactories),
-      new Set<ResponseConverterFactory>(this._responseConverterFactories)
+      new Set<ResponseConverterFactory>(this._responseConverterFactories),
+      this._responseHandlerFactories
     )
   }
 
@@ -284,5 +304,7 @@ export class DrizzleBuilder {
 
     this._responseConverterFactories.unshift(new RawResponseConverterFactory())
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
+
+    this.addResponseHandlerFactory(new RawResponseHandlerFactory())
   }
 }

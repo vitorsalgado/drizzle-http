@@ -13,7 +13,7 @@ export class RawResponseConverterFactory implements ResponseConverterFactory {
     _drizzle: Drizzle,
     _method: string,
     requestFactory: RequestFactory
-  ): ResponseConverter<HttpResponse, Promise<HttpResponse>> | null {
+  ): ResponseConverter<HttpResponse> | null {
     if (requestFactory.isReturnIdentifier(Keys.ReturnIdentifier)) {
       return RawResponseConverter.INSTANCE
     }

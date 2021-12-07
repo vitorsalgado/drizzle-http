@@ -1,27 +1,25 @@
 import { Chain } from './Chain'
 import { Interceptor } from './Interceptor'
+import { HttpRequest } from './HttpRequest'
+import { HttpResponse } from './HttpResponse'
 
-export class ChainExecutor<TReq, TRes> implements Chain<TReq, TRes> {
+export class ChainExecutor implements Chain {
   constructor(
     private readonly _index: number,
-    private readonly _interceptors: Interceptor<TReq, TRes>[],
-    private readonly _request: TReq,
+    private readonly _interceptors: Interceptor[],
+    private readonly _request: HttpRequest,
     private readonly _argv: unknown[]
   ) {}
 
-  static first<TReq, TRes>(
-    interceptors: Interceptor<TReq, TRes>[],
-    request: TReq,
-    argv: unknown[]
-  ): ChainExecutor<TReq, TRes> {
-    return new ChainExecutor<TReq, TRes>(0, interceptors, request, argv)
+  static first(interceptors: Interceptor[], request: HttpRequest, argv: unknown[]): ChainExecutor {
+    return new ChainExecutor(0, interceptors, request, argv)
   }
 
-  proceed(request: TReq): Promise<TRes> {
+  proceed(request: HttpRequest): Promise<HttpResponse> {
     return this._interceptors[this._index].intercept(this.copy(this._index + 1, request))
   }
 
-  request(): TReq {
+  request(): HttpRequest {
     return this._request
   }
 
@@ -29,7 +27,7 @@ export class ChainExecutor<TReq, TRes> implements Chain<TReq, TRes> {
     return this._argv
   }
 
-  copy(index: number, request: TReq): ChainExecutor<TReq, TRes> {
+  copy(index: number, request: HttpRequest): ChainExecutor {
     return new ChainExecutor(index, this._interceptors, request, this._argv)
   }
 }

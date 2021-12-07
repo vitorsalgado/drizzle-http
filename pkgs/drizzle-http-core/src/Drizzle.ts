@@ -1,4 +1,5 @@
 import { RequestBodyConverter } from './RequestBodyConverter'
+import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { serviceInvoker } from './drizzleServiceInvoker'
 import { RequestFactory } from './RequestFactory'
 import { DrizzleMeta } from './DrizzleMeta'
@@ -8,11 +9,13 @@ import { NoParameterHandlerFoundForType } from './internal'
 import { Parameter, ParameterHandlerFactory } from './internal'
 import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
+import { ResponseConverterFactory } from './ResponseConverter'
 import { CallAdapter } from './CallAdapter'
-import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { CallAdapterFactory } from './CallAdapter'
 import { CallFactory } from './Call'
-import { ResponseConverterFactory } from './ResponseConverter'
+import { ResponseHandler } from './ResponseHandler'
+import { ResponseHandlerFactory } from './ResponseHandler'
+import { DefaultResponseHandler } from './ResponseHandler'
 
 /**
  * Drizzle adapts a class to perform HTTP calls by using the decorators on the declared methods
@@ -34,11 +37,12 @@ export class Drizzle {
     public readonly baseUrl: string,
     public readonly headers: HttpHeaders,
     public readonly callFactory: CallFactory,
-    private readonly _interceptors: Interceptor<unknown, unknown>[],
+    private readonly _interceptors: Interceptor[],
     private readonly callAdapterFactories: Set<CallAdapterFactory>,
     private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
     private readonly requestConverterFactories: Set<RequestBodyConverterFactory>,
-    private readonly responseConverterFactories: Set<ResponseConverterFactory>
+    private readonly responseConverterFactories: Set<ResponseConverterFactory>,
+    private readonly _responseHandlerFactories: ResponseHandlerFactory[]
   ) {
     this.shutdownHooks = []
   }
@@ -51,7 +55,7 @@ export class Drizzle {
    * Get all registered {@link Interceptor} instances
    * @returns All registered {@link Interceptor} instances
    */
-  interceptors(): Interceptor<unknown, unknown>[] {
+  interceptors(): Interceptor[] {
     return [...this._interceptors]
   }
 
@@ -83,6 +87,12 @@ export class Drizzle {
     return null
   }
 
+  /**
+   * Search a {@link ParameterHandlerFactory} that handles the parameter type from argument
+   *
+   * @returns {@link ParameterHandlerFactory} instance
+   * @throws {@link NoParameterHandlerFoundForType} if no factory is found for provided parameter type
+   */
   parameterHandlerFactory<P extends Parameter, R>(
     requestFactory: RequestFactory,
     parameter: Parameter
@@ -121,20 +131,41 @@ export class Drizzle {
    * @returns {@link ResponseConverter} instance based on request configuration or
    *  {@link RawResponseConverter} when none is found.
    */
-  responseBodyConverter<F, T>(method: string, requestFactory: RequestFactory): ResponseConverter<F, T> {
+  responseBodyConverter<T>(method: string, requestFactory: RequestFactory): ResponseConverter<T> {
     if (requestFactory.noResponseConverter) {
-      return RawResponseConverter.INSTANCE as unknown as ResponseConverter<F, T>
+      return RawResponseConverter.INSTANCE as unknown as ResponseConverter<T>
     }
 
     for (const factory of this.responseConverterFactories) {
       const converter = factory.responseBodyConverter(this, method, requestFactory)
 
       if (converter !== null) {
-        return converter as ResponseConverter<F, T>
+        return converter as ResponseConverter<T>
       }
     }
 
-    return RawResponseConverter.INSTANCE as unknown as ResponseConverter<F, T>
+    return RawResponseConverter.INSTANCE as unknown as ResponseConverter<T>
+  }
+
+  /**
+   * Search for response handler. If no none is found, returns {@link DefaultResponseHandler}.
+   *
+   * @returns {@link ResponseHandlerFactory} instance or {@link DefaultResponseHandler} if none is found for method.
+   */
+  responseHandler(method: string, requestFactory: RequestFactory): ResponseHandler {
+    if (this._responseHandlerFactories.length === 0) {
+      return new DefaultResponseHandler()
+    }
+
+    for (const factory of this._responseHandlerFactories) {
+      const handler = factory.responseHandler(this, method, requestFactory)
+
+      if (handler !== null) {
+        return handler
+      }
+    }
+
+    return new DefaultResponseHandler()
   }
 
   /**

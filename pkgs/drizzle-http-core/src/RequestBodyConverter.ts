@@ -6,7 +6,7 @@ import { Drizzle } from './Drizzle'
  * Converts a value to an HTTP representation format
  */
 export interface RequestBodyConverter<T> {
-  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: T): void
+  convert(requestFactory: RequestFactory, requestParameterization: RequestParameterization, value: T): void
 }
 
 /**

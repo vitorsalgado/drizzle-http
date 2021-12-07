@@ -4,6 +4,7 @@ import MediaTypes from '../../../../../MediaTypes'
 import { DrizzleBuilder, initDrizzleHttp } from '../../../../../DrizzleBuilder'
 import { TestCallFactory } from '../../../../net/http/test'
 import { Body, ContentType, POST } from '../../../../../decorators'
+import { GET } from '../../../../../decorators'
 import { HttpResponse } from '../../../../../HttpResponse'
 import {
   FullResponse,
@@ -22,10 +23,18 @@ class API {
   test(@Body() data: string): Promise<HttpResponse> {
     return noop(data)
   }
+
+  @GET('/nowhere')
+  @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @FullResponse()
+  nowhere(): Promise<HttpResponse> {
+    return noop()
+  }
 }
 
 describe('Raw Converter', function () {
   let address = ''
+  let api: API
 
   const drizzle = DrizzleBuilder.newBuilder()
     .baseUrl('http://www.test.com.br')
@@ -37,14 +46,22 @@ describe('Raw Converter', function () {
       fastify.post('/raw-test', (req, res) => {
         res.status(200).send({ test: 'ok' })
       })
+
+      fastify.get('/nowhere', (req, res) => {
+        res.status(404).send({ message: 'Nothing Here!' })
+      })
     })
 
     return startTestServer().then((addr: string) => {
       address = addr
+      api = initDrizzleHttp().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
     })
   })
 
-  afterAll(() => closeTestServer())
+  afterAll(async () => {
+    await closeTestServer()
+    await drizzle.shutdown()
+  })
 
   it('should return raw response converter when generic return type is Response', function () {
     const requestFactory = new RequestFactory()
@@ -96,13 +113,22 @@ describe('Raw Converter', function () {
   it('should set full response when using @FullResponse() decorator', () => {
     expect.assertions(3)
 
-    const api: API = initDrizzleHttp().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
-
     return api.test('text').then(response => {
       expect(response.ok).toBeTruthy()
       expect(response.status).toEqual(200)
 
       return response.text().then(txt => expect(txt).toContain('ok'))
     })
+  })
+
+  it('should not throw error when request fails', async () => {
+    expect.assertions(3)
+
+    const response = await api.nowhere()
+    const json = await response.json<{ message: string }>()
+
+    expect(response.ok).toBeFalsy()
+    expect(response.status).toEqual(404)
+    expect(json.message).toEqual('Nothing Here!')
   })
 })

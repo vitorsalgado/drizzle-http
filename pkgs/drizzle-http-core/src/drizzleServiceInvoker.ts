@@ -4,6 +4,8 @@ import { InterceptorHttpExecutor } from './InterceptorHttpExecutor'
 import { notNull } from './internal'
 import { notBlank } from './internal'
 import { CallBridge } from './CallBridge'
+import { Call } from './Call'
+import { ResponseConverter } from './ResponseConverter'
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on
@@ -41,13 +43,20 @@ export function serviceInvoker(
     const requestBuilder = requestFactory.requestBuilder(drizzle)
     const responseConverter = drizzle.responseBodyConverter(method, requestFactory)
     const interceptors = drizzle.interceptors()
+    const responseHandler = drizzle.responseHandler(method, requestFactory)
 
     interceptors.push(new InterceptorHttpExecutor(callProvider))
 
     // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
-      const call = new CallBridge(responseConverter, interceptors, requestBuilder.toRequest([]), [])
+      const call = new CallBridge(
+        responseHandler,
+        responseConverter,
+        interceptors,
+        requestBuilder.toRequest([]),
+        []
+      ) as Call<unknown>
 
       if (callAdapter !== null) {
         return function (): T {
@@ -68,7 +77,13 @@ export function serviceInvoker(
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: unknown[]): T {
-      const call = new CallBridge(responseConverter, interceptors, requestBuilder.toRequest(args), args)
+      const call = new CallBridge(
+        responseHandler,
+        responseConverter,
+        interceptors,
+        requestBuilder.toRequest(args),
+        args
+      )
 
       if (callAdapter === null) {
         return call.execute() as T

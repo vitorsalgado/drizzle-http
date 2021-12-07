@@ -3,9 +3,10 @@
  */
 import { Drizzle } from './Drizzle'
 import { RequestFactory } from './RequestFactory'
+import { HttpResponse } from './HttpResponse'
 
-export interface ResponseConverter<F, T> {
-  convert(from: F): T
+export interface ResponseConverter<T> {
+  convert(from: HttpResponse): Promise<T>
 }
 
 /**
@@ -20,5 +21,5 @@ export interface ResponseConverterFactory {
     drizzle: Drizzle,
     method: string,
     requestFactory: RequestFactory
-  ): ResponseConverter<unknown, unknown> | null
+  ): ResponseConverter<unknown> | null
 }

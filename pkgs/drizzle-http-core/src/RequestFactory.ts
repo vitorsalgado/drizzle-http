@@ -564,8 +564,8 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
     )
 
     for (let i = 0; i < this.requestFactory.parameterHandlers.length; i++) {
-      const ph = this.requestFactory.parameterHandlers[i]
-      ph.apply(requestParameterization, args[ph.parameter.index])
+      const parameterHandler = this.requestFactory.parameterHandlers[i]
+      parameterHandler.apply(requestParameterization, args[parameterHandler.parameter.index])
     }
 
     if (requestParameterization.body === null && this.requestFactory.hasBody()) {

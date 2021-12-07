@@ -1,5 +1,6 @@
 import { Chain } from './Chain'
+import { HttpResponse } from './HttpResponse'
 
-export interface Interceptor<TReq, TRes> {
-  intercept(chain: Chain<TReq, TRes>): Promise<TRes>
+export interface Interceptor {
+  intercept(chain: Chain): Promise<HttpResponse>
 }

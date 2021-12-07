@@ -7,7 +7,6 @@ import { Call, CallProvider } from '../../../../Call'
 import { CallFactory } from '../../../../Call'
 import { RequestFactory } from '../../../../RequestFactory'
 import { Drizzle } from '../../../../Drizzle'
-import { HttpError } from '../../../../HttpError'
 import { HttpRequest } from '../../../../HttpRequest'
 import { HttpResponse } from '../../../../HttpResponse'
 import { isOK } from '../../../../HttpResponse'
@@ -31,19 +30,7 @@ class TestCall implements Call<Promise<HttpResponse>> {
       ...toRequest(this.url, this.request),
       path: undefined as unknown as string
     } as RequestOptions)
-
-    if (isOK(res.statusCode)) {
-      return new TestDzResponse(this.url, res)
-    }
-
-    if (res.body) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for await (const chunk of res.body) {
-        // forcing body consumption
-      }
-    }
-
-    throw new HttpError(this.request, new TestDzResponse(this.url, res))
+    return new TestDzResponse(this.url, res)
   }
 }
 

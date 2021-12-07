@@ -203,7 +203,8 @@ describe('Drizzle Http', () => {
   })
 
   afterAll(async () => {
-    await Promise.all([closeTestServer(), drizzle.shutdown()])
+    await closeTestServer()
+    await drizzle.shutdown()
   })
 
   describe('General', function () {
