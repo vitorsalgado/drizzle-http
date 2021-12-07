@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "jest --detectOpenHandles --logHeapUsage",
+    "test": "jest --detectOpenHandles --logHeapUsage --runInBand",
     "test:coverage": "npm test --coverage",
     "test:ci": "npm test --colors --coverage --ci",
     "test:failures": "npm test --onlyFailures",

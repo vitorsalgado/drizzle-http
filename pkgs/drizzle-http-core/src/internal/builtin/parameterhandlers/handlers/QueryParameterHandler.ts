@@ -14,7 +14,9 @@ export class QueryParameter extends Parameter {
   }
 }
 
-export class QueryParameterHandler extends ParameterHandler<QueryParameter, string | string[]> {
+export class QueryParameterHandler implements ParameterHandler<QueryParameter, string | string[]> {
+  constructor(readonly parameter: QueryParameter) {}
+
   apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
@@ -32,7 +34,7 @@ export class QueryParameterHandler extends ParameterHandler<QueryParameter, stri
   }
 }
 
-export class QueryParameterHandlerFactory extends ParameterHandlerFactory<QueryParameter, string | string[]> {
+export class QueryParameterHandlerFactory implements ParameterHandlerFactory<QueryParameter, string | string[]> {
   static INSTANCE: QueryParameterHandlerFactory = new QueryParameterHandlerFactory()
 
   handledType = (): string => QueryParameterType

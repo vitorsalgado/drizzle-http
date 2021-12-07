@@ -1,4 +1,4 @@
-import { provideRequestInit } from '../FetchInit'
+import { provideRequestInit } from '../provideRequestInit'
 
 export function NoCORS() {
   return function (target: object, method: string): void {

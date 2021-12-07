@@ -5,6 +5,8 @@ import { PinoLogger } from './PinoLogger'
 import { isStream } from './isStream'
 
 export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse> {
+  static DEFAULT: LoggingInterceptor = new LoggingInterceptor()
+
   constructor(
     public level: Level = Level.BASIC,
     private readonly headersToRedact: Set<string> = new Set<string>(),
@@ -71,7 +73,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
       this.logger.info('--> END ' + request.method + ' (stream request body omitted)')
     } else {
       if (Buffer.isBuffer(request.body)) {
-        const isUtf8 = typeof contentType !== 'undefined' && contentType.toLowerCase().indexOf('utf-8') > -1
+        const isUtf8 = contentType && contentType.toLowerCase().indexOf('utf-8') > -1
 
         if (isUtf8) {
           this.logger.info((request.body as Buffer).toString('utf-8'))
@@ -114,7 +116,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
           this.logger.info('<-- END HTTP ' + request.method + ' (stream response body omitted)')
         } else {
           if (Buffer.isBuffer(response.body)) {
-            const isUtf8 = typeof contentType !== 'undefined' && contentType.toLowerCase().indexOf('utf-8') > -1
+            const isUtf8 = contentType && contentType.toLowerCase().indexOf('utf-8') > -1
 
             if (isUtf8) {
               this.logger.info((response.body as Buffer).toString('utf-8'))
@@ -132,7 +134,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
 
         return response
       })
-      .catch(error => {
+      .catch((error: HttpError) => {
         const took = LoggingInterceptor.ms() - start
 
         if (error instanceof HttpError) {
@@ -150,7 +152,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
         }
 
         this.logger.error('Took: ' + took.toString() + 'ms')
-        this.logger.error('<-- HTTP Failed: ' + error, error)
+        this.logger.error('<-- HTTP Failed: ' + error.message, error)
         this.logger.error('')
 
         throw error

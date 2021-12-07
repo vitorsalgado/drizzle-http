@@ -6,7 +6,7 @@ import { ResponseConverter } from '../../../../ResponseConverter'
 import { ResponseConverterFactory } from '../../../../ResponseConverter'
 import { JsonResponseConverter } from './JsonResponseConverter'
 
-export class JsonResponseConverterFactory extends ResponseConverterFactory {
+export class JsonResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()
 
   responseBodyConverter<T>(

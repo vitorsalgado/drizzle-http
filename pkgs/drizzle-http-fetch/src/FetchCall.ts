@@ -1,20 +1,17 @@
 import { Call, HttpError, HttpRequest, isAbsolute } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 import { RequestAbortedError } from './errors/RequestAbortedError'
-import { FetchInit } from './FetchInit'
 
-export class FetchCall extends Call<Promise<Response>> {
+export class FetchCall implements Call<Promise<Response>> {
   private readonly url: string
 
   constructor(
     baseUrl: URL,
     private readonly requestInit: RequestInit,
-    private readonly options: FetchInit,
-    request: HttpRequest,
-    argv: unknown[]
+    private readonly options: RequestInit,
+    readonly request: HttpRequest,
+    readonly argv: unknown[]
   ) {
-    super(request, argv)
-
     if (!isAbsolute(request.url)) {
       this.url = new URL(request.url, baseUrl).href
     } else {
@@ -53,10 +50,10 @@ export class FetchCall extends Call<Promise<Response>> {
 
   static requestInit(
     requestInit: RequestInit,
-    options: FetchInit,
+    options: RequestInit,
     request: HttpRequest,
     signal: AbortSignal
-  ): FetchInit {
+  ): RequestInit {
     return {
       ...options,
       ...requestInit,

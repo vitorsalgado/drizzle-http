@@ -52,7 +52,6 @@ describe('Callback Call Adapter - @Callback decorated', function () {
     api.err((error: HttpError) => {
       expect(error).not.toBeNull()
       expect(error.request).not.toBeNull()
-      expect(error.response).not.toBeNull()
       done()
     })
   })

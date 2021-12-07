@@ -13,12 +13,11 @@ import { UndiciStreamCall } from './UndiciStreamCall'
 import { UndiciCall } from './UndiciCall'
 import { Keys } from './Keys'
 
-export class UndiciCallFactory extends CallFactory {
+export class UndiciCallFactory implements CallFactory {
   private _pool!: Pool
   private readonly _options?: Pool.Options
 
   constructor(opts?: Pool.Options) {
-    super()
     this._options = opts
   }
 

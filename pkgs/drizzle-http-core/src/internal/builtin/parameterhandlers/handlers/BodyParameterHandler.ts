@@ -15,14 +15,12 @@ export class BodyParameter extends Parameter {
   }
 }
 
-export class BodyParameterHandler extends ParameterHandler<BodyParameter, BodyType> {
+export class BodyParameterHandler implements ParameterHandler<BodyParameter, BodyType> {
   constructor(
     private readonly converter: RequestBodyConverter<BodyType>,
     private readonly requestFactory: RequestFactory,
-    parameter: BodyParameter
-  ) {
-    super(parameter)
-  }
+    readonly parameter: BodyParameter
+  ) {}
 
   apply(requestValues: RequestParameterization, value: BodyType): void {
     if (value === null || typeof value === 'undefined') {
@@ -33,7 +31,7 @@ export class BodyParameterHandler extends ParameterHandler<BodyParameter, BodyTy
   }
 }
 
-export class BodyParameterHandlerFactory extends ParameterHandlerFactory<BodyParameter, BodyType> {
+export class BodyParameterHandlerFactory implements ParameterHandlerFactory<BodyParameter, BodyType> {
   static INSTANCE: BodyParameterHandlerFactory = new BodyParameterHandlerFactory()
 
   handledType = (): string => BodyParameterType

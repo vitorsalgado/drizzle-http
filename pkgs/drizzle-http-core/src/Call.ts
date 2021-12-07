@@ -8,13 +8,15 @@ import { RequestFactory } from './RequestFactory'
  *
  * @typeParam V - type of the response
  */
-export abstract class Call<T> {
-  protected constructor(readonly request: HttpRequest, readonly argv: unknown[]) {}
+export interface Call<T> {
+  readonly request: HttpRequest
+
+  readonly argv: unknown[]
 
   /**
    * Executes the HTTP request
    */
-  abstract execute(): T
+  execute(): T
 }
 
 export type CallProvider = (request: HttpRequest, args: unknown[]) => Call<unknown>
@@ -23,15 +25,12 @@ export type CallProvider = (request: HttpRequest, args: unknown[]) => Call<unkno
  * Builds a {@link Call} for a request.
  * Call<V> instances are created in the context of an HTTP request.
  */
-export abstract class CallFactory {
+export interface CallFactory {
   /**
    * Additional setupTestServer like register a shutdown hook
    * @param drizzle - Drizzle instance
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setup(drizzle: Drizzle): void {
-    // Overwrite to perform specific client setup
-  }
+  setup?(drizzle: Drizzle): void
 
   /**
    * Prepares the Call<V> that will make teh HTTP request.
@@ -41,5 +40,5 @@ export abstract class CallFactory {
    * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  abstract prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider
+  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider
 }

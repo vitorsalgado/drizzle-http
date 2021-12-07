@@ -1,6 +1,6 @@
 const sHeaders = Symbol('headers')
 
-export class HttpHeaders {
+export class HttpHeaders implements Headers {
   public static readonly CONTENT_TYPE = 'content-type'
   public static readonly ACCEPT = 'accept'
 
@@ -44,8 +44,14 @@ export class HttpHeaders {
     return this
   }
 
-  get(key: string): string | undefined {
-    return this[sHeaders].get(HttpHeaders.normalizeHeaderName(key))
+  get(key: string): string | null {
+    const item = this[sHeaders].get(HttpHeaders.normalizeHeaderName(key))
+
+    if (!item) {
+      return null
+    }
+
+    return item
   }
 
   delete(key: string): boolean {
@@ -68,9 +74,9 @@ export class HttpHeaders {
     return this[sHeaders].entries()
   }
 
-  forEach(callback: (value: string, key: string, map: Map<string, string>) => void, thisArg?: unknown): void {
+  forEach(callback: (value: string, key: string, parent: Headers) => void, thisArg?: unknown): void {
     for (const [key, value] of this[sHeaders]) {
-      callback.call(thisArg, value, key, this[sHeaders])
+      callback.call(thisArg, value, key, this)
     }
   }
 

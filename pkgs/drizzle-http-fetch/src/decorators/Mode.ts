@@ -1,4 +1,4 @@
-import { provideRequestInit } from '../FetchInit'
+import { provideRequestInit } from '../provideRequestInit'
 
 export function Mode(mode: RequestMode) {
   return function (target: object, method: string): void {

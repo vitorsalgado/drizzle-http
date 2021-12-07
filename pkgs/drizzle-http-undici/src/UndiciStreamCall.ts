@@ -41,10 +41,13 @@ export class StreamToHttpError extends DrizzleError {
   }
 }
 
-export class UndiciStreamCall extends Call<Promise<StreamToResult>> {
-  constructor(private readonly client: Pool, private readonly streamTo: number, request: HttpRequest, argv: unknown[]) {
-    super(request, argv)
-  }
+export class UndiciStreamCall implements Call<Promise<StreamToResult>> {
+  constructor(
+    private readonly client: Pool,
+    private readonly streamTo: number,
+    readonly request: HttpRequest,
+    readonly argv: unknown[]
+  ) {}
 
   async execute(): Promise<StreamToResult> {
     return new Promise<StreamToResult>((resolve, reject) => {

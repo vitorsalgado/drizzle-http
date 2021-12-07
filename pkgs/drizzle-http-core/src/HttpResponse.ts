@@ -1,10 +1,10 @@
-import { HttpHeaders } from './HttpHeaders'
 import { BodyType } from './internal'
+import { HttpHeaders } from './HttpHeaders'
 
 /**
  * Minimum contract that every response should follow inside the framework
  */
-export interface HttpResponse<BLOB = unknown, FORM_DATA = unknown, HEADERS = HttpHeaders> {
+export interface HttpResponse<BLOB = unknown, FORM_DATA = unknown, HEADERS extends Headers = HttpHeaders> {
   readonly headers: HEADERS
   readonly status: number
   readonly statusText: string

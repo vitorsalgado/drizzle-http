@@ -1,10 +1,10 @@
 import { RequestBodyConverter } from '../../../../RequestBodyConverter'
+import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { RequestFactory } from '../../../../RequestFactory'
 import { Drizzle } from '../../../../Drizzle'
-import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { RawRequestConverter } from './RawRequestConverter'
 
-export class RawRequestConverterFactory extends RequestBodyConverterFactory {
+export class RawRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: RawRequestConverterFactory = new RawRequestConverterFactory()
 
   requestConverter(

@@ -13,7 +13,9 @@ export class HeaderParameter extends Parameter {
   }
 }
 
-export class HeaderParameterHandler extends ParameterHandler<HeaderParameter, string | string[]> {
+export class HeaderParameterHandler implements ParameterHandler<HeaderParameter, string | string[]> {
+  constructor(readonly parameter: HeaderParameter) {}
+
   apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
@@ -29,7 +31,7 @@ export class HeaderParameterHandler extends ParameterHandler<HeaderParameter, st
   }
 }
 
-export class HeaderParameterHandlerFactory extends ParameterHandlerFactory<HeaderParameter, string | string[]> {
+export class HeaderParameterHandlerFactory implements ParameterHandlerFactory<HeaderParameter, string | string[]> {
   static INSTANCE: HeaderParameterHandlerFactory = new HeaderParameterHandlerFactory()
 
   handledType = (): string => HeaderParameterType

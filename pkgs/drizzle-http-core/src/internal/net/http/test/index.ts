@@ -12,15 +12,13 @@ import { HttpRequest } from '../../../../HttpRequest'
 import { HttpResponse } from '../../../../HttpResponse'
 import { isOK } from '../../../../HttpResponse'
 import { isAbsolute } from '../../url'
-import { HttpHeaders } from '../../../../HttpHeaders'
 import { BodyType } from '../../../types'
+import { HttpHeaders } from '../../../../HttpHeaders'
 
-class TestCall extends Call<Promise<HttpResponse>> {
+class TestCall implements Call<Promise<HttpResponse>> {
   private readonly url: string
 
-  constructor(readonly baseUrl: URL, public readonly request: HttpRequest, public readonly argv: unknown[]) {
-    super(request, argv)
-
+  constructor(readonly baseUrl: URL, readonly request: HttpRequest, readonly argv: unknown[]) {
     if (!isAbsolute(this.request.url)) {
       this.url = new URL(request.url, baseUrl.href).href
     } else {
@@ -49,7 +47,7 @@ class TestCall extends Call<Promise<HttpResponse>> {
   }
 }
 
-export class TestCallFactory extends CallFactory {
+export class TestCallFactory implements CallFactory {
   static INSTANCE: TestCallFactory = new TestCallFactory()
 
   prepareCall(drizzle: Drizzle, _method: string, _requestFactory: RequestFactory): CallProvider {

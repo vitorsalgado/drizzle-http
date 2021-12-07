@@ -1,11 +1,9 @@
 import type { Config as JestConfig } from '@jest/types'
-import 'dotenv/config'
+import Base from './jest-base.config'
 
 const config: JestConfig.InitialOptions = {
-  verbose: true,
-  collectCoverage: false,
-  restoreMocks: true,
-  resetMocks: true,
+  ...Base,
+
   projects: ['<rootDir>'],
   transform: { '^.+\\.tsx?$': 'ts-jest' },
   globals: {

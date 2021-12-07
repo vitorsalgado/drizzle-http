@@ -1,4 +1,4 @@
-import DrizzleMeta from '../../../../DrizzleMeta'
+import { DrizzleMeta } from '../../../../DrizzleMeta'
 import { KEY_IS_CALLBACK } from './Keys'
 
 export function Callback() {

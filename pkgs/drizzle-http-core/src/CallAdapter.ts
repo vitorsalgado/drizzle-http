@@ -15,7 +15,7 @@ export interface CallAdapter<F, T> {
 /**
  * Builds {@link CallAdapter} for a request.
  */
-export abstract class CallAdapterFactory {
+export interface CallAdapterFactory {
   /**
    * This will execute outside a request context.
    * Every request will already have an instance of {@link CallAdapter} ready.
@@ -24,7 +24,7 @@ export abstract class CallAdapterFactory {
    * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  abstract provideCallAdapter(
+  provideCallAdapter(
     drizzle: Drizzle,
     method: string,
     requestFactory: RequestFactory

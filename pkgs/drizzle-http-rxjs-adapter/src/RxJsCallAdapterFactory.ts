@@ -19,12 +19,10 @@ class RxJsCallAdapter<T> implements CallAdapter<Promise<T>, Observable<T>> {
   }
 }
 
-export class RxJsCallAdapterFactory extends CallAdapterFactory {
+export class RxJsCallAdapterFactory implements CallAdapterFactory {
   static INSTANCE: RxJsCallAdapterFactory = new RxJsCallAdapterFactory()
 
-  constructor(private readonly decorated?: CallAdapterFactory) {
-    super()
-  }
+  constructor(private readonly decorated?: CallAdapterFactory) {}
 
   provideCallAdapter(
     drizzle: Drizzle,

@@ -6,7 +6,7 @@ import { ResponseConverterFactory } from '../../../../ResponseConverter'
 import { RawResponseConverter } from './RawResponseConverter'
 import { Keys } from './Keys'
 
-export class RawResponseConverterFactory extends ResponseConverterFactory {
+export class RawResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: RawResponseConverterFactory = new RawResponseConverterFactory()
 
   responseBodyConverter(

@@ -1,10 +1,10 @@
 import { RequestBodyConverter } from '../../../../RequestBodyConverter'
+import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { RequestFactory } from '../../../../RequestFactory'
 import { Drizzle } from '../../../../Drizzle'
-import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { FormRequestConverter } from './FormRequestConverter'
 
-export class FormRequestConverterFactory extends RequestBodyConverterFactory {
+export class FormRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: FormRequestConverterFactory = new FormRequestConverterFactory()
 
   requestConverter(

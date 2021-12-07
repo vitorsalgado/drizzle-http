@@ -1,15 +1,12 @@
 import { Call, CallFactory, CallProvider, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
 import { FetchCall } from './FetchCall'
-import { FetchInit } from './FetchInit'
 import { Keys } from './Keys'
 
-export class FetchCallFactory extends CallFactory {
+export class FetchCallFactory implements CallFactory {
   static DEFAULT: FetchCallFactory = new FetchCallFactory({})
 
-  constructor(private readonly options: FetchInit = {}) {
-    super()
-  }
+  constructor(private readonly options: RequestInit = {}) {}
 
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     const requestInit = requestFactory.getConfig(Keys.ConfigKeyRequestInit) as RequestInit

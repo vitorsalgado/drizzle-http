@@ -5,7 +5,7 @@ import { CallAdapterFactory } from '../../../../CallAdapter'
 import { CallbackCallAdapter } from './CallbackCallAdapter'
 import { KEY_IS_CALLBACK } from './Keys'
 
-export class CallbackCallAdapterFactory extends CallAdapterFactory {
+export class CallbackCallAdapterFactory implements CallAdapterFactory {
   provideCallAdapter(
     _drizzle: Drizzle,
     _method: string,

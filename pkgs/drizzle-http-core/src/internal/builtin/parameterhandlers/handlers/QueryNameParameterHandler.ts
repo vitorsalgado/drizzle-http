@@ -14,7 +14,9 @@ export class QueryNameParameter extends Parameter {
   }
 }
 
-export class QueryNameParameterHandler extends ParameterHandler<QueryNameParameter, string | string[]> {
+export class QueryNameParameterHandler implements ParameterHandler<QueryNameParameter, string | string[]> {
+  constructor(readonly parameter: QueryNameParameter) {}
+
   apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (typeof value === 'string') {
       requestValues.query.push(encodeIfNecessary(value))
@@ -26,7 +28,9 @@ export class QueryNameParameterHandler extends ParameterHandler<QueryNameParamet
   }
 }
 
-export class QueryNameParameterHandlerFactory extends ParameterHandlerFactory<QueryNameParameter, string | string[]> {
+export class QueryNameParameterHandlerFactory
+  implements ParameterHandlerFactory<QueryNameParameter, string | string[]>
+{
   static INSTANCE: QueryNameParameterHandlerFactory = new QueryNameParameterHandlerFactory()
 
   handledType = (): string => QueryNameParameterType

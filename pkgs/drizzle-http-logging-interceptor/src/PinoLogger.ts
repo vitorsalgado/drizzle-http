@@ -25,12 +25,7 @@ export class PinoLogger implements Logger {
     this.pinoLogger.info(message)
   }
 
-  error(message: string, error?: Error): void {
-    if (!error) {
-      this.pinoLogger.error(message)
-      return
-    }
-
-    this.pinoLogger.error(error, message)
+  error(message: string, _error?: Error): void {
+    this.pinoLogger.error(message)
   }
 }

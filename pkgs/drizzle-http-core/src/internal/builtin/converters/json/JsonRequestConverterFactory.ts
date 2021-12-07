@@ -1,11 +1,11 @@
 import { RequestBodyConverter } from '../../../../RequestBodyConverter'
+import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { RequestFactory } from '../../../../RequestFactory'
 import { Drizzle } from '../../../../Drizzle'
 import MediaTypes from '../../../../MediaTypes'
-import { RequestBodyConverterFactory } from '../../../../RequestBodyConverter'
 import { JsonRequestConverter } from './JsonRequestConverter'
 
-export class JsonRequestConverterFactory extends RequestBodyConverterFactory {
+export class JsonRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: JsonRequestConverterFactory = new JsonRequestConverterFactory()
 
   requestConverter(

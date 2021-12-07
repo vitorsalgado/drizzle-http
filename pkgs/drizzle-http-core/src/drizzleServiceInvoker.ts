@@ -19,7 +19,10 @@ export function serviceInvoker(
   notNull(drizzle, 'Drizzle instance cannot be null.')
 
   const callFactory = drizzle.callFactory
-  callFactory.setup(drizzle)
+
+  if (callFactory.setup) {
+    callFactory.setup(drizzle)
+  }
 
   /**
    * Holding Drizzle instance for each API decorated method

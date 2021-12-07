@@ -10,17 +10,16 @@ import { ChainExecutor } from './ChainExecutor'
  *
  * @typeParam V - Type of the response
  */
-export class CallBridge<T> extends Call<T> {
+export class CallBridge<T> implements Call<T> {
   private readonly responseConverter: ResponseConverter<HttpResponse, T>
   private readonly chain: ChainExecutor<unknown, unknown>
 
   constructor(
     responseConverter: ResponseConverter<HttpResponse, T>,
     interceptors: Interceptor<unknown, unknown>[],
-    request: HttpRequest,
-    argv: unknown[]
+    readonly request: HttpRequest,
+    readonly argv: unknown[]
   ) {
-    super(request, argv)
     this.responseConverter = responseConverter
     this.chain = ChainExecutor.first(interceptors, request, argv)
   }

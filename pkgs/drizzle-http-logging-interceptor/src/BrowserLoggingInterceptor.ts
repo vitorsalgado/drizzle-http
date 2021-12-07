@@ -67,7 +67,8 @@ export class BrowserLoggingInterceptor implements Interceptor<HttpRequest, Respo
       console.log(`--> END ${request.method} %c(stream request body omitted)`, ...[Styles.LightGray])
     } else {
       if (Buffer.isBuffer(request.body)) {
-        const isUtf8 = typeof contentType !== 'undefined' && contentType.toLowerCase().indexOf('utf-8') > -1
+        const isUtf8 =
+          typeof contentType !== 'undefined' && contentType !== null && contentType.toLowerCase().indexOf('utf-8') > -1
 
         if (isUtf8) {
           console.log((request.body as Buffer).toString('utf-8'))
@@ -113,7 +114,10 @@ export class BrowserLoggingInterceptor implements Interceptor<HttpRequest, Respo
           console.log(`<-- END HTTP ${request.method} %c(stream response body omitted)`, ...[Styles.LightGray])
         } else {
           if (Buffer.isBuffer(response.body)) {
-            const isUtf8 = typeof contentType !== 'undefined' && contentType.toLowerCase().indexOf('utf-8') > -1
+            const isUtf8 =
+              typeof contentType !== 'undefined' &&
+              contentType !== null &&
+              contentType.toLowerCase().indexOf('utf-8') > -1
 
             if (isUtf8) {
               console.log((response.body as Buffer).toString('utf-8'))
@@ -153,7 +157,7 @@ export class BrowserLoggingInterceptor implements Interceptor<HttpRequest, Respo
         }
 
         console.log('Took: ' + took.toString() + 'ms')
-        console.log(`<-- HTTP Failed: %c${error}`, ...[Styles.Red])
+        console.log(`<-- HTTP Failed: %c${error.message}`, ...[Styles.Red])
 
         throw error
       })

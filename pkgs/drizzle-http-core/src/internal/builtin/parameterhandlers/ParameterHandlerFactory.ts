@@ -3,8 +3,8 @@ import { RequestFactory } from '../../../RequestFactory'
 import { Parameter } from './Parameter'
 import { ParameterHandler } from './ParameterHandler'
 
-export abstract class ParameterHandlerFactory<P extends Parameter, R> {
-  abstract handledType(): string
+export interface ParameterHandlerFactory<P extends Parameter, R> {
+  handledType(): string
 
-  abstract parameterHandler(drizzle: Drizzle, requestFactory: RequestFactory, parameter: P): ParameterHandler<P, R>
+  parameterHandler(drizzle: Drizzle, requestFactory: RequestFactory, parameter: P): ParameterHandler<P, R>
 }

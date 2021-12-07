@@ -14,7 +14,9 @@ export class FormParameter extends Parameter {
   }
 }
 
-export class FormParameterHandler extends ParameterHandler<FormParameter, string | string[]> {
+export class FormParameterHandler implements ParameterHandler<FormParameter, string | string[]> {
+  constructor(readonly parameter: FormParameter) {}
+
   apply(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
@@ -32,7 +34,7 @@ export class FormParameterHandler extends ParameterHandler<FormParameter, string
   }
 }
 
-export class FormParameterHandlerFactory extends ParameterHandlerFactory<FormParameter, string | string[]> {
+export class FormParameterHandlerFactory implements ParameterHandlerFactory<FormParameter, string | string[]> {
   static INSTANCE: FormParameterHandlerFactory = new FormParameterHandlerFactory()
 
   handledType = (): string => FormParameterType

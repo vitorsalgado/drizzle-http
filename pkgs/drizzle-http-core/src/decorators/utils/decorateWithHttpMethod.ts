@@ -1,6 +1,6 @@
 import { InvalidRequestMethodConfigurationError } from '../../internal'
 import { RequestFactory } from '../../RequestFactory'
-import DrizzleMeta from '../../DrizzleMeta'
+import { DrizzleMeta } from '../../DrizzleMeta'
 import { HttpMethod } from './HttpMethod'
 
 /**

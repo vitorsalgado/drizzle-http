@@ -1,7 +1,9 @@
 import type { Config as JestConfig } from '@jest/types'
+import 'dotenv/config'
 
 const config: JestConfig.InitialOptions = {
   verbose: true,
+  testTimeout: 15000,
   collectCoverage: false,
   resetModules: true,
   restoreMocks: true,

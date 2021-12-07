@@ -1,4 +1,4 @@
-import DrizzleMeta from '../../../../DrizzleMeta'
+import { DrizzleMeta } from '../../../../DrizzleMeta'
 import { Keys } from './Keys'
 
 /**

@@ -1,15 +1,13 @@
 import { DrizzleMeta } from '@drizzle-http/core'
 import { Keys } from './Keys'
 
-export type FetchInit = RequestInit
-
 /**
  * Get or create a RequestInit instance associated with an API class and method
  */
-export function provideRequestInit(target: object, method: string): FetchInit {
+export function provideRequestInit(target: object, method: string): RequestInit {
   const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
 
-  let requestInit = requestFactory.getConfig(Keys.ConfigKeyRequestInit) as FetchInit
+  let requestInit = requestFactory.getConfig(Keys.ConfigKeyRequestInit) as RequestInit
 
   if (requestInit) {
     return requestInit

@@ -114,5 +114,4 @@ class _DrizzleMeta {
 
 const DrizzleMeta = new _DrizzleMeta()
 
-export default DrizzleMeta
 export { DrizzleMeta }

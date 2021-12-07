@@ -12,12 +12,12 @@ export interface RequestBodyConverter<T> {
 /**
  * Creates instances of {@link RequestBodyConverter}
  */
-export abstract class RequestBodyConverterFactory {
+export interface RequestBodyConverterFactory {
   /**
    * This will be called outside the context of a request.
    * Every request will already contain a {@link RequestBodyConverter} instance ready.
    */
-  abstract requestConverter(
+  requestConverter(
     drizzle: Drizzle,
     method: string,
     requestFactory: RequestFactory

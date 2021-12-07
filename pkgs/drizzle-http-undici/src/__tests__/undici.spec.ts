@@ -29,7 +29,7 @@ const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()
 
 @Abort(evtCls)
-@Timeout(10, 10)
+@Timeout(2500, 2500)
 class API {
   @GET('/{id}/projects')
   @FullResponse()
@@ -143,7 +143,7 @@ describe('Undici Call', function () {
     })
   })
 
-  it('should return logErrorMsg when request fails', function () {
+  it('should return error when request fails', function () {
     expect.assertions(1)
 
     return api.nowhere().catch((err: HttpError) => {
@@ -193,7 +193,7 @@ describe('Undici Call', function () {
       })
   })
 
-  it('should return logErrorMsg when stream to request fails', () => {
+  it('should return error when stream to request fails', () => {
     expect.assertions(1)
 
     return api

@@ -13,7 +13,9 @@ export class SignalParameter extends Parameter {
   }
 }
 
-export class SignalParameterHandler extends ParameterHandler<SignalParameter, unknown> {
+export class SignalParameterHandler implements ParameterHandler<SignalParameter, unknown> {
+  constructor(readonly parameter: SignalParameter) {}
+
   apply(requestValues: RequestParameterization, value: unknown): void {
     if (value === null || typeof value === 'undefined') {
       throw new TypeError(`Signal parameter must not be null or undefined. (Index: ${this.parameter.index})`)
@@ -23,7 +25,7 @@ export class SignalParameterHandler extends ParameterHandler<SignalParameter, un
   }
 }
 
-export class SignalParameterHandlerFactory extends ParameterHandlerFactory<SignalParameter, unknown> {
+export class SignalParameterHandlerFactory implements ParameterHandlerFactory<SignalParameter, unknown> {
   static INSTANCE: SignalParameterHandlerFactory = new SignalParameterHandlerFactory()
 
   handledType = (): string => SignalParameterType
