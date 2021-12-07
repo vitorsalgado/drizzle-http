@@ -1,4 +1,5 @@
-import { Chain, HttpError, HttpRequest, Interceptor } from '@drizzle-http/core'
+import { Chain, HttpError, Interceptor } from '@drizzle-http/core'
+import { HttpResponse } from '@drizzle-http/core'
 import { Level } from './Level'
 import { isStream } from './isStream'
 
@@ -10,7 +11,7 @@ const Styles = {
   Red: 'color: #F20404'
 }
 
-export class BrowserLoggingInterceptor implements Interceptor<HttpRequest, Response> {
+export class BrowserLoggingInterceptor implements Interceptor {
   constructor(public level: Level = Level.BASIC, private readonly headersToRedact: Set<string> = new Set<string>()) {}
 
   private static ms(): number {
@@ -31,7 +32,7 @@ export class BrowserLoggingInterceptor implements Interceptor<HttpRequest, Respo
     })
   }
 
-  intercept(chain: Chain<HttpRequest, Response>): Promise<Response> {
+  intercept(chain: Chain): Promise<HttpResponse> {
     const request = chain.request()
     const level = this.level
 

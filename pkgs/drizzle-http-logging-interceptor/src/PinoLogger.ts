@@ -2,10 +2,11 @@ import Pino from 'pino'
 import { Logger } from './Logger'
 
 export class PinoLogger implements Logger {
-  static DEFAULT: PinoLogger = new PinoLogger({
+  static DEFAULT_OPTIONS: Pino.LoggerOptions = {
     level: 'info',
     transport: {
       target: 'pino-pretty',
+      worker: { autoEnd: true },
       options: {
         colorize: true,
         messageFormat: '{msg}',
@@ -13,7 +14,7 @@ export class PinoLogger implements Logger {
         ignore: 'hostname'
       }
     }
-  })
+  }
 
   private readonly pinoLogger: Pino.Logger
 

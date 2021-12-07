@@ -1,16 +1,16 @@
-import { Chain, HttpError, HttpRequest, HttpResponse, Interceptor } from '@drizzle-http/core'
+import { Chain, HttpError, HttpResponse, Interceptor } from '@drizzle-http/core'
 import { Level } from './Level'
 import { Logger } from './Logger'
 import { PinoLogger } from './PinoLogger'
 import { isStream } from './isStream'
 
-export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse> {
+export class LoggingInterceptor implements Interceptor {
   static DEFAULT: LoggingInterceptor = new LoggingInterceptor()
 
   constructor(
     public level: Level = Level.BASIC,
     private readonly headersToRedact: Set<string> = new Set<string>(),
-    public readonly logger: Logger = PinoLogger.DEFAULT
+    public readonly logger: Logger = new PinoLogger(PinoLogger.DEFAULT_OPTIONS)
   ) {}
 
   private static ms(): number {
@@ -37,7 +37,7 @@ export class LoggingInterceptor implements Interceptor<HttpRequest, HttpResponse
     })
   }
 
-  intercept(chain: Chain<HttpRequest, HttpResponse>): Promise<HttpResponse> {
+  intercept(chain: Chain): Promise<HttpResponse> {
     const request = chain.request()
     const level = this.level
 
