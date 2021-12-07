@@ -13,6 +13,8 @@ export interface ResponseHandlerFactory {
 }
 
 export class DefaultResponseHandler implements ResponseHandler {
+  static INSTANCE: DefaultResponseHandler = new DefaultResponseHandler()
+
   async handle(request: HttpRequest, response: HttpResponse): Promise<HttpResponse> {
     if (response.ok) {
       return response
@@ -27,6 +29,8 @@ export class DefaultResponseHandler implements ResponseHandler {
 }
 
 export class NoopResponseHandler implements ResponseHandler {
+  static INSTANCE: NoopResponseHandler = new NoopResponseHandler()
+
   async handle(request: HttpRequest, response: HttpResponse): Promise<HttpResponse> {
     return response
   }

@@ -16,6 +16,7 @@ import { CallFactory } from './Call'
 import { ResponseHandler } from './ResponseHandler'
 import { ResponseHandlerFactory } from './ResponseHandler'
 import { DefaultResponseHandler } from './ResponseHandler'
+import { NoopResponseHandler } from './ResponseHandler'
 
 /**
  * Drizzle adapts a class to perform HTTP calls by using the decorators on the declared methods
@@ -154,7 +155,11 @@ export class Drizzle {
    */
   responseHandler(method: string, requestFactory: RequestFactory): ResponseHandler {
     if (this._responseHandlerFactories.length === 0) {
-      return new DefaultResponseHandler()
+      return DefaultResponseHandler.INSTANCE
+    }
+
+    if (requestFactory.noResponseHandler) {
+      return NoopResponseHandler.INSTANCE
     }
 
     for (const factory of this._responseHandlerFactories) {
@@ -165,7 +170,7 @@ export class Drizzle {
       }
     }
 
-    return new DefaultResponseHandler()
+    return DefaultResponseHandler.INSTANCE
   }
 
   /**

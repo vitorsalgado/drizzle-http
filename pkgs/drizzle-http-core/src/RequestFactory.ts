@@ -51,6 +51,7 @@ export class RequestFactory {
   parameters: Parameter[]
   signal: unknown
   noResponseConverter: boolean
+  noResponseHandler: boolean
 
   // This holds generic values used by additional adapters, converters and callers
   private readonly bag: Map<string, unknown>
@@ -72,6 +73,7 @@ export class RequestFactory {
     this.parameters = []
     this.signal = null
     this.noResponseConverter = false
+    this.noResponseHandler = false
   }
 
   private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
@@ -512,6 +514,15 @@ export class RequestFactory {
    */
   ignoreResponseConverter(value = true): void {
     this.noResponseConverter = value
+  }
+
+  /**
+   * Uses a noop response handler. Good when using caller or adapters that returns response types different from {@link HttpResponse}.
+   *
+   * @param value - yes/on to ignore response handlers. defaults to true
+   */
+  ignoreResponseHandler(value = true): void {
+    this.noResponseHandler = value
   }
 
   private invalidArgErr(message: string): InvalidRequestMethodConfigurationError {
