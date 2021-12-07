@@ -15,7 +15,6 @@ import { HeaderMap } from '@drizzle-http/core'
 import { Header } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
 import { Param } from '@drizzle-http/core'
-import { HttpError } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 import { P } from '@drizzle-http/core'
@@ -146,8 +145,8 @@ describe('Undici Call', function () {
   it('should return error when request fails', function () {
     expect.assertions(1)
 
-    return api.nowhere().catch((err: HttpError) => {
-      expect(err.response.status).toEqual(404)
+    return api.nowhere().then(response => {
+      expect(response.status).toEqual(404)
     })
   })
 

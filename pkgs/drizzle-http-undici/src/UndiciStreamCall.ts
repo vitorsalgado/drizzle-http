@@ -14,6 +14,7 @@ export function Streaming() {
   return (target: object, method: string) => {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
     requestFactory.ignoreResponseConverter()
+    requestFactory.ignoreResponseHandler()
     requestFactory.addConfig(Keys.ConfigIsStream, true)
   }
 }
@@ -21,7 +22,6 @@ export function Streaming() {
 export function StreamTo() {
   return function (target: object, method: string, index: number): void {
     const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
-    requestFactory.ignoreResponseConverter()
     requestFactory.addConfig(Keys.ConfigStreamToIndex, index)
   }
 }
