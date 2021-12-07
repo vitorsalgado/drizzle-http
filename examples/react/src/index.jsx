@@ -6,7 +6,11 @@ function App() {
   const [parties, updateParties] = useState([])
   const [acronym, setAcronym] = useState('')
 
-  const onPartiesSearch = () => deputiesApi.parties(acronym).then(parties => updateParties([...parties.dados]))
+  const onPartiesSearch = () =>
+    deputiesApi
+      .parties(acronym)
+      .then(parties => updateParties([...parties.dados]))
+      .catch(err => console.log(err.message))
 
   return (
     <div>
