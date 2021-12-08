@@ -1,6 +1,9 @@
 import { Call, HttpRequest, isAbsolute } from '@drizzle-http/core'
+import { HttpResponse } from '@drizzle-http/core'
 
-export class FetchCall implements Call<Promise<Response>> {
+export class FetchCall
+  implements Call<Promise<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>>>
+{
   private readonly url: string
 
   constructor(
@@ -17,7 +20,7 @@ export class FetchCall implements Call<Promise<Response>> {
     }
   }
 
-  execute(): Promise<Response> {
+  execute(): Promise<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>> {
     const timeout = this.request.bodyTimeout ?? 30e3
     const controller = new AbortController()
 

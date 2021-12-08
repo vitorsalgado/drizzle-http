@@ -3,7 +3,7 @@ import { BodyType, HttpHeaders, HttpResponse } from '@drizzle-http/core'
 import { isOK } from '@drizzle-http/core'
 import { Dispatcher } from 'undici'
 
-export class UndiciResponse implements HttpResponse<Blob, never> {
+export class UndiciResponse implements HttpResponse<BodyType, Blob, never> {
   readonly body: BodyType
   readonly headers: HttpHeaders
   readonly status: number

@@ -40,7 +40,7 @@ export function serviceInvoker(
     const callProvider = callFactory.prepareCall(drizzle, method, requestFactory)
     const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)
     const requestBuilder = requestFactory.requestBuilder(drizzle)
-    const responseConverter = drizzle.responseBodyConverter(method, requestFactory)
+    const responseConverter = drizzle.responseBodyConverter<T>(method, requestFactory)
     const interceptors = drizzle.interceptors()
     const responseHandler = drizzle.responseHandler(method, requestFactory)
 
@@ -55,7 +55,7 @@ export function serviceInvoker(
         interceptors,
         requestBuilder.toRequest([]),
         []
-      ) as Call<unknown>
+      ) as Call<T>
 
       if (callAdapter !== null) {
         return function (): T {
@@ -64,7 +64,7 @@ export function serviceInvoker(
       }
 
       return function (): T {
-        return call.execute() as T
+        return call.execute()
       }
     }
 
@@ -76,7 +76,7 @@ export function serviceInvoker(
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: unknown[]): T {
-      const call = new CallBridge(
+      const call = new CallBridge<T>(
         responseHandler,
         responseConverter,
         interceptors,
@@ -85,7 +85,7 @@ export function serviceInvoker(
       )
 
       if (callAdapter === null) {
-        return call.execute() as T
+        return call.execute()
       }
 
       return callAdapter.adapt(call)

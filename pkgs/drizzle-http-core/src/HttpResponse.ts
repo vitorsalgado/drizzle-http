@@ -4,12 +4,17 @@ import { HttpHeaders } from './HttpHeaders'
 /**
  * Minimum contract that every response should follow inside the framework
  */
-export interface HttpResponse<BLOB = unknown, FORM_DATA = unknown, HEADERS extends Headers = HttpHeaders> {
+export interface HttpResponse<
+  BODY = BodyType,
+  BLOB = unknown,
+  FORM_DATA = unknown,
+  HEADERS extends Headers = HttpHeaders
+> {
   readonly headers: HEADERS
   readonly status: number
   readonly statusText: string
   readonly url: string
-  readonly body: BodyType
+  readonly body: BODY
 
   get ok(): boolean
 
