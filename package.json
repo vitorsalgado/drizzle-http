@@ -57,9 +57,15 @@
     "annotations"
   ],
   "devDependencies": {
+    "@drizzle-http/test-utils": "file:pkgs/test-utils",
+    "@drizzle-http/undici": "file:pkgs/drizzle-http-undici",
     "@jest/types": "^27.2.5",
-    "@types/node": "^16.11.10",
+    "@types/benchmark": "^2.1.1",
+    "@types/node": "^16.11.12",
+    "@types/node-fetch": "^2.5.12",
     "@types/opossum": "^6.2.0",
+    "@types/pino": "^7.0.5",
+    "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "codecov": "^3.8.3",
@@ -86,6 +92,7 @@
     "prettier": "^2.5.0",
     "ts-jest": "^27.0.7",
     "ts-node": "10.4.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "undici": "^4.11.3"
   }
 }

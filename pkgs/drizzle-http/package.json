@@ -50,8 +50,5 @@
     "@drizzle-http/logging-interceptor": "^2.2.0",
     "@drizzle-http/rxjs-adapter": "^2.2.0",
     "@drizzle-http/undici": "^2.2.0"
-  },
-  "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0"
   }
 }

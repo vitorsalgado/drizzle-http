@@ -42,8 +42,5 @@
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
     "undici": "^4.10.3"
-  },
-  "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0"
   }
 }

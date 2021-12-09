@@ -5,6 +5,7 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc --build --force"
   },
@@ -18,13 +19,8 @@
     "benchmark": "^2.1.4",
     "drizzle-http": "^2.2.0",
     "got": "^11.8.3",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.0",
     "superagent": "^6.1.0",
     "undici": "^4.10.3"
-  },
-  "devDependencies": {
-    "@types/benchmark": "^2.1.1",
-    "@types/node-fetch": "^2.5.12",
-    "@types/superagent": "^4.1.13"
   }
 }

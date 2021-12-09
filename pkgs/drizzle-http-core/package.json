@@ -38,10 +38,5 @@
     "undici",
     "http",
     "api"
-  ],
-  "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0",
-    "@types/node": "^16.11.10",
-    "undici": "^4.10.3"
-  }
+  ]
 }

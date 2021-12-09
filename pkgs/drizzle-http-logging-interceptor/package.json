@@ -47,10 +47,5 @@
     "@drizzle-http/core": "^2.2.0",
     "pino": "^7.4.1",
     "pino-pretty": "^7.2.0"
-  },
-  "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0",
-    "@drizzle-http/undici": "^2.2.0",
-    "@types/pino": "^7.0.5"
   }
 }

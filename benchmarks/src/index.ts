@@ -20,7 +20,7 @@ import {
   UndiciCallFactory
 } from 'drizzle-http'
 import { FullResponse } from 'drizzle-http'
-import { HttpResponse } from '@drizzle-http/core'
+import { HttpResponse } from 'drizzle-http'
 
 const suite = new Benchmark.Suite()
 
@@ -121,7 +121,7 @@ suite
         Array.from(Array(parallelRequests)).map(() =>
           api.post('identifier', 'some filter parameter', data).then((response: Response) => response.json())
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -157,7 +157,7 @@ suite
                 )
             })
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -185,7 +185,7 @@ suite
               )
             })
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -200,7 +200,7 @@ suite
             httpAgent: axiosAgent
           })
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -215,7 +215,7 @@ suite
             responseType: 'json'
           })
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -231,7 +231,7 @@ suite
             agent: nodeFetchAgent
           } as any).then(res => res.json())
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -248,7 +248,7 @@ suite
             })
           )
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
@@ -267,7 +267,7 @@ suite
               })
           )
         )
-      ).then(() => deferred.resolve())
+      ).finally(() => deferred.resolve())
     }
   })
 
