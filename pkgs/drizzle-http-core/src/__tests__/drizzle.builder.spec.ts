@@ -16,7 +16,7 @@ describe('Drizzle Builder', function () {
 
     const drizzle = builder.build()
 
-    expect(drizzle.baseUrl).toEqual('http://www.test.com.br')
+    expect(drizzle.baseUrl()).toEqual('http://www.test.com.br')
   })
 
   it('should not allow set interceptors with empty array', function () {
@@ -103,8 +103,8 @@ describe('Drizzle Builder', function () {
 
     const drizzle = builder.build()
 
-    expect(drizzle.headers.has('user-agent')).toBeTruthy()
-    expect(drizzle.headers.get('user-agent')).toEqual('Drizzle-Http')
+    expect(drizzle.headers().has('user-agent')).toBeTruthy()
+    expect(drizzle.headers().get('user-agent')).toEqual('Drizzle-Http')
   })
 
   it('should set default drizzle-http user-agent by default', function () {
@@ -114,7 +114,7 @@ describe('Drizzle Builder', function () {
 
     const drizzle = builder.build()
 
-    expect(drizzle.headers.has('user-agent')).toBeTruthy()
+    expect(drizzle.headers().has('user-agent')).toBeTruthy()
   })
 
   it('should not set default drizzle-http user-agent when builder .useDrizzleUserAgent() is called with FALSE', function () {
@@ -125,7 +125,7 @@ describe('Drizzle Builder', function () {
 
     const drizzle = builder.build()
 
-    expect(drizzle.headers.has('user-agent')).toBeFalsy()
+    expect(drizzle.headers().has('user-agent')).toBeFalsy()
   })
 
   it('should contain to string tag symbol', function () {

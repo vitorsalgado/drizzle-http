@@ -90,8 +90,8 @@ describe('Logging Interceptor', function () {
   it('should log without errors', () => {
     class API {
       @GET('/get-logging')
-      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
-      @Accept(MediaTypes.APPLICATION_JSON_UTF8)
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      @Accept(MediaTypes.APPLICATION_JSON)
       execute(): Promise<TestRes> {
         return noop()
       }
@@ -137,8 +137,7 @@ describe('Logging Interceptor', function () {
     class API3 {
       @GET('/nowhere')
       @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
-      @FullResponse()
-      execute(): Promise<HttpResponse> {
+      execute(): Promise<{ ok: string }> {
         return noop()
       }
     }

@@ -3,7 +3,7 @@ import { Keys } from './Keys'
 
 export function RxJs() {
   return function (target: object, method: string): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.returnIdentifier = Keys.RxJxKey
   }
 }

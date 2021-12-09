@@ -1,3 +1,3 @@
-import stream from 'stream'
+import { Readable } from 'stream'
 
-export type BodyType = stream.Readable | ReadableStream<Uint8Array> | Buffer | Uint8Array | string | null
+export type BodyType = Readable | Buffer | Uint8Array | string | null

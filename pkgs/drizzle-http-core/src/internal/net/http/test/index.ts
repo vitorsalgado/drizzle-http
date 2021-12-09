@@ -14,7 +14,7 @@ import { isAbsolute } from '../../url'
 import { BodyType } from '../../../types'
 import { HttpHeaders } from '../../../../HttpHeaders'
 
-class TestCall implements Call<Promise<HttpResponse>> {
+class TestCall implements Call {
   private readonly url: string
 
   constructor(readonly baseUrl: URL, readonly request: HttpRequest, readonly argv: unknown[]) {
@@ -37,9 +37,13 @@ class TestCall implements Call<Promise<HttpResponse>> {
 export class TestCallFactory implements CallFactory {
   static INSTANCE: TestCallFactory = new TestCallFactory()
 
+  setup(_drizzle: Drizzle): void {
+    // no setup
+  }
+
   prepareCall(drizzle: Drizzle, _method: string, _requestFactory: RequestFactory): CallProvider {
     return function (request, args) {
-      return new TestCall(new URL(drizzle.baseUrl), request, args)
+      return new TestCall(new URL(drizzle.baseUrl()), request, args)
     }
   }
 }
@@ -56,7 +60,7 @@ export function toRequest(url: string, request: HttpRequest): RequestOptions {
   }
 }
 
-class TestDzResponse implements HttpResponse<Blob, never> {
+class TestDzResponse implements HttpResponse<BodyType, Blob, never> {
   readonly body: BodyType
   readonly headers: HttpHeaders
   readonly status: number

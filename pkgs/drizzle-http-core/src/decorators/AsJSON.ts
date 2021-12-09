@@ -9,16 +9,16 @@ import { HttpHeaders } from '../HttpHeaders'
 export function AsJSON() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      DrizzleMeta.provideRequestFactory(target.constructor.name, method).defaultHeaders.append(
+      DrizzleMeta.provideRequestFactory(target, method).defaultHeaders.append(
         HttpHeaders.CONTENT_TYPE,
-        MediaTypes.APPLICATION_JSON_UTF8
+        MediaTypes.APPLICATION_JSON
       )
       return
     }
 
-    DrizzleMeta.provideInstanceMetadata((target as TFunction).name).defaultHeaders.append(
+    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
       HttpHeaders.CONTENT_TYPE,
-      MediaTypes.APPLICATION_JSON_UTF8
+      MediaTypes.APPLICATION_JSON
     )
   }
 }

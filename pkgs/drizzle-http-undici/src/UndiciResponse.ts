@@ -11,8 +11,11 @@ export class UndiciResponse implements HttpResponse<BodyType, Blob, never> {
   readonly url: string
 
   constructor(url: string, private readonly response: Dispatcher.ResponseData) {
+    const headers = new HttpHeaders(response.headers as Record<string, string>)
+    headers.mergeObject(response.trailers)
+
     this.body = response.body
-    this.headers = new HttpHeaders(response.headers as Record<string, string>)
+    this.headers = headers
     this.status = response.statusCode
     this.statusText = ''
     this.url = url

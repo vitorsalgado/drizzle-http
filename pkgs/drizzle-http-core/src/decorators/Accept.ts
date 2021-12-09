@@ -10,12 +10,12 @@ import { HttpHeaders } from '../HttpHeaders'
 export function Accept(value: string) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
       requestFactory.defaultHeaders.append(HttpHeaders.ACCEPT, value)
       return
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
     apiInstanceMeta.defaultHeaders.append(HttpHeaders.ACCEPT, value)
   }
 }

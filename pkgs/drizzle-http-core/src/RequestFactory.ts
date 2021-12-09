@@ -38,42 +38,44 @@ interface RequestBuilder {
  * This class values are not changed so, validations and pre-process should be made outside a request context.
  */
 export class RequestFactory {
-  method: string
-  httpMethod: string
-  path: string
-  argLen: number
-  bodyIndex: number
-  defaultHeaders: HttpHeaders
-  readTimeout?: number
-  connectTimeout?: number
-  returnIdentifier: string | null
-  parameterHandlers!: ParameterHandler<Parameter, unknown>[]
-  parameters: Parameter[]
-  signal: unknown
-  noResponseConverter: boolean
-  noResponseHandler: boolean
+  constructor(
+    public method: string = '',
+    public httpMethod: string = '',
+    public path: string = '',
+    public argLen: number = 0,
+    public bodyIndex: number = -1,
+    public defaultHeaders: HttpHeaders = new HttpHeaders(),
+    public readTimeout: number | undefined = undefined,
+    public connectTimeout: number | undefined = undefined,
+    public returnIdentifier: string | null = '',
+    public parameterHandlers: ParameterHandler<Parameter, unknown>[] = [],
+    public parameters: Parameter[] = [],
+    public signal: unknown = null,
+    public noResponseConverter: boolean = false,
+    public noResponseHandler: boolean = false,
+    public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
+    private preProcessed: boolean = false
+  ) {}
 
-  // This holds generic values used by additional adapters, converters and callers
-  private readonly bag: Map<string, unknown>
-  private preProcessed: boolean
-
-  constructor() {
-    this.method = ''
-    this.httpMethod = ''
-    this.path = ''
-    this.argLen = 0
-    this.bodyIndex = -1
-    this.defaultHeaders = new HttpHeaders()
-    this.readTimeout = undefined
-    this.connectTimeout = undefined
-    this.returnIdentifier = ''
-    this.bag = new Map<string, unknown>()
-    this.preProcessed = false
-    this.parameterHandlers = []
-    this.parameters = []
-    this.signal = null
-    this.noResponseConverter = false
-    this.noResponseHandler = false
+  static copyFrom(other: RequestFactory): RequestFactory {
+    return new RequestFactory(
+      other.method,
+      other.httpMethod,
+      other.path,
+      other.argLen,
+      other.bodyIndex,
+      new HttpHeaders(Array.from(other.defaultHeaders.entries())),
+      other.readTimeout,
+      other.connectTimeout,
+      other.returnIdentifier,
+      [...other.parameterHandlers],
+      [...other.parameters],
+      other.signal,
+      other.noResponseConverter,
+      other.noResponseHandler,
+      other.bag,
+      other.preProcessed
+    )
   }
 
   private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
@@ -171,13 +173,13 @@ export class RequestFactory {
     if (this.isFormUrlEncoded()) {
       if (this.bodyIndex > 0 && formParameters.length > 0) {
         throw this.invalidArgErr(
-          `${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} request cannot contain both @Body() and @Field() decorators.`
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} request cannot contain both @Body() and @Field() decorators.`
         )
       }
     } else {
       if (formParameters.length > 0) {
         throw this.invalidArgErr(
-          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} requests. Maybe you are missing @FormUrlEncoded() decorator?`
+          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED} requests. Maybe you are missing @FormUrlEncoded() decorator?`
         )
       }
     }
@@ -194,12 +196,12 @@ export class RequestFactory {
       throw new Error('This RequestFactory instance is already Pre Processed.')
     }
 
-    if (!drizzle.headers.isEmpty()) {
-      this.defaultHeaders.merge(drizzle.headers)
+    if (!drizzle.headers().isEmpty()) {
+      this.defaultHeaders.merge(drizzle.headers())
     }
 
     if (!this.path.startsWith('http:') || !this.path.startsWith('https:')) {
-      const url = new URL(drizzle.baseUrl)
+      const url = new URL(drizzle.baseUrl())
 
       if (/\/.+/.test(url.pathname)) {
         this.path = url.pathname + this.path
@@ -314,7 +316,6 @@ export class RequestFactory {
 
   /**
    * Get all configurations
-   * @returns configurations map
    */
   allConfigs(): Map<string, unknown> {
     return new Map<string, unknown>(this.bag)
@@ -495,7 +496,6 @@ export class RequestFactory {
   /**
    * Check if current request contains dynamic parameters.
    * This is useful to avoid unnecessary parameter processing in some Drizzle-Http components.
-   * @returns true / false
    */
   containsDynamicParameters(): boolean {
     return this.hasArgs() || this.parameters.length > 0 || this.hasBody()
@@ -505,7 +505,7 @@ export class RequestFactory {
    * Check if {@link RequestFactory} contains a Content-Type header with: application/x-www-form-urlencoded
    */
   isFormUrlEncoded(): boolean {
-    return this.contentTypeContains(MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    return this.contentTypeContains(MediaTypes.APPLICATION_FORM_URL_ENCODED)
   }
 
   /**

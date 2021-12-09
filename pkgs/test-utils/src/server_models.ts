@@ -4,7 +4,7 @@ export class TestResult<T> {
   url!: string
   method!: string
   query!: any
-  headers!: IncomingHttpHeaders
+  headers!: Record<string, string>
   params!: any
   body: any
   result!: T

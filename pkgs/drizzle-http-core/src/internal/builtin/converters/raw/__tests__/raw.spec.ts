@@ -18,14 +18,14 @@ import { HttpHeaders } from '../../../../../HttpHeaders'
 
 class API {
   @POST('/raw-test')
-  @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @ContentType(MediaTypes.TEXT_PLAIN)
   @FullResponse()
   test(@Body() data: string): Promise<HttpResponse> {
     return noop(data)
   }
 
   @GET('/nowhere')
-  @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @ContentType(MediaTypes.TEXT_PLAIN)
   @FullResponse()
   nowhere(): Promise<HttpResponse> {
     return noop()
@@ -68,7 +68,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -84,7 +84,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -99,7 +99,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
     requestFactory.returnIdentifier = 'raw'
 
     requestFactory.preProcessAndValidate(drizzle)

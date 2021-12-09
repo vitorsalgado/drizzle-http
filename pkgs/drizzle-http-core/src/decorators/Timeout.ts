@@ -11,13 +11,13 @@ import { DrizzleMeta } from '../DrizzleMeta'
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
   return <TFunction extends Function>(target: object | TFunction, method?: string): void => {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
       requestFactory.readTimeout = readTimeoutInMs
       requestFactory.connectTimeout = connectTimeoutInMs
       return
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
     apiInstanceMeta.readTimeout = readTimeoutInMs
     apiInstanceMeta.connectTimeout = connectTimeoutInMs
   }

@@ -82,7 +82,7 @@ describe('Request Factory', () => {
     requestFactory.path = '/groups/{id}/projects'
     requestFactory.addDefaultHeaders({
       'x-id': '100',
-      'content-type': MediaTypes.APPLICATION_JSON_UTF8
+      'content-type': MediaTypes.APPLICATION_JSON
     })
     requestFactory.addParameter(new HeaderParameter('x-id', 2))
     requestFactory.addParameters(
@@ -120,7 +120,7 @@ describe('Request Factory', () => {
     expect(request.headersTimeout).toEqual(10)
     expect(request.headers.get('x-id')).toEqual('100,8bc')
     expect(request.headers.get('x-client-id')).toEqual('666')
-    expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON_UTF8)
+    expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON)
   })
 
   describe('Invalid instances', () => {
@@ -259,7 +259,7 @@ describe('Request Factory', () => {
       requestFactory.method = 'example'
       requestFactory.httpMethod = 'POST'
       requestFactory.path = '/test'
-      requestFactory.addDefaultHeaders({ 'content-type': MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8 })
+      requestFactory.addDefaultHeaders({ 'content-type': MediaTypes.APPLICATION_FORM_URL_ENCODED })
       requestFactory.addParameter(new FormParameter('name', 0))
       requestFactory.addParameter(new BodyParameter(1))
 

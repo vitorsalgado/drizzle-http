@@ -20,9 +20,9 @@ import { HttpResponse } from '@drizzle-http/core'
 import { P } from '@drizzle-http/core'
 import { AsJSON } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
-import { HttpHeaders } from '@drizzle-http/core'
 import { FullResponse } from '@drizzle-http/core'
-import { Streaming, StreamTo, StreamToHttpError, StreamToResult, UndiciCallFactory, UndiciOptionsBuilder } from '..'
+import { Streaming, StreamTo, StreamToHttpError, UndiciCallFactory, UndiciOptionsBuilder } from '..'
+import { HttpEmptyResponse } from '..'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()
@@ -45,14 +45,14 @@ class API {
   @GET('/')
   @ContentType('application/json')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<StreamToResult> {
+  streaming(@StreamTo() target: Writable): Promise<HttpEmptyResponse> {
     return noop(target)
   }
 
   @GET('/nowhere')
   @ContentType('application/json')
   @Streaming()
-  streamingFromNowhere(@StreamTo() target: Writable): Promise<StreamToResult> {
+  streamingFromNowhere(@StreamTo() target: Writable): Promise<HttpEmptyResponse> {
     return noop(target)
   }
 
@@ -155,7 +155,7 @@ describe('Undici Call', function () {
       class FailApi {
         @GET('/{id}/projects')
         @Streaming()
-        invalidStreaming(@Param('id') id: string): Promise<StreamToResult> {
+        invalidStreaming(@Param('id') id: string): Promise<HttpEmptyResponse> {
           return noop(id)
         }
       }
@@ -166,7 +166,7 @@ describe('Undici Call', function () {
     expect(() => {
       class FailApi {
         @GET('/{id}/projects')
-        invalidStreaming(@Param('id') id: string, @StreamTo() to: unknown): Promise<StreamToResult> {
+        invalidStreaming(@Param('id') id: string, @StreamTo() to: unknown): Promise<HttpEmptyResponse> {
           return noop(id, to)
         }
       }
@@ -186,9 +186,6 @@ describe('Undici Call', function () {
       )
       .then(response => {
         expect(response.status).toEqual(200)
-        expect(response.stream).not.toBeNull()
-        expect(response.stream).toBeInstanceOf(Writable)
-        expect(response.stream).not.toBeUndefined()
       })
   })
 
@@ -224,7 +221,7 @@ describe('Undici Call', function () {
       expect(response.query).toHaveProperty(prop)
       expect(response.params).toHaveProperty('id', id)
       expect(response.params).toHaveProperty('name', name)
-      expect(response.headers).toHaveProperty('content-type', 'application/json;charset=UTF-8')
+      expect(response.headers).toHaveProperty('content-type', 'application/json')
       expect(response.headers).toHaveProperty('cache', String(cache))
       expect(response.headers).toHaveProperty('code', String(code))
       expect(response.url.substring(response.url.length - 1)).not.toEqual('&')
@@ -269,7 +266,7 @@ describe('Undici Call', function () {
   it('should join paths', async () => {
     class TestAPI {
       @GET('/base/path')
-      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+      @ContentType(MediaTypes.APPLICATION_JSON)
       exec(): Promise<Ok> {
         return noop()
       }
@@ -288,7 +285,14 @@ describe('Undici Call', function () {
 
   it('should init stream result', function () {
     expect(
-      () => new StreamToResult('http://www.test.com.br/', 200, new HttpHeaders({}), new Writable())
+      () =>
+        new HttpEmptyResponse('http://www.test.com.br/', {
+          status: 200,
+          statusText: '',
+          headers: {},
+          trailers: {},
+          url: ''
+        })
     ).not.toThrowError()
   })
 

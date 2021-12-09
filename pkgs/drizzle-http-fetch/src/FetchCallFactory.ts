@@ -8,9 +8,13 @@ export class FetchCallFactory implements CallFactory {
 
   constructor(private readonly options: RequestInit = {}) {}
 
+  setup(_drizzle: Drizzle): void {
+    // no setup needed
+  }
+
   prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
     const requestInit = requestFactory.getConfig(Keys.ConfigKeyRequestInit) as RequestInit
-    const url = new URL(drizzle.baseUrl)
+    const url = new URL(drizzle.baseUrl())
     const opts = this.options
 
     return function (request: HttpRequest, args: unknown[]): Call<unknown> {

@@ -1,0 +1,55 @@
+{
+  "name": "@drizzle-http/opossum-circuit-breaker",
+  "version": "2.2.0",
+  "description": "Opossum implementation for Drizzle-HTTP",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "npm test -- --coverage",
+    "lint": "eslint --fix --ext .ts .",
+    "prettier": "prettier 'src/**' --write --ignore-unknown",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
+  },
+  "engines": {
+    "node": ">=12.4.0"
+  },
+  "author": {
+    "name": "Vitor Hugo Salgado",
+    "url": "https://github.com/vitorsalgado"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-opossum-circuit-breaker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
+    "directory": "pkgs/drizzle-http-undici"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/drizzle-http/issues"
+  },
+  "keywords": [
+    "drizzle-http",
+    "circuit-breaker",
+    "circuit breaker",
+    "circuitbreaker",
+    "resilience",
+    "fail-fast",
+    "http",
+    "api"
+  ],
+  "dependencies": {
+    "@drizzle-http/core": "^2.2.0",
+    "opossum": "^6.2.1"
+  },
+  "devDependencies": {
+    "@drizzle-http/test-utils": "^2.2.0",
+    "@drizzle-http/undici": "^2.2.0"
+  }
+}

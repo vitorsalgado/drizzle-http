@@ -9,7 +9,7 @@ const port = process.env.SENDER_PORT || 3000
 
 class API {
   @POST('/test/{id}')
-  @HeaderMap({ 'Content-Type': MediaTypes.APPLICATION_JSON_UTF8 })
+  @HeaderMap({ 'Content-Type': MediaTypes.APPLICATION_JSON })
   @FullResponse()
   test(@Param('id') id: string, @Query('filter') filter: string, @Body() data: unknown): Promise<HttpResponse> {
     return noop(id, filter, data)

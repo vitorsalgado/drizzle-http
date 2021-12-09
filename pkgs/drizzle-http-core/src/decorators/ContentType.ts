@@ -10,13 +10,13 @@ import { HttpHeaders } from '../HttpHeaders'
 export function ContentType(value: string) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string) {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
       requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
 
       return
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
     apiInstanceMeta.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, value)
   }
 }

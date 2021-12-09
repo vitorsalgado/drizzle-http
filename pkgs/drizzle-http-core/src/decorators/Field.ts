@@ -16,7 +16,7 @@ import { FormParameter } from '../internal'
  */
 export function Field(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addParameter(new FormParameter(key, index))
   }
 }

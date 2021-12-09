@@ -9,7 +9,7 @@ interface Party {
 
 class PartiesAPI {
   @GET('/partidos')
-  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+  @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
   parties(@Query('sigla') acronym: string): Promise<Party[]> {
     return noop(acronym)

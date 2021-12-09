@@ -13,7 +13,7 @@ import { DrizzleMeta } from '../DrizzleMeta'
  */
 export function Path(path: string) {
   return function <TFunction extends Function>(target: TFunction) {
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
     apiInstanceMeta.setPath(path)
   }
 }

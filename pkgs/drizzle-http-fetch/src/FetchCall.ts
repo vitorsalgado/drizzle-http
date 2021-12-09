@@ -1,9 +1,7 @@
 import { Call, HttpRequest, isAbsolute } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 
-export class FetchCall
-  implements Call<Promise<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>>>
-{
+export class FetchCall implements Call<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>> {
   private readonly url: string
 
   constructor(

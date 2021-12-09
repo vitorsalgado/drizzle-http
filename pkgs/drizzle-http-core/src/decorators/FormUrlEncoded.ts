@@ -15,14 +15,14 @@ import { HttpHeaders } from '../HttpHeaders'
 export function FormUrlEncoded() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
-      requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
+      requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       return
     }
 
-    DrizzleMeta.provideInstanceMetadata((target as TFunction).name).defaultHeaders.append(
+    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
       HttpHeaders.CONTENT_TYPE,
-      MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8
+      MediaTypes.APPLICATION_FORM_URL_ENCODED
     )
   }
 }

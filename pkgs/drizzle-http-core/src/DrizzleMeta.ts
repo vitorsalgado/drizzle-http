@@ -2,6 +2,9 @@ import { RequestFactory } from './RequestFactory'
 import { HttpHeaders } from './HttpHeaders'
 import { notNull } from './internal'
 
+type ApiTarget = Function
+type ExtractArgs = ApiTarget | object
+
 export class ApiInstanceMeta {
   defaultHeaders: HttpHeaders
   readTimeout?: number
@@ -52,13 +55,13 @@ interface Data {
 }
 
 class _DrizzleMeta {
-  private readonly _meta: Map<string, Data> = new Map<string, Data>()
+  private readonly _entries: Map<ApiTarget, Data> = new Map()
 
-  provideInstanceMetadata(target: string): ApiInstanceMeta {
+  provideInstanceMetadata(target: ExtractArgs): ApiInstanceMeta {
     return this.getOrInitMetadata(target).meta
   }
 
-  provideRequestFactory(target: string, method: string): RequestFactory {
+  provideRequestFactory(target: ExtractArgs, method: string): RequestFactory {
     const data = this.getOrInitMetadata(target)
     let requestFactory = data.requestFactories.get(method)
 
@@ -70,7 +73,7 @@ class _DrizzleMeta {
     return requestFactory
   }
 
-  registerMethod(target: string, method: string): void {
+  registerMethod(target: ApiTarget, method: string): void {
     const data = this.getOrInitMetadata(target)
 
     if (!data.requestFactories.has(method)) {
@@ -78,12 +81,12 @@ class _DrizzleMeta {
     }
   }
 
-  meta(): Map<string, Data> {
-    return this._meta
+  meta(): Map<ApiTarget, Data> {
+    return this._entries
   }
 
-  metaFor(api: string): Data {
-    const data = this._meta.get(api)
+  metaFor(api: ApiTarget): Data {
+    const data = this._entries.get(api)
 
     if (!data) {
       throw new TypeError(`Invalid API state. No metadata found for API definition: ${api}.`)
@@ -92,12 +95,14 @@ class _DrizzleMeta {
     return data
   }
 
-  removeMetaFor(api: string): void {
-    this._meta.delete(api)
+  removeMetaFor(target: ApiTarget): void {
+    this._entries.delete(target)
   }
 
-  private getOrInitMetadata(name: string): Data {
-    let data = this._meta.get(name)
+  private getOrInitMetadata(target: ExtractArgs): Data {
+    const arg = typeof target === 'function' ? target : target.constructor
+
+    let data = this._entries.get(arg)
 
     if (!data) {
       data = {
@@ -105,7 +110,7 @@ class _DrizzleMeta {
         requestFactories: new Map()
       }
 
-      this._meta.set(name, data)
+      this._entries.set(arg, data)
     }
 
     return data

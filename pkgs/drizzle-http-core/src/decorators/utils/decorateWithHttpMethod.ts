@@ -12,15 +12,15 @@ import { HttpMethod } from './HttpMethod'
 export function decorateWithHttpMethod(
   httpMethod: HttpMethod,
   path = '/'
-): (target: Object, method: string, descriptor: PropertyDescriptor) => void {
-  return function (target: Object, method: string, descriptor: PropertyDescriptor): void {
+): (target: object, method: string, descriptor: PropertyDescriptor) => void {
+  return function (target: object, method: string, descriptor: PropertyDescriptor): void {
     if (!path.startsWith('/')) {
       throw new InvalidRequestMethodConfigurationError(method, 'Path must start with a /')
     }
 
-    DrizzleMeta.registerMethod(target.constructor.name, method)
+    DrizzleMeta.registerMethod(target.constructor, method)
 
-    const requestFactory: RequestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory: RequestFactory = DrizzleMeta.provideRequestFactory(target, method)
 
     requestFactory.method = method
     requestFactory.path = path

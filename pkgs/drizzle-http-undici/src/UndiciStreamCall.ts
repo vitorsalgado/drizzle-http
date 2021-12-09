@@ -1,4 +1,6 @@
 import { Writable } from 'stream'
+import { IncomingHttpHeaders } from 'http'
+import { Blob } from 'buffer'
 import { Pool } from 'undici'
 import { Call } from '@drizzle-http/core'
 import { DrizzleError } from '@drizzle-http/core'
@@ -7,12 +9,14 @@ import { DrizzleMeta } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
 import { HttpHeaders } from '@drizzle-http/core'
 import { isOK } from '@drizzle-http/core'
+import { HttpResponse } from '@drizzle-http/core'
+import { BodyType } from '@drizzle-http/core'
 import { toUndiciRequest } from './toUndiciRequest'
 import { Keys } from './Keys'
 
 export function Streaming() {
   return (target: object, method: string) => {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.ignoreResponseConverter()
     requestFactory.ignoreResponseHandler()
     requestFactory.addConfig(Keys.ConfigIsStream, true)
@@ -21,27 +25,75 @@ export function Streaming() {
 
 export function StreamTo() {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addConfig(Keys.ConfigStreamToIndex, index)
   }
 }
 
-/**
- * Represents a Stream Response
- */
-export class StreamToResult {
-  constructor(public url: string, public status: number, public headers: HttpHeaders, public stream: Writable) {}
+interface HttpEmptyResponseInit {
+  readonly headers: IncomingHttpHeaders
+  readonly trailers: IncomingHttpHeaders
+  readonly status: number
+  readonly statusText: string
+  readonly url: string
 }
 
-export class StreamToHttpError extends DrizzleError {
-  constructor(public readonly request: HttpRequest, public readonly response: StreamToResult) {
-    super(`Request failed with status code: ${response.status}`, 'DRIZZLE_HTTP_STREAM_ERR_HTTP')
-    Error.captureStackTrace(this, HttpError)
-    this.name = 'StreamHttpError'
+export class HttpEmptyResponse implements HttpResponse<BodyType, Blob, never> {
+  readonly body: BodyType
+  readonly headers: HttpHeaders
+  readonly status: number
+  readonly statusText: string
+  readonly url: string
+
+  constructor(url: string, private readonly init: HttpEmptyResponseInit) {
+    const headers = new HttpHeaders(init.headers as Record<string, string>)
+    headers.mergeObject(init.trailers as Record<string, string>)
+
+    this.body = null
+    this.headers = headers
+    this.status = init.status
+    this.statusText = ''
+    this.url = url
+  }
+
+  get ok(): boolean {
+    return isOK(this.status)
+  }
+
+  get bodyUsed(): boolean {
+    return true
+  }
+
+  arrayBuffer(): Promise<ArrayBuffer> {
+    throw new TypeError('.arrayBuffer() is not applicable')
+  }
+
+  blob(): Promise<Blob> {
+    throw new TypeError('.blob() is not applicable')
+  }
+
+  formData(): Promise<never> {
+    throw new TypeError('.formData() is not applicable')
+  }
+
+  json<T>(): Promise<T> {
+    throw new TypeError('.json() is not applicable')
+  }
+
+  text(): Promise<string> {
+    throw new TypeError('.text() is not applicable')
   }
 }
 
-export class UndiciStreamCall implements Call<Promise<StreamToResult>> {
+export class StreamToHttpError extends DrizzleError {
+  constructor(public readonly request: HttpRequest, public readonly response: HttpEmptyResponse) {
+    super(`Request failed with status code: ${response.status}`, 'DRIZZLE_STREAM_ERR_HTTP')
+    Error.captureStackTrace(this, HttpError)
+    this.name = 'StreamToHttpError'
+  }
+}
+
+export class UndiciStreamCall implements Call<HttpEmptyResponse> {
   constructor(
     private readonly client: Pool,
     private readonly streamTo: number,
@@ -49,32 +101,38 @@ export class UndiciStreamCall implements Call<Promise<StreamToResult>> {
     readonly argv: unknown[]
   ) {}
 
-  async execute(): Promise<StreamToResult> {
-    return new Promise<StreamToResult>((resolve, reject) => {
-      const response: Partial<StreamToResult> = { url: this.request.url }
+  async execute(): Promise<HttpEmptyResponse> {
+    return new Promise<HttpEmptyResponse>((resolve, reject) => {
+      const partial = {} as Record<string, unknown>
+      partial.url = this.request.url
       const to = this.argv[this.streamTo] as Writable
 
       this.client.stream(
         toUndiciRequest(this.request),
         ({ statusCode, headers }) => {
-          response.status = statusCode
-          response.headers = new HttpHeaders(headers as Record<string, string>)
+          partial.status = statusCode
+          partial.headers = headers
 
           return to
         },
         (err, data) => {
           if (err) {
-            return reject(new StreamToHttpError(this.request, response as StreamToResult))
+            return reject(err)
           }
 
-          response.headers?.mergeObject(data.trailers as Record<string, string>)
-          response.stream = to
+          const response = new HttpEmptyResponse(partial.url as string, {
+            status: partial.status as number,
+            statusText: '',
+            headers: partial.headers as IncomingHttpHeaders,
+            trailers: data.trailers,
+            url: partial.url as string
+          })
 
-          if (isOK((response as StreamToResult).status)) {
-            return resolve(response as StreamToResult)
+          if (isOK(response.status)) {
+            return resolve(response)
           }
 
-          return reject(new StreamToHttpError(this.request, response as StreamToResult))
+          return reject(new StreamToHttpError(this.request, response))
         }
       )
     })

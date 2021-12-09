@@ -54,7 +54,7 @@ describe('Browser Logging Interceptor', function () {
   it('should log without errors with default implementation', () => {
     class API {
       @POST('/{id}/projects/{project}')
-      @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
+      @HeaderMap({ 'content-type': 'application/json' })
       execute(
         @Param('id') id: string,
         @Param('project') project: string,
@@ -77,8 +77,8 @@ describe('Browser Logging Interceptor', function () {
   it('should log without errors', () => {
     class API {
       @GET('/get-logging')
-      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
-      @Accept(MediaTypes.APPLICATION_JSON_UTF8)
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      @Accept(MediaTypes.APPLICATION_JSON)
       execute(): Promise<TestRes> {
         return noop()
       }
@@ -97,7 +97,7 @@ describe('Browser Logging Interceptor', function () {
   it('should log without errors when logging headers and body', () => {
     class API2 {
       @POST('/{id}/projects/{project}')
-      @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
+      @HeaderMap({ 'content-type': 'application/json' })
       @FullResponse()
       execute(
         @Param('id') id: string,
@@ -123,9 +123,8 @@ describe('Browser Logging Interceptor', function () {
 
     class API3 {
       @GET('/nowhere')
-      @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
-      @FullResponse()
-      execute(): Promise<HttpResponse> {
+      @HeaderMap({ 'content-type': 'application/json' })
+      execute(): Promise<{ ok: string }> {
         return noop()
       }
     }
@@ -144,7 +143,7 @@ describe('Browser Logging Interceptor', function () {
     class API4 {
       @POST('/test-logging')
       @HeaderMap({
-        'content-type': 'application/json; charset=UTF-8',
+        'content-type': 'application/json',
         'x-super-secret-header': 'super-secret-value',
         'x-hey': 'open-value'
       })

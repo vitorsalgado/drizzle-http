@@ -7,6 +7,7 @@ import { Interceptor } from './Interceptor'
 import { RawRequestConverter, RawResponseConverter } from './internal'
 import { NoParameterHandlerFoundForType } from './internal'
 import { Parameter, ParameterHandlerFactory } from './internal'
+import { Mixin } from './internal'
 import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
 import { ResponseConverterFactory } from './ResponseConverter'
@@ -32,29 +33,53 @@ import { NoopResponseHandler } from './ResponseHandler'
  .create(API)
  */
 export class Drizzle {
-  private readonly shutdownHooks: (() => Promise<void>)[]
-
   constructor(
-    public readonly baseUrl: string,
-    public readonly headers: HttpHeaders,
-    public readonly callFactory: CallFactory,
+    private readonly _baseUrl: string,
+    private readonly _headers: HttpHeaders,
+    private readonly _callFactory: CallFactory,
     private readonly _interceptors: Interceptor[],
-    private readonly callAdapterFactories: Set<CallAdapterFactory>,
+    private readonly _callAdapterFactories: Set<CallAdapterFactory>,
     private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
-    private readonly requestConverterFactories: Set<RequestBodyConverterFactory>,
-    private readonly responseConverterFactories: Set<ResponseConverterFactory>,
-    private readonly _responseHandlerFactories: ResponseHandlerFactory[]
-  ) {
-    this.shutdownHooks = []
-  }
+    private readonly _requestConverterFactories: Set<RequestBodyConverterFactory>,
+    private readonly _responseConverterFactories: Set<ResponseConverterFactory>,
+    private readonly _responseHandlerFactories: ResponseHandlerFactory[],
+    private readonly shutdownHooks: (() => Promise<unknown>)[] = []
+  ) {}
 
   get [Symbol.toStringTag](): string {
     return this.constructor.name
   }
 
   /**
+   * Get the base url
+   *
+   * @returns string
+   */
+  baseUrl(): string {
+    return this._baseUrl
+  }
+
+  /**
+   * Get registered global {@link HttpHeaders}
+   *
+   * @returns HttpHeaders
+   */
+  headers(): HttpHeaders {
+    return this._headers
+  }
+
+  /**
+   * Get registered {@link CallFactory} instance
+   *
+   * @returns CallFactory
+   */
+  callFactory(): CallFactory {
+    return this._callFactory
+  }
+
+  /**
    * Get all registered {@link Interceptor} instances
-   * @returns All registered {@link Interceptor} instances
+   * @returns Array<Interceptor>
    */
   interceptors(): Interceptor[] {
     return [...this._interceptors]
@@ -73,11 +98,11 @@ export class Drizzle {
    * @returns {@link CallAdapter} instance or null
    */
   callAdapter<F, T>(method: string, requestFactory: RequestFactory): CallAdapter<F, T> | null {
-    if (!this.callAdapterFactories || this.callAdapterFactories.size === 0) {
+    if (!this._callAdapterFactories || this._callAdapterFactories.size === 0) {
       return null
     }
 
-    for (const factory of this.callAdapterFactories) {
+    for (const factory of this._callAdapterFactories) {
       const adapter = factory.provideCallAdapter(this, method, requestFactory)
 
       if (adapter !== null) {
@@ -115,7 +140,7 @@ export class Drizzle {
    *  {@link RawResponseConverter} instance when none is found
    */
   requestBodyConverter<R>(method: string, requestFactory: RequestFactory): RequestBodyConverter<R> {
-    for (const factory of this.requestConverterFactories) {
+    for (const factory of this._requestConverterFactories) {
       const converter = factory.requestConverter(this, method, requestFactory)
 
       if (converter !== null) {
@@ -137,7 +162,7 @@ export class Drizzle {
       return RawResponseConverter.INSTANCE as unknown as ResponseConverter<T>
     }
 
-    for (const factory of this.responseConverterFactories) {
+    for (const factory of this._responseConverterFactories) {
       const converter = factory.responseBodyConverter(this, method, requestFactory)
 
       if (converter !== null) {
@@ -180,7 +205,7 @@ export class Drizzle {
    *
    * @param fn - shutdown async function
    */
-  registerShutdownHook(fn: () => Promise<void>): void {
+  registerShutdownHook(fn: () => Promise<unknown>): void {
     this.shutdownHooks.push(fn)
   }
 
@@ -198,38 +223,37 @@ export class Drizzle {
    * configurations.
    *
    * @param TargetApi - the target API class with decorated methods
+   * @param args - optional list of arguments to be passed to the api constructor
+   *
    * @returns A proxy instance of the target API class
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  create<T extends { new (...args: any[]): any }>(TargetApi: T): InstanceType<T> {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this
+  create<T extends { new (...args: any[]): any }>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
+    const map = new Map<string, RequestFactory>()
+    const invoker = serviceInvoker(this)
+    const meta = DrizzleMeta.metaFor(TargetApi)
 
-    // Extended version of the decorated API Class
-    // This extended class will contain the implementations to execute the http requests based on configurations from
-    // decorators and Drizzle instance
-    class ExtendedTargetApi extends TargetApi {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      constructor(..._args: any[]) {
-        super()
+    function MIXIN<TBase extends Mixin>(superclass: TBase) {
+      return class extends superclass {
+        constructor(...args: any[]) {
+          super(...args)
 
-        this.name = `${TargetApi.name}_Extended`
-
-        const invoker = serviceInvoker(self)
-        const meta = DrizzleMeta.metaFor(TargetApi.name)
-
-        for (const [method, requestFactory] of meta.requestFactories) {
-          requestFactory.mergeWithInstanceMeta(meta.meta)
-          requestFactory.preProcessAndValidate(self)
-
-          this[method] = invoker(requestFactory, method)
+          for (const [method, requestFactory] of meta.requestFactories) {
+            map.set(method, RequestFactory.copyFrom(requestFactory))
+          }
         }
-
-        DrizzleMeta.removeMetaFor(TargetApi.name)
       }
     }
 
-    return new ExtendedTargetApi()
+    const Extended = MIXIN(TargetApi)
+    const extendedApi = new Extended(...args)
+
+    for (const [method, requestFactory] of map) {
+      requestFactory.mergeWithInstanceMeta(meta.meta)
+      requestFactory.preProcessAndValidate(this)
+
+      Extended.prototype[method] = invoker(requestFactory, method)
+    }
+
+    return extendedApi
   }
 }

@@ -7,10 +7,10 @@ import { Observable } from 'rxjs'
 import { from } from 'rxjs'
 import { Keys } from './Keys'
 
-class RxJsCallAdapter<T> implements CallAdapter<Promise<T>, Observable<T>> {
+class RxJsCallAdapter<T> implements CallAdapter<T, Observable<T>> {
   constructor(private readonly decorated?: CallAdapter<unknown, Promise<T>>) {}
 
-  adapt(action: Call<Promise<T>>): Observable<T> {
+  adapt(action: Call<T>): Observable<T> {
     if (this.decorated) {
       return from(this.decorated.adapt(action))
     }

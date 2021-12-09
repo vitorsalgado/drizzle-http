@@ -28,7 +28,7 @@ export class FormRequestConverter implements RequestBodyConverter<unknown> {
       if (!Array.isArray(value[0])) {
         throw new RequestBodyTypeNotAllowed(
           requestFactory.method,
-          `${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8} @Body() arg must be a object, 2d Array or string.`
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} @Body() arg must be a object, 2d Array or string.`
         )
       }
 

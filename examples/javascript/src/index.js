@@ -5,7 +5,7 @@ const { UndiciCallFactory } = require('@drizzle-http/undici')
 
 class PartiesClientAPI {
   @GET('/partidos')
-  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+  @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
   parties(@Query('sigla') acronym) {}
 }

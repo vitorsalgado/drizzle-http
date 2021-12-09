@@ -8,7 +8,7 @@ export function Abort(value: string | unknown | null = null) {
     desc?: number | PropertyDescriptor
   ): void {
     if (method !== null && typeof method !== 'undefined') {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
 
       if (desc !== null && typeof desc === 'number') {
         requestFactory.addParameter(new SignalParameter(desc))
@@ -35,9 +35,7 @@ export function Abort(value: string | unknown | null = null) {
       )
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata((target as TFunction).name)
+    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
     apiInstanceMeta.signal = value
   }
 }
-
-export const Cancellation = Abort

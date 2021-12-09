@@ -13,7 +13,7 @@ import { HeaderParameter } from '../internal'
  */
 export function Header(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addParameter(new HeaderParameter(key, index))
   }
 }

@@ -11,7 +11,7 @@ import { BodyParameter } from '../internal'
  */
 export function Body() {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addParameter(new BodyParameter(index))
   }
 }

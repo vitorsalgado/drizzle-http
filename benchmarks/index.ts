@@ -17,10 +17,10 @@ import {
   Query,
   Streaming,
   StreamTo,
-  StreamToResult,
   UndiciCallFactory
 } from 'drizzle-http'
 import { FullResponse } from 'drizzle-http'
+import { HttpResponse } from '@drizzle-http/core'
 
 const suite = new Benchmark.Suite()
 
@@ -80,7 +80,7 @@ const gotOpts = {
   retry: 0
 }
 
-@ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+@ContentType(MediaTypes.APPLICATION_JSON)
 class API {
   @GET('/')
   @FullResponse()
@@ -96,7 +96,7 @@ class API {
 
   @GET('/')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<StreamToResult> {
+  streaming(@StreamTo() target: Writable): Promise<HttpResponse> {
     return noop(target)
   }
 }

@@ -15,7 +15,7 @@ import { QueryNameParameter } from '../internal'
  */
 export function QueryName() {
   return function QueryName(target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addParameter(new QueryNameParameter(index))
   }
 }

@@ -7,7 +7,7 @@ import { Keys } from './Keys'
  */
 export function FullResponse() {
   return function (target: object, method: string) {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.returnIdentifier = Keys.ReturnIdentifier
   }
 }

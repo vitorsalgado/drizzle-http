@@ -22,13 +22,13 @@ import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
 
 function Custom() {
   return function (target: object, method: string): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target.constructor.name, method)
+    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
     requestFactory.addConfig('rxjs:test:custom', true)
   }
 }
 
-class CustomCallAdapter implements CallAdapter<Promise<unknown>, Promise<unknown>> {
-  adapt(action: Call<Promise<unknown>>): Promise<unknown> {
+class CustomCallAdapter implements CallAdapter<unknown, Promise<unknown>> {
+  adapt(action: Call<unknown>): Promise<unknown> {
     return action.execute().then(data => ({ id: (data as { result: { id: string } }).result.id }))
   }
 }

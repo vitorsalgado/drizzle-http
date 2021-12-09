@@ -13,12 +13,12 @@ describe('Form Converter', function () {
     .callFactory(new TestCallFactory())
     .build()
 
-  it(`should return form request converter when content type contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8}`, function () {
+  it(`should return form request converter when content type contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED}`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -28,12 +28,12 @@ describe('Form Converter', function () {
     expect(converter).toBeInstanceOf(FormRequestConverter)
   })
 
-  it(`should return null when content type does not contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8}`, function () {
+  it(`should return null when content type does not contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED}`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
     requestFactory.addParameter(new BodyParameter(0))
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -49,7 +49,7 @@ describe('Form Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -72,7 +72,7 @@ describe('Form Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -95,7 +95,7 @@ describe('Form Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
 
     requestFactory.preProcessAndValidate(drizzle)
 

@@ -1,6 +1,7 @@
 import { HttpRequest } from './HttpRequest'
 import { Drizzle } from './Drizzle'
 import { RequestFactory } from './RequestFactory'
+import { HttpResponse } from './HttpResponse'
 
 /**
  * Represents a single HTTP call.
@@ -8,7 +9,7 @@ import { RequestFactory } from './RequestFactory'
  *
  * @typeParam V - type of the response
  */
-export interface Call<T> {
+export interface Call<T = HttpResponse> {
   readonly request: HttpRequest
 
   readonly argv: unknown[]
@@ -16,10 +17,12 @@ export interface Call<T> {
   /**
    * Executes the HTTP request
    */
-  execute(): T
+  execute(): Promise<T>
 }
 
-export type CallProvider = (request: HttpRequest, args: unknown[]) => Call<unknown>
+export interface CallProvider<T = unknown> {
+  (request: HttpRequest, args: unknown[]): Call<T>
+}
 
 /**
  * Builds a {@link Call} for a request.
@@ -30,7 +33,7 @@ export interface CallFactory {
    * Additional setupTestServer like register a shutdown hook
    * @param drizzle - Drizzle instance
    */
-  setup?(drizzle: Drizzle): void
+  setup(drizzle: Drizzle): void
 
   /**
    * Prepares the Call<V> that will make teh HTTP request.

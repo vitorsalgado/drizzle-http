@@ -4,7 +4,7 @@ import { HttpRequest } from '@drizzle-http/core'
 import { toUndiciRequest } from './toUndiciRequest'
 import { UndiciResponse } from './UndiciResponse'
 
-export class UndiciCall implements Call<Promise<UndiciResponse>> {
+export class UndiciCall implements Call<UndiciResponse> {
   constructor(private readonly client: Pool, readonly request: HttpRequest, readonly argv: unknown[]) {}
 
   execute(): Promise<UndiciResponse> {

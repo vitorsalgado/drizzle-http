@@ -1,0 +1,9 @@
+temp
+out
+src
+tsconfig.json
+tsconfig.tsbuildinfo
+*.log
+*.tgz
+*.spec.ts
+*.spec.js

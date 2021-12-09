@@ -10,8 +10,10 @@ import {
 import { HttpRequest } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { UndiciStreamCall } from './UndiciStreamCall'
+import { HttpEmptyResponse } from './UndiciStreamCall'
 import { UndiciCall } from './UndiciCall'
 import { Keys } from './Keys'
+import { UndiciResponse } from './UndiciResponse'
 
 export class UndiciCallFactory implements CallFactory {
   private _pool!: Pool
@@ -22,7 +24,7 @@ export class UndiciCallFactory implements CallFactory {
   }
 
   setup(drizzle: Drizzle): void {
-    this._pool = new Pool(new URL(drizzle.baseUrl).origin, this._options)
+    this._pool = new Pool(new URL(drizzle.baseUrl()).origin, this._options)
 
     drizzle.registerShutdownHook(async () => {
       if (this._pool !== null) {
@@ -31,7 +33,11 @@ export class UndiciCallFactory implements CallFactory {
     })
   }
 
-  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
+  prepareCall(
+    drizzle: Drizzle,
+    method: string,
+    requestFactory: RequestFactory
+  ): CallProvider<UndiciResponse | HttpEmptyResponse> {
     const pool = this._pool
 
     if (pool === null) {
@@ -48,7 +54,7 @@ export class UndiciCallFactory implements CallFactory {
         )
       }
 
-      return function (request: HttpRequest, args: unknown[]): Call<unknown> {
+      return function (request: HttpRequest, args: unknown[]): Call<HttpEmptyResponse> {
         return new UndiciStreamCall(pool, streamToIndex, request, args)
       }
     } else {
@@ -62,7 +68,7 @@ export class UndiciCallFactory implements CallFactory {
       }
     }
 
-    return function (request: HttpRequest, args: unknown[]): Call<unknown> {
+    return function (request: HttpRequest, args: unknown[]): Call<UndiciResponse> {
       return new UndiciCall(pool, request, args)
     }
   }

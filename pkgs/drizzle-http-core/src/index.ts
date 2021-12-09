@@ -3,7 +3,7 @@ export * from './internal'
 
 export * from './Call'
 export * from './CallAdapter'
-export * from './CallBridge'
+export * from './CallEntryPoint'
 export * from './Chain'
 export * from './ChainExecutor'
 export * from './Drizzle'

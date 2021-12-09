@@ -3,7 +3,7 @@ import { CORS, FetchCallFactory, KeepAlive } from '../..'
 
 class ApiJs {
   @GET('/')
-  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+  @ContentType(MediaTypes.APPLICATION_JSON)
   @CORS()
   @KeepAlive(true)
   @FullResponse()

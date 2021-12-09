@@ -42,6 +42,8 @@ import {
 } from '..'
 import { HttpResponse } from '..'
 import { FullResponse } from '..'
+import { Interceptor } from '..'
+import { Chain } from '..'
 
 const cancellation = new EventEmitter()
 const cancellationInMethod = new EventEmitter()
@@ -62,14 +64,14 @@ class TestAPI {
   }
 
   @GET('/txt')
-  @ContentType(MediaTypes.TEXT_PLAIN_UTF8)
+  @ContentType(MediaTypes.TEXT_PLAIN)
   @FullResponse()
   txt(): Promise<HttpResponse> {
     return noop()
   }
 
   @GET('/group/{id}/owner/{name}/projects')
-  @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
+  @ContentType(MediaTypes.APPLICATION_JSON)
   @Timeout(5000, 5000)
   projects(
     @Param('id') id: string,
@@ -85,7 +87,7 @@ class TestAPI {
   }
 
   @GET('/{id}/projects')
-  @Accept(MediaTypes.APPLICATION_JSON_UTF8)
+  @Accept(MediaTypes.APPLICATION_JSON)
   @Abort(cancellationInMethod)
   @FullResponse()
   getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<HttpResponse> {
@@ -238,7 +240,7 @@ describe('Drizzle Http', () => {
 
       @AsJSON()
       @Accept(MediaTypes.APPLICATION_JSON)
-      class InnerAPI {
+      class JsonAPI {
         @GET('/')
         test(): Promise<TestResult<Ok>> {
           return noop()
@@ -247,12 +249,12 @@ describe('Drizzle Http', () => {
 
       const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
-      const api: InnerAPI = d.create(InnerAPI)
+      const api: JsonAPI = d.create(JsonAPI)
 
       return api
         .test()
         .then(res => {
-          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON)
           expect(res.headers).toHaveProperty('accept', MediaTypes.APPLICATION_JSON)
           expect(res.result.ok).toBeTruthy()
         })
@@ -262,8 +264,8 @@ describe('Drizzle Http', () => {
     it('should allow @ContentType() on class level', function () {
       expect.assertions(2)
 
-      @ContentType(MediaTypes.APPLICATION_JSON_UTF8)
-      class InnerAPI {
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      class TestContentTypeClazzLevelAPI {
         @GET('/')
         test(): Promise<TestResult<Ok>> {
           return noop()
@@ -272,12 +274,12 @@ describe('Drizzle Http', () => {
 
       const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
-      const api: InnerAPI = d.create(InnerAPI)
+      const api: TestContentTypeClazzLevelAPI = d.create(TestContentTypeClazzLevelAPI)
 
       return api
         .test()
         .then(res => {
-          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+          expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON)
           expect(res.result.ok).toBeTruthy()
         })
         .finally(() => d.shutdown())
@@ -287,7 +289,7 @@ describe('Drizzle Http', () => {
       expect.assertions(1)
 
       @FormUrlEncoded()
-      class InnerAPI {
+      class FormAPI {
         @POST('/')
         @FullResponse()
         test(@Field('value') val: string): Promise<HttpResponse> {
@@ -297,7 +299,7 @@ describe('Drizzle Http', () => {
 
       const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
-      const api: InnerAPI = d.create(InnerAPI)
+      const api: FormAPI = d.create(FormAPI)
 
       return api
         .test('test')
@@ -305,7 +307,7 @@ describe('Drizzle Http', () => {
           return res.json<TestResult<Ok>>()
         })
         .then(result => {
-          expect(result.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_FORM_URL_ENCODED_UTF8)
+          expect(result.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_FORM_URL_ENCODED)
         })
         .finally(() => d.shutdown())
     })
@@ -320,7 +322,7 @@ describe('Drizzle Http', () => {
       expect.assertions(3)
 
       return api.testGET().then(res => {
-        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON)
         expect(res.headers).toHaveProperty('x-env', 'Test')
         expect(res.result.ok).toBeTruthy()
       })
@@ -372,7 +374,7 @@ describe('Drizzle Http', () => {
         expect(res.query).toHaveProperty(prop)
         expect(res.params).toHaveProperty('id', id)
         expect(res.params).toHaveProperty('name', name)
-        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON_UTF8)
+        expect(res.headers).toHaveProperty('content-type', MediaTypes.APPLICATION_JSON)
         expect(res.headers).toHaveProperty('cache', String(cache))
         expect(res.headers).toHaveProperty('code', String(code))
         expect(res.url.substring(res.url.length - 1)).not.toEqual('&')
@@ -475,6 +477,82 @@ describe('Drizzle Http', () => {
         .then(txt => {
           expect(txt).toEqual('ok')
         })
+    })
+  })
+
+  describe('when using interceptors', function () {
+    it('should execute the interceptor and apply changes to the request', function () {
+      expect.assertions(5)
+
+      @AsJSON()
+      @HeaderMap({ clazz: 'clazz' })
+      class InterceptorAPI {
+        @GET('/')
+        @HeaderMap({ method: 'method' })
+        @FullResponse()
+        test(@Header('param') param: string): Promise<HttpResponse> {
+          return noop(param)
+        }
+      }
+
+      const spy = jest.fn()
+      const value = 'interceptor-header-value'
+
+      class TestInterceptor implements Interceptor {
+        intercept(chain: Chain): Promise<HttpResponse> {
+          chain.request().headers.append('interceptor', value)
+          spy()
+          return chain.proceed(chain.request())
+        }
+      }
+
+      const d = initDrizzleHttp()
+        .baseUrl(address)
+        .callFactory(TestCallFactory.INSTANCE)
+        .addInterceptor(new TestInterceptor())
+        .build()
+
+      const api: InterceptorAPI = d.create(InterceptorAPI)
+
+      return api
+        .test('param')
+        .then(res => {
+          return res.json<TestResult<Ok>>()
+        })
+        .then(result => {
+          expect(result.headers.clazz).toEqual('clazz')
+          expect(result.headers.method).toEqual('method')
+          expect(result.headers.param).toEqual('param')
+          expect(result.headers.interceptor).toEqual(value)
+          expect(spy).toHaveBeenCalledTimes(1)
+        })
+        .finally(() => d.shutdown())
+    })
+  })
+
+  describe('when two instances of same API class', function () {
+    it('should create instance applying only new global values from Drizzle instance', async function () {
+      const d = new DrizzleBuilder()
+        .baseUrl(address)
+        .callFactory(TestCallFactory.INSTANCE)
+        .addDefaultHeader('x-second-api', 'true')
+        .build()
+
+      const second = d.create(TestAPI)
+
+      const res = await second.testGET()
+
+      expect(res.headers['global-header']).toEqual('Global-Value')
+      expect(res.headers.accept).toEqual(MediaTypes.TEXT_PLAIN)
+      expect(res.headers['x-second-api']).toEqual('true')
+
+      const original = await api.testGET()
+
+      expect(original.headers['global-header']).toEqual('Global-Value')
+      expect(original.headers.accept).toEqual(MediaTypes.TEXT_PLAIN)
+      expect(original.headers['x-second-api']).toBeUndefined()
+
+      await d.shutdown()
     })
   })
 })
