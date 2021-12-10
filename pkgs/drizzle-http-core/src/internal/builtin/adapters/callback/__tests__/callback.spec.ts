@@ -1,11 +1,11 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { Drizzle } from '../../../../../Drizzle'
 import { AsJSON, GET, Param } from '../../../../../decorators'
-import { TestCallFactory } from '../../../../net/http/test'
 import { DrizzleBuilder } from '../../../../../DrizzleBuilder'
 import { HttpError } from '../../../../../HttpError'
 import { Callback } from '..'
 import { noop } from '../../../../../noop'
+import { TestCallFactory } from '../../../../../__tests__/TestCallFactory'
 
 class API {
   @GET('/{id}/projects')

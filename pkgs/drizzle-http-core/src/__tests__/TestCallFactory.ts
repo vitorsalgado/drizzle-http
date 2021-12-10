@@ -3,16 +3,17 @@ import { request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
 import { HttpMethod } from 'undici/types/dispatcher'
-import { Call, CallProvider } from '../../../../Call'
-import { CallFactory } from '../../../../Call'
-import { RequestFactory } from '../../../../RequestFactory'
-import { Drizzle } from '../../../../Drizzle'
-import { HttpRequest } from '../../../../HttpRequest'
-import { HttpResponse } from '../../../../HttpResponse'
-import { isOK } from '../../../../HttpResponse'
-import { isAbsolute } from '../../url'
-import { BodyType } from '../../../types'
-import { HttpHeaders } from '../../../../HttpHeaders'
+import { HttpRequest } from '../HttpRequest'
+import { Call } from '../Call'
+import { CallProvider } from '../Call'
+import { CallFactory } from '../Call'
+import { HttpHeaders } from '../HttpHeaders'
+import { Drizzle } from '../Drizzle'
+import { HttpResponse } from '../HttpResponse'
+import { isOK } from '../HttpResponse'
+import { BodyType } from '../internal'
+import { isAbsolute } from '../internal'
+import { RequestFactory } from '../RequestFactory'
 
 class TestCall implements Call {
   private readonly url: string
@@ -48,7 +49,7 @@ export class TestCallFactory implements CallFactory {
   }
 }
 
-export function toRequest(url: string, request: HttpRequest): RequestOptions {
+function toRequest(url: string, request: HttpRequest): RequestOptions {
   return {
     path: url,
     method: request.method as HttpMethod,

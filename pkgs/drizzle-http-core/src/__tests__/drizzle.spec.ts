@@ -9,7 +9,6 @@ import {
   TestResult
 } from '@drizzle-http/test-utils'
 import { noop } from '../noop'
-import { TestCallFactory } from '../internal/net/http/test'
 import {
   Abort,
   Accept,
@@ -44,6 +43,7 @@ import { HttpResponse } from '..'
 import { FullResponse } from '..'
 import { Interceptor } from '..'
 import { Chain } from '..'
+import { TestCallFactory } from './TestCallFactory'
 
 const cancellation = new EventEmitter()
 const cancellationInMethod = new EventEmitter()

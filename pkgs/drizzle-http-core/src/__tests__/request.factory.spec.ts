@@ -10,7 +10,7 @@ import { PathParameter } from '../internal'
 import { FormParameter } from '../internal'
 import { MediaTypes } from '../MediaTypes'
 import { DrizzleBuilder } from '../DrizzleBuilder'
-import { TestCallFactory } from '../internal/net/http/test'
+import { TestCallFactory } from './TestCallFactory'
 
 describe('Request Factory', () => {
   const drizzle = DrizzleBuilder.newBuilder()

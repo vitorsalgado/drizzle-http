@@ -2,7 +2,6 @@ import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http
 import { RequestFactory } from '../../../../../RequestFactory'
 import MediaTypes from '../../../../../MediaTypes'
 import { DrizzleBuilder, initDrizzleHttp } from '../../../../../DrizzleBuilder'
-import { TestCallFactory } from '../../../../net/http/test'
 import { Body, ContentType, POST } from '../../../../../decorators'
 import { GET } from '../../../../../decorators'
 import { HttpResponse } from '../../../../../HttpResponse'
@@ -15,6 +14,7 @@ import {
 } from '..'
 import { noop } from '../../../../../noop'
 import { HttpHeaders } from '../../../../../HttpHeaders'
+import { TestCallFactory } from '../../../../../__tests__/TestCallFactory'
 
 class API {
   @POST('/raw-test')

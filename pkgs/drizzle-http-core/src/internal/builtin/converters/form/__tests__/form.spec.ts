@@ -1,11 +1,11 @@
 import MediaTypes from '../../../../../MediaTypes'
 import { RequestFactory } from '../../../../../RequestFactory'
 import { DrizzleBuilder } from '../../../../../DrizzleBuilder'
-import { TestCallFactory } from '../../../../net/http/test'
 import { RequestParameterization } from '../../../../../RequestParameterization'
 import { FormRequestConverter, FormRequestConverterFactory } from '..'
 import { BodyParameter } from '../../../parameterhandlers'
 import { HttpHeaders } from '../../../../../HttpHeaders'
+import { TestCallFactory } from '../../../../../__tests__/TestCallFactory'
 
 describe('Form Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()
