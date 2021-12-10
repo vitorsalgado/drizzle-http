@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./",
     "outDir": "dist",
-    "sourceMap": false
+    "sourceMap": false,
+    "target": "ESNext",
+    "module": "ESNext"
   },
   "references": [
     { "path": "../../pkgs/drizzle-http-core", "prepend": false },
     { "path": "../../pkgs/drizzle-http-undici", "prepend": false }
-  ],
-  "include": ["src"]
+  ]
 }

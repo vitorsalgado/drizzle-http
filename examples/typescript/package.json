@@ -2,6 +2,7 @@
   "name": "@drizzle-http/example-typescript",
   "version": "2.2.0",
   "description": "Typescript example",
+  "type": "module",
   "scripts": {
     "start": "node dist/index.js",
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"
