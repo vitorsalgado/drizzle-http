@@ -16,8 +16,5 @@
   "dependencies": {
     "fastify": "^3.24.0",
     "fastify-formbody": "^5.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^16.11.10"
   }
 }
