@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "exclude": [
-    "dist",
+	"dist",
     "node_modules",
     "**/__tests__/",
     "**/__fixtures__",

@@ -8,11 +8,11 @@
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
     "run:receiver": "node dist/receiver.js",
-    "run:doctor": "clinic doctor -- node dist/sender.js",
-    "run:flame": "clinic flame -- node dist/sender.js",
-    "run:bubbleprof": "clinic bubbleprof -- node dist/sender.js",
-    "run:heapprofiler": "clinic heapprofiler -- node dist/sender.js",
-    "run:cannon": "autocannon http://localhost:3000"
+    "run:doctor": "node_modules/.bin/clinic doctor -- node dist/sender.js",
+    "run:flame": "node_modules/.bin/clinic flame -- node dist/sender.js",
+    "run:bubbleprof": "node_modules/.bin/clinic bubbleprof -- node dist/sender.js",
+    "run:heapprofiler": "node_modules/.bin/clinic heapprofiler -- node dist/sender.js",
+    "run:cannon": "node_modules/.bin/autocannon http://localhost:3000"
   },
   "author": {
     "name": "Vitor Hugo Salgado",

@@ -5,6 +5,6 @@
   },
   "references": [
     { "path": "../drizzle-http-core", "prepend": false },
-    { "path": "../test-utils", "prepend": false }
+    { "path": "../../internal/test-utils", "prepend": false }
   ]
 }

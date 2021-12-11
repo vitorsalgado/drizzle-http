@@ -6,8 +6,8 @@
     "noImplicitAny": false
   },
   "references": [
-    { "path": "../drizzle-http-core", "prepend": false },
-    { "path": "../drizzle-http-undici", "prepend": false }
+    { "path": "../../pkgs/drizzle-http-core", "prepend": false },
+    { "path": "../../pkgs/drizzle-http-undici", "prepend": false }
   ],
   "include": ["src/**/*"]
 }

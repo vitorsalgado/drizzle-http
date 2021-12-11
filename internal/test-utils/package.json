@@ -3,7 +3,7 @@
   "version": "2.2.0",
   "description": "Test utilities for Drizzle-Http",
   "private": true,
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"

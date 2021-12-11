@@ -41,6 +41,7 @@
   "homepage": "https://github.com/vitorsalgado/drizzle-http",
   "workspaces": [
     "benchmarks",
+    "internal/*",
     "pkgs/*",
     "examples/*"
   ],
@@ -64,7 +65,7 @@
     "@babel/plugin-transform-runtime": "^7.16.4",
     "@babel/preset-env": "^7.16.4",
     "@babel/runtime": "^7.16.3",
-    "@drizzle-http/test-utils": "file:pkgs/test-utils",
+    "@drizzle-http/test-utils": "file:internal/test-utils",
     "@drizzle-http/undici": "file:pkgs/drizzle-http-undici",
     "@jest/types": "^27.2.5",
     "@types/benchmark": "^2.1.1",
