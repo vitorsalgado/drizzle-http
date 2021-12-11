@@ -1,5 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
-import { QueryNameParameter } from '../internal'
+import { setupApiMethod } from '../ApiParameterization'
+import { QueryNameParameter } from '../builtin'
 
 /**
  * Query parameter appended to the URL that has no value.
@@ -15,8 +15,7 @@ import { QueryNameParameter } from '../internal'
  */
 export function QueryName() {
   return function QueryName(target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.addParameter(new QueryNameParameter(index))
+    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new QueryNameParameter(index)))
   }
 }
 

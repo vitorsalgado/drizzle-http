@@ -1,9 +1,7 @@
 export class DrizzleError extends Error {
-  readonly code: string
-
-  constructor(message: string, code?: string) {
+  constructor(message: string, public readonly code: string = 'DZ_ERR') {
     super(message)
-    this.name = 'Drizzle-Http.Error'
-    this.code = code || 'DRIZZLE_HTTP_ERR'
+    this.name = 'DrizzleError'
+    this.code = code
   }
 }

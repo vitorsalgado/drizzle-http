@@ -12,7 +12,7 @@
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
     "test": "jest --detectOpenHandles",
     "lint": "eslint --fix --ext .ts .",
-    "prettier": "prettier 'src/**' --write --ignore-unknown",
+    "prettier": "prettier './**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },

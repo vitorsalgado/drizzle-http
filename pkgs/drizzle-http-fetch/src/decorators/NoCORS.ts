@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function NoCORS() {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.mode = 'no-cors'
+    setupRequestInit(target, method, requestInit => (requestInit.mode = 'no-cors'))
   }
 }

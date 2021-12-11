@@ -1,4 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 
 /**
  * Set the timeouts for an HTTP request.
@@ -11,14 +12,15 @@ import { DrizzleMeta } from '../DrizzleMeta'
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
   return <TFunction extends Function>(target: object | TFunction, method?: string): void => {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-      requestFactory.readTimeout = readTimeoutInMs
-      requestFactory.connectTimeout = connectTimeoutInMs
-      return
+      return setupApiMethod(target, method, requestFactory => {
+        requestFactory.readTimeout = readTimeoutInMs
+        requestFactory.connectTimeout = connectTimeoutInMs
+      })
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.readTimeout = readTimeoutInMs
-    apiInstanceMeta.connectTimeout = connectTimeoutInMs
+    setupApiInstance(target, parameters => {
+      parameters.readTimeout = readTimeoutInMs
+      parameters.connectTimeout = connectTimeoutInMs
+    })
   }
 }

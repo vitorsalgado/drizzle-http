@@ -3,8 +3,7 @@ import { RequestFactory } from './RequestFactory'
 import { InterceptorHttpExecutor } from './InterceptorHttpExecutor'
 import { notNull } from './internal'
 import { notBlank } from './internal'
-import { CallEntryPoint } from './CallEntryPoint'
-import { Call } from './Call'
+import { CallRequestEntryPoint } from './CallRequestEntryPoint'
 import { CallProvider } from './Call'
 import { HttpResponse } from './HttpResponse'
 
@@ -48,7 +47,7 @@ export function serviceInvoker(
     // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
-      const call = new CallEntryPoint(
+      const call = new CallRequestEntryPoint(
         responseHandler,
         responseConverter,
         interceptors,
@@ -56,7 +55,7 @@ export function serviceInvoker(
         requestFactory,
         requestBuilder.toRequest([]),
         []
-      ) as Call<T>
+      )
 
       if (callAdapter !== null) {
         return function (): T {
@@ -77,7 +76,7 @@ export function serviceInvoker(
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: unknown[]): T {
-      const call = new CallEntryPoint<T>(
+      const call = new CallRequestEntryPoint<T>(
         responseHandler,
         responseConverter,
         interceptors,

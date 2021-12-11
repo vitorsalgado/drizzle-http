@@ -1,5 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
-import { QueryParameter } from '../internal'
+import { setupApiMethod } from '../ApiParameterization'
+import { QueryParameter } from '../builtin'
 
 /**
  * Query parameter appended to the URL.
@@ -13,8 +13,7 @@ import { QueryParameter } from '../internal'
  */
 export function Query(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.addParameter(new QueryParameter(key, index))
+    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new QueryParameter(key, index)))
   }
 }
 

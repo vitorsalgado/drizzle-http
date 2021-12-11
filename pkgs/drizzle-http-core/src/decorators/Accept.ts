@@ -1,4 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
 
 /**
@@ -10,12 +11,11 @@ import { HttpHeaders } from '../HttpHeaders'
 export function Accept(value: string) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-      requestFactory.defaultHeaders.append(HttpHeaders.ACCEPT, value)
-      return
+      return setupApiMethod(target, method, requestFactory =>
+        requestFactory.defaultHeaders.append(HttpHeaders.ACCEPT, value)
+      )
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.defaultHeaders.append(HttpHeaders.ACCEPT, value)
+    setupApiInstance(target, parameters => parameters.defaultHeaders.append(HttpHeaders.ACCEPT, value))
   }
 }

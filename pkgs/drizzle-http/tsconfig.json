@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "./dist"
   },
   "references": [
@@ -11,6 +11,5 @@
     { "path": "../drizzle-http-fetch", "prepend": false },
     { "path": "../drizzle-http-rxjs-adapter", "prepend": false },
     { "path": "../test-utils", "prepend": false }
-  ],
-  "include": ["src/**/*"]
+  ]
 }

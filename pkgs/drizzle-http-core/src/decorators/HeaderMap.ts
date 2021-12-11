@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 
 /**
  * Adds fixed params to the request
@@ -15,15 +16,10 @@ import { DrizzleMeta } from '../DrizzleMeta'
  */
 export function HeaderMap(headers: Record<string, string>) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
-    // is method decorator
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-      requestFactory.addDefaultHeaders(headers)
-
-      return
+      return setupApiMethod(target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.addDefaultHeaders(headers)
+    setupApiInstance(target, parameters => parameters.addDefaultHeaders(headers))
   }
 }

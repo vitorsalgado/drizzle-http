@@ -1,5 +1,5 @@
 import { HttpHeaders } from './HttpHeaders'
-import { BodyType } from './internal'
+import { BodyType } from './BodyType'
 
 interface HttpRequestInit {
   url: string

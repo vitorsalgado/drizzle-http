@@ -1,4 +1,5 @@
 import { Blob } from 'buffer'
+import { Readable } from 'stream'
 import { request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
@@ -11,11 +12,10 @@ import { HttpHeaders } from '../HttpHeaders'
 import { Drizzle } from '../Drizzle'
 import { HttpResponse } from '../HttpResponse'
 import { isOK } from '../HttpResponse'
-import { BodyType } from '../internal'
 import { isAbsolute } from '../internal'
 import { RequestFactory } from '../RequestFactory'
 
-class TestCall implements Call {
+class TestCall implements Call<HttpResponse<Readable>> {
   private readonly url: string
 
   constructor(readonly baseUrl: URL, readonly request: HttpRequest, readonly argv: unknown[]) {
@@ -26,7 +26,7 @@ class TestCall implements Call {
     }
   }
 
-  async execute(): Promise<HttpResponse> {
+  async execute(): Promise<HttpResponse<Readable>> {
     const res = await request(this.url, {
       ...toRequest(this.url, this.request),
       path: undefined as unknown as string
@@ -61,8 +61,8 @@ function toRequest(url: string, request: HttpRequest): RequestOptions {
   }
 }
 
-class TestDzResponse implements HttpResponse<BodyType, Blob, never> {
-  readonly body: BodyType
+class TestDzResponse implements HttpResponse<Readable | null, Blob, never> {
+  readonly body: Readable
   readonly headers: HttpHeaders
   readonly status: number
   readonly statusText: string

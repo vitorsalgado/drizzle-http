@@ -3,6 +3,7 @@ out
 src
 tsconfig.json
 tsconfig.tsbuildinfo
+tsconfig.build.tsbuildinfo
 *.log
 *.tgz
 *.spec.ts

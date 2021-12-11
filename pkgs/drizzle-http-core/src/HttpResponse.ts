@@ -1,4 +1,4 @@
-import { BodyType } from './internal'
+import { BodyType } from './BodyType'
 import { HttpHeaders } from './HttpHeaders'
 
 /**

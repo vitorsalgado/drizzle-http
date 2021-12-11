@@ -1,5 +1,5 @@
 import { HttpHeaders } from './HttpHeaders'
-import { BodyType } from './internal'
+import { BodyType } from './BodyType'
 
 export class RequestParameterization {
   constructor(

@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function Redirect(redirect: RequestRedirect) {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.redirect = redirect
+    setupRequestInit(target, method, requestInit => (requestInit.redirect = redirect))
   }
 }

@@ -2,9 +2,9 @@
 
 /* eslint-disable */
 
-import { DrizzleBuilder, GET, Query } from '@drizzle-http/core'
+import { DrizzleBuilder, GET, HttpError, Query } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
-import { StreamTo, StreamToHttpError, UndiciCallFactory } from '@drizzle-http/undici'
+import { StreamTo, UndiciCallFactory } from '@drizzle-http/undici'
 import { Streaming } from '@drizzle-http/undici'
 import { HttpEmptyResponse } from '@drizzle-http/undici'
 import { createServer } from 'http'
@@ -15,7 +15,7 @@ class PartiesAPI {
   @GET('/partidos')
   @Streaming()
   parties(@Query('sigla') acronym: string, @StreamTo() target: Writable): Promise<HttpEmptyResponse> {
-    return noop(Promise)
+    return noop(acronym, target)
   }
 }
 
@@ -28,6 +28,8 @@ const partiesAPI = DrizzleBuilder.newBuilder()
 const port = parseInt(String(process.env.PORT || 3001))
 
 createServer((req, res) => {
+  console.error('TEST')
+
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
@@ -42,7 +44,7 @@ createServer((req, res) => {
   }
 
   const query = url.parse(req.url as string, true).query
-  const header = { 'Content-Type': 'application/json;charset=utf-8' }
+  const header = { 'Content-Type': 'application/json' }
   const charset = 'utf-8'
 
   if (req.method === 'POST') {
@@ -61,7 +63,7 @@ createServer((req, res) => {
         return res.end()
       }
     })
-    .catch((err: StreamToHttpError) => {
+    .catch((err: HttpError) => {
       res.writeHead(500, 'Internal Server Error', { ...header, ...cors })
       res.write(JSON.stringify({ error: err.message }), charset)
       res.end()

@@ -1,7 +1,7 @@
 import Puppeteer from 'puppeteer'
 import { Browser } from 'puppeteer'
-import * as RestServer from './test/server'
-import * as StaticServer from './test/server_static'
+import * as RestServer from './server'
+import * as StaticServer from './server_static'
 
 describe('Fetch Client', () => {
   let browser!: Browser

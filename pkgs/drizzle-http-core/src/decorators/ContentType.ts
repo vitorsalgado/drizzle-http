@@ -1,4 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
 
 /**
@@ -10,13 +11,11 @@ import { HttpHeaders } from '../HttpHeaders'
 export function ContentType(value: string) {
   return function <TFunction extends Function>(target: object | TFunction, method?: string) {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-      requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
-
-      return
+      return setupApiMethod(target, method, requestFactory =>
+        requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
+      )
     }
 
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, value)
+    setupApiInstance(target, parameters => parameters.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, value))
   }
 }

@@ -1,5 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
-import { HeaderParameter } from '../internal'
+import { setupApiMethod } from '../ApiParameterization'
+import { HeaderParameter } from '../builtin'
 
 /**
  * Named header to be added to the request.
@@ -13,8 +13,7 @@ import { HeaderParameter } from '../internal'
  */
 export function Header(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.addParameter(new HeaderParameter(key, index))
+    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new HeaderParameter(key, index)))
   }
 }
 

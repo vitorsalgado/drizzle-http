@@ -1,5 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
-import { BodyParameter } from '../internal'
+import { setupApiMethod } from '../ApiParameterization'
+import { BodyParameter } from '../builtin'
 
 /**
  * Use this decorator to mark that a method parameter must be sent as the HTTP Request body
@@ -11,7 +11,6 @@ import { BodyParameter } from '../internal'
  */
 export function Body() {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.addParameter(new BodyParameter(index))
+    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new BodyParameter(index)))
   }
 }

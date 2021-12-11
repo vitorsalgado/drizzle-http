@@ -1,15 +1,15 @@
 import EventEmitter from 'events'
 import { NoParametersRequestBuilder, RequestFactory } from '../RequestFactory'
-import { ApiInstanceMeta } from '../DrizzleMeta'
+import { ApiGlobalParameters } from '../ApiParameterization'
 import { pathParameterRegex } from '../internal'
-import { QueryNameParameter } from '../internal'
-import { QueryParameter } from '../internal'
-import { HeaderParameter } from '../internal'
-import { BodyParameter } from '../internal'
-import { PathParameter } from '../internal'
-import { FormParameter } from '../internal'
 import { MediaTypes } from '../MediaTypes'
 import { DrizzleBuilder } from '../DrizzleBuilder'
+import { QueryNameParameter } from '../builtin'
+import { QueryParameter } from '../builtin'
+import { HeaderParameter } from '../builtin'
+import { BodyParameter } from '../builtin'
+import { PathParameter } from '../builtin'
+import { FormParameter } from '../builtin'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Request Factory', () => {
@@ -92,7 +92,7 @@ describe('Request Factory', () => {
     requestFactory.addParameters(new QueryParameter('filter', 3), new QueryParameter('active', 4))
     requestFactory.addParameters(new QueryNameParameter(5), new QueryNameParameter(6))
 
-    const instanceMeta = new ApiInstanceMeta()
+    const instanceMeta = new ApiGlobalParameters()
     instanceMeta.connectTimeout = 10
     instanceMeta.readTimeout = 5
     instanceMeta.addDefaultHeaders({ 'x-client-id': '666' })
@@ -361,7 +361,7 @@ describe('Request Factory', () => {
       requestFactory.addParameter(new PathParameter('id', pathParameterRegex('id'), 0))
       requestFactory.addParameter(new PathParameter('version', pathParameterRegex('version'), 0))
 
-      const instanceMeta = new ApiInstanceMeta()
+      const instanceMeta = new ApiGlobalParameters()
       instanceMeta.connectTimeout = 15
       instanceMeta.readTimeout = 25
       instanceMeta.addDefaultHeaders({ 'x-trace-id': '200' })

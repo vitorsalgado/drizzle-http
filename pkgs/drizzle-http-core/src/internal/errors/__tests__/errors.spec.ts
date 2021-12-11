@@ -1,26 +1,20 @@
 import {
   DrizzleError,
-  InvalidArgumentError,
-  InvalidRequestMethodConfigurationError,
-  MethodNotSupportedError,
-  NoParameterHandlerFoundForType,
+  InvalidMethodConfigError,
+  NoParameterHandlerError,
   NoRequestConverterError,
-  PrematureServerResponseCloseError,
-  RequestBodyTypeNotAllowed
+  RequestBodyTypeNotAllowedError
 } from '..'
 
 describe('Errors', function () {
   it('should contain basic fields name and code', function () {
     const codeStart = 'DRIZZLE_HTTP_ERR'
 
-    const drizzleError = new DrizzleError('message')
-    const prematureServerResponseCloseError = new PrematureServerResponseCloseError()
-    const invalidRequestMethodConfigurationError = new InvalidRequestMethodConfigurationError('method', 'some message')
-    const requestBodyTypeNotAllowed = new RequestBodyTypeNotAllowed('method', 'message')
+    const drizzleError = new DrizzleError('message', '')
+    const invalidRequestMethodConfigurationError = new InvalidMethodConfigError('method', 'some message')
+    const requestBodyTypeNotAllowed = new RequestBodyTypeNotAllowedError('method', 'message')
     const noRequestConverterError = new NoRequestConverterError('method')
-    const methodNotSupportedError = new MethodNotSupportedError('method')
-    const noParameterHandlerFoundForType = new NoParameterHandlerFoundForType('type', 'method', 1)
-    const invalidArgumentError = new InvalidArgumentError('bad arg', 'ctx')
+    const noParameterHandlerFoundForType = new NoParameterHandlerError('type', 'method', 1)
 
     // DrizzleError
     expect(drizzleError.code).not.toBeNull()
@@ -29,14 +23,6 @@ describe('Errors', function () {
     expect(drizzleError.message).not.toBeNull()
     expect(drizzleError.message).not.toBeUndefined()
     expect(drizzleError.message.length).toBeGreaterThan(0)
-
-    // PrematureServerResponseCloseError
-    expect(prematureServerResponseCloseError.code).not.toBeNull()
-    expect(prematureServerResponseCloseError.code).not.toBeUndefined()
-    expect(prematureServerResponseCloseError.code.startsWith(codeStart))
-    expect(prematureServerResponseCloseError.message).not.toBeNull()
-    expect(prematureServerResponseCloseError.message).not.toBeUndefined()
-    expect(prematureServerResponseCloseError.message.length).toBeGreaterThan(0)
 
     // InvalidRequestMethodConfigurationError
     expect(invalidRequestMethodConfigurationError.code).not.toBeNull()
@@ -62,14 +48,6 @@ describe('Errors', function () {
     expect(noRequestConverterError.message).not.toBeUndefined()
     expect(noRequestConverterError.message.length).toBeGreaterThan(0)
 
-    // MethodNotSupportedError
-    expect(methodNotSupportedError.code).not.toBeNull()
-    expect(methodNotSupportedError.code).not.toBeUndefined()
-    expect(methodNotSupportedError.code.startsWith(codeStart))
-    expect(methodNotSupportedError.message).not.toBeNull()
-    expect(methodNotSupportedError.message).not.toBeUndefined()
-    expect(methodNotSupportedError.message.length).toBeGreaterThan(0)
-
     // NoParameterHandlerFoundForType
     expect(noParameterHandlerFoundForType.code).not.toBeNull()
     expect(noParameterHandlerFoundForType.code).not.toBeUndefined()
@@ -77,23 +55,12 @@ describe('Errors', function () {
     expect(noParameterHandlerFoundForType.message).not.toBeNull()
     expect(noParameterHandlerFoundForType.message).not.toBeUndefined()
     expect(noParameterHandlerFoundForType.message.length).toBeGreaterThan(0)
-
-    // InvalidArgumentError
-    expect(invalidArgumentError.code).not.toBeNull()
-    expect(invalidArgumentError.code).not.toBeUndefined()
-    expect(invalidArgumentError.code.startsWith(codeStart))
-    expect(invalidArgumentError.message).not.toBeNull()
-    expect(invalidArgumentError.message).not.toBeUndefined()
-    expect(invalidArgumentError.message.length).toBeGreaterThan(0)
-    expect(invalidArgumentError.context).not.toBeNull()
-    expect(invalidArgumentError.context).not.toBeUndefined()
-    expect(invalidArgumentError.context.length).toBeGreaterThan(0)
   })
 
   it('should accept null method', function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const invalidRequestMethodConfigurationError = new InvalidRequestMethodConfigurationError(null, 'some message')
+    const invalidRequestMethodConfigurationError = new InvalidMethodConfigError(null, 'some message')
 
     expect(invalidRequestMethodConfigurationError.method).toBeNull()
   })

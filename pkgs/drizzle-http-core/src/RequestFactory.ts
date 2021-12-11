@@ -1,27 +1,27 @@
 import { Drizzle } from './Drizzle'
-import { InvalidRequestMethodConfigurationError } from './internal'
+import { InvalidMethodConfigError } from './internal'
 import { notNull } from './internal'
 import { notBlank } from './internal'
-import { BodyType } from './internal'
-import { QueryParameter } from './internal'
-import { FormParameterType } from './internal'
-import { QueryNameParameterType } from './internal'
-import { BodyParameter } from './internal'
-import { PathParameter } from './internal'
-import { FormParameter } from './internal'
-import { ParameterHandler } from './internal'
-import { QueryNameParameter } from './internal'
-import { QueryParameterType } from './internal'
-import { Parameter } from './internal'
-import { HeaderParameter } from './internal'
-import { PathParameterType } from './internal'
-import { HeaderParameterType } from './internal'
+import { BodyType } from './BodyType'
 import { RequestBodyConverter } from './RequestBodyConverter'
-import { ApiInstanceMeta } from './DrizzleMeta'
+import { ApiGlobalParameters } from './ApiParameterization'
 import { RequestParameterization } from './RequestParameterization'
 import { MediaTypes } from './MediaTypes'
 import { HttpHeaders } from './HttpHeaders'
 import { HttpRequest } from './HttpRequest'
+import { QueryParameter } from './builtin'
+import { FormParameterType } from './builtin'
+import { QueryNameParameterType } from './builtin'
+import { BodyParameter } from './builtin'
+import { PathParameter } from './builtin'
+import { FormParameter } from './builtin'
+import { ParameterHandler } from './builtin'
+import { QueryNameParameter } from './builtin'
+import { QueryParameterType } from './builtin'
+import { Parameter } from './builtin'
+import { HeaderParameter } from './builtin'
+import { PathParameterType } from './builtin'
+import { HeaderParameterType } from './builtin'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
@@ -222,12 +222,12 @@ export class RequestFactory {
 
   /**
    * Merge current {@link RequestFactory} instance with values from
-   * {@link ApiInstanceMeta}.
+   * {@link ApiGlobalParameters}.
    * This will only replace undefined values in RequestFactory.
    *
    * @param instanceMeta - instance with default values for all methods
    */
-  mergeWithInstanceMeta(instanceMeta: ApiInstanceMeta): void {
+  mergeWithInstanceMeta(instanceMeta: ApiGlobalParameters): void {
     if (instanceMeta === null || typeof instanceMeta === 'undefined') {
       return
     }
@@ -525,8 +525,8 @@ export class RequestFactory {
     this.noResponseHandler = value
   }
 
-  private invalidArgErr(message: string): InvalidRequestMethodConfigurationError {
-    return new InvalidRequestMethodConfigurationError(this.method ?? '', message)
+  private invalidArgErr(message: string): InvalidMethodConfigError {
+    return new InvalidMethodConfigError(this.method ?? '', message)
   }
 }
 

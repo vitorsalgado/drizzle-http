@@ -1,4 +1,4 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiInstance } from '../ApiParameterization'
 
 /**
  * Sets an url path that will be concatenated with the base url and the final processed path
@@ -13,7 +13,6 @@ import { DrizzleMeta } from '../DrizzleMeta'
  */
 export function Path(path: string) {
   return function <TFunction extends Function>(target: TFunction) {
-    const apiInstanceMeta = DrizzleMeta.provideInstanceMetadata(target)
-    apiInstanceMeta.setPath(path)
+    setupApiInstance(target, parameters => parameters.setPath(path))
   }
 }

@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function Cache(cache: RequestCache) {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.cache = cache
+    setupRequestInit(target, method, requestInit => (requestInit.cache = cache))
   }
 }

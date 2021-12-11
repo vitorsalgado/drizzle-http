@@ -1,4 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 import { MediaTypes } from '../MediaTypes'
 import { HttpHeaders } from '../HttpHeaders'
 
@@ -15,14 +16,13 @@ import { HttpHeaders } from '../HttpHeaders'
 export function FormUrlEncoded() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-      requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
-      return
+      return setupApiMethod(target, method, requestFactory =>
+        requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      )
     }
 
-    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
-      HttpHeaders.CONTENT_TYPE,
-      MediaTypes.APPLICATION_FORM_URL_ENCODED
+    setupApiInstance(target, parameters =>
+      parameters.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     )
   }
 }

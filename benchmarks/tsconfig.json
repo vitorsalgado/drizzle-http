@@ -7,6 +7,8 @@
     "module": "ESNext",
     "target": "ESNext"
   },
-  "references": [{ "path": "../pkgs/drizzle-http", "prepend": false }],
-  "include": ["./**/*"]
+  "references": [
+    { "path": "../pkgs/drizzle-http", "prepend": false }
+  ],
+  "include": ["./src"]
 }

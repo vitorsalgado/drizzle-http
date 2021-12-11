@@ -1,7 +1,6 @@
-import { Call, HttpRequest, isAbsolute } from '@drizzle-http/core'
-import { HttpResponse } from '@drizzle-http/core'
+import { Call, HttpRequest, Internals } from '@drizzle-http/core'
 
-export class FetchCall implements Call<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>> {
+export class FetchCall implements Call<Response> {
   private readonly url: string
 
   constructor(
@@ -11,14 +10,14 @@ export class FetchCall implements Call<HttpResponse<ReadableStream<Uint8Array> |
     readonly request: HttpRequest,
     readonly argv: unknown[]
   ) {
-    if (!isAbsolute(request.url)) {
+    if (!Internals.isAbsolute(request.url)) {
       this.url = new URL(request.url, baseUrl).href
     } else {
       this.url = request.url
     }
   }
 
-  execute(): Promise<HttpResponse<ReadableStream<Uint8Array> | null, Blob, FormData, Headers>> {
+  execute(): Promise<Response> {
     const timeout = this.request.bodyTimeout ?? 30e3
     const controller = new AbortController()
 

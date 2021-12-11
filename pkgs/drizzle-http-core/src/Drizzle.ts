@@ -2,11 +2,11 @@ import { RequestBodyConverter } from './RequestBodyConverter'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { serviceInvoker } from './drizzleServiceInvoker'
 import { RequestFactory } from './RequestFactory'
-import { DrizzleMeta } from './DrizzleMeta'
+import { ApiParameterization } from './ApiParameterization'
 import { Interceptor } from './Interceptor'
-import { RawRequestConverter, RawResponseConverter } from './internal'
-import { NoParameterHandlerFoundForType } from './internal'
-import { Parameter, ParameterHandlerFactory } from './internal'
+import { RawRequestConverter, RawResponseConverter } from './builtin'
+import { Parameter, ParameterHandlerFactory } from './builtin'
+import { NoParameterHandlerError } from './internal'
 import { Mixin } from './internal'
 import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
@@ -126,7 +126,7 @@ export class Drizzle {
     const factory = this._parameterHandlerFactories.filter(x => x.handledType() === parameter.type)[0]
 
     if (factory === null || typeof factory === 'undefined') {
-      throw new NoParameterHandlerFoundForType(parameter.type, requestFactory.method, parameter.index)
+      throw new NoParameterHandlerError(parameter.type, requestFactory.method, parameter.index)
     }
 
     return factory as ParameterHandlerFactory<P, R>
@@ -228,17 +228,17 @@ export class Drizzle {
    * @returns A proxy instance of the target API class
    */
   create<T extends { new (...args: any[]): any }>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
-    const map = new Map<string, RequestFactory>()
-    const invoker = serviceInvoker(this)
-    const meta = DrizzleMeta.metaFor(TargetApi)
+    const requestFactories = new Map<string, RequestFactory>()
+    const createApiInvocationMethod = serviceInvoker(this)
+    const parameterization = ApiParameterization.parameterizationForTarget(TargetApi)
 
     function MIXIN<TBase extends Mixin>(superclass: TBase) {
       return class extends superclass {
         constructor(...args: any[]) {
           super(...args)
 
-          for (const [method, requestFactory] of meta.requestFactories) {
-            map.set(method, RequestFactory.copyFrom(requestFactory))
+          for (const [method, requestFactory] of parameterization.requestFactories) {
+            requestFactories.set(method, RequestFactory.copyFrom(requestFactory))
           }
         }
       }
@@ -247,11 +247,11 @@ export class Drizzle {
     const Extended = MIXIN(TargetApi)
     const extendedApi = new Extended(...args)
 
-    for (const [method, requestFactory] of map) {
-      requestFactory.mergeWithInstanceMeta(meta.meta)
+    for (const [method, requestFactory] of requestFactories) {
+      requestFactory.mergeWithInstanceMeta(parameterization.meta)
       requestFactory.preProcessAndValidate(this)
 
-      Extended.prototype[method] = invoker(requestFactory, method)
+      Extended.prototype[method] = createApiInvocationMethod(requestFactory, method)
     }
 
     return extendedApi

@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function Mode(mode: RequestMode) {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.mode = mode
+    setupRequestInit(target, method, requestInit => (requestInit.mode = mode))
   }
 }

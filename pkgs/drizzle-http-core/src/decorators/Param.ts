@@ -1,6 +1,6 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
 import { pathParameterRegex } from '../internal'
-import { PathParameter } from '../internal'
+import { PathParameter } from '../builtin'
 
 /**
  * Named replacement for a URL path segment
@@ -14,10 +14,9 @@ import { PathParameter } from '../internal'
  */
 export function Param(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    const regex = pathParameterRegex(key)
-
-    requestFactory.addParameter(new PathParameter(key, regex, index))
+    setupApiMethod(target, method, requestFactory => {
+      requestFactory.addParameter(new PathParameter(key, pathParameterRegex(key), index))
+    })
   }
 }
 

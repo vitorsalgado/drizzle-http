@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function ReferrerPolicy(referrerPolicy: ReferrerPolicy) {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.referrerPolicy = referrerPolicy
+    setupRequestInit(target, method, requestInit => (requestInit.referrerPolicy = referrerPolicy))
   }
 }

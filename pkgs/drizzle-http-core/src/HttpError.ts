@@ -1,26 +1,33 @@
 import { DrizzleError } from './internal'
 import { HttpResponse } from './HttpResponse'
+import { HttpRequest } from './HttpRequest'
 
 export class HttpError extends DrizzleError {
-  constructor(public readonly request: unknown, public readonly response: HttpResponse) {
-    super(`Request failed with status code: ${response.status}`, 'DRIZZLE_ERR_HTTP')
+  private readonly status?: number
+  private readonly url?: string
+
+  constructor(public readonly request: HttpRequest, public readonly response: HttpResponse) {
+    super(`Request failed with status code: ${response.status}`, 'DZ_ERR_HTTP')
 
     Error.captureStackTrace(this, HttpError)
 
     this.name = 'DrizzleHttpError'
+    this.status = this.response.status
+    this.url = this.response.url
   }
 
-  toString(): string {
-    return (
-      'DrizzleHttpError{\n' +
-      ' response{\n' +
-      `   url: ${this.response.url}` +
-      `   status: ${this.response.status}\n` +
-      `   headers: \n     ${Array.from(this.response.headers.entries())
-        .map(([name, value]) => `${name}: ${value}\n`)
-        .join()}` +
-      ' }' +
-      '}'
-    )
+  toJSON() {
+    return {
+      message: this.message,
+      name: this.name,
+      code: this.code,
+      url: this.url,
+      status: this.status,
+      stack: this.stack
+    }
+  }
+
+  toString() {
+    return `HttpError{ ${this.message} }`
   }
 }

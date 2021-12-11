@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function KeepAlive(keepAlive: boolean) {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.keepalive = keepAlive
+    setupRequestInit(target, method, requestInit => (requestInit.keepalive = keepAlive))
   }
 }

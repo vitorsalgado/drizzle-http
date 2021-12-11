@@ -1,6 +1,6 @@
-import { InvalidRequestMethodConfigurationError } from '../../internal'
+import { InvalidMethodConfigError } from '../../internal'
 import { RequestFactory } from '../../RequestFactory'
-import { DrizzleMeta } from '../../DrizzleMeta'
+import { ApiParameterization } from '../../ApiParameterization'
 import { HttpMethod } from './HttpMethod'
 
 /**
@@ -15,12 +15,12 @@ export function decorateWithHttpMethod(
 ): (target: object, method: string, descriptor: PropertyDescriptor) => void {
   return function (target: object, method: string, descriptor: PropertyDescriptor): void {
     if (!path.startsWith('/')) {
-      throw new InvalidRequestMethodConfigurationError(method, 'Path must start with a /')
+      throw new InvalidMethodConfigError(method, 'Path must start with a /')
     }
 
-    DrizzleMeta.registerMethod(target.constructor, method)
+    ApiParameterization.registerApiMethod(target.constructor, method)
 
-    const requestFactory: RequestFactory = DrizzleMeta.provideRequestFactory(target, method)
+    const requestFactory: RequestFactory = ApiParameterization.provideRequestFactory(target, method)
 
     requestFactory.method = method
     requestFactory.path = path

@@ -1,12 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
     "outDir": "./dist"
   },
   "references": [
     { "path": "../drizzle-http-core", "prepend": false },
     { "path": "../test-utils", "prepend": false }
-  ],
-  "include": ["src/**/*"]
+  ]
 }

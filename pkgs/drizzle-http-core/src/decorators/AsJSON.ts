@@ -1,4 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
+import { setupApiMethod } from '../ApiParameterization'
+import { setupApiInstance } from '../ApiParameterization'
 import { MediaTypes } from '../MediaTypes'
 import { HttpHeaders } from '../HttpHeaders'
 
@@ -9,16 +10,13 @@ import { HttpHeaders } from '../HttpHeaders'
 export function AsJSON() {
   return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
     if (method) {
-      DrizzleMeta.provideRequestFactory(target, method).defaultHeaders.append(
-        HttpHeaders.CONTENT_TYPE,
-        MediaTypes.APPLICATION_JSON
+      return setupApiMethod(target, method, requestFactory =>
+        requestFactory.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
       )
-      return
     }
 
-    DrizzleMeta.provideInstanceMetadata(target).defaultHeaders.append(
-      HttpHeaders.CONTENT_TYPE,
-      MediaTypes.APPLICATION_JSON
+    setupApiInstance(target, parameters =>
+      parameters.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
     )
   }
 }

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDir": "./http",
     "outDir": "./http",
-    "sourceMap": false
+    "sourceMap": true
   },
   "references": [
     { "path": "../../pkgs/drizzle-http-core", "prepend": false },

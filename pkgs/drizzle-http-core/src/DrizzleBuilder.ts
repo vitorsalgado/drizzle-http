@@ -1,22 +1,23 @@
 import { Drizzle } from './Drizzle'
-import { DrizzleError } from './internal'
 import { notNull } from './internal'
-import { JsonResponseConverterFactory } from './internal'
-import { BodyParameterHandlerFactory } from './internal'
-import { ParameterHandlerFactory } from './internal'
-import { HeaderParameterHandlerFactory } from './internal'
-import { RawRequestConverterFactory } from './internal'
-import { QueryNameParameterHandlerFactory } from './internal'
-import { RawResponseConverterFactory } from './internal'
-import { FormParameterHandlerFactory } from './internal'
-import { QueryParameterHandlerFactory } from './internal'
-import { JsonRequestConverterFactory } from './internal'
-import { CallbackCallAdapterFactory } from './internal'
-import { Parameter } from './internal'
-import { FormRequestConverterFactory } from './internal'
-import { PathParameterHandlerFactory } from './internal'
-import { SignalParameterHandlerFactory } from './internal'
 import { notEmpty } from './internal'
+import { notBlank } from './internal'
+import { JsonResponseConverterFactory } from './builtin'
+import { BodyParameterHandlerFactory } from './builtin'
+import { ParameterHandlerFactory } from './builtin'
+import { HeaderParameterHandlerFactory } from './builtin'
+import { RawRequestConverterFactory } from './builtin'
+import { QueryNameParameterHandlerFactory } from './builtin'
+import { RawResponseConverterFactory } from './builtin'
+import { FormParameterHandlerFactory } from './builtin'
+import { QueryParameterHandlerFactory } from './builtin'
+import { JsonRequestConverterFactory } from './builtin'
+import { CallbackCallAdapterFactory } from './builtin'
+import { Parameter } from './builtin'
+import { FormRequestConverterFactory } from './builtin'
+import { PathParameterHandlerFactory } from './builtin'
+import { SignalParameterHandlerFactory } from './builtin'
+import { RawResponseHandlerFactory } from './builtin'
 import { Interceptor } from './Interceptor'
 import { HttpHeaders } from './HttpHeaders'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
@@ -24,7 +25,6 @@ import { CallAdapterFactory } from './CallAdapter'
 import { CallFactory } from './Call'
 import { ResponseConverterFactory } from './ResponseConverter'
 import { ResponseHandlerFactory } from './ResponseHandler'
-import { RawResponseHandlerFactory } from './internal/builtin/converters/raw/RawResponseHandlerFactory'
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
@@ -124,10 +124,7 @@ export class DrizzleBuilder {
    */
   addInterceptor(...interceptors: Interceptor[]): this {
     notNull(interceptors, 'Parameter "interceptor" must not be null.')
-
-    if (interceptors.length === 0) {
-      throw new DrizzleError('Parameter "interceptor" must not be empty.')
-    }
+    notEmpty(interceptors, 'Parameter "interceptor" must not be empty.')
 
     this._interceptors.push(...interceptors)
 
@@ -144,10 +141,7 @@ export class DrizzleBuilder {
    */
   addCallAdapterFactories(...callAdapterFactory: CallAdapterFactory[]): this {
     notNull(callAdapterFactory, 'Parameter "callAdapterFactory" must not be null.')
-
-    if (callAdapterFactory.length === 0) {
-      throw new DrizzleError('Parameter "callAdapterFactory" must not be empty.')
-    }
+    notEmpty(callAdapterFactory, 'Parameter "callAdapterFactory" must not be empty.')
 
     this._callAdapterFactories.push(...callAdapterFactory)
 
@@ -178,10 +172,7 @@ export class DrizzleBuilder {
    */
   addRequestConverterFactories(...requestConverterFactory: RequestBodyConverterFactory[]): this {
     notNull(requestConverterFactory, 'Parameter "requestConverterFactory" must not be null.')
-
-    if (requestConverterFactory.length === 0) {
-      throw new DrizzleError('Parameter "requestConverterFactory" must not be empty.')
-    }
+    notEmpty(requestConverterFactory, 'Parameter "requestConverterFactory" must not be empty.')
 
     this._requestConverterFactories.push(...requestConverterFactory)
 
@@ -197,10 +188,7 @@ export class DrizzleBuilder {
    */
   addResponseConverterFactories(...responseConverterFactory: ResponseConverterFactory[]): this {
     notNull(responseConverterFactory, 'Parameter "responseConverterFactory" must not be null.')
-
-    if (responseConverterFactory.length === 0) {
-      throw new DrizzleError('Parameter "responseConverterFactory" must not be empty.')
-    }
+    notEmpty(responseConverterFactory, 'Parameter "responseConverterFactory" must not be empty.')
 
     this._responseConverterFactories.push(...responseConverterFactory)
 
@@ -216,12 +204,8 @@ export class DrizzleBuilder {
    * @returns Same {@link DrizzleBuilder} instance
    */
   addDefaultHeader(key: string, value: string): this {
-    notNull(key, 'Parameters "key" must not be null')
+    notBlank(key, 'Parameters "key" must not be null or empty')
     notNull(value, 'Parameters "value" must not be null. If you want a empty Header value, provide a empty string.')
-
-    if (key.length === 0) {
-      throw new DrizzleError('Parameter "key" must not be an empty string.')
-    }
 
     this._headers.append(key, value)
 

@@ -1,11 +1,11 @@
 import { initDrizzleHttp } from '../DrizzleBuilder'
-import { QueryNameParameterHandlerFactory } from '../internal'
-import { FormParameterHandlerFactory } from '../internal'
-import { QueryParameterHandlerFactory } from '../internal'
-import { BodyParameterHandlerFactory } from '../internal'
-import { PathParameterHandlerFactory } from '../internal'
-import { SignalParameterHandlerFactory } from '../internal'
-import { HeaderParameterHandlerFactory } from '../internal'
+import { QueryNameParameterHandlerFactory } from '../builtin'
+import { FormParameterHandlerFactory } from '../builtin'
+import { QueryParameterHandlerFactory } from '../builtin'
+import { BodyParameterHandlerFactory } from '../builtin'
+import { PathParameterHandlerFactory } from '../builtin'
+import { SignalParameterHandlerFactory } from '../builtin'
+import { HeaderParameterHandlerFactory } from '../builtin'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Drizzle Builder', function () {

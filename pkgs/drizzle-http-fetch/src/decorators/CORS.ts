@@ -1,8 +1,7 @@
-import { provideRequestInit } from '../provideRequestInit'
+import { setupRequestInit } from '../setupRequestInit'
 
 export function CORS() {
   return function (target: object, method: string): void {
-    const requestInit = provideRequestInit(target, method)
-    requestInit.mode = 'cors'
+    setupRequestInit(target, method, requestInit => (requestInit.mode = 'cors'))
   }
 }

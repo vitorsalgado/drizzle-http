@@ -1,5 +1,5 @@
-import { DrizzleMeta } from '../DrizzleMeta'
-import { FormParameter } from '../internal'
+import { setupApiMethod } from '../ApiParameterization'
+import { FormParameter } from '../builtin'
 
 /**
  * Named form parameter for a form url-encode request.
@@ -16,8 +16,7 @@ import { FormParameter } from '../internal'
  */
 export function Field(key: string) {
   return function (target: object, method: string, index: number): void {
-    const requestFactory = DrizzleMeta.provideRequestFactory(target, method)
-    requestFactory.addParameter(new FormParameter(key, index))
+    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new FormParameter(key, index)))
   }
 }
 
