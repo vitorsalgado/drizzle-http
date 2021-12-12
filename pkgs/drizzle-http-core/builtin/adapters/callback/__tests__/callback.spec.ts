@@ -3,7 +3,7 @@ import { Drizzle } from '../../../../Drizzle'
 import { AsJSON, GET, Param } from '../../../../decorators'
 import { DrizzleBuilder } from '../../../../DrizzleBuilder'
 import { HttpError } from '../../../../HttpError'
-import { Callback } from '..'
+import { Callback } from '../Callback'
 import { noop } from '../../../../noop'
 import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
 

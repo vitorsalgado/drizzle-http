@@ -1,48 +1,45 @@
 import EventEmitter from 'events'
-import {
-  closeTestServer,
-  Data,
-  Ok,
-  setupTestServer,
-  startTestServer,
-  TestId,
-  TestResult
-} from '@drizzle-http/test-utils'
-import { noop } from '../noop'
+import { TestId } from '@drizzle-http/test-utils'
+import { closeTestServer } from '@drizzle-http/test-utils'
+import { setupTestServer } from '@drizzle-http/test-utils'
+import { Ok } from '@drizzle-http/test-utils'
+import { TestResult } from '@drizzle-http/test-utils'
+import { Data } from '@drizzle-http/test-utils'
+import { startTestServer } from '@drizzle-http/test-utils'
 import {
   Abort,
   Accept,
-  AsJSON,
-  Body,
   ContentType,
-  DELETE,
-  Drizzle,
-  DrizzleBuilder,
-  Field,
   FormUrlEncoded,
   GET,
   H,
-  HEAD,
-  Header,
   HeaderMap,
-  initDrizzleHttp,
-  MediaTypes,
   OPTIONS,
   P,
   Param,
   PATCH,
   Path,
-  POST,
-  PUT,
   Q,
   Query,
-  QueryName,
-  Timeout
-} from '..'
-import { HttpResponse } from '..'
-import { FullResponse } from '..'
-import { Interceptor } from '..'
-import { Chain } from '..'
+  QueryName
+} from '../decorators'
+import { Timeout } from '../decorators'
+import { AsJSON } from '../decorators'
+import { Header } from '../decorators'
+import { POST } from '../decorators'
+import { PUT } from '../decorators'
+import { Body } from '../decorators'
+import { DELETE } from '../decorators'
+import { Field } from '../decorators'
+import { HEAD } from '../decorators'
+import { MediaTypes } from '../MediaTypes'
+import { noop } from '../noop'
+import { FullResponse } from '../builtin'
+import { HttpResponse } from '../HttpResponse'
+import { DrizzleBuilder, initDrizzleHttp } from '../DrizzleBuilder'
+import { Chain } from '../Chain'
+import { Interceptor } from '../Interceptor'
+import { Drizzle } from '../Drizzle'
 import { TestCallFactory } from './TestCallFactory'
 
 const cancellation = new EventEmitter()

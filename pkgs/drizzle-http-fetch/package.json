@@ -10,7 +10,7 @@
   },
   "scripts": {
     "pretest": "npm run build:test",
-    "build": "rm -rf dist && tsc --build --force tsconfig.build.json",
+    "build": "rm -rf dist && tsc --build --force tsconfig.build.json && npm run build:test",
     "build:test": "webpack --config ./build/webpack.config.cjs",
     "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node __tests__/serverStatic.js\" \"node -e 'setTimeout(() => {}, 1000)' && jest __tests__/fetch.spec.ts\"",
     "install:puppeteer": "node_modules/puppeteer/install.js",

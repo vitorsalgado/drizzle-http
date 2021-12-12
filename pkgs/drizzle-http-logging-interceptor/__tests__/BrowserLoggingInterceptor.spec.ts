@@ -15,7 +15,7 @@ import { HttpError } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { Body } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { BrowserLoggingInterceptor } from '..'
+import { BrowserLoggingInterceptor } from '../BrowserLoggingInterceptor'
 import { Level } from '../Level'
 
 describe('Browser Logging Interceptor', function () {
