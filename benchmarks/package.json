@@ -18,7 +18,7 @@
     "axios": "^0.24.0",
     "benchmark": "^2.1.4",
     "drizzle-http": "^2.2.0",
-    "got": "^11.8.3",
+    "got": "^12.0.0",
     "node-fetch": "^3.1.0",
     "superagent": "^6.1.0"
   }
