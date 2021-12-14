@@ -4,16 +4,18 @@
   "description": "Browser Fetch HTTP client for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "pretest": "npm run build:test",
-    "build": "rm -rf dist && tsc --build --force tsconfig.build.json && npm run build:test",
-    "build:test": "webpack --config ./build/webpack.config.cjs",
-    "test": "concurrently -k --kill-others-on-fail -s first \"node __tests__/server.js\" \"node __tests__/serverStatic.js\" \"node -e 'setTimeout(() => {}, 1000)' && jest __tests__/fetch.spec.ts\"",
-    "install:puppeteer": "node_modules/puppeteer/install.js",
+    "webpack:server-dev": "webpack server --config build/webpack.config.cjs",
+    "test:e2e:prepare": "npx playwright install-deps && npx playwright install",
+    "test:e2e": "playwright test",
+    "build": "rm -rf dist && tsc --build --force tsconfig.build.json",
+    "lint": "eslint --fix --ext .ts .",
+    "prettier": "prettier './**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },

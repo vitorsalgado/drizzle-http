@@ -2,19 +2,38 @@
 
 const Path = require('path')
 const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
-
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const Cwd = process.cwd()
+
+console.log(Cwd)
 
 module.exports = {
   mode: 'production',
   bail: true,
   target: 'web',
-  entry: {
-    ts: Path.join(Cwd, 'src/__tests__/apiTs.ts'),
-    js: Path.join(Cwd, 'src/__tests__/apiJs.js')
-  },
+  entry: './__tests__/app.ts',
   devtool: 'inline-source-map',
-  plugins: [new CleanPlugin()],
+  devServer: {
+    hot: false,
+    port: 3000,
+    host: '0.0.0.0',
+    historyApiFallback: true,
+    client: {
+      overlay: {
+        errors: false,
+        warnings: false
+      },
+      progress: false
+    },
+    open: false
+  },
+  plugins: [
+    new CleanPlugin(),
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: './__tests__/index.html'
+    })
+  ],
   module: {
     rules: [
       {
@@ -25,7 +44,7 @@ module.exports = {
         }
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: [
           {
             loader: 'ts-loader',
@@ -39,7 +58,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json']
   },
   performance: {
     hints: 'warning'
@@ -47,6 +66,6 @@ module.exports = {
   stats: 'errors-only',
   output: {
     filename: '[name].js',
-    path: Path.join(Cwd, 'src/__tests__/dist')
+    path: Path.join(Cwd, '__tests__/dist')
   }
 }

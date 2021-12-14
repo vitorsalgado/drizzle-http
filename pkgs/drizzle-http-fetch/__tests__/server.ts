@@ -19,11 +19,24 @@ const server = createServer((req, res) => {
   }
 
   if (['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].indexOf(req.method as string) > -1) {
-    res.writeHead(200, 'OK', { ...{ 'Content-Type': 'text/plain; charset=utf-8' }, ...headers })
-    res.write('success', 'utf-8')
-    res.end()
+    if ((req.url ?? '').indexOf('txt') > -1) {
+      res.writeHead(200, 'OK', { ...{ 'Content-Type': 'text/plain' }, ...headers })
+      res.write('success', 'utf-8')
+      res.end()
 
-    return
+      return
+    } else if ((req.url ?? '').indexOf('json') > -1) {
+      const buf: Buffer[] = []
+
+      req.on('data', chunk => buf.push(chunk))
+      req.on('end', () => {
+        res.writeHead(200, 'OK', { ...{ 'Content-Type': 'application/json' }, ...headers })
+        res.write(JSON.stringify({ status: 'ok', data: JSON.parse(buf.join().toString()) }), 'utf-8')
+        res.end()
+      })
+
+      return
+    }
   }
 
   res.writeHead(405, headers)
@@ -37,11 +50,11 @@ server.on('connection', socket => {
 
 server.on('error', console.error)
 
-export function start() {
+export function startServer() {
   return server.listen(port)
 }
 
-export function close(callback?: ((err?: Error | undefined) => void) | undefined) {
+export function closeServer(callback?: ((err?: Error | undefined) => void) | undefined) {
   for (const socket of sockets) {
     socket.destroy()
     sockets.delete(socket)
