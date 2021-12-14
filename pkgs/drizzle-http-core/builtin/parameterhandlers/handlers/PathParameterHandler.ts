@@ -4,13 +4,13 @@ import { Drizzle } from '../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
-import { encodeIfNecessary } from '../../../internal/encoding'
-
-export const PathParameterType = 'path_param'
+import { encodeIfNecessary } from '../../../internal'
 
 export class PathParameter extends Parameter {
+  static Type = 'path_param'
+
   constructor(public readonly key: string, public readonly regex: RegExp, public readonly index: number) {
-    super(index, PathParameterType)
+    super(index, PathParameter.Type)
   }
 }
 
@@ -39,9 +39,9 @@ export class PathParameterHandler implements ParameterHandler<PathParameter, str
 export class PathParameterHandlerFactory implements ParameterHandlerFactory<PathParameter, string | string[]> {
   static INSTANCE: PathParameterHandlerFactory = new PathParameterHandlerFactory()
 
-  handledType = (): string => PathParameterType
+  forType = (): string => PathParameter.Type
 
-  parameterHandler(
+  provide(
     _drizzle: Drizzle,
     _rf: RequestFactory,
     p: PathParameter

@@ -9,7 +9,7 @@ export interface ResponseHandler {
 }
 
 export interface ResponseHandlerFactory {
-  responseHandler(drizzle: Drizzle, method: string, requestFactory: RequestFactory): ResponseHandler | null
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): ResponseHandler | null
 }
 
 export class DefaultResponseHandler implements ResponseHandler {

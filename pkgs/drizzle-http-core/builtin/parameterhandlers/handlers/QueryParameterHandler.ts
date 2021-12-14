@@ -3,14 +3,14 @@ import { RequestFactory } from '../../../RequestFactory'
 import { Drizzle } from '../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
-import { encodeIfNecessary } from '../../../internal/encoding'
+import { encodeIfNecessary } from '../../../internal'
 import { RequestParameterization } from '../../../RequestParameterization'
 
-export const QueryParameterType = 'query'
-
 export class QueryParameter extends Parameter {
+  static Type = 'query'
+
   constructor(public readonly key: string, public readonly index: number) {
-    super(index, QueryParameterType)
+    super(index, QueryParameter.Type)
   }
 }
 
@@ -25,8 +25,8 @@ export class QueryParameterHandler implements ParameterHandler<QueryParameter, s
     if (typeof value === 'string') {
       requestValues.query.push(this.parameter.key + '=' + encodeIfNecessary(value))
     } else if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        requestValues.query.push(this.parameter.key + '=' + encodeIfNecessary(value[i]))
+      for (const item of value) {
+        requestValues.query.push(this.parameter.key + '=' + encodeIfNecessary(item))
       }
     } else {
       requestValues.query.push(this.parameter.key + '=' + encodeIfNecessary(String(value)))
@@ -37,9 +37,9 @@ export class QueryParameterHandler implements ParameterHandler<QueryParameter, s
 export class QueryParameterHandlerFactory implements ParameterHandlerFactory<QueryParameter, string | string[]> {
   static INSTANCE: QueryParameterHandlerFactory = new QueryParameterHandlerFactory()
 
-  handledType = (): string => QueryParameterType
+  forType = (): string => QueryParameter.Type
 
-  parameterHandler(
+  provide(
     _drizzle: Drizzle,
     _rf: RequestFactory,
     p: QueryParameter

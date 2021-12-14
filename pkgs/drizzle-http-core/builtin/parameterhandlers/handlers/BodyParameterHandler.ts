@@ -7,11 +7,11 @@ import { BodyType } from '../../../BodyType'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
 
-export const BodyParameterType = 'body'
-
 export class BodyParameter extends Parameter {
+  static Type = 'body'
+
   constructor(public readonly index: number) {
-    super(index, BodyParameterType)
+    super(index, BodyParameter.Type)
   }
 }
 
@@ -34,9 +34,9 @@ export class BodyParameterHandler implements ParameterHandler<BodyParameter, Bod
 export class BodyParameterHandlerFactory implements ParameterHandlerFactory<BodyParameter, BodyType> {
   static INSTANCE: BodyParameterHandlerFactory = new BodyParameterHandlerFactory()
 
-  handledType = (): string => BodyParameterType
+  forType = (): string => BodyParameter.Type
 
-  parameterHandler(
+  provide(
     drizzle: Drizzle,
     requestFactory: RequestFactory,
     p: BodyParameter

@@ -5,11 +5,11 @@ export { BuiltIn, Internals }
 
 export * from './builtin'
 export * from './decorators'
+
 export * from './BodyType'
 export * from './Call'
 export * from './CallAdapter'
 export * from './Chain'
-export * from './ChainExecutor'
 export * from './Drizzle'
 export * from './DrizzleBuilder'
 export * from './ApiParameterization'

@@ -5,11 +5,11 @@ import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
 
-export const SignalParameterType = 'signal'
-
 export class SignalParameter extends Parameter {
+  static Type = 'signal'
+
   constructor(public readonly index: number) {
-    super(index, SignalParameterType)
+    super(index, SignalParameter.Type)
   }
 }
 
@@ -28,9 +28,9 @@ export class SignalParameterHandler implements ParameterHandler<SignalParameter,
 export class SignalParameterHandlerFactory implements ParameterHandlerFactory<SignalParameter, unknown> {
   static INSTANCE: SignalParameterHandlerFactory = new SignalParameterHandlerFactory()
 
-  handledType = (): string => SignalParameterType
+  forType = (): string => SignalParameter.Type
 
-  parameterHandler(
+  provide(
     drizzle: Drizzle,
     requestFactory: RequestFactory,
     p: SignalParameter

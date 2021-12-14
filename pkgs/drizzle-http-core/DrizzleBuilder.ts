@@ -18,7 +18,10 @@ import { FormRequestConverterFactory } from './builtin'
 import { PathParameterHandlerFactory } from './builtin'
 import { SignalParameterHandlerFactory } from './builtin'
 import { RawResponseHandlerFactory } from './builtin'
+import { PlainTextResponseConverterFactory } from './builtin'
 import { Interceptor } from './Interceptor'
+import { InterceptorFactory } from './Interceptor'
+import { InterceptorFunction } from './Interceptor'
 import { HttpHeaders } from './HttpHeaders'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { CallAdapterFactory } from './CallAdapter'
@@ -42,6 +45,7 @@ export class DrizzleBuilder {
   private readonly _headers: HttpHeaders
   private _callFactory!: CallFactory
   private readonly _interceptors: Interceptor[]
+  private readonly _interceptorFactories: InterceptorFactory[]
   private readonly _callAdapterFactories: CallAdapterFactory[]
   private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[]
   private readonly _requestConverterFactories: RequestBodyConverterFactory[]
@@ -53,6 +57,7 @@ export class DrizzleBuilder {
   constructor() {
     this._headers = new HttpHeaders({})
     this._interceptors = []
+    this._interceptorFactories = []
     this._callAdapterFactories = []
     this._parameterHandlerFactories = []
     this._requestConverterFactories = []
@@ -117,16 +122,24 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Adds a {@link Interceptor} to the execution chain
+   * Adds a {@link Interceptor} to the execution chain.
+   * You can also provide a {@link InterceptorFactory} instance expose Drizzle core components during setup phase.
    *
-   * @param interceptors - {@link Interceptor} instance
+   * @param interceptor - {@link Interceptor} instance or a {@link InterceptorFactory} instance
    * @returns Same {@link DrizzleBuilder} instance
    */
-  addInterceptor(...interceptors: Interceptor[]): this {
-    notNull(interceptors, 'Parameter "interceptor" must not be null.')
-    notEmpty(interceptors, 'Parameter "interceptor" must not be empty.')
+  addInterceptor(interceptor: Interceptor | InterceptorFunction | InterceptorFactory): this {
+    notNull(interceptor, 'Parameter "interceptor" must not be null.')
 
-    this._interceptors.push(...interceptors)
+    if (typeof interceptor === 'function') {
+      this._interceptors.push({ intercept: interceptor })
+    } else {
+      if ('provide' in interceptor) {
+        this._interceptorFactories.push(interceptor)
+      } else if ('intercept' in interceptor) {
+        this._interceptors.push(interceptor)
+      }
+    }
 
     return this
   }
@@ -257,16 +270,14 @@ export class DrizzleBuilder {
 
     notNull(this._baseURL, '"BaseUrl" must not be null or undefined.')
     notNull(this._callFactory, 'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.')
+    notEmpty(
+      this._parameterHandlerFactories,
+      'No "Parameter Handler Factories" set. ' +
+        'Use "parameterHandlerFactory()" method to add a "ParameterHandlerFactory" instance. ' +
+        'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."'
+    )
 
-    if (this._parameterHandlerFactories.length === 0) {
-      throw new Error(
-        'No "Parameter Handler Factories" set. ' +
-          'Use "parameterHandlerFactory()" method to add a "ParameterHandlerFactory" instance. ' +
-          'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."'
-      )
-    }
-
-    if (this._enableDrizzleUserAgent) {
+    if (this._enableDrizzleUserAgent && !this._headers.has('user-agent')) {
       this.addDefaultHeader('user-agent', 'Drizzle-Http')
     }
 
@@ -275,6 +286,7 @@ export class DrizzleBuilder {
       this._headers,
       this._callFactory,
       this._interceptors,
+      this._interceptorFactories,
       new Set<CallAdapterFactory>(this._callAdapterFactories),
       this._parameterHandlerFactories,
       new Set<RequestBodyConverterFactory>(this._requestConverterFactories),
@@ -301,7 +313,9 @@ export class DrizzleBuilder {
     )
 
     this._responseConverterFactories.unshift(new RawResponseConverterFactory())
+
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
+    this.addResponseConverterFactories(new PlainTextResponseConverterFactory())
 
     this.addResponseHandlerFactory(new RawResponseHandlerFactory())
   }

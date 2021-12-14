@@ -6,11 +6,7 @@ import { CallbackCallAdapter } from './CallbackCallAdapter'
 import { KEY_IS_CALLBACK } from './Keys'
 
 export class CallbackCallAdapterFactory implements CallAdapterFactory {
-  provideCallAdapter(
-    _drizzle: Drizzle,
-    _method: string,
-    requestFactory: RequestFactory
-  ): CallAdapter<unknown, unknown> | null {
+  provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasConfig(KEY_IS_CALLBACK)) {
       return CallbackCallAdapter.INSTANCE
     }

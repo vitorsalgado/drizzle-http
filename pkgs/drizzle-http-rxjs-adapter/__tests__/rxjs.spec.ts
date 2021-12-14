@@ -14,6 +14,7 @@ import { FullResponse } from '@drizzle-http/core'
 import { CallAdapter } from '@drizzle-http/core'
 import { CallAdapterFactory } from '@drizzle-http/core'
 import { setupApiMethod } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Observable } from 'rxjs'
@@ -26,20 +27,15 @@ function Custom() {
   }
 }
 
-class CustomCallAdapter implements CallAdapter<unknown, Promise<unknown>> {
-  adapt(action: Call<unknown>): Promise<unknown> {
-    return action.execute().then(data => ({ id: (data as { result: { id: string } }).result.id }))
-  }
-}
-
 class CustomCallAdapterFactory implements CallAdapterFactory {
-  provideCallAdapter(
-    _drizzle: Drizzle,
-    _method: string,
-    requestFactory: RequestFactory
-  ): CallAdapter<unknown, unknown> | null {
+  provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasConfig('rxjs:test:custom')) {
-      return new CustomCallAdapter()
+      return {
+        adapt(call: Call<unknown>): (request: HttpRequest, argv: unknown[]) => unknown {
+          return (request, argv) =>
+            call.execute(request, argv).then(data => ({ id: (data as { result: { id: string } }).result.id }))
+        }
+      }
     }
 
     return null

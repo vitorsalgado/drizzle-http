@@ -23,7 +23,7 @@ describe('Form Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new FormRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(FormRequestConverter)
   })
@@ -39,7 +39,7 @@ describe('Form Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new FormRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeNull()
   })
@@ -54,7 +54,7 @@ describe('Form Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new FormRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
     const rv = new RequestParameterization([])
     const obj = {
       name: 'the name',
@@ -77,7 +77,7 @@ describe('Form Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new FormRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
     const rv = new RequestParameterization([])
     const arr = [
       ['name', 'the name'],
@@ -100,7 +100,7 @@ describe('Form Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new FormRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
     const rv = new RequestParameterization([])
     const arr = ['test', 'some other value']
 

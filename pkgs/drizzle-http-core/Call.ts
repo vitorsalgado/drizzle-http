@@ -10,18 +10,10 @@ import { HttpResponse } from './HttpResponse'
  * @typeParam V - type of the response
  */
 export interface Call<T = HttpResponse> {
-  readonly request: HttpRequest
-
-  readonly argv: unknown[]
-
   /**
    * Executes the HTTP request
    */
-  execute(): Promise<T>
-}
-
-export interface CallProvider<T = unknown> {
-  (request: HttpRequest, args: unknown[]): Call<T>
+  execute(request: HttpRequest, argv: unknown[]): Promise<T>
 }
 
 /**
@@ -43,5 +35,5 @@ export interface CallFactory {
    * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<unknown>
 }

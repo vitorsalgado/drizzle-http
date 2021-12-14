@@ -5,11 +5,11 @@ import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
 
-export const HeaderParameterType = 'header'
-
 export class HeaderParameter extends Parameter {
+  static Type = 'header'
+
   constructor(public readonly key: string, public readonly index: number) {
-    super(index, HeaderParameterType)
+    super(index, HeaderParameter.Type)
   }
 }
 
@@ -34,9 +34,9 @@ export class HeaderParameterHandler implements ParameterHandler<HeaderParameter,
 export class HeaderParameterHandlerFactory implements ParameterHandlerFactory<HeaderParameter, string | string[]> {
   static INSTANCE: HeaderParameterHandlerFactory = new HeaderParameterHandlerFactory()
 
-  handledType = (): string => HeaderParameterType
+  forType = (): string => HeaderParameter.Type
 
-  parameterHandler(
+  provide(
     _drizzle: Drizzle,
     _rf: RequestFactory,
     p: HeaderParameter

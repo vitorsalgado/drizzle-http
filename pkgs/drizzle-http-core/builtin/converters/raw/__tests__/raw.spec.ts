@@ -74,7 +74,7 @@ describe('Raw Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new RawResponseConverterFactory()
-    const converter = factory.responseBodyConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(RawResponseConverter)
   })
@@ -89,7 +89,7 @@ describe('Raw Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new RawResponseConverterFactory()
-    const converter = factory.responseBodyConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeNull()
   })
@@ -105,7 +105,7 @@ describe('Raw Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new RawRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(RawRequestConverter)
   })

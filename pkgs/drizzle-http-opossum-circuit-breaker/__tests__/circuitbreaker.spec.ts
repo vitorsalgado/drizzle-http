@@ -15,7 +15,6 @@ import { UseCircuitBreaker } from '../decorators'
 import { Fallback } from '../decorators'
 import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
 import { CircuitBreakerCallAdapterFactory } from '../CircuitBreakerCallAdapterFactory'
-import { LifeCycleListener } from '../LifeCycleListener'
 
 const opts = {
   timeout: 100,
@@ -380,42 +379,5 @@ describe('Circuit Breaker', function () {
 
     await api.test()
     await d.shutdown()
-  })
-
-  it('should call lifecycle listener methods', async function () {
-    class Def {
-      @GET('/')
-      @UseCircuitBreaker({ name: 'test' })
-      test(): Promise<unknown> {
-        return noop()
-      }
-    }
-
-    const spy = jest.fn()
-
-    class Listener implements LifeCycleListener {
-      onBeforeExecution(circuitBreaker: CircuitBreaker): void {
-        spy('before-' + circuitBreaker.name)
-      }
-
-      onRegistered(circuitBreaker: CircuitBreaker): void {
-        spy('registered-' + circuitBreaker.name)
-      }
-    }
-
-    const d = DrizzleBuilder.newBuilder()
-      .baseUrl(address)
-      .callFactory(new UndiciCallFactory())
-      .addCallAdapterFactories(new CircuitBreakerCallAdapterFactory({ listener: new Listener() }))
-      .build()
-
-    const api = d.create(Def)
-
-    await api.test()
-    await d.shutdown()
-
-    expect(spy).toHaveBeenNthCalledWith(1, 'registered-test')
-    expect(spy).toHaveBeenNthCalledWith(2, 'before-test')
-    expect(spy).toHaveBeenCalledTimes(2)
   })
 })

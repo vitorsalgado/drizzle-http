@@ -9,11 +9,7 @@ import { Keys } from './Keys'
 export class RawResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: RawResponseConverterFactory = new RawResponseConverterFactory()
 
-  responseBodyConverter(
-    _drizzle: Drizzle,
-    _method: string,
-    requestFactory: RequestFactory
-  ): ResponseConverter<HttpResponse> | null {
+  provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): ResponseConverter<HttpResponse> | null {
     if (requestFactory.isReturnIdentifier(Keys.ReturnIdentifier)) {
       return RawResponseConverter.INSTANCE
     }

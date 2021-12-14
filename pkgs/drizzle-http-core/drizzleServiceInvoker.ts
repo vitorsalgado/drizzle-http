@@ -3,9 +3,8 @@ import { RequestFactory } from './RequestFactory'
 import { InterceptorHttpExecutor } from './InterceptorHttpExecutor'
 import { notNull } from './internal'
 import { notBlank } from './internal'
-import { CallRequestEntryPoint } from './CallRequestEntryPoint'
-import { CallProvider } from './Call'
-import { HttpResponse } from './HttpResponse'
+import { EntryPointInvoker } from './EntryPointInvoker'
+import { Call } from './Call'
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on
@@ -21,6 +20,7 @@ export function serviceInvoker(
   notNull(drizzle, 'Drizzle instance cannot be null.')
 
   const callFactory = drizzle.callFactory()
+
   callFactory.setup(drizzle)
 
   /**
@@ -35,62 +35,51 @@ export function serviceInvoker(
     notNull(requestFactory, 'RequestFactory instance cannot be null.')
     notBlank(method, 'Method cannot be null or empty.')
 
-    const callProvider = callFactory.prepareCall(drizzle, method, requestFactory) as CallProvider<HttpResponse>
-    const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)
+    const call = callFactory.provide(drizzle, method, requestFactory) as Call
     const requestBuilder = requestFactory.requestBuilder(drizzle)
     const responseConverter = drizzle.responseBodyConverter<T>(method, requestFactory)
-    const interceptors = drizzle.interceptors()
+    const interceptors = drizzle.interceptors(method, requestFactory)
     const responseHandler = drizzle.responseHandler(method, requestFactory)
 
-    interceptors.push(new InterceptorHttpExecutor(callProvider))
+    interceptors.push(new InterceptorHttpExecutor(call))
+
+    const entrypoint: Call<unknown> = new EntryPointInvoker<T>(
+      responseHandler,
+      responseConverter,
+      interceptors,
+      method,
+      requestFactory
+    )
+    const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)?.adapt(entrypoint)
+    const hasAdapter = typeof callAdapter === 'function'
 
     // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
-      const call = new CallRequestEntryPoint(
-        responseHandler,
-        responseConverter,
-        interceptors,
-        method,
-        requestFactory,
-        requestBuilder.toRequest([]),
-        []
-      )
+      const request = requestBuilder.toRequest([])
 
-      if (callAdapter !== null) {
-        return function (): T {
-          return callAdapter.adapt(call)
-        }
+      if (hasAdapter) {
+        return (): T => callAdapter(request, [])
       }
 
-      return function (): T {
-        return call.execute() as unknown as T
-      }
+      return (): T => entrypoint.execute(request, []) as unknown as T
     }
 
     /**
-     * this is the function that actually makes the HTTP Request
-     * it takes in consideration the method arguments and builds a {@link Call} instance on every execution
+     * This is the function that makes the HTTP Request.
+     * This method executes the {@link Call} instance with an adapter, if any.
      *
      * @param args - function arguments usually decorated
      * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: unknown[]): T {
-      const call = new CallRequestEntryPoint<T>(
-        responseHandler,
-        responseConverter,
-        interceptors,
-        method,
-        requestFactory,
-        requestBuilder.toRequest(args),
-        args
-      )
+      const request = requestBuilder.toRequest(args)
 
-      if (callAdapter === null) {
-        return call.execute() as unknown as T
+      if (hasAdapter) {
+        return callAdapter(request, args)
       }
 
-      return callAdapter.adapt(call)
+      return entrypoint.execute(request, args) as unknown as T
     }
   }
 }

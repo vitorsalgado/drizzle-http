@@ -3,19 +3,22 @@ import { RequestFactory } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { CallAdapterFactory } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
 import { Observable } from 'rxjs'
 import { from } from 'rxjs'
 import { Keys } from './Keys'
 
 class RxJsCallAdapter<T> implements CallAdapter<T, Observable<T>> {
-  constructor(private readonly decorated?: CallAdapter<unknown, Promise<T>>) {}
+  constructor(private readonly decorated: CallAdapter<unknown, Promise<T>> | null = null) {}
 
-  adapt(action: Call<T>): Observable<T> {
+  adapt(call: Call<T>): (request: HttpRequest, argv: unknown[]) => Observable<T> {
     if (this.decorated) {
-      return from(this.decorated.adapt(action))
+      const adapter = this.decorated
+
+      return (request, argv) => from(adapter.adapt(call)(request, argv))
     }
 
-    return from(action.execute())
+    return (request, argv) => from(call.execute(request, argv))
   }
 }
 
@@ -24,14 +27,10 @@ export class RxJsCallAdapterFactory implements CallAdapterFactory {
 
   constructor(private readonly decorated?: CallAdapterFactory) {}
 
-  provideCallAdapter(
-    drizzle: Drizzle,
-    method: string,
-    requestFactory: RequestFactory
-  ): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.returnIdentifier === Keys.RxJxKey) {
       if (this.decorated) {
-        const adapter = this.decorated.provideCallAdapter(drizzle, method, requestFactory)
+        const adapter = this.decorated.provide(drizzle, method, requestFactory)
 
         if (adapter) {
           if (requestFactory.returnIdentifier === Keys.RxJxKey) {

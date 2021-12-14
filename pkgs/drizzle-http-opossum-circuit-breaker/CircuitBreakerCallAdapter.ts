@@ -1,48 +1,38 @@
 import { CallAdapter } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
 import CircuitBreaker from 'opossum'
 import { Registry } from './Registry'
-import { LifeCycleListener } from './LifeCycleListener'
 
 interface CircuitBreakerInit {
-  name: string
   options: CircuitBreaker.Options
   registry: Registry
   fallback?: (...args: unknown[]) => unknown
-  listener?: LifeCycleListener
 }
 
 export class CircuitBreakerCallAdapter implements CallAdapter<unknown, unknown> {
-  private readonly name: string
   private readonly options: CircuitBreaker.Options
   private readonly registry: Registry
   private readonly fallback?: (...args: unknown[]) => unknown
-  private readonly listener?: LifeCycleListener
-
-  private circuitBreaker: CircuitBreaker | null = null
 
   constructor(init: CircuitBreakerInit) {
-    this.name = init.name
     this.options = init.options
     this.registry = init.registry
     this.fallback = init.fallback
-    this.listener = init.listener
   }
 
-  adapt(action: Call<unknown>): Promise<unknown> {
-    if (this.circuitBreaker === null) {
-      this.circuitBreaker = new CircuitBreaker<unknown[], unknown>(() => action.execute(), { ...this.options })
+  adapt(action: Call<unknown>): (request: HttpRequest, argv: unknown[]) => Promise<unknown> {
+    const circuitBreaker = new CircuitBreaker<[HttpRequest, unknown[]], unknown>(
+      (request, argv) => action.execute(request, argv),
+      { ...this.options }
+    )
 
-      if (this.fallback) {
-        this.circuitBreaker.fallback(this.fallback)
-      }
-
-      this.registry.register(this.circuitBreaker)
-      this.listener?.onRegistered(this.circuitBreaker)
+    if (this.fallback) {
+      circuitBreaker.fallback((...[_, argv, error]) => this.fallback?.(...argv, error))
     }
 
-    this.listener?.onBeforeExecution(this.circuitBreaker)
+    this.registry.register(circuitBreaker)
 
-    return this.circuitBreaker.fire(...action.argv)
+    return (request, argv) => circuitBreaker.fire(request, argv)
   }
 }

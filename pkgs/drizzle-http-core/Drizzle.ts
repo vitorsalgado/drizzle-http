@@ -4,10 +4,13 @@ import { serviceInvoker } from './drizzleServiceInvoker'
 import { RequestFactory } from './RequestFactory'
 import { ApiParameterization } from './ApiParameterization'
 import { Interceptor } from './Interceptor'
+import { InterceptorFactory } from './Interceptor'
 import { RawRequestConverter, RawResponseConverter } from './builtin'
 import { Parameter, ParameterHandlerFactory } from './builtin'
 import { NoParameterHandlerError } from './internal'
 import { Mixin } from './internal'
+import { Ctor } from './internal'
+import { AbstractCtor } from './internal'
 import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
 import { ResponseConverterFactory } from './ResponseConverter'
@@ -38,12 +41,13 @@ export class Drizzle {
     private readonly _headers: HttpHeaders,
     private readonly _callFactory: CallFactory,
     private readonly _interceptors: Interceptor[],
+    private readonly _interceptorFactories: InterceptorFactory[],
     private readonly _callAdapterFactories: Set<CallAdapterFactory>,
     private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
     private readonly _requestConverterFactories: Set<RequestBodyConverterFactory>,
     private readonly _responseConverterFactories: Set<ResponseConverterFactory>,
     private readonly _responseHandlerFactories: ResponseHandlerFactory[],
-    private readonly shutdownHooks: (() => Promise<unknown>)[] = []
+    private readonly _shutdownHooks: (() => Promise<unknown>)[] = []
   ) {}
 
   get [Symbol.toStringTag](): string {
@@ -78,11 +82,17 @@ export class Drizzle {
   }
 
   /**
-   * Get all registered {@link Interceptor} instances
+   * Get all registered {@link Interceptor} instances.
+   *
    * @returns Array<Interceptor>
    */
-  interceptors(): Interceptor[] {
-    return [...this._interceptors]
+  interceptors(method: string, requestFactory: RequestFactory): Interceptor[] {
+    return [
+      ...this._interceptors,
+      ...(this._interceptorFactories
+        .map(x => x.provide(this, method, requestFactory))
+        .filter(x => x !== null) as Interceptor[])
+    ]
   }
 
   /**
@@ -103,7 +113,7 @@ export class Drizzle {
     }
 
     for (const factory of this._callAdapterFactories) {
-      const adapter = factory.provideCallAdapter(this, method, requestFactory)
+      const adapter = factory.provide(this, method, requestFactory)
 
       if (adapter !== null) {
         return adapter as CallAdapter<F, T>
@@ -123,7 +133,7 @@ export class Drizzle {
     requestFactory: RequestFactory,
     parameter: Parameter
   ): ParameterHandlerFactory<P, R> {
-    const factory = this._parameterHandlerFactories.filter(x => x.handledType() === parameter.type)[0]
+    const factory = this._parameterHandlerFactories.filter(x => x.forType() === parameter.type)[0]
 
     if (factory === null || typeof factory === 'undefined') {
       throw new NoParameterHandlerError(parameter.type, requestFactory.method, parameter.index)
@@ -141,7 +151,7 @@ export class Drizzle {
    */
   requestBodyConverter<R>(method: string, requestFactory: RequestFactory): RequestBodyConverter<R> {
     for (const factory of this._requestConverterFactories) {
-      const converter = factory.requestConverter(this, method, requestFactory)
+      const converter = factory.provide(this, method, requestFactory)
 
       if (converter !== null) {
         return converter as RequestBodyConverter<R>
@@ -163,7 +173,7 @@ export class Drizzle {
     }
 
     for (const factory of this._responseConverterFactories) {
-      const converter = factory.responseBodyConverter(this, method, requestFactory)
+      const converter = factory.provide(this, method, requestFactory)
 
       if (converter !== null) {
         return converter as ResponseConverter<T>
@@ -188,7 +198,7 @@ export class Drizzle {
     }
 
     for (const factory of this._responseHandlerFactories) {
-      const handler = factory.responseHandler(this, method, requestFactory)
+      const handler = factory.provide(this, method, requestFactory)
 
       if (handler !== null) {
         return handler
@@ -206,14 +216,14 @@ export class Drizzle {
    * @param fn - shutdown async function
    */
   registerShutdownHook(fn: () => Promise<unknown>): void {
-    this.shutdownHooks.push(fn)
+    this._shutdownHooks.push(fn)
   }
 
   /**
    * Executes all registered shutdown hooks
    */
   async shutdown(): Promise<void> {
-    for (const hook of this.shutdownHooks) {
+    for (const hook of this._shutdownHooks) {
       await hook()
     }
   }
@@ -222,12 +232,12 @@ export class Drizzle {
    * Creates a proxy instance of the class with decorated methods that perform HTTP requests based on decorated methods
    * configurations.
    *
-   * @param TargetApi - the target API class with decorated methods
-   * @param args - optional list of arguments to be passed to the api constructor
+   * @param TargetApi - the target API class with decorated methods. use class and abstract class.
+   * @param args - optional list of arguments to be passed to the api constructor.
    *
    * @returns A proxy instance of the target API class
    */
-  create<T extends { new (...args: any[]): any }>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
+  create<T extends Ctor | AbstractCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
     const requestFactories = new Map<string, RequestFactory>()
     const createApiInvocationMethod = serviceInvoker(this)
     const parameterization = ApiParameterization.parameterizationForTarget(TargetApi)

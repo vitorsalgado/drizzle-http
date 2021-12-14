@@ -120,6 +120,7 @@ typings/
 .clinic/
 .vscode/
 .idea/
+.tasks/
 .nvmrc
 .npmrc
 .yarn/

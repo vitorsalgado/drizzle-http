@@ -1,7 +1,7 @@
 import { URL } from 'url'
-import { Call, CallFactory, CallProvider, Drizzle, RequestFactory } from '@drizzle-http/core'
-import { HttpRequest } from '@drizzle-http/core'
+import { CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { Internals } from '@drizzle-http/core'
+import { Call } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { UndiciStreamCall } from './UndiciStreamCall'
 import { HttpEmptyResponse } from './UndiciStreamCall'
@@ -27,11 +27,7 @@ export class UndiciCallFactory implements CallFactory {
     })
   }
 
-  prepareCall(
-    drizzle: Drizzle,
-    method: string,
-    requestFactory: RequestFactory
-  ): CallProvider<UndiciResponse | HttpEmptyResponse> {
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
     const pool = this._pool
 
     if (pool === null) {
@@ -48,9 +44,7 @@ export class UndiciCallFactory implements CallFactory {
         )
       }
 
-      return function (request: HttpRequest, args: unknown[]): Call<HttpEmptyResponse> {
-        return new UndiciStreamCall(pool, streamToIndex, request, args)
-      }
+      return new UndiciStreamCall(pool, streamToIndex)
     } else {
       const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
@@ -62,8 +56,6 @@ export class UndiciCallFactory implements CallFactory {
       }
     }
 
-    return function (request: HttpRequest, args: unknown[]): Call<UndiciResponse> {
-      return new UndiciCall(pool, request, args)
-    }
+    return new UndiciCall(pool)
   }
 }

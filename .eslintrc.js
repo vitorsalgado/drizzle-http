@@ -32,6 +32,9 @@ module.exports = {
     '@typescript-eslint/ban-types': ['warn'],
     '@typescript-eslint/no-inferrable-types': ['off'],
 
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['warn', { classes: false, functions: false }],
+
     'import/order': [
       'error',
       {

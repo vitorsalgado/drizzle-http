@@ -5,9 +5,9 @@ import { toUndiciRequest } from './toUndiciRequest'
 import { UndiciResponse } from './UndiciResponse'
 
 export class UndiciCall implements Call<UndiciResponse> {
-  constructor(private readonly client: Pool, readonly request: HttpRequest, readonly argv: unknown[]) {}
+  constructor(private readonly client: Pool) {}
 
-  execute(): Promise<UndiciResponse> {
-    return this.client.request(toUndiciRequest(this.request)).then(res => new UndiciResponse(this.request.url, res))
+  execute(request: HttpRequest): Promise<UndiciResponse> {
+    return this.client.request(toUndiciRequest(request)).then(res => new UndiciResponse(request.url, res))
   }
 }

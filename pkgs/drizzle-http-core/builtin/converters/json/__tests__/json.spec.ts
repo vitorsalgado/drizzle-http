@@ -27,7 +27,7 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(JsonRequestConverter)
   })
@@ -43,7 +43,7 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonRequestConverterFactory()
-    const converter = factory.requestConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeNull()
   })
@@ -58,7 +58,7 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonResponseConverterFactory()
-    const converter = factory.responseBodyConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeInstanceOf(JsonResponseConverter)
   })
@@ -74,7 +74,7 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonResponseConverterFactory()
-    const converter = factory.responseBodyConverter(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'test', requestFactory)
 
     expect(converter).toBeNull()
   })

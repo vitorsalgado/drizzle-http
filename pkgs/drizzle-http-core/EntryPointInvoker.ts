@@ -19,29 +19,19 @@ import { RequestFactory } from './RequestFactory'
  *
  * @typeParam V - Type of the response
  */
-export class CallRequestEntryPoint<T> implements Call<T> {
-  private readonly responseHandler: ResponseHandler
-  private readonly responseConverter: ResponseConverter<T>
-  private readonly chain: ChainExecutor
-
+export class EntryPointInvoker<T> implements Call<T> {
   constructor(
-    responseHandler: ResponseHandler,
-    responseConverter: ResponseConverter<T>,
-    interceptors: Interceptor[],
-    method: string,
-    requestFactory: RequestFactory,
-    readonly request: HttpRequest,
-    readonly argv: unknown[]
-  ) {
-    this.responseHandler = responseHandler
-    this.responseConverter = responseConverter
-    this.chain = ChainExecutor.first(interceptors, method, requestFactory, request, argv)
-  }
+    private readonly responseHandler: ResponseHandler,
+    private readonly responseConverter: ResponseConverter<T>,
+    private readonly interceptors: Interceptor[],
+    private readonly method: string,
+    private readonly requestFactory: RequestFactory
+  ) {}
 
-  execute(): Promise<T> {
-    return this.chain
-      .proceed(this.request)
-      .then(response => this.responseHandler.handle(this.request, response))
+  execute(request: HttpRequest, argv: unknown[]): Promise<T> {
+    return ChainExecutor.first(this.interceptors, this.method, this.requestFactory, request, argv)
+      .proceed(request)
+      .then(response => this.responseHandler.handle(request, response))
       .then(this.responseConverter.convert)
   }
 }

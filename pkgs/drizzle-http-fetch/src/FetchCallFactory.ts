@@ -1,5 +1,4 @@
-import { Call, CallFactory, CallProvider, Drizzle, RequestFactory } from '@drizzle-http/core'
-import { HttpRequest } from '@drizzle-http/core'
+import { Call, CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { FetchCall } from './FetchCall'
 import { Keys } from './Keys'
 
@@ -12,13 +11,10 @@ export class FetchCallFactory implements CallFactory {
     // no setup needed
   }
 
-  prepareCall(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallProvider {
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<Response> {
     const requestInit = requestFactory.getConfig(Keys.ConfigKeyRequestInit) as RequestInit
     const url = new URL(drizzle.baseUrl())
-    const opts = this.options
 
-    return function (request: HttpRequest, args: unknown[]): Call<unknown> {
-      return new FetchCall(url, requestInit, opts, request, args)
-    }
+    return new FetchCall(url, requestInit, this.options)
   }
 }

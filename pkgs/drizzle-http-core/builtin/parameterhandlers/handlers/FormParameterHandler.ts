@@ -4,13 +4,13 @@ import { Drizzle } from '../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
-import { encodeFormFieldIfNecessary } from '../../../internal/encoding'
-
-export const FormParameterType = 'form_field'
+import { encodeFormFieldIfNecessary } from '../../../internal'
 
 export class FormParameter extends Parameter {
+  static Type = 'form_field'
+
   constructor(public readonly key: string, public readonly index: number) {
-    super(index, FormParameterType)
+    super(index, FormParameter.Type)
   }
 }
 
@@ -25,8 +25,8 @@ export class FormParameterHandler implements ParameterHandler<FormParameter, str
     if (typeof value === 'string') {
       requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(value))
     } else if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(value[i]))
+      for (const item of value) {
+        requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(item))
       }
     } else {
       requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(String(value)))
@@ -37,9 +37,9 @@ export class FormParameterHandler implements ParameterHandler<FormParameter, str
 export class FormParameterHandlerFactory implements ParameterHandlerFactory<FormParameter, string | string[]> {
   static INSTANCE: FormParameterHandlerFactory = new FormParameterHandlerFactory()
 
-  handledType = (): string => FormParameterType
+  forType = (): string => FormParameter.Type
 
-  parameterHandler(
+  provide(
     _drizzle: Drizzle,
     _rf: RequestFactory,
     p: FormParameter

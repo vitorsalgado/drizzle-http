@@ -7,38 +7,29 @@ import { Keys } from './Keys'
 import { Registry } from './Registry'
 import { CircuitBreakerRegistry } from './CircuitBreakerRegistry'
 import { CircuitBreakerCallAdapter } from './CircuitBreakerCallAdapter'
-import { LifeCycleListener } from './LifeCycleListener'
 
 interface Init {
   options?: CircuitBreaker.Options
   registry?: Registry
   fallbacks?: object | Record<string, (...args: unknown[]) => unknown>
-  listener?: LifeCycleListener
 }
 
 export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
-  private readonly names: Set<string> = new Set<string>()
   private readonly options: CircuitBreaker.Options
   private readonly registry: Registry
   private readonly fallbacks?: object | Record<string, (...args: unknown[]) => unknown>
-  private readonly listener?: LifeCycleListener
 
   constructor(init: Init = {}) {
     this.options = init.options ?? {}
     this.registry = init.registry ?? new CircuitBreakerRegistry()
     this.fallbacks = init.fallbacks
-    this.listener = init.listener
   }
 
   circuitBreakerRegistry(): Registry {
     return this.registry
   }
 
-  provideCallAdapter(
-    drizzle: Drizzle,
-    method: string,
-    requestFactory: RequestFactory
-  ): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (!requestFactory.hasConfig(Keys.Enabled)) {
       return null
     }
@@ -55,7 +46,7 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
       group
     }
 
-    if (this.names.has(name)) {
+    if (this.registry.find(name)) {
       throw new Error(`The name "${name}" is already used by another circuit breaker in the internal registry.`)
     }
 
@@ -91,14 +82,10 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
       }
     }
 
-    this.names.add(name)
-
     return new CircuitBreakerCallAdapter({
-      name,
       options,
       fallback,
-      registry: this.registry,
-      listener: this.listener
+      registry: this.registry
     })
   }
 }

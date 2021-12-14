@@ -1,9 +1,9 @@
 import { RequestFactory } from '../../../RequestFactory'
 import { RequestBodyConverter } from '../../../RequestBodyConverter'
 import { BodyType } from '../../../BodyType'
-import MediaTypes from '../../../MediaTypes'
-import { encodeFormFieldIfNecessary } from '../../../internal/encoding'
-import { RequestBodyTypeNotAllowedError } from '../../../internal/errors'
+import { MediaTypes } from '../../../MediaTypes'
+import { encodeFormFieldIfNecessary } from '../../../internal'
+import { RequestBodyTypeNotAllowedError } from '../../../internal'
 import { RequestParameterization } from '../../../RequestParameterization'
 
 export class FormRequestConverter implements RequestBodyConverter<unknown> {

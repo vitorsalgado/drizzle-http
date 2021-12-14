@@ -4,13 +4,13 @@ import { Drizzle } from '../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
-import { encodeIfNecessary } from '../../../internal/encoding'
-
-export const QueryNameParameterType = 'query_name'
+import { encodeIfNecessary } from '../../../internal'
 
 export class QueryNameParameter extends Parameter {
+  static Type = 'query_name'
+
   constructor(index: number) {
-    super(index, QueryNameParameterType)
+    super(index, QueryNameParameter.Type)
   }
 }
 
@@ -33,9 +33,9 @@ export class QueryNameParameterHandlerFactory
 {
   static INSTANCE: QueryNameParameterHandlerFactory = new QueryNameParameterHandlerFactory()
 
-  handledType = (): string => QueryNameParameterType
+  forType = (): string => QueryNameParameter.Type
 
-  parameterHandler(
+  provide(
     _drizzle: Drizzle,
     _rf: RequestFactory,
     p: QueryNameParameter

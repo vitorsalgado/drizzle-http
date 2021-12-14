@@ -6,6 +6,7 @@ import { BodyParameterHandlerFactory } from '../builtin'
 import { PathParameterHandlerFactory } from '../builtin'
 import { SignalParameterHandlerFactory } from '../builtin'
 import { HeaderParameterHandlerFactory } from '../builtin'
+import { RequestFactory } from '../RequestFactory'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Drizzle Builder', function () {
@@ -17,12 +18,6 @@ describe('Drizzle Builder', function () {
     const drizzle = builder.build()
 
     expect(drizzle.baseUrl()).toEqual('http://www.test.com.br')
-  })
-
-  it('should not allow set interceptors with empty array', function () {
-    const builder = initDrizzleHttp()
-
-    expect(() => builder.addInterceptor()).toThrowError()
   })
 
   it('should not allow set call adapters with empty array', function () {
@@ -84,7 +79,7 @@ describe('Drizzle Builder', function () {
     const drizzle = builder.build()
     const parameterHandlerFactories = drizzle.parameterHandlerFactories()
 
-    expect(drizzle.interceptors()).toHaveLength(0)
+    expect(drizzle.interceptors('test', new RequestFactory())).toHaveLength(0)
     expect(parameterHandlerFactories).toHaveLength(7)
     expect(parameterHandlerFactories.some(x => x instanceof QueryParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof FormParameterHandlerFactory)).toBeTruthy()

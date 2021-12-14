@@ -3,7 +3,7 @@
 
 benchmarks/
 docs/
-dist/
+/dist/
 examples/
 scripts/
 

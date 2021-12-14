@@ -1,6 +1,7 @@
 import { Call } from './Call'
 import { Drizzle } from './Drizzle'
 import { RequestFactory } from './RequestFactory'
+import { HttpRequest } from './HttpRequest'
 
 /**
  * Adapts a {@link Call} with response F to a type of V
@@ -9,7 +10,7 @@ import { RequestFactory } from './RequestFactory'
  * @typeParam V - Type destination
  */
 export interface CallAdapter<F, T> {
-  adapt(action: Call<F>): T
+  adapt(call: Call<F>): (request: HttpRequest, argv: unknown[]) => T
 }
 
 /**
@@ -24,9 +25,5 @@ export interface CallAdapterFactory {
    * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  provideCallAdapter(
-    drizzle: Drizzle,
-    method: string,
-    requestFactory: RequestFactory
-  ): CallAdapter<unknown, unknown> | null
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null
 }

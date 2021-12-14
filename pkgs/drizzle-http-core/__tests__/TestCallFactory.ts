@@ -1,12 +1,11 @@
 import { Blob } from 'buffer'
 import { Readable } from 'stream'
-import { request } from 'undici'
+import { request as Request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
 import { HttpMethod } from 'undici/types/dispatcher'
 import { HttpRequest } from '../HttpRequest'
 import { Call } from '../Call'
-import { CallProvider } from '../Call'
 import { CallFactory } from '../Call'
 import { HttpHeaders } from '../HttpHeaders'
 import { Drizzle } from '../Drizzle'
@@ -16,22 +15,16 @@ import { isAbsolute } from '../internal'
 import { RequestFactory } from '../RequestFactory'
 
 class TestCall implements Call<HttpResponse<Readable>> {
-  private readonly url: string
+  constructor(readonly baseUrl: URL) {}
 
-  constructor(readonly baseUrl: URL, readonly request: HttpRequest, readonly argv: unknown[]) {
-    if (!isAbsolute(this.request.url)) {
-      this.url = new URL(request.url, baseUrl.href).href
-    } else {
-      this.url = request.url
-    }
-  }
+  async execute(request: HttpRequest, argv: unknown[]): Promise<HttpResponse<Readable>> {
+    const url = !isAbsolute(request.url) ? new URL(request.url, this.baseUrl.href).href : request.url
 
-  async execute(): Promise<HttpResponse<Readable>> {
-    const res = await request(this.url, {
-      ...toRequest(this.url, this.request),
+    const res = await Request(url, {
+      ...toRequest(url, request),
       path: undefined as unknown as string
     } as RequestOptions)
-    return new TestDzResponse(this.url, res)
+    return new TestDzResponse(url, res)
   }
 }
 
@@ -42,10 +35,8 @@ export class TestCallFactory implements CallFactory {
     // no setup
   }
 
-  prepareCall(drizzle: Drizzle, _method: string, _requestFactory: RequestFactory): CallProvider {
-    return function (request, args) {
-      return new TestCall(new URL(drizzle.baseUrl()), request, args)
-    }
+  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<unknown> {
+    return new TestCall(new URL(drizzle.baseUrl()))
   }
 }
 

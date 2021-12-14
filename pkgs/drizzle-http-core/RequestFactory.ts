@@ -2,6 +2,7 @@ import { Drizzle } from './Drizzle'
 import { InvalidMethodConfigError } from './internal'
 import { notNull } from './internal'
 import { notBlank } from './internal'
+import { Ctor } from './internal'
 import { BodyType } from './BodyType'
 import { RequestBodyConverter } from './RequestBodyConverter'
 import { ApiGlobalParameters } from './ApiParameterization'
@@ -10,18 +11,13 @@ import { MediaTypes } from './MediaTypes'
 import { HttpHeaders } from './HttpHeaders'
 import { HttpRequest } from './HttpRequest'
 import { QueryParameter } from './builtin'
-import { FormParameterType } from './builtin'
-import { QueryNameParameterType } from './builtin'
 import { BodyParameter } from './builtin'
 import { PathParameter } from './builtin'
 import { FormParameter } from './builtin'
 import { ParameterHandler } from './builtin'
 import { QueryNameParameter } from './builtin'
-import { QueryParameterType } from './builtin'
 import { Parameter } from './builtin'
 import { HeaderParameter } from './builtin'
-import { PathParameterType } from './builtin'
-import { HeaderParameterType } from './builtin'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
@@ -51,6 +47,7 @@ export class RequestFactory {
     public parameterHandlers: ParameterHandler<Parameter, unknown>[] = [],
     public parameters: Parameter[] = [],
     public signal: unknown = null,
+    public returnType: Ctor | null = null,
     public noResponseConverter: boolean = false,
     public noResponseHandler: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
@@ -71,6 +68,7 @@ export class RequestFactory {
       [...other.parameterHandlers],
       [...other.parameters],
       other.signal,
+      other.returnType,
       other.noResponseConverter,
       other.noResponseHandler,
       other.bag,
@@ -212,7 +210,7 @@ export class RequestFactory {
       .sort((a, b) => a.index - b.index)
       .forEach(parameter => {
         const handlerFactory = drizzle.parameterHandlerFactory(this, parameter)
-        const handler = handlerFactory.parameterHandler(drizzle, this, parameter)
+        const handler = handlerFactory.provide(drizzle, this, parameter)
 
         this.parameterHandlers.push(handler)
       })
@@ -275,6 +273,11 @@ export class RequestFactory {
    */
   hasBody(): boolean {
     return this.bodyIndex > -1
+  }
+
+  returnTypeIsOfType(type: Ctor): boolean {
+    notNull(type)
+    return this.returnType instanceof type || this.returnType === type
   }
 
   /**
@@ -413,7 +416,7 @@ export class RequestFactory {
    * Return registered query parameters
    */
   getQueryParameters(): Array<QueryParameter> {
-    return [...(this.parameters.filter(x => x.type === QueryParameterType) as Array<QueryParameter>)]
+    return [...(this.parameters.filter(x => x.type === QueryParameter.Type) as Array<QueryParameter>)]
   }
 
   /**
@@ -427,7 +430,7 @@ export class RequestFactory {
    * Return registered query name parameters
    */
   getQueryNameParameters(): Array<QueryNameParameter> {
-    return [...(this.parameters.filter(x => x.type === QueryNameParameterType) as Array<QueryNameParameter>)]
+    return [...(this.parameters.filter(x => x.type === QueryNameParameter.Type) as Array<QueryNameParameter>)]
   }
 
   /**
@@ -441,7 +444,7 @@ export class RequestFactory {
    * Return registered form field parameters
    */
   getFormParameters(): Array<FormParameter> {
-    return [...(this.parameters.filter(x => x.type === FormParameterType) as Array<FormParameter>)]
+    return [...(this.parameters.filter(x => x.type === FormParameter.Type) as Array<FormParameter>)]
   }
 
   /**
@@ -455,7 +458,7 @@ export class RequestFactory {
    * Return registered path parameters
    */
   getPathParameters(): Array<PathParameter> {
-    return [...(this.parameters.filter(x => x.type === PathParameterType) as Array<PathParameter>)]
+    return [...(this.parameters.filter(x => x.type === PathParameter.Type) as Array<PathParameter>)]
   }
 
   /**
@@ -483,7 +486,7 @@ export class RequestFactory {
    * Return registered header parameters
    */
   getHeaderParameters(): Array<HeaderParameter> {
-    return [...(this.parameters.filter(x => x.type === HeaderParameterType) as Array<HeaderParameter>)]
+    return [...(this.parameters.filter(x => x.type === HeaderParameter.Type) as Array<HeaderParameter>)]
   }
 
   /**
@@ -574,8 +577,7 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       this.requestFactory.signal
     )
 
-    for (let i = 0; i < this.requestFactory.parameterHandlers.length; i++) {
-      const parameterHandler = this.requestFactory.parameterHandlers[i]
+    for (const parameterHandler of this.requestFactory.parameterHandlers) {
       parameterHandler.apply(requestParameterization, args[parameterHandler.parameter.index])
     }
 

@@ -1,12 +1,12 @@
-import { CallProvider } from './Call'
 import { Interceptor } from './Interceptor'
-import { HttpResponse } from './HttpResponse'
 import { Chain } from './Chain'
+import { HttpResponse } from './HttpResponse'
+import { Call } from './Call'
 
 export class InterceptorHttpExecutor implements Interceptor {
-  constructor(private readonly callProvider: CallProvider<HttpResponse>) {}
+  constructor(private readonly call: Call) {}
 
   intercept(chain: Chain): Promise<HttpResponse> {
-    return this.callProvider(chain.request(), chain.argv()).execute()
+    return this.call.execute(chain.request(), chain.argv())
   }
 }

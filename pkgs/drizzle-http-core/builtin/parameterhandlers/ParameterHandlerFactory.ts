@@ -4,7 +4,7 @@ import { Parameter } from './Parameter'
 import { ParameterHandler } from './ParameterHandler'
 
 export interface ParameterHandlerFactory<P extends Parameter, R> {
-  handledType(): string
+  forType(): string
 
-  parameterHandler(drizzle: Drizzle, requestFactory: RequestFactory, parameter: P): ParameterHandler<P, R>
+  provide(drizzle: Drizzle, requestFactory: RequestFactory, parameter: P): ParameterHandler<P, R>
 }

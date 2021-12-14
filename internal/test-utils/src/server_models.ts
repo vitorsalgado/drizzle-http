@@ -1,5 +1,3 @@
-import { IncomingHttpHeaders } from 'http'
-
 export class TestResult<T> {
   url!: string
   method!: string

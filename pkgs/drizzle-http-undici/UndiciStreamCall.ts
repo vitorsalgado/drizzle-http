@@ -85,21 +85,16 @@ export class HttpEmptyResponse implements HttpResponse<BodyType, Blob, never> {
 }
 
 export class UndiciStreamCall implements Call<HttpEmptyResponse> {
-  constructor(
-    private readonly client: Pool,
-    private readonly streamTo: number,
-    readonly request: HttpRequest,
-    readonly argv: unknown[]
-  ) {}
+  constructor(private readonly client: Pool, private readonly streamTo: number) {}
 
-  async execute(): Promise<HttpEmptyResponse> {
+  async execute(request: HttpRequest, argv: unknown[]): Promise<HttpEmptyResponse> {
     return new Promise<HttpEmptyResponse>((resolve, reject) => {
       const partial = {} as Record<string, unknown>
-      partial.url = this.request.url
-      const to = this.argv[this.streamTo] as Writable
+      partial.url = request.url
+      const to = argv[this.streamTo] as Writable
 
       this.client.stream(
-        toUndiciRequest(this.request),
+        toUndiciRequest(request),
         ({ statusCode, headers }) => {
           partial.status = statusCode
           partial.headers = headers
@@ -123,7 +118,7 @@ export class UndiciStreamCall implements Call<HttpEmptyResponse> {
             return resolve(response)
           }
 
-          return reject(new HttpError(this.request, response))
+          return reject(new HttpError(request, response))
         }
       )
     })

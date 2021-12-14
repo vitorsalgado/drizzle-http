@@ -8,12 +8,12 @@ const port = process.env.PORT || 3000
 const timeout = parseInt(process.env.TIMEOUT ?? '1', 10) || 1
 const data = readFileSync(Path.join('benchmarks', 'data', 'data.json'))
 
-createServer((_req: IncomingMessage, res: ServerResponse) => {
+createServer((_req: IncomingMessage, res: ServerResponse) =>
   setTimeout(function () {
-    res.writeHead(200, 'OK', { 'Content-Type': 'application/json;charset=utf-8' })
+    res.writeHead(200, 'OK', { 'Content-Type': 'application/json' })
     res.write(data, 'utf-8')
     res.end()
   }, timeout)
-})
+)
   .listen(port)
   .on('error', console.error)

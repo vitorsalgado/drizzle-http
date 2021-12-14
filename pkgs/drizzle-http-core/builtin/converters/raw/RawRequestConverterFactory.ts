@@ -7,11 +7,7 @@ import { RawRequestConverter } from './RawRequestConverter'
 export class RawRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: RawRequestConverterFactory = new RawRequestConverterFactory()
 
-  requestConverter(
-    _drizzle: Drizzle,
-    _method: string,
-    _requestInit: RequestFactory
-  ): RequestBodyConverter<unknown> | null {
+  provide(_drizzle: Drizzle, _method: string, _requestInit: RequestFactory): RequestBodyConverter<unknown> | null {
     return RawRequestConverter.INSTANCE
   }
 }

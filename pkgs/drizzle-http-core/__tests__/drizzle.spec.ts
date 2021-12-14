@@ -37,8 +37,6 @@ import { noop } from '../noop'
 import { FullResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { DrizzleBuilder, initDrizzleHttp } from '../DrizzleBuilder'
-import { Chain } from '../Chain'
-import { Interceptor } from '../Interceptor'
 import { Drizzle } from '../Drizzle'
 import { TestCallFactory } from './TestCallFactory'
 
@@ -477,56 +475,6 @@ describe('Drizzle Http', () => {
     })
   })
 
-  describe('when using interceptors', function () {
-    it('should execute the interceptor and apply changes to the request', function () {
-      expect.assertions(5)
-
-      @AsJSON()
-      @HeaderMap({ clazz: 'clazz' })
-      class InterceptorAPI {
-        @GET('/')
-        @HeaderMap({ method: 'method' })
-        @FullResponse()
-        test(@Header('param') param: string): Promise<HttpResponse> {
-          return noop(param)
-        }
-      }
-
-      const spy = jest.fn()
-      const value = 'interceptor-header-value'
-
-      class TestInterceptor implements Interceptor {
-        intercept(chain: Chain): Promise<HttpResponse> {
-          chain.request().headers.append('interceptor', value)
-          spy()
-          return chain.proceed(chain.request())
-        }
-      }
-
-      const d = initDrizzleHttp()
-        .baseUrl(address)
-        .callFactory(TestCallFactory.INSTANCE)
-        .addInterceptor(new TestInterceptor())
-        .build()
-
-      const api: InterceptorAPI = d.create(InterceptorAPI)
-
-      return api
-        .test('param')
-        .then(res => {
-          return res.json<TestResult<Ok>>()
-        })
-        .then(result => {
-          expect(result.headers.clazz).toEqual('clazz')
-          expect(result.headers.method).toEqual('method')
-          expect(result.headers.param).toEqual('param')
-          expect(result.headers.interceptor).toEqual(value)
-          expect(spy).toHaveBeenCalledTimes(1)
-        })
-        .finally(() => d.shutdown())
-    })
-  })
-
   describe('when two instances of same API class', function () {
     it('should create instance applying only new global values from Drizzle instance', async function () {
       const d = new DrizzleBuilder()
@@ -550,6 +498,25 @@ describe('Drizzle Http', () => {
       expect(original.headers['x-second-api']).toBeUndefined()
 
       await d.shutdown()
+    })
+  })
+
+  describe('when using an api instance from and abstract class', function () {
+    it('should be able to create api instances with abstract classes', async function () {
+      @Accept(MediaTypes.TEXT_PLAIN)
+      @ContentType(MediaTypes.TEXT_PLAIN)
+      abstract class AbstractApi {
+        @GET('/txt')
+        txt(): Promise<string> {
+          return noop()
+        }
+      }
+
+      const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
+      const absApi = d.create(AbstractApi)
+      const txt = await absApi.txt()
+
+      expect(txt).toEqual('ok')
     })
   })
 })
