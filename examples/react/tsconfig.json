@@ -6,9 +6,9 @@
     "sourceMap": true
   },
   "references": [
-    { "path": "../../pkgs/drizzle-http-core", "prepend": false },
-    { "path": "../../pkgs/drizzle-http-undici", "prepend": false },
-    { "path": "../../pkgs/drizzle-http-logging-interceptor", "prepend": false }
+    { "path": "../../pkgs/core", "prepend": false },
+    { "path": "../../pkgs/undici-http", "prepend": false },
+    { "path": "../../pkgs/logging-interceptor", "prepend": false }
   ],
   "include": ["http/"]
 }

@@ -8,7 +8,7 @@
     "module": "ESNext"
   },
   "references": [
-    { "path": "../../pkgs/drizzle-http-core", "prepend": false },
-    { "path": "../../pkgs/drizzle-http-undici", "prepend": false }
+    { "path": "../../pkgs/core", "prepend": false },
+    { "path": "../../pkgs/undici-http", "prepend": false }
   ]
 }

@@ -4,8 +4,7 @@
     "outDir": "./dist"
   },
   "references": [
-    { "path": "../drizzle-http-core", "prepend": false },
-    { "path": "../drizzle-http-undici", "prepend": false },
+    { "path": "../core", "prepend": false },
     { "path": "../../internal/test-utils", "prepend": false }
   ]
 }

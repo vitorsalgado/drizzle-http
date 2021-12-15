@@ -25,11 +25,11 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-opossum-circuit-breaker",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/opossum-circuit-breaker-adapter",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/drizzle-http-undici"
+    "directory": "pkgs/undici-http"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"

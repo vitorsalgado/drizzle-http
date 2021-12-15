@@ -13,8 +13,6 @@ const config: JestConfig.InitialOptions = {
   },
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
-    '**/pkgs/*/**/*.ts',
-    '!**/pkgs/*/**/*.js',
     '!**/bin/**',
     '!**/__mocks__/**',
     '!**/__tests__/**',
@@ -44,7 +42,7 @@ const config: JestConfig.InitialOptions = {
     '/out/',
     'internal/*',
     'scripts/*',
-    'pkgs/drizzle-http-fetch'
+    'pkgs/fetch'
   ]
 }
 

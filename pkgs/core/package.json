@@ -1,7 +1,7 @@
 {
-  "name": "@drizzle-http/undici",
+  "name": "@drizzle-http/core",
   "version": "2.2.0",
-  "description": "Undici HTTP client for Drizzle-Http",
+  "description": "Drizzle-Http core module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -24,11 +24,11 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-undici",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/drizzle-http-undici"
+    "directory": "pkgs/core"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -38,9 +38,5 @@
     "undici",
     "http",
     "api"
-  ],
-  "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
-    "undici": "^4.12.0"
-  }
+  ]
 }

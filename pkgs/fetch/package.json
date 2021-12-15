@@ -1,51 +1,49 @@
 {
-  "name": "@drizzle-http/logging-interceptor",
+  "name": "@drizzle-http/fetch",
   "version": "2.2.0",
-  "description": "Logging Interceptor for Drizzle-HTTP",
+  "description": "Browser Fetch HTTP client for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "test": "jest --detectOpenHandles",
+    "webpack:server-dev": "webpack server --config build/webpack.config.cjs",
+    "test:e2e:prepare": "npx playwright install-deps && npx playwright install",
+    "test:e2e": "playwright test",
+    "build": "rm -rf dist && tsc --build --force tsconfig.build.json",
     "lint": "eslint --fix --ext .ts .",
     "prettier": "prettier './**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
-  "engines": {
-    "node": ">=12.4.0"
-  },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
+  "engines": {
+    "node": ">=12.4.0"
+  },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-logging-interceptor",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/fetch",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/drizzle-http-logging-interceptor"
+    "directory": "pkgs/fetch"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",
-    "interceptor",
-    "pino",
-    "logger",
-    "log",
+    "fetch",
+    "browser",
     "http",
-    "api",
-    "debug"
+    "api"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
-    "pino": "^7.5.1",
-    "pino-pretty": "^7.3.0"
+    "@drizzle-http/core": "^2.2.0"
   }
 }

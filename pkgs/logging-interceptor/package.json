@@ -1,7 +1,7 @@
 {
-  "name": "@drizzle-http/rxjs-adapter",
+  "name": "@drizzle-http/logging-interceptor",
   "version": "2.2.0",
-  "description": "RxJs call adapter for Drizzle-HTTP",
+  "description": "Logging Interceptor for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -24,27 +24,28 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/drizzle-http-rxjs-adapter",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/logging-interceptor",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/drizzle-http-rxjs-adapter"
+    "directory": "pkgs/logging-interceptor"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",
-    "rxjs",
-    "rx",
-    "reactive",
+    "interceptor",
+    "pino",
+    "logger",
+    "log",
     "http",
-    "http client",
     "api",
-    "typescript"
+    "debug"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "rxjs": "^7.4.0"
+    "pino": "^7.5.1",
+    "pino-pretty": "^7.3.0"
   }
 }

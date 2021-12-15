@@ -1,7 +1,7 @@
 {
-  "name": "@drizzle-http/core",
+  "name": "@drizzle-http/rxjs-adapter",
   "version": "2.2.0",
-  "description": "Drizzle-Http core module",
+  "description": "RxJs call adapter for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -24,19 +24,27 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/rxjs-adapter",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/drizzle-http-core"
+    "directory": "pkgs/rxjs-adapter"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",
-    "undici",
+    "rxjs",
+    "rx",
+    "reactive",
     "http",
-    "api"
-  ]
+    "http client",
+    "api",
+    "typescript"
+  ],
+  "dependencies": {
+    "@drizzle-http/core": "^2.2.0",
+    "rxjs": "^7.4.0"
+  }
 }

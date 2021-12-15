@@ -9,8 +9,7 @@ paths-ignore:
   - node_modules
   - pkgs/**/node_modules
   - pkgs/**/dist
-  - pkgs/clinic
-  - pkgs/test-utils
+  - internal
   - benchmarks
   - examples
   - scripts
