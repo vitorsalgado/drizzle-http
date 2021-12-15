@@ -3,4 +3,4 @@
 export type AbstractCtor = abstract new (...args: any[]) => any
 export type Ctor = new (...args: any[]) => any
 
-export type Mixin<T = object> = Ctor | AbstractCtor
+export type Mixin = Ctor | AbstractCtor

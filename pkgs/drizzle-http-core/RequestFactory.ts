@@ -2,7 +2,6 @@ import { Drizzle } from './Drizzle'
 import { InvalidMethodConfigError } from './internal'
 import { notNull } from './internal'
 import { notBlank } from './internal'
-import { Ctor } from './internal'
 import { BodyType } from './BodyType'
 import { RequestBodyConverter } from './RequestBodyConverter'
 import { ApiGlobalParameters } from './ApiParameterization'
@@ -47,7 +46,6 @@ export class RequestFactory {
     public parameterHandlers: ParameterHandler<Parameter, unknown>[] = [],
     public parameters: Parameter[] = [],
     public signal: unknown = null,
-    public returnType: Ctor | null = null,
     public noResponseConverter: boolean = false,
     public noResponseHandler: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
@@ -68,7 +66,6 @@ export class RequestFactory {
       [...other.parameterHandlers],
       [...other.parameters],
       other.signal,
-      other.returnType,
       other.noResponseConverter,
       other.noResponseHandler,
       other.bag,
@@ -273,11 +270,6 @@ export class RequestFactory {
    */
   hasBody(): boolean {
     return this.bodyIndex > -1
-  }
-
-  returnTypeIsOfType(type: Ctor): boolean {
-    notNull(type)
-    return this.returnType instanceof type || this.returnType === type
   }
 
   /**
