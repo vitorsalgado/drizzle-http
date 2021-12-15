@@ -24,11 +24,7 @@ const config: JestConfig.InitialOptions = {
     '!**/out/**',
     '!scripts/*'
   ],
-  coveragePathIgnorePatterns: [
-    'drizzle-http-fetch/src/test',
-    'drizzle-http-core/src/internal/net/http/test',
-    '/node_modules/'
-  ],
+  coveragePathIgnorePatterns: ['/node_modules/'],
   modulePathIgnorePatterns: [
     'dist',
     'dist-*',
@@ -38,7 +34,7 @@ const config: JestConfig.InitialOptions = {
     'pkgs/.*/dist',
     'pkgs/.*/out',
     'pkgs/.*/tsconfig.*',
-    'pkgs/clinic/*'
+    'internal/*'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -46,9 +42,9 @@ const config: JestConfig.InitialOptions = {
     '/examples/',
     '/dist/',
     '/out/',
-    '/pkgs/.*/dist',
-    'pkgs/clinic/*',
-    '/scripts/'
+    'internal/*',
+    'scripts/*',
+    'pkgs/drizzle-http-fetch'
   ]
 }
 
