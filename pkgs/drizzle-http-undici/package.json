@@ -41,6 +41,6 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "undici": "^4.11.3"
+    "undici": "^4.12.0"
   }
 }
