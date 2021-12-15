@@ -1,6 +1,6 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { RequestFactory } from '../../../../RequestFactory'
-import MediaTypes from '../../../../MediaTypes'
+import { MediaTypes } from '../../../../MediaTypes'
 import { DrizzleBuilder, initDrizzleHttp } from '../../../../DrizzleBuilder'
 import { Body, ContentType, POST } from '../../../../decorators'
 import { GET } from '../../../../decorators'

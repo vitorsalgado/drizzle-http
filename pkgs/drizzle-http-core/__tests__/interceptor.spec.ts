@@ -11,7 +11,6 @@ import { FullResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { noop } from '../noop'
 import { initDrizzleHttp } from '../DrizzleBuilder'
-import { Drizzle } from '../Drizzle'
 import { TestCallFactory } from './TestCallFactory'
 
 @AsJSON()
@@ -26,7 +25,6 @@ class InterceptorAPI {
 }
 
 describe('when using interceptors', function () {
-  let drizzle: Drizzle
   let address = ''
 
   beforeAll(() => {
@@ -43,7 +41,6 @@ describe('when using interceptors', function () {
 
   afterAll(async () => {
     await closeTestServer()
-    await drizzle.shutdown()
   })
 
   it('should execute the interceptor and apply changes to the request', function () {

@@ -10,8 +10,8 @@ import { UndiciCallFactory } from '@drizzle-http/undici'
 import { closeTestServer } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
-import CircuitBreaker from 'opossum'
-import { UseCircuitBreaker } from '../decorators'
+import OpossumCircuitBreaker from 'opossum'
+import { CircuitBreaker } from '../decorators'
 import { Fallback } from '../decorators'
 import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
 import { CircuitBreakerCallAdapterFactory } from '../CircuitBreakerCallAdapterFactory'
@@ -30,7 +30,7 @@ class API {
   }
 
   @GET('/circuit-breaker/{id}')
-  @UseCircuitBreaker({
+  @CircuitBreaker({
     name: undefined,
     group: 'nice-group'
   })
@@ -43,26 +43,26 @@ class API {
   }
 
   @GET('/long-running')
-  @UseCircuitBreaker({ ...opts })
+  @CircuitBreaker({ ...opts })
   longRunning(): Promise<{ ok: boolean }> {
     return noop()
   }
 
   @GET('/long-running')
-  @UseCircuitBreaker({ ...opts })
+  @CircuitBreaker({ ...opts })
   fallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
     return noop(filter, page)
   }
 
   @GET('/long-running')
-  @UseCircuitBreaker({ ...opts })
+  @CircuitBreaker({ ...opts })
   @Fallback('custom')
   differentFallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
     return noop(filter, page)
   }
 
   @GET('/long-running')
-  @UseCircuitBreaker({ ...opts })
+  @CircuitBreaker({ ...opts })
   @Fallback(async (filter: string, page: string, error: Error): Promise<{ ok: string }> => {
     expect(Array.isArray(filter)).toBeFalsy()
     expect(filter).toBeDefined()
@@ -110,7 +110,7 @@ class Fallbacks {
 
 describe('Circuit Breaker', function () {
   const srvSpy = jest.fn()
-  const options: CircuitBreaker.Options = {}
+  const options: OpossumCircuitBreaker.Options = {}
   const registry = new CircuitBreakerRegistry()
 
   let address = ''
@@ -169,7 +169,7 @@ describe('Circuit Breaker', function () {
   it('should use method to name circuit breaker when none is specified', async function () {
     class DefaultName {
       @GET('/circuit-breaker/{id}')
-      @UseCircuitBreaker()
+      @CircuitBreaker()
       defaultName(@Param('id') id: string): Promise<unknown> {
         return noop(id)
       }
@@ -196,13 +196,13 @@ describe('Circuit Breaker', function () {
   it('should fail when circuit breaker name is repeated', function () {
     class RepeatedNameApi {
       @GET('/')
-      @UseCircuitBreaker({ name: 'test' })
+      @CircuitBreaker({ name: 'test' })
       test1(): Promise<unknown> {
         return noop()
       }
 
       @GET('/')
-      @UseCircuitBreaker({ name: 'test' })
+      @CircuitBreaker({ name: 'test' })
       test2(): Promise<unknown> {
         return noop()
       }
@@ -288,7 +288,7 @@ describe('Circuit Breaker', function () {
     it('should fail when function ', function () {
       class StringRefWithoutFallbacksClazzApi {
         @GET('/')
-        @UseCircuitBreaker()
+        @CircuitBreaker()
         @Fallback('someMethod')
         test(): Promise<unknown> {
           return noop()
@@ -312,7 +312,7 @@ describe('Circuit Breaker', function () {
     it("should fail when method specified on @Fallback() doesn't exists in the fallbacks instance provided in the factory", function () {
       class NoMethod {
         @GET('/')
-        @UseCircuitBreaker()
+        @CircuitBreaker()
         @Fallback('nonexistent')
         test(): Promise<unknown> {
           return noop()
@@ -337,7 +337,7 @@ describe('Circuit Breaker', function () {
     it('should fail when method specified on @Fallback() is not a function', function () {
       class NoMethod {
         @GET('/')
-        @UseCircuitBreaker()
+        @CircuitBreaker()
         @Fallback('prop')
         test(): Promise<unknown> {
           return noop()
@@ -363,7 +363,7 @@ describe('Circuit Breaker', function () {
   it('should init with default values', async function () {
     class Def {
       @GET('/')
-      @UseCircuitBreaker({ name: 'test' })
+      @CircuitBreaker({ name: 'test' })
       test(): Promise<unknown> {
         return noop()
       }

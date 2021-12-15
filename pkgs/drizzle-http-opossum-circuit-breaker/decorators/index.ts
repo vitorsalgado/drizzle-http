@@ -1,2 +1,2 @@
 export * from './Fallback'
-export * from './UseCircuitBreaker'
+export * from './CircuitBreaker'

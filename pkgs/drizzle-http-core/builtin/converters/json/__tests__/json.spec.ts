@@ -1,4 +1,4 @@
-import MediaTypes from '../../../../MediaTypes'
+import { MediaTypes } from '../../../../MediaTypes'
 import { RequestFactory } from '../../../../RequestFactory'
 import { DrizzleBuilder } from '../../../../DrizzleBuilder'
 import {

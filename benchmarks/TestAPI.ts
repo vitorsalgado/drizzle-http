@@ -11,7 +11,7 @@ import { HttpResponse } from '@drizzle-http/core'
 import { Streaming } from '@drizzle-http/undici'
 import { StreamTo } from '@drizzle-http/undici'
 import { Writable } from 'stream'
-import { UseCircuitBreaker } from '@drizzle-http/opossum-circuit-breaker'
+import { CircuitBreaker } from '@drizzle-http/opossum-circuit-breaker'
 
 @ContentType(MediaTypes.APPLICATION_JSON)
 export class TestAPI {
@@ -31,7 +31,7 @@ export class TestAPI {
   }
 
   @POST('/{id}')
-  @UseCircuitBreaker()
+  @CircuitBreaker()
   postCb(
     @Param('id') _id: string,
     @Query('filter') _filter: string,

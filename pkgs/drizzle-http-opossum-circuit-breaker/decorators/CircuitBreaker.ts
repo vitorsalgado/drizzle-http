@@ -1,8 +1,8 @@
-import CircuitBreaker from 'opossum'
+import OpossumCircuitBreaker from 'opossum'
 import { setupApiMethod } from '@drizzle-http/core'
 import { Keys } from '../Keys'
 
-export function UseCircuitBreaker(options: CircuitBreaker.Options = {}) {
+export function CircuitBreaker(options: OpossumCircuitBreaker.Options = {}) {
   return function (target: object, method: string): void {
     const opts = { ...options }
 
