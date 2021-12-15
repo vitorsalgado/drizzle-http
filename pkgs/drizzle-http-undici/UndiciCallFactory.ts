@@ -10,7 +10,7 @@ import { Keys } from './Keys'
 import { UndiciResponse } from './UndiciResponse'
 
 export class UndiciCallFactory implements CallFactory {
-  private _pool!: Pool
+  private _pool?: Pool
   private readonly _options?: Pool.Options
 
   constructor(opts?: Pool.Options) {
@@ -20,18 +20,12 @@ export class UndiciCallFactory implements CallFactory {
   setup(drizzle: Drizzle): void {
     this._pool = new Pool(new URL(drizzle.baseUrl()).origin, this._options)
 
-    drizzle.registerShutdownHook(async () => {
-      if (this._pool !== null) {
-        await this._pool.close()
-      }
-    })
+    drizzle.registerShutdownHook(async () => await this._pool?.close())
   }
 
   provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
-    const pool = this._pool
-
-    if (pool === null) {
-      throw new TypeError('Undici Pool must not be null.')
+    if (!this._pool) {
+      throw new Error('Undici pool must not be null or undefined.')
     }
 
     if (requestFactory.getConfig(Keys.ConfigIsStream)) {
@@ -44,7 +38,7 @@ export class UndiciCallFactory implements CallFactory {
         )
       }
 
-      return new UndiciStreamCall(pool, streamToIndex)
+      return new UndiciStreamCall(this._pool, streamToIndex)
     } else {
       const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
@@ -56,6 +50,6 @@ export class UndiciCallFactory implements CallFactory {
       }
     }
 
-    return new UndiciCall(pool)
+    return new UndiciCall(this._pool)
   }
 }
