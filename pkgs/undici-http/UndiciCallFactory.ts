@@ -17,6 +17,10 @@ export class UndiciCallFactory implements CallFactory {
     this._options = opts
   }
 
+  pool(): Pool | undefined {
+    return this._pool
+  }
+
   setup(drizzle: Drizzle): void {
     this._pool = new Pool(new URL(drizzle.baseUrl()).origin, this._options)
 

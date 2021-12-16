@@ -22,8 +22,11 @@ import { AsJSON } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { FullResponse } from '@drizzle-http/core'
 import { HttpError } from '@drizzle-http/core'
-import { Streaming, StreamTo, UndiciCallFactory, UndiciOptionsBuilder } from '..'
-import { HttpEmptyResponse } from '..'
+import { Streaming } from '../UndiciStreamCall'
+import { HttpEmptyResponse } from '../UndiciStreamCall'
+import { StreamTo } from '../UndiciStreamCall'
+import { UndiciCallFactory } from '../UndiciCallFactory'
+import { UndiciOptionsBuilder } from '../UndiciOptionsBuilder'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()
@@ -304,5 +307,14 @@ describe('Undici Call', function () {
       .build()
 
     await drizzle.shutdown()
+  })
+
+  it('should expose pool from factory', async function () {
+    const factory = new UndiciCallFactory()
+    factory.setup(drizzle)
+
+    expect(factory.pool()).toBeDefined()
+
+    await factory.pool()?.close()
   })
 })
