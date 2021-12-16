@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../core", "prepend": false },
+    { "path": "../undici-http", "prepend": false },
+    { "path": "../../internal/test-utils", "prepend": false }
+  ]
+}
