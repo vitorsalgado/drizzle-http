@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@DELETE('/relative/path/to/:id')
  *  example(\@Param('id') entryId: string): Promise<Result>
  */
-export const DELETE = (path: string) => decorateWithHttpMethod('DELETE', path)
+export const DELETE = (path: string) => decorateWithHttpMethod(DELETE, 'DELETE', path)

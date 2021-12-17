@@ -1,9 +1,10 @@
 import { CallAdapter } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
+import { Internals } from '@drizzle-http/core'
 
 export class MapToCallAdapter<F, T> implements CallAdapter<F, Promise<T>> {
-  constructor(private readonly Type: new (...args: any[]) => T, private readonly mapper?: Function) {}
+  constructor(private readonly Type: Internals.Class, private readonly mapper?: Function) {}
 
   adapt(call: Call<F>): (request: HttpRequest, argv: unknown[]) => Promise<T> {
     return (request, argv) =>

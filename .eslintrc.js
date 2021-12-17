@@ -29,11 +29,17 @@ module.exports = {
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': ['error'],
 
-    '@typescript-eslint/ban-types': ['warn'],
+    '@typescript-eslint/ban-types': ['off'],
     '@typescript-eslint/no-inferrable-types': ['off'],
 
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['warn', { classes: false, functions: false }],
+    '@typescript-eslint/no-use-before-define': [
+      'warn',
+      {
+        classes: false,
+        functions: false
+      }
+    ],
 
     'import/order': [
       'error',

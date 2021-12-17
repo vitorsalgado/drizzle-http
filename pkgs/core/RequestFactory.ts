@@ -2,9 +2,10 @@ import { Drizzle } from './Drizzle'
 import { InvalidMethodConfigError } from './internal'
 import { notNull } from './internal'
 import { notBlank } from './internal'
+import { isFunction } from './internal'
 import { BodyType } from './BodyType'
 import { RequestBodyConverter } from './RequestBodyConverter'
-import { ApiGlobalParameters } from './ApiParameterization'
+import { ApiDefaults } from './ApiParameterization'
 import { RequestParameterization } from './RequestParameterization'
 import { MediaTypes } from './MediaTypes'
 import { HttpHeaders } from './HttpHeaders'
@@ -42,14 +43,14 @@ export class RequestFactory {
     public defaultHeaders: HttpHeaders = new HttpHeaders(),
     public readTimeout: number | undefined = undefined,
     public connectTimeout: number | undefined = undefined,
-    public returnIdentifier: string | null = '',
     public parameterHandlers: ParameterHandler<Parameter, unknown>[] = [],
     public parameters: Parameter[] = [],
     public signal: unknown = null,
     public noResponseConverter: boolean = false,
     public noResponseHandler: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
-    private preProcessed: boolean = false
+    private preProcessed: boolean = false,
+    private readonly decorators: Function[] = []
   ) {}
 
   static copyFrom(other: RequestFactory): RequestFactory {
@@ -62,14 +63,14 @@ export class RequestFactory {
       new HttpHeaders(Array.from(other.defaultHeaders.entries())),
       other.readTimeout,
       other.connectTimeout,
-      other.returnIdentifier,
       [...other.parameterHandlers],
       [...other.parameters],
       other.signal,
       other.noResponseConverter,
       other.noResponseHandler,
-      other.bag,
-      other.preProcessed
+      new Map<string, unknown>(other.bag),
+      other.preProcessed,
+      [...other.decorators]
     )
   }
 
@@ -217,31 +218,31 @@ export class RequestFactory {
 
   /**
    * Merge current {@link RequestFactory} instance with values from
-   * {@link ApiGlobalParameters}.
+   * {@link ApiDefaults}.
    * This will only replace undefined values in RequestFactory.
    *
-   * @param instanceMeta - instance with default values for all methods
+   * @param defaults - instance with default values for all methods
    */
-  mergeWithInstanceMeta(instanceMeta: ApiGlobalParameters): void {
-    if (instanceMeta === null || typeof instanceMeta === 'undefined') {
+  mergeWithApiDefaults(defaults: ApiDefaults): void {
+    if (defaults === null || typeof defaults === 'undefined') {
       return
     }
 
-    this.defaultHeaders.merge(instanceMeta.defaultHeaders)
+    this.defaultHeaders.merge(defaults.headers)
 
     if (this.readTimeout === null || typeof this.readTimeout === 'undefined') {
-      this.readTimeout = instanceMeta.readTimeout
+      this.readTimeout = defaults.readTimeout
     }
 
     if (this.connectTimeout === null || typeof this.connectTimeout === 'undefined') {
-      this.connectTimeout = instanceMeta.connectTimeout
+      this.connectTimeout = defaults.connectTimeout
     }
 
     if (this.signal === null || typeof this.signal === 'undefined') {
-      this.signal = instanceMeta.signal
+      this.signal = defaults.signal
     }
 
-    const p = instanceMeta.getPath()
+    const p = defaults.path
 
     if (p) {
       if (this.path.startsWith('/')) {
@@ -250,6 +251,8 @@ export class RequestFactory {
         this.path = p + '/' + this.path
       }
     }
+
+    this.decorators.push(...defaults.decorators)
   }
 
   /**
@@ -270,6 +273,31 @@ export class RequestFactory {
    */
   hasBody(): boolean {
     return this.bodyIndex > -1
+  }
+
+  /**
+   * Register a method decorator.  It is not required to register all decorators.
+   *
+   * @param decorator - decorator function reference
+   */
+  registerDecorator(decorator: Function): void {
+    notNull(decorator)
+    isFunction(decorator)
+
+    this.decorators.push(decorator)
+  }
+
+  /**
+   * Check if provided decorator was registered.
+   *
+   * @param decorator - decorator function reference
+   * @returns boolean
+   */
+  hasDecorator(decorator: Function): boolean {
+    notNull(decorator)
+    isFunction(decorator)
+
+    return this.decorators.some(x => x === decorator)
   }
 
   /**
@@ -351,16 +379,6 @@ export class RequestFactory {
    */
   hasHeaderWithValue(key: string, value: string | string[]): boolean {
     return this.defaultHeaders.get(key) === value
-  }
-
-  /**
-   * Validate the return type identifier.
-   * Used when unable to identify the return type of api function and return type is set via a string identifier.
-   *
-   * @param identifier - return type identifier
-   */
-  isReturnIdentifier(identifier: string): boolean {
-    return this.returnIdentifier === identifier
   }
 
   /**

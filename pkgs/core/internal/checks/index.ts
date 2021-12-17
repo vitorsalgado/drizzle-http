@@ -1,3 +1,4 @@
+export * from './isFunction'
 export * from './isTrue'
 export * from './noNullElements'
 export * from './notBlank'

@@ -1,4 +1,4 @@
-import { setupApiMethod } from '../ApiParameterization'
+import { createParameterDecorator } from '../ApiParameterization'
 import { QueryNameParameter } from '../builtin'
 
 /**
@@ -14,13 +14,7 @@ import { QueryNameParameter } from '../builtin'
  *
  */
 export function QueryName() {
-  return function QueryName(target: object, method: string, index: number): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new QueryNameParameter(index)))
-  }
+  return createParameterDecorator(QueryName, ctx =>
+    ctx.requestFactory.addParameter(new QueryNameParameter(ctx.parameterIndex))
+  )
 }
-
-/**
- * Shorthand version of {@link QueryName} decorator.
- * The value will be encoded by default.
- */
-export const Qn = QueryName

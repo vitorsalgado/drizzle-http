@@ -6,12 +6,13 @@ import { Body, ContentType, POST } from '../../../../decorators'
 import { GET } from '../../../../decorators'
 import { HttpResponse } from '../../../../HttpResponse'
 import {
-  FullResponse,
   RawRequestConverter,
   RawRequestConverterFactory,
+  RawResponse,
   RawResponseConverter,
   RawResponseConverterFactory
 } from '..'
+import { RawRequest } from '..'
 import { noop } from '../../../../noop'
 import { HttpHeaders } from '../../../../HttpHeaders'
 import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
@@ -19,14 +20,14 @@ import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
 class API {
   @POST('/raw-test')
   @ContentType(MediaTypes.TEXT_PLAIN)
-  @FullResponse()
+  @RawResponse()
   test(@Body() data: string): Promise<HttpResponse> {
     return noop(data)
   }
 
   @GET('/nowhere')
   @ContentType(MediaTypes.TEXT_PLAIN)
-  @FullResponse()
+  @RawResponse()
   nowhere(): Promise<HttpResponse> {
     return noop()
   }
@@ -69,7 +70,7 @@ describe('Raw Converter', function () {
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
-    requestFactory.returnIdentifier = 'raw'
+    requestFactory.registerDecorator(RawResponse)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -100,7 +101,7 @@ describe('Raw Converter', function () {
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
-    requestFactory.returnIdentifier = 'raw'
+    requestFactory.registerDecorator(RawRequest)
 
     requestFactory.preProcessAndValidate(drizzle)
 

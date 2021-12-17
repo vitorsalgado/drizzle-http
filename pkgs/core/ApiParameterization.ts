@@ -1,36 +1,25 @@
 import { RequestFactory } from './RequestFactory'
 import { HttpHeaders } from './HttpHeaders'
 import { notNull } from './internal'
+import { isFunction } from './internal'
 
-type ApiConstructorType = Function
-type TargetType = ApiConstructorType | object
+type ConstructorTargetType = Function
+type TargetType = ConstructorTargetType | object
 
-export class ApiGlobalParameters {
-  defaultHeaders: HttpHeaders
-  readTimeout?: number
-  connectTimeout?: number
-  signal: unknown | null
-  private path?: string
+export class ApiDefaults {
+  private _path: string = ''
 
-  constructor() {
-    this.path = undefined
-    this.defaultHeaders = new HttpHeaders({})
-    this.connectTimeout = undefined
-    this.readTimeout = undefined
-    this.signal = null
+  decorators: Function[] = []
+  headers: HttpHeaders = new HttpHeaders({})
+  readTimeout: number | undefined = undefined
+  connectTimeout: number | undefined = undefined
+  signal: unknown | null = null
+
+  get path(): string {
+    return this._path
   }
 
-  /**
-   * Utility to add default params
-   * Use it in decorators
-   *
-   * @param value - params object
-   */
-  addDefaultHeaders(value: Record<string, string>): void {
-    this.defaultHeaders.mergeObject(value)
-  }
-
-  setPath(value: string): void {
+  set path(value: string) {
     notNull(value, 'Parameter "value" cannot be null.')
 
     if (!value.startsWith('/')) {
@@ -41,23 +30,19 @@ export class ApiGlobalParameters {
       value = value.substring(0, value.length - 1)
     }
 
-    this.path = value
-  }
-
-  getPath(): string | undefined {
-    return this.path
+    this._path = value
   }
 }
 
 interface Data {
-  meta: ApiGlobalParameters
+  meta: ApiDefaults
   requestFactories: Map<string, RequestFactory>
 }
 
-class ApiInternalParameterization {
-  private readonly _entries: Map<ApiConstructorType, Data> = new Map()
+class ApiMethodParameterization {
+  private readonly _entries: Map<ConstructorTargetType, Data> = new Map()
 
-  provideApiGlobalParameters(target: TargetType): ApiGlobalParameters {
+  provideApiDefaults(target: TargetType): ApiDefaults {
     return this.getParametersDb(target).meta
   }
 
@@ -73,7 +58,7 @@ class ApiInternalParameterization {
     return requestFactory
   }
 
-  registerApiMethod(target: ApiConstructorType, method: string): void {
+  registerApiMethod(target: ConstructorTargetType, method: string): void {
     const data = this.getParametersDb(target)
 
     if (!data.requestFactories.has(method)) {
@@ -81,11 +66,7 @@ class ApiInternalParameterization {
     }
   }
 
-  parameterization(): Map<ApiConstructorType, Data> {
-    return this._entries
-  }
-
-  parameterizationForTarget(api: ApiConstructorType): Data {
+  parameterizationForTarget(api: ConstructorTargetType): Data {
     const data = this._entries.get(api)
 
     if (!data) {
@@ -95,10 +76,6 @@ class ApiInternalParameterization {
     return data
   }
 
-  removeParameterizationFromTarget(target: ApiConstructorType): void {
-    this._entries.delete(target)
-  }
-
   private getParametersDb(target: TargetType): Data {
     const arg = typeof target === 'function' ? target : target.constructor
 
@@ -106,7 +83,7 @@ class ApiInternalParameterization {
 
     if (!data) {
       data = {
-        meta: new ApiGlobalParameters(),
+        meta: new ApiDefaults(),
         requestFactories: new Map()
       }
 
@@ -117,22 +94,107 @@ class ApiInternalParameterization {
   }
 }
 
-const ApiParameterization = new ApiInternalParameterization()
+const ApiParameterization = new ApiMethodParameterization()
 
-export { ApiParameterization }
-
-export function setupApiInstance(target: TargetType, callback: (parameters: ApiGlobalParameters) => void): void {
-  callback(ApiParameterization.provideApiGlobalParameters(target))
+export function registerApiMethod(target: ConstructorTargetType, method: string): void {
+  return ApiParameterization.registerApiMethod(target, method)
 }
 
-export function setupApiMethod(
+export function parameterizationForTarget(target: ConstructorTargetType): Data {
+  return ApiParameterization.parameterizationForTarget(target)
+}
+
+export function setupClassDecorator(
+  decorator: Function,
+  target: TargetType,
+  callback?: (parameters: ApiDefaults) => void
+): void {
+  const defaults = ApiParameterization.provideApiDefaults(target)
+  defaults.decorators.push(decorator)
+
+  callback?.(defaults)
+}
+
+export function setupMethodOrParameterDecorator(
+  decorator: Function,
   target: TargetType,
   method: string,
-  callback: (requestFactory: RequestFactory) => void
+  callback?: (requestFactory: RequestFactory) => void
 ): void {
-  callback(ApiParameterization.provideRequestFactory(target, method))
+  const requestFactory = ApiParameterization.provideRequestFactory(target, method)
+  requestFactory.registerDecorator(decorator)
+
+  callback?.(requestFactory)
 }
 
 export function getRequestFactoryForMethod(target: TargetType, method: string): RequestFactory {
   return ApiParameterization.provideRequestFactory(target, method)
+}
+
+export interface ClassDecoratorContext {
+  target: Function
+  defaults: ApiDefaults
+}
+
+export function createClassDecorator(decorator: Function, configurer?: (ctx: ClassDecoratorContext) => void) {
+  isFunction(decorator)
+
+  return function (target: Function) {
+    const defaults = ApiParameterization.provideApiDefaults(target)
+    defaults.decorators.push(decorator)
+
+    configurer?.({
+      target,
+      defaults
+    })
+  }
+}
+
+export interface MethodDecoratorContext<T = unknown> {
+  target: object
+  method: string
+  descriptor: TypedPropertyDescriptor<T>
+  requestFactory: RequestFactory
+}
+
+export function createMethodDecorator<T = any>(
+  decorator: Function,
+  configurer?: (ctx: MethodDecoratorContext<T>) => void
+) {
+  isFunction(decorator)
+
+  return function (target: object, method: string, descriptor: TypedPropertyDescriptor<T>): void {
+    const requestFactory = ApiParameterization.provideRequestFactory(target, method)
+    requestFactory.registerDecorator(decorator)
+
+    configurer?.({
+      target,
+      method,
+      descriptor,
+      requestFactory
+    })
+  }
+}
+
+export interface ParameterDecoratorContext {
+  target: object
+  method: string
+  parameterIndex: number
+  requestFactory: RequestFactory
+}
+
+export function createParameterDecorator(decorator: Function, configurer?: (ctx: ParameterDecoratorContext) => void) {
+  isFunction(decorator)
+
+  return function (target: object, method: string, parameterIndex: number) {
+    const requestFactory = ApiParameterization.provideRequestFactory(target, method)
+    requestFactory.registerDecorator(decorator)
+
+    configurer?.({
+      target,
+      method,
+      parameterIndex,
+      requestFactory
+    })
+  }
 }

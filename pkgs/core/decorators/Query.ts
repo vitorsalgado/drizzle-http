@@ -1,4 +1,4 @@
-import { setupApiMethod } from '../ApiParameterization'
+import { createParameterDecorator } from '../ApiParameterization'
 import { QueryParameter } from '../builtin'
 
 /**
@@ -12,13 +12,7 @@ import { QueryParameter } from '../builtin'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function Query(key: string) {
-  return function (target: object, method: string, index: number): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new QueryParameter(key, index)))
-  }
+  return createParameterDecorator(Query, ctx =>
+    ctx.requestFactory.addParameter(new QueryParameter(key, ctx.parameterIndex))
+  )
 }
-
-/**
- * Shorthand version of {@link Query} decorator.
- * This decorator will use the method parameter name as the key and will be encoded by default.
- */
-export const Q = Query

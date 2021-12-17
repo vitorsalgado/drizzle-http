@@ -1,15 +1,17 @@
 import { InvalidMethodConfigError } from '../../internal'
-import { RequestFactory } from '../../RequestFactory'
-import { ApiParameterization } from '../../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../../ApiParameterization'
+import { registerApiMethod } from '../../ApiParameterization'
 import { HttpMethod } from './HttpMethod'
 
 /**
  * Configure a method to perform an HTTP request
  *
+ * @param decorator - method decorator
  * @param httpMethod - HTTP verb of the request
  * @param path - request path that will be concatenated with the base url
  */
 export function decorateWithHttpMethod(
+  decorator: Function,
   httpMethod: HttpMethod,
   path = '/'
 ): (target: object, method: string, descriptor: PropertyDescriptor) => void {
@@ -18,13 +20,13 @@ export function decorateWithHttpMethod(
       throw new InvalidMethodConfigError(method, 'Path must start with a /')
     }
 
-    ApiParameterization.registerApiMethod(target.constructor, method)
+    registerApiMethod(target.constructor, method)
 
-    const requestFactory: RequestFactory = ApiParameterization.provideRequestFactory(target, method)
-
-    requestFactory.method = method
-    requestFactory.path = path
-    requestFactory.httpMethod = httpMethod
-    requestFactory.argLen = descriptor.value.length
+    setupMethodOrParameterDecorator(decorator, target, method, requestFactory => {
+      requestFactory.method = method
+      requestFactory.path = path
+      requestFactory.httpMethod = httpMethod
+      requestFactory.argLen = descriptor.value.length
+    })
   }
 }

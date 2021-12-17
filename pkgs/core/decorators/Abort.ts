@@ -1,15 +1,12 @@
-import { setupApiMethod } from '../ApiParameterization'
-import { setupApiInstance } from '../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../ApiParameterization'
+import { setupClassDecorator } from '../ApiParameterization'
 import { SignalParameter } from '../builtin'
+import { TargetClass } from '../internal'
 
 export function Abort(value: string | unknown | null = null) {
-  return function <TFunction extends Function>(
-    target: object | TFunction,
-    method?: string,
-    desc?: number | PropertyDescriptor
-  ): void {
+  return function (target: object | TargetClass, method?: string, desc?: number | PropertyDescriptor): void {
     if (method !== null && typeof method !== 'undefined') {
-      return setupApiMethod(target, method, requestFactory => {
+      return setupMethodOrParameterDecorator(Abort, target, method, requestFactory => {
         if (desc !== null && typeof desc === 'number') {
           requestFactory.addParameter(new SignalParameter(desc))
         } else {
@@ -34,6 +31,6 @@ export function Abort(value: string | unknown | null = null) {
       )
     }
 
-    setupApiInstance(target, globalParameters => (globalParameters.signal = value))
+    setupClassDecorator(Abort, target, globalParameters => (globalParameters.signal = value))
   }
 }

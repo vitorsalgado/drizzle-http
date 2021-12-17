@@ -1,6 +1,7 @@
-import { setupApiMethod } from '../ApiParameterization'
-import { setupApiInstance } from '../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../ApiParameterization'
+import { setupClassDecorator } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
+import { TargetClass } from '../internal'
 
 /**
  * Set Content-Type header in the request
@@ -9,13 +10,13 @@ import { HttpHeaders } from '../HttpHeaders'
  * @param value - content type header value
  */
 export function ContentType(value: string) {
-  return function <TFunction extends Function>(target: object | TFunction, method?: string) {
+  return function (target: object | TargetClass, method?: string) {
     if (method) {
-      return setupApiMethod(target, method, requestFactory =>
+      return setupMethodOrParameterDecorator(ContentType, target, method, requestFactory =>
         requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
       )
     }
 
-    setupApiInstance(target, parameters => parameters.defaultHeaders.append(HttpHeaders.CONTENT_TYPE, value))
+    setupClassDecorator(ContentType, target, parameters => parameters.headers.append(HttpHeaders.CONTENT_TYPE, value))
   }
 }

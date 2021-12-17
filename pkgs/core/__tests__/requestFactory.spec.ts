@@ -1,6 +1,5 @@
 import EventEmitter from 'events'
 import { NoParametersRequestBuilder, RequestFactory } from '../RequestFactory'
-import { ApiGlobalParameters } from '../ApiParameterization'
 import { pathParameterRegex } from '../internal'
 import { MediaTypes } from '../MediaTypes'
 import { DrizzleBuilder } from '../DrizzleBuilder'
@@ -10,6 +9,7 @@ import { HeaderParameter } from '../builtin'
 import { BodyParameter } from '../builtin'
 import { PathParameter } from '../builtin'
 import { FormParameter } from '../builtin'
+import { ApiDefaults } from '../ApiParameterization'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Request Factory', () => {
@@ -92,13 +92,13 @@ describe('Request Factory', () => {
     requestFactory.addParameters(new QueryParameter('filter', 3), new QueryParameter('active', 4))
     requestFactory.addParameters(new QueryNameParameter(5), new QueryNameParameter(6))
 
-    const instanceMeta = new ApiGlobalParameters()
+    const instanceMeta = new ApiDefaults()
     instanceMeta.connectTimeout = 10
     instanceMeta.readTimeout = 5
-    instanceMeta.addDefaultHeaders({ 'x-client-id': '666' })
-    instanceMeta.setPath('api/{version}')
+    instanceMeta.headers.mergeObject({ 'x-client-id': '666' })
+    instanceMeta.path = 'api/{version}'
 
-    requestFactory.mergeWithInstanceMeta(instanceMeta)
+    requestFactory.mergeWithApiDefaults(instanceMeta)
     requestFactory.preProcessAndValidate(drizzle)
 
     const requestBuilder = requestFactory.requestBuilder(drizzle)
@@ -361,14 +361,14 @@ describe('Request Factory', () => {
       requestFactory.addParameter(new PathParameter('id', pathParameterRegex('id'), 0))
       requestFactory.addParameter(new PathParameter('version', pathParameterRegex('version'), 0))
 
-      const instanceMeta = new ApiGlobalParameters()
+      const instanceMeta = new ApiDefaults()
       instanceMeta.connectTimeout = 15
       instanceMeta.readTimeout = 25
-      instanceMeta.addDefaultHeaders({ 'x-trace-id': '200' })
-      instanceMeta.setPath('another/path/{version}/')
+      instanceMeta.headers.mergeObject({ 'x-trace-id': '200' })
+      instanceMeta.path = 'another/path/{version}/'
       instanceMeta.signal = testEmitter
 
-      requestFactory.mergeWithInstanceMeta(instanceMeta)
+      requestFactory.mergeWithApiDefaults(instanceMeta)
       requestFactory.preProcessAndValidate(drizzle)
 
       expect(requestFactory.path).toEqual('/another/path/{version}/test/{id}')
@@ -422,10 +422,10 @@ describe('Request Factory', () => {
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      requestFactory.mergeWithInstanceMeta(null)
+      requestFactory.mergeWithApiDefaults(null)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      requestFactory.mergeWithInstanceMeta(undefined)
+      requestFactory.mergeWithApiDefaults(undefined)
       requestFactory.preProcessAndValidate(drizzle)
     })
 

@@ -2,7 +2,6 @@ import { Readable } from 'stream'
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
-import { FullResponse } from '@drizzle-http/core'
 import { HeaderMap } from '@drizzle-http/core'
 import { ContentType } from '@drizzle-http/core'
 import { Accept } from '@drizzle-http/core'
@@ -14,6 +13,7 @@ import { DrizzleBuilder } from '@drizzle-http/core'
 import { HttpError } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { Body } from '@drizzle-http/core'
+import { RawResponse } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { BrowserLoggingInterceptor } from '../BrowserLoggingInterceptor'
 import { Level } from '../Level'
@@ -96,7 +96,7 @@ describe('Browser Logging Interceptor', function () {
     class API2 {
       @POST('/{id}/projects/{project}')
       @HeaderMap({ 'content-type': 'application/json' })
-      @FullResponse()
+      @RawResponse()
       execute(
         @Param('id') id: string,
         @Param('project') project: string,
@@ -145,7 +145,7 @@ describe('Browser Logging Interceptor', function () {
         'x-super-secret-header': 'super-secret-value',
         'x-hey': 'open-value'
       })
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
@@ -181,7 +181,7 @@ describe('Browser Logging Interceptor', function () {
     class API4 {
       @POST('/test-logging')
       @ContentType('text/plain')
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
@@ -210,7 +210,7 @@ describe('Browser Logging Interceptor', function () {
     class API4 {
       @POST('/test-logging')
       @AsJSON()
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }

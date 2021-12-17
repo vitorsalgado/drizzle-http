@@ -31,7 +31,11 @@ export class EntryPointInvoker<T> implements Call<T> {
   execute(request: HttpRequest, argv: unknown[]): Promise<T> {
     return ChainExecutor.first(this.interceptors, this.method, this.requestFactory, request, argv)
       .proceed(request)
-      .then(response => this.responseHandler.handle(request, response))
-      .then(this.responseConverter.convert)
+      .then(response => {
+        return this.responseHandler.handle(request, response)
+      })
+      .then(res => {
+        return this.responseConverter.convert(res)
+      })
   }
 }

@@ -306,17 +306,14 @@ export class DrizzleBuilder {
     this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE)
     this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE)
 
-    this.addRequestConverterFactories(
-      new JsonRequestConverterFactory(),
-      new FormRequestConverterFactory(),
-      new RawRequestConverterFactory()
-    )
+    this.addRequestConverterFactories(new JsonRequestConverterFactory())
+    this.addRequestConverterFactories(new FormRequestConverterFactory())
+    this.addRequestConverterFactories(new RawRequestConverterFactory())
 
     this._responseConverterFactories.unshift(new RawResponseConverterFactory())
 
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
     this.addResponseConverterFactories(new PlainTextResponseConverterFactory())
-
     this.addResponseHandlerFactory(new RawResponseHandlerFactory())
   }
 }

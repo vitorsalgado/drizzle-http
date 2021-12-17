@@ -9,24 +9,22 @@ import { HttpHeaders } from '@drizzle-http/core'
 import { isOK } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 import { BodyType } from '@drizzle-http/core'
-import { setupApiMethod } from '@drizzle-http/core'
+import { createMethodDecorator } from '@drizzle-http/core'
+import { createParameterDecorator } from '@drizzle-http/core'
 import { toUndiciRequest } from './toUndiciRequest'
 import { Keys } from './Keys'
 
 export function Streaming() {
-  return (target: object, method: string) => {
-    setupApiMethod(target, method, requestFactory => {
-      requestFactory.ignoreResponseConverter()
-      requestFactory.ignoreResponseHandler()
-      requestFactory.addConfig(Keys.ConfigIsStream, true)
-    })
-  }
+  return createMethodDecorator(Streaming, ({ requestFactory }) => {
+    requestFactory.ignoreResponseConverter()
+    requestFactory.ignoreResponseHandler()
+  })
 }
 
 export function StreamTo() {
-  return function (target: object, method: string, index: number): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addConfig(Keys.ConfigStreamToIndex, index))
-  }
+  return createParameterDecorator(StreamTo, ctx =>
+    ctx.requestFactory.addConfig(Keys.ConfigStreamToIndex, ctx.parameterIndex)
+  )
 }
 
 interface HttpEmptyResponseInit {

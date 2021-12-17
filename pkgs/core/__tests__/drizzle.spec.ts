@@ -6,23 +6,6 @@ import { Ok } from '@drizzle-http/test-utils'
 import { TestResult } from '@drizzle-http/test-utils'
 import { Data } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
-import {
-  Abort,
-  Accept,
-  ContentType,
-  FormUrlEncoded,
-  GET,
-  H,
-  HeaderMap,
-  OPTIONS,
-  P,
-  Param,
-  PATCH,
-  Path,
-  Q,
-  Query,
-  QueryName
-} from '../decorators'
 import { Timeout } from '../decorators'
 import { AsJSON } from '../decorators'
 import { Header } from '../decorators'
@@ -32,12 +15,25 @@ import { Body } from '../decorators'
 import { DELETE } from '../decorators'
 import { Field } from '../decorators'
 import { HEAD } from '../decorators'
+import { Accept } from '../decorators'
+import { ContentType } from '../decorators'
+import { Query } from '../decorators'
+import { OPTIONS } from '../decorators'
+import { PATCH } from '../decorators'
+import { QueryName } from '../decorators'
+import { Abort } from '../decorators'
+import { HeaderMap } from '../decorators'
+import { FormUrlEncoded } from '../decorators'
+import { GET } from '../decorators'
+import { Param } from '../decorators'
+import { Path } from '../decorators'
 import { MediaTypes } from '../MediaTypes'
 import { noop } from '../noop'
-import { FullResponse } from '../builtin'
+import { RawResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { DrizzleBuilder, initDrizzleHttp } from '../DrizzleBuilder'
 import { Drizzle } from '../Drizzle'
+import { HttpError } from '../HttpError'
 import { TestCallFactory } from './TestCallFactory'
 
 const cancellation = new EventEmitter()
@@ -60,7 +56,7 @@ class TestAPI {
 
   @GET('/txt')
   @ContentType(MediaTypes.TEXT_PLAIN)
-  @FullResponse()
+  @RawResponse()
   txt(): Promise<HttpResponse> {
     return noop()
   }
@@ -70,12 +66,12 @@ class TestAPI {
   @Timeout(5000, 5000)
   projects(
     @Param('id') id: string,
-    @P('name') name: string,
+    @Param('name') name: string,
     @Query('filter') filter: string[],
-    @Q('sort') sort: string,
+    @Query('sort') sort: string,
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
-    @H('code') code: number,
+    @Header('code') code: number,
     @Abort() abort: EventEmitter
   ): Promise<TestResult<TestId>> {
     return noop(id, name, filter, sort, prop, cache, code, abort)
@@ -84,7 +80,7 @@ class TestAPI {
   @GET('/{id}/projects')
   @Accept(MediaTypes.APPLICATION_JSON)
   @Abort(cancellationInMethod)
-  @FullResponse()
+  @RawResponse()
   getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<HttpResponse> {
     return noop(id, orderBy)
   }
@@ -114,7 +110,7 @@ class TestAPI {
   // region DELETE
 
   @DELETE('/delete/{id}')
-  @FullResponse()
+  @RawResponse()
   testDELETE(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
@@ -124,7 +120,7 @@ class TestAPI {
   // region PATCH
 
   @PATCH('/patch/{id}')
-  @FullResponse()
+  @RawResponse()
   testPATCH(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
@@ -134,7 +130,7 @@ class TestAPI {
   // region OPTIONS
 
   @OPTIONS('/options')
-  @FullResponse()
+  @RawResponse()
   testOPTIONS(): Promise<HttpResponse> {
     return noop()
   }
@@ -144,12 +140,17 @@ class TestAPI {
   // region HEAD
 
   @HEAD('/head')
-  @FullResponse()
+  @RawResponse()
   testHEAD(): Promise<HttpResponse> {
     return noop()
   }
 
   // endregion
+
+  @GET('/not-found')
+  notFound(): Promise<TestResult<Ok>> {
+    return noop()
+  }
 }
 
 describe('Drizzle Http', () => {
@@ -286,7 +287,7 @@ describe('Drizzle Http', () => {
       @FormUrlEncoded()
       class FormAPI {
         @POST('/')
-        @FullResponse()
+        @RawResponse()
         test(@Field('value') val: string): Promise<HttpResponse> {
           return noop(val)
         }
@@ -517,6 +518,19 @@ describe('Drizzle Http', () => {
       const txt = await absApi.txt()
 
       expect(txt).toEqual('ok')
+    })
+  })
+
+  describe('when an HTTP error occurs', function () {
+    describe('and response handler is default and not using the raw response return', function () {
+      it('should throw an HttpError with request and response information', function () {
+        expect.assertions(2)
+
+        return api.notFound().catch((res: HttpError) => {
+          expect(res.response.ok).toBeFalsy()
+          expect(res.response.status).toEqual(404)
+        })
+      })
     })
   })
 })

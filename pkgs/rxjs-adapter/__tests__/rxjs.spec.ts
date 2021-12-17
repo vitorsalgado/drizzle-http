@@ -10,11 +10,11 @@ import {
   Param,
   RequestFactory
 } from '@drizzle-http/core'
-import { FullResponse } from '@drizzle-http/core'
 import { CallAdapter } from '@drizzle-http/core'
 import { CallAdapterFactory } from '@drizzle-http/core'
-import { setupApiMethod } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
+import { createMethodDecorator } from '@drizzle-http/core'
+import { RawResponse } from '@drizzle-http/core'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Observable } from 'rxjs'
@@ -22,14 +22,12 @@ import { RxJs } from '../RxJs'
 import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
 
 function Custom() {
-  return function (target: object, method: string): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addConfig('rxjs:test:custom', true))
-  }
+  return createMethodDecorator(Custom)
 }
 
 class CustomCallAdapterFactory implements CallAdapterFactory {
   provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
-    if (requestFactory.hasConfig('rxjs:test:custom')) {
+    if (requestFactory.hasDecorator(Custom)) {
       return {
         adapt(call: Call<unknown>): (request: HttpRequest, argv: unknown[]) => unknown {
           return (request, argv) =>
@@ -57,7 +55,7 @@ class API {
   }
 
   @GET('/{id}/projects')
-  @FullResponse()
+  @RawResponse()
   nonRx(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
@@ -72,19 +70,23 @@ class API {
 
 describe('RxJs Call Adapter', () => {
   let api: API
+  let drizzle: Drizzle
 
   beforeAll(() =>
     startTestServer().then((addr: string) => {
-      api = DrizzleBuilder.newBuilder()
+      drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(new UndiciCallFactory())
         .addCallAdapterFactories(new RxJsCallAdapterFactory(new CustomCallAdapterFactory()))
         .build()
-        .create(API)
+      api = drizzle.create(API)
     })
   )
 
-  afterAll(() => closeTestServer())
+  afterAll(async () => {
+    await closeTestServer()
+    await drizzle.shutdown()
+  })
 
   it('should capture the success response on next', done => {
     expect.assertions(1)
@@ -99,10 +101,14 @@ describe('RxJs Call Adapter', () => {
     })
   })
 
-  it('should capture the logErrorMsg response on logErrorMsg', done => {
+  it('should capture the error response on error() listener', done => {
     expect.assertions(1)
 
     api.nowhere().subscribe({
+      next(model) {
+        console.log(model)
+        done()
+      },
       error(err: HttpError) {
         expect(err.response.status).toEqual(404)
         done()

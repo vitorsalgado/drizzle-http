@@ -7,7 +7,7 @@ import { AsJSON } from '../decorators'
 import { HeaderMap } from '../decorators'
 import { GET } from '../decorators'
 import { Header } from '../decorators'
-import { FullResponse } from '../builtin'
+import { RawResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { noop } from '../noop'
 import { initDrizzleHttp } from '../DrizzleBuilder'
@@ -18,7 +18,7 @@ import { TestCallFactory } from './TestCallFactory'
 class InterceptorAPI {
   @GET('/')
   @HeaderMap({ method: 'method' })
-  @FullResponse()
+  @RawResponse()
   test(@Header('param') param: string): Promise<HttpResponse> {
     return noop(param)
   }

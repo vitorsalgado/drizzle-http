@@ -2,20 +2,21 @@ import { CallAdapterFactory } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { CallAdapter } from '@drizzle-http/core'
 import { RequestFactory } from '@drizzle-http/core'
-import CircuitBreaker from 'opossum'
+import OpoCircuitBreaker from 'opossum'
 import { Keys } from './Keys'
 import { Registry } from './Registry'
 import { CircuitBreakerRegistry } from './CircuitBreakerRegistry'
 import { CircuitBreakerCallAdapter } from './CircuitBreakerCallAdapter'
+import { CircuitBreaker } from './decorators'
 
 interface Init {
-  options?: CircuitBreaker.Options
+  options?: OpoCircuitBreaker.Options
   registry?: Registry
   fallbacks?: object | Record<string, (...args: unknown[]) => unknown>
 }
 
 export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
-  private readonly options: CircuitBreaker.Options
+  private readonly options: OpoCircuitBreaker.Options
   private readonly registry: Registry
   private readonly fallbacks?: object | Record<string, (...args: unknown[]) => unknown>
 
@@ -30,11 +31,11 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
   }
 
   provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
-    if (!requestFactory.hasConfig(Keys.Enabled)) {
+    if (!requestFactory.hasDecorator(CircuitBreaker)) {
       return null
     }
 
-    const decoratorOptions = requestFactory.getConfig<CircuitBreaker.Options>(Keys.OptionsForMethod)
+    const decoratorOptions = requestFactory.getConfig<OpoCircuitBreaker.Options>(Keys.OptionsForMethod)
     const name = `${this.options.name ? this.options.name : ''}${decoratorOptions.name}`
     const group = `${this.options.group ? this.options.name : ''}${
       decoratorOptions.group ? decoratorOptions.group : ''

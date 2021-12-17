@@ -1,4 +1,4 @@
-import { setupApiMethod } from '../ApiParameterization'
+import { createParameterDecorator } from '../ApiParameterization'
 import { FormParameter } from '../builtin'
 
 /**
@@ -15,13 +15,7 @@ import { FormParameter } from '../builtin'
  *  example(\@Field('name') name: string, \@Field('id') id: string): Promise<Result>
  */
 export function Field(key: string) {
-  return function (target: object, method: string, index: number): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new FormParameter(key, index)))
-  }
+  return createParameterDecorator(Field, ctx =>
+    ctx.requestFactory.addParameter(new FormParameter(key, ctx.parameterIndex))
+  )
 }
-
-/**
- * Shorthand version for {@link Field} decorator.
- * This decorator will use the method parameter name as the key and will be encoded by default.
- */
-export const F = Field

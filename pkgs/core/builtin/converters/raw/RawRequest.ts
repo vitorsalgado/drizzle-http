@@ -1,3 +1,3 @@
 import { createMethodDecorator } from '../../../ApiParameterization'
 
-export const Callback = () => createMethodDecorator(Callback)
+export const RawRequest = () => createMethodDecorator(RawRequest)

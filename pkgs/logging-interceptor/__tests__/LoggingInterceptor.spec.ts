@@ -15,7 +15,7 @@ import {
 } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
-import { FullResponse } from '@drizzle-http/core'
+import { RawResponse } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Level } from '../Level'
 import { Logger } from '../Logger'
@@ -111,7 +111,7 @@ describe('Logging Interceptor', function () {
     class API2 {
       @POST('/{id}/projects/{project}')
       @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
-      @FullResponse()
+      @RawResponse()
       execute(
         @Param('id') id: string,
         @Param('project') project: string,
@@ -160,7 +160,7 @@ describe('Logging Interceptor', function () {
         'x-super-secret-header': 'super-secret-value',
         'x-hey': 'open-value'
       })
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
@@ -217,7 +217,7 @@ describe('Logging Interceptor', function () {
     class API4 {
       @POST('/test-logging')
       @ContentType('text/plain')
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
@@ -248,7 +248,7 @@ describe('Logging Interceptor', function () {
     class API4 {
       @POST('/test-logging')
       @AsJSON()
-      @FullResponse()
+      @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)
       }

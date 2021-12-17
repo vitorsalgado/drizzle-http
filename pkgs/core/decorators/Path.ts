@@ -1,4 +1,5 @@
-import { setupApiInstance } from '../ApiParameterization'
+import { createClassDecorator } from '../ApiParameterization'
+import { Param } from './Param'
 
 /**
  * Sets an url path that will be concatenated with the base url and the final processed path
@@ -12,7 +13,5 @@ import { setupApiInstance } from '../ApiParameterization'
  *  class API \{ \}
  */
 export function Path(path: string) {
-  return function <TFunction extends Function>(target: TFunction) {
-    setupApiInstance(target, parameters => parameters.setPath(path))
-  }
+  return createClassDecorator(Param, ctx => (ctx.defaults.path = path))
 }

@@ -1,4 +1,4 @@
-import { setupApiMethod } from '../ApiParameterization'
+import { createParameterDecorator } from '../ApiParameterization'
 import { HeaderParameter } from '../builtin'
 
 /**
@@ -12,13 +12,7 @@ import { HeaderParameter } from '../builtin'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function Header(key: string) {
-  return function (target: object, method: string, index: number): void {
-    setupApiMethod(target, method, requestFactory => requestFactory.addParameter(new HeaderParameter(key, index)))
-  }
+  return createParameterDecorator(Header, ctx =>
+    ctx.requestFactory.addParameter(new HeaderParameter(key, ctx.parameterIndex))
+  )
 }
-
-/**
- * Short-hard version of {@link Header} decorator.
- * This decorator will use the method parameter name as the key.
- */
-export const H = Header

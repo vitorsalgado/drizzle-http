@@ -6,10 +6,8 @@ import { ContentType } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { Timeout } from '@drizzle-http/core'
-import { H } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
 import { QueryName } from '@drizzle-http/core'
-import { Q } from '@drizzle-http/core'
 import { Abort } from '@drizzle-http/core'
 import { HeaderMap } from '@drizzle-http/core'
 import { Header } from '@drizzle-http/core'
@@ -17,11 +15,10 @@ import { GET } from '@drizzle-http/core'
 import { Param } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
-import { P } from '@drizzle-http/core'
 import { AsJSON } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
-import { FullResponse } from '@drizzle-http/core'
 import { HttpError } from '@drizzle-http/core'
+import { RawResponse } from '@drizzle-http/core'
 import { Streaming } from '../UndiciStreamCall'
 import { HttpEmptyResponse } from '../UndiciStreamCall'
 import { StreamTo } from '../UndiciStreamCall'
@@ -35,13 +32,13 @@ const evtMethod = new EventEmitter()
 @Timeout(2500, 2500)
 class API {
   @GET('/{id}/projects')
-  @FullResponse()
+  @RawResponse()
   execute(@Param('id') id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
   @GET('/nowhere')
-  @FullResponse()
+  @RawResponse()
   nowhere(): Promise<HttpResponse> {
     return noop()
   }
@@ -61,20 +58,20 @@ class API {
   }
 
   @GET('/long-running')
-  @FullResponse()
+  @RawResponse()
   longRunning(@Abort() cancel: EventEmitter): Promise<HttpResponse> {
     return noop(cancel)
   }
 
   @GET('/long-running')
   @Abort(evtMethod)
-  @FullResponse()
+  @RawResponse()
   longRunningMethod(): Promise<HttpResponse> {
     return noop()
   }
 
   @GET('/long-running')
-  @FullResponse()
+  @RawResponse()
   longRunningClass(): Promise<HttpResponse> {
     return noop()
   }
@@ -84,12 +81,12 @@ class API {
   @AsJSON()
   complete(
     @Param('id') id: string,
-    @P('name') name: string,
+    @Param('name') name: string,
     @Query('filter') filter: string[],
-    @Q('sort') sort: string,
+    @Query('sort') sort: string,
     @QueryName() prop: string,
     @Header('cache') cache: boolean,
-    @H('code') code: number
+    @Header('code') code: number
   ): Promise<TestResult<TestId>> {
     return noop(id, name, filter, sort, prop, cache, code)
   }

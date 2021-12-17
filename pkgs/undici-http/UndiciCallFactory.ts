@@ -5,6 +5,7 @@ import { Call } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { UndiciStreamCall } from './UndiciStreamCall'
 import { HttpEmptyResponse } from './UndiciStreamCall'
+import { Streaming } from './UndiciStreamCall'
 import { UndiciCall } from './UndiciCall'
 import { Keys } from './Keys'
 import { UndiciResponse } from './UndiciResponse'
@@ -24,7 +25,11 @@ export class UndiciCallFactory implements CallFactory {
   setup(drizzle: Drizzle): void {
     this._pool = new Pool(new URL(drizzle.baseUrl()).origin, this._options)
 
-    drizzle.registerShutdownHook(async () => await this._pool?.close())
+    drizzle.registerShutdownHook(async () => {
+      if (!this._pool?.closed) {
+        await this._pool?.close()
+      }
+    })
   }
 
   provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
@@ -32,7 +37,7 @@ export class UndiciCallFactory implements CallFactory {
       throw new Error('Undici pool must not be null or undefined.')
     }
 
-    if (requestFactory.getConfig(Keys.ConfigIsStream)) {
+    if (requestFactory.hasDecorator(Streaming)) {
       const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
 
       if (streamToIndex < 0) {

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { setupApiMethod } from '../ApiParameterization'
-import { setupApiInstance } from '../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../ApiParameterization'
+import { setupClassDecorator } from '../ApiParameterization'
+import { TargetClass } from '../internal'
 
 /**
  * Adds fixed params to the request
@@ -15,11 +16,13 @@ import { setupApiInstance } from '../ApiParameterization'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function HeaderMap(headers: Record<string, string>) {
-  return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
+  return function (target: object | TargetClass, method?: string): void {
     if (method) {
-      return setupApiMethod(target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
+      return setupMethodOrParameterDecorator(HeaderMap, target, method, requestFactory =>
+        requestFactory.addDefaultHeaders(headers)
+      )
     }
 
-    setupApiInstance(target, parameters => parameters.addDefaultHeaders(headers))
+    setupClassDecorator(HeaderMap, target, parameters => parameters.headers.mergeObject(headers))
   }
 }

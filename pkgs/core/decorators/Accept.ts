@@ -1,6 +1,7 @@
-import { setupApiMethod } from '../ApiParameterization'
-import { setupApiInstance } from '../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../ApiParameterization'
+import { setupClassDecorator } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
+import { TargetClass } from '../internal'
 
 /**
  * Set Accept header in the request
@@ -9,13 +10,13 @@ import { HttpHeaders } from '../HttpHeaders'
  * @param value - accept header value
  */
 export function Accept(value: string) {
-  return function <TFunction extends Function>(target: object | TFunction, method?: string): void {
+  return function (target: object | TargetClass, method?: string) {
     if (method) {
-      return setupApiMethod(target, method, requestFactory =>
+      return setupMethodOrParameterDecorator(Accept, target, method, requestFactory =>
         requestFactory.defaultHeaders.append(HttpHeaders.ACCEPT, value)
       )
     }
 
-    setupApiInstance(target, parameters => parameters.defaultHeaders.append(HttpHeaders.ACCEPT, value))
+    setupClassDecorator(Accept, target, parameters => parameters.headers.append(HttpHeaders.ACCEPT, value))
   }
 }

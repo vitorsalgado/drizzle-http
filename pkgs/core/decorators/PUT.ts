@@ -9,4 +9,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@PUT('/relative/path')
  *  example(\@Body data: object): Promise<Result>
  */
-export const PUT = (path: string) => decorateWithHttpMethod('PUT', path)
+export const PUT = (path: string) => decorateWithHttpMethod(PUT, 'PUT', path)

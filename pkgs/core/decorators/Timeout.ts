@@ -1,5 +1,6 @@
-import { setupApiMethod } from '../ApiParameterization'
-import { setupApiInstance } from '../ApiParameterization'
+import { setupMethodOrParameterDecorator } from '../ApiParameterization'
+import { setupClassDecorator } from '../ApiParameterization'
+import { TargetClass } from '../internal'
 
 /**
  * Set the timeouts for an HTTP request.
@@ -10,15 +11,15 @@ import { setupApiInstance } from '../ApiParameterization'
  * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
-  return <TFunction extends Function>(target: object | TFunction, method?: string): void => {
+  return (target: object | TargetClass, method?: string): void => {
     if (method) {
-      return setupApiMethod(target, method, requestFactory => {
+      return setupMethodOrParameterDecorator(Timeout, target, method, requestFactory => {
         requestFactory.readTimeout = readTimeoutInMs
         requestFactory.connectTimeout = connectTimeoutInMs
       })
     }
 
-    setupApiInstance(target, parameters => {
+    setupClassDecorator(Timeout, target, parameters => {
       parameters.readTimeout = readTimeoutInMs
       parameters.connectTimeout = connectTimeoutInMs
     })

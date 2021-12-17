@@ -1,16 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { RequestBodyConverter } from './RequestBodyConverter'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { serviceInvoker } from './drizzleServiceInvoker'
 import { RequestFactory } from './RequestFactory'
-import { ApiParameterization } from './ApiParameterization'
+import { parameterizationForTarget } from './ApiParameterization'
 import { Interceptor } from './Interceptor'
 import { InterceptorFactory } from './Interceptor'
 import { RawRequestConverter, RawResponseConverter } from './builtin'
 import { Parameter, ParameterHandlerFactory } from './builtin'
 import { NoParameterHandlerError } from './internal'
-import { Mixin } from './internal'
-import { Ctor } from './internal'
-import { AbstractCtor } from './internal'
+import { AnyCtor } from './internal'
 import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
 import { ResponseConverterFactory } from './ResponseConverter'
@@ -237,12 +237,12 @@ export class Drizzle {
    *
    * @returns A proxy instance of the target API class
    */
-  create<T extends Ctor | AbstractCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
+  create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
     const requestFactories = new Map<string, RequestFactory>()
     const createApiInvocationMethod = serviceInvoker(this)
-    const parameterization = ApiParameterization.parameterizationForTarget(TargetApi)
+    const parameterization = parameterizationForTarget(TargetApi)
 
-    function MIXIN<TBase extends Mixin>(superclass: TBase) {
+    function MIXIN<TBase extends AnyCtor>(superclass: TBase) {
       return class extends superclass {
         constructor(...args: any[]) {
           super(...args)
@@ -258,7 +258,7 @@ export class Drizzle {
     const extendedApi = new Extended(...args)
 
     for (const [method, requestFactory] of requestFactories) {
-      requestFactory.mergeWithInstanceMeta(parameterization.meta)
+      requestFactory.mergeWithApiDefaults(parameterization.meta)
       requestFactory.preProcessAndValidate(this)
 
       Extended.prototype[method] = createApiInvocationMethod(requestFactory, method)
