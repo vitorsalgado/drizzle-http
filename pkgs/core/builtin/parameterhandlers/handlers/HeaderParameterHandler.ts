@@ -34,13 +34,15 @@ export class HeaderParameterHandler implements ParameterHandler<HeaderParameter,
 export class HeaderParameterHandlerFactory implements ParameterHandlerFactory<HeaderParameter, string | string[]> {
   static INSTANCE: HeaderParameterHandlerFactory = new HeaderParameterHandlerFactory()
 
-  forType = (): string => HeaderParameter.Type
-
   provide(
-    _drizzle: Drizzle,
-    _rf: RequestFactory,
+    drizzle: Drizzle,
+    rf: RequestFactory,
     p: HeaderParameter
-  ): ParameterHandler<HeaderParameter, string | string[]> {
-    return new HeaderParameterHandler(p)
+  ): ParameterHandler<HeaderParameter, string | string[]> | null {
+    if (p.type === HeaderParameter.Type) {
+      return new HeaderParameterHandler(p)
+    }
+
+    return null
   }
 }

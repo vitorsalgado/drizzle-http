@@ -28,13 +28,15 @@ export class SignalParameterHandler implements ParameterHandler<SignalParameter,
 export class SignalParameterHandlerFactory implements ParameterHandlerFactory<SignalParameter, unknown> {
   static INSTANCE: SignalParameterHandlerFactory = new SignalParameterHandlerFactory()
 
-  forType = (): string => SignalParameter.Type
-
   provide(
     drizzle: Drizzle,
     requestFactory: RequestFactory,
     p: SignalParameter
-  ): ParameterHandler<SignalParameter, unknown> {
-    return new SignalParameterHandler(p)
+  ): ParameterHandler<SignalParameter, unknown> | null {
+    if (p.type === SignalParameter.Type) {
+      return new SignalParameterHandler(p)
+    }
+
+    return null
   }
 }

@@ -15,6 +15,7 @@
     "sourceMap": true,
     "declaration": true,
 
+    "strictBindCallApply": true,
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,

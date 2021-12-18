@@ -9,6 +9,7 @@ import { Interceptor } from './Interceptor'
 import { InterceptorFactory } from './Interceptor'
 import { RawRequestConverter, RawResponseConverter } from './builtin'
 import { Parameter, ParameterHandlerFactory } from './builtin'
+import { ParameterHandler } from './builtin'
 import { NoParameterHandlerError } from './internal'
 import { AnyCtor } from './internal'
 import { HttpHeaders } from './HttpHeaders'
@@ -124,22 +125,24 @@ export class Drizzle {
   }
 
   /**
-   * Search a {@link ParameterHandlerFactory} that handles the parameter type from argument
+   * Search a {@link ParameterHandler} that handles the parameter type from argument
    *
-   * @returns {@link ParameterHandlerFactory} instance
-   * @throws {@link NoParameterHandlerFoundForType} if no factory is found for provided parameter type
+   * @returns {@link ParameterHandler} instance
+   * @throws {@link NoParameterHandlerError} if no handler is found for provided parameter type
    */
-  parameterHandlerFactory<P extends Parameter, R>(
+  parameterHandler<P extends Parameter, V>(
     requestFactory: RequestFactory,
     parameter: Parameter
-  ): ParameterHandlerFactory<P, R> {
-    const factory = this._parameterHandlerFactories.filter(x => x.forType() === parameter.type)[0]
+  ): ParameterHandler<P, V> {
+    for (const factory of this._parameterHandlerFactories) {
+      const handler = factory.provide(this, requestFactory, parameter)
 
-    if (factory === null || typeof factory === 'undefined') {
-      throw new NoParameterHandlerError(parameter.type, requestFactory.method, parameter.index)
+      if (handler !== null) {
+        return handler as ParameterHandler<P, V>
+      }
     }
 
-    return factory as ParameterHandlerFactory<P, R>
+    throw new NoParameterHandlerError(parameter.type, requestFactory.method, parameter.index)
   }
 
   /**

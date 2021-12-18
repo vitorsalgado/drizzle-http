@@ -49,6 +49,7 @@ export class RequestFactory {
     public noResponseConverter: boolean = false,
     public noResponseHandler: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
+    public checkIfPathParamsAreInSyncWithUrl: boolean = true,
     private preProcessed: boolean = false,
     private readonly decorators: Function[] = []
   ) {}
@@ -69,6 +70,7 @@ export class RequestFactory {
       other.noResponseConverter,
       other.noResponseHandler,
       new Map<string, unknown>(other.bag),
+      other.checkIfPathParamsAreInSyncWithUrl,
       other.preProcessed,
       [...other.decorators]
     )
@@ -153,7 +155,7 @@ export class RequestFactory {
 
     const nonDupPathParams = new Set(this.path.match(REGEX_EXTRACT_TEMPLATE_PARAMS) ?? [])
 
-    if (pathParameters.length !== nonDupPathParams.size) {
+    if (pathParameters.length !== nonDupPathParams.size && this.checkIfPathParamsAreInSyncWithUrl) {
       throw this.invalidArgErr(
         'Path parameter configuration is not in sync with URL. ' +
           'Check your path and arguments decorated with @Param().'
@@ -206,12 +208,7 @@ export class RequestFactory {
 
     this.parameters
       .sort((a, b) => a.index - b.index)
-      .forEach(parameter => {
-        const handlerFactory = drizzle.parameterHandlerFactory(this, parameter)
-        const handler = handlerFactory.provide(drizzle, this, parameter)
-
-        this.parameterHandlers.push(handler)
-      })
+      .forEach(parameter => this.parameterHandlers.push(drizzle.parameterHandler(this, parameter)))
 
     this.preProcessed = true
   }
@@ -266,6 +263,13 @@ export class RequestFactory {
     }
 
     return new NoParametersRequestBuilder(this)
+  }
+
+  /**
+   * Skip path params validation. Use this when customizing path params building.
+   */
+  skipCheckIfPathParamsAreInSyncWithUrl(): void {
+    this.checkIfPathParamsAreInSyncWithUrl = false
   }
 
   /**

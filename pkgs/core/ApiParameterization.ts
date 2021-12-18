@@ -198,3 +198,8 @@ export function createParameterDecorator(decorator: Function, configurer?: (ctx:
     })
   }
 }
+
+export interface PropertyDecoratorContext {
+  target: object | Function
+  property: string
+}

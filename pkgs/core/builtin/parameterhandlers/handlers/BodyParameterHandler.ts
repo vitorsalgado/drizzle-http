@@ -34,13 +34,15 @@ export class BodyParameterHandler implements ParameterHandler<BodyParameter, Bod
 export class BodyParameterHandlerFactory implements ParameterHandlerFactory<BodyParameter, BodyType> {
   static INSTANCE: BodyParameterHandlerFactory = new BodyParameterHandlerFactory()
 
-  forType = (): string => BodyParameter.Type
-
   provide(
     drizzle: Drizzle,
     requestFactory: RequestFactory,
     p: BodyParameter
-  ): ParameterHandler<BodyParameter, BodyType> {
+  ): ParameterHandler<BodyParameter, BodyType> | null {
+    if (p.type !== BodyParameter.Type) {
+      return null
+    }
+
     return new BodyParameterHandler(
       drizzle.requestBodyConverter(requestFactory.method, requestFactory),
       requestFactory,

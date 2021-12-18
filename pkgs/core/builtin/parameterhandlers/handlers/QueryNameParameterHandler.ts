@@ -33,13 +33,15 @@ export class QueryNameParameterHandlerFactory
 {
   static INSTANCE: QueryNameParameterHandlerFactory = new QueryNameParameterHandlerFactory()
 
-  forType = (): string => QueryNameParameter.Type
-
   provide(
-    _drizzle: Drizzle,
-    _rf: RequestFactory,
+    drizzle: Drizzle,
+    rf: RequestFactory,
     p: QueryNameParameter
-  ): ParameterHandler<QueryNameParameter, string | string[]> {
-    return new QueryNameParameterHandler(p)
+  ): ParameterHandler<QueryNameParameter, string | string[]> | null {
+    if (p.type === QueryNameParameter.Type) {
+      return new QueryNameParameterHandler(p)
+    }
+
+    return null
   }
 }

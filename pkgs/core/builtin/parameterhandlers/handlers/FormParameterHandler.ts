@@ -37,13 +37,15 @@ export class FormParameterHandler implements ParameterHandler<FormParameter, str
 export class FormParameterHandlerFactory implements ParameterHandlerFactory<FormParameter, string | string[]> {
   static INSTANCE: FormParameterHandlerFactory = new FormParameterHandlerFactory()
 
-  forType = (): string => FormParameter.Type
-
   provide(
-    _drizzle: Drizzle,
-    _rf: RequestFactory,
+    drizzle: Drizzle,
+    rf: RequestFactory,
     p: FormParameter
-  ): ParameterHandler<FormParameter, string | string[]> {
-    return new FormParameterHandler(p)
+  ): ParameterHandler<FormParameter, string | string[]> | null {
+    if (p.type === FormParameter.Type) {
+      return new FormParameterHandler(p)
+    }
+
+    return null
   }
 }

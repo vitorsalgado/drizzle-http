@@ -37,13 +37,15 @@ export class QueryParameterHandler implements ParameterHandler<QueryParameter, s
 export class QueryParameterHandlerFactory implements ParameterHandlerFactory<QueryParameter, string | string[]> {
   static INSTANCE: QueryParameterHandlerFactory = new QueryParameterHandlerFactory()
 
-  forType = (): string => QueryParameter.Type
-
   provide(
-    _drizzle: Drizzle,
-    _rf: RequestFactory,
+    drizzle: Drizzle,
+    rf: RequestFactory,
     p: QueryParameter
-  ): ParameterHandler<QueryParameter, string | string[]> {
-    return new QueryParameterHandler(p)
+  ): ParameterHandler<QueryParameter, string | string[]> | null {
+    if (p.type === QueryParameter.Type) {
+      return new QueryParameterHandler(p)
+    }
+
+    return null
   }
 }

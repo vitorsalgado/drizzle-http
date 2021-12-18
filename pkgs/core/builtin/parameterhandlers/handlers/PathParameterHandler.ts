@@ -39,13 +39,15 @@ export class PathParameterHandler implements ParameterHandler<PathParameter, str
 export class PathParameterHandlerFactory implements ParameterHandlerFactory<PathParameter, string | string[]> {
   static INSTANCE: PathParameterHandlerFactory = new PathParameterHandlerFactory()
 
-  forType = (): string => PathParameter.Type
-
   provide(
-    _drizzle: Drizzle,
-    _rf: RequestFactory,
+    drizzle: Drizzle,
+    rf: RequestFactory,
     p: PathParameter
-  ): ParameterHandler<PathParameter, string | string[]> {
-    return new PathParameterHandler(p)
+  ): ParameterHandler<PathParameter, string | string[]> | null {
+    if (p.type === PathParameter.Type) {
+      return new PathParameterHandler(p)
+    }
+
+    return null
   }
 }
