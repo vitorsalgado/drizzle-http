@@ -4,6 +4,9 @@ const { DrizzleBuilder, GET, Query, ContentType, Accept, MediaTypes } = require(
 const { UndiciCallFactory } = require('@drizzle-http/undici')
 
 class PartiesClientAPI {
+  /**
+   * @return Promise<{dados: [{id:number; sigla: string; nome:string; uri:string}]}>
+   */
   @GET('/partidos')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)

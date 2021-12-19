@@ -1,9 +1,10 @@
-'use strict'
-
 import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 
 class PartiesClientAPI {
+  /**
+   * @return Promise<{dados: [{id:number; sigla: string; nome:string; uri:string}]}>
+   */
   @GET('/partidos')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
