@@ -14,10 +14,10 @@ export class QueryNameParameter extends Parameter {
   }
 }
 
-export class QueryNameParameterHandler implements ParameterHandler<QueryNameParameter, string | string[]> {
-  constructor(readonly parameter: QueryNameParameter) {}
+export class QueryNameParameterHandler implements ParameterHandler<string | string[]> {
+  static INSTANCE: QueryNameParameterHandler = new QueryNameParameterHandler()
 
-  apply(requestValues: RequestParameterization, value: string | string[]): void {
+  handle(requestValues: RequestParameterization, value: string | string[]): void {
     if (typeof value === 'string') {
       requestValues.query.push(encodeIfNecessary(value))
     } else if (Array.isArray(value)) {
@@ -33,13 +33,9 @@ export class QueryNameParameterHandlerFactory
 {
   static INSTANCE: QueryNameParameterHandlerFactory = new QueryNameParameterHandlerFactory()
 
-  provide(
-    drizzle: Drizzle,
-    rf: RequestFactory,
-    p: QueryNameParameter
-  ): ParameterHandler<QueryNameParameter, string | string[]> | null {
+  provide(drizzle: Drizzle, rf: RequestFactory, p: QueryNameParameter): ParameterHandler<string | string[]> | null {
     if (p.type === QueryNameParameter.Type) {
-      return new QueryNameParameterHandler(p)
+      return new QueryNameParameterHandler()
     }
 
     return null

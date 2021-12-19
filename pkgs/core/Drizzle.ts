@@ -130,15 +130,12 @@ export class Drizzle {
    * @returns {@link ParameterHandler} instance
    * @throws {@link NoParameterHandlerError} if no handler is found for provided parameter type
    */
-  parameterHandler<P extends Parameter, V>(
-    requestFactory: RequestFactory,
-    parameter: Parameter
-  ): ParameterHandler<P, V> {
+  parameterHandler<V>(requestFactory: RequestFactory, parameter: Parameter): ParameterHandler<V> {
     for (const factory of this._parameterHandlerFactories) {
       const handler = factory.provide(this, requestFactory, parameter)
 
       if (handler !== null) {
-        return handler as ParameterHandler<P, V>
+        return handler as ParameterHandler<V>
       }
     }
 

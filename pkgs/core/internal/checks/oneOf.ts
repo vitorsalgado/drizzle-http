@@ -1,4 +1,4 @@
-export function anyOf<T>(
+export function oneOf<T>(
   value: T,
   args: unknown[],
   message: string = 'Value must be contained in the accepted values list.'

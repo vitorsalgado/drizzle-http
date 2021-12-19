@@ -1,11 +1,11 @@
-import { anyOf } from '../anyOf'
+import { oneOf } from '../oneOf'
 
-describe('anyOf', function () {
+describe('oneOf', function () {
   it('should return same value when value is within the accepted values list', function () {
     const value = 'test'
     const accepted = ['test', 'other', 'nothing']
 
-    const result = anyOf(value, accepted)
+    const result = oneOf(value, accepted)
 
     expect(result).toEqual(value)
   })
@@ -18,7 +18,7 @@ describe('anyOf', function () {
     const msg = 'fail'
 
     try {
-      anyOf(value, accepted, msg)
+      oneOf(value, accepted, msg)
     } catch (ex) {
       expect((ex as Error).message).toEqual(msg)
     }

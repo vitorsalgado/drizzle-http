@@ -1,6 +1,6 @@
 import { Class } from '../../../internal'
 import { pathParameterRegex } from '../../../internal'
-import { ToDest } from '../../../decorators/To'
+import { ToDest } from '../../../decorators'
 import { Parameter } from '../Parameter'
 import { HeaderParameter } from './HeaderParameterHandler'
 import { QueryParameter } from './QueryParameterHandler'
@@ -9,58 +9,61 @@ import { PathParameter } from './PathParameterHandler'
 import { FormParameter } from './FormParameterHandler'
 import { BodyParameter } from './BodyParameterHandler'
 
-export type ModelMapSourceTypes = 'method' | 'property' | 'static'
-export type ModelMapping = { to: ToDest; key: string; source: string; type: ModelMapSourceTypes; parameter: Parameter }
-export type RequestModelMappings = Map<Class, Array<ModelMapping>>
+export type DecoratedTypes = 'instance' | 'static'
+export type Mapping = {
+  to: ToDest
+  key: string
+  decorated: string
+  type: DecoratedTypes
+  parameter: Parameter
+  model: unknown
+}
 
 export class ModelRegistry {
-  private static readonly data: RequestModelMappings = new Map()
+  private static readonly data: Mapping[] = []
 
   static register(
-    target: Class,
     to: ToDest,
     key: string,
-    source: string,
-    type: ModelMapSourceTypes,
-    parameter: Parameter
+    decorated: string,
+    type: DecoratedTypes,
+    parameter: Parameter,
+    model: Class
   ): void {
-    const current = ModelRegistry.data.get(target)
-
-    if (!current) {
-      ModelRegistry.data.set(target, [
-        {
-          key,
-          type,
-          to,
-          parameter,
-          source
-        }
-      ])
-      return
-    }
-
-    current.push({
+    ModelRegistry.data.push({
       key,
       type,
       to,
       parameter,
-      source
+      decorated,
+      model
     })
   }
 
-  static mappingsForType(type: Class): Array<ModelMapping> {
-    return ModelRegistry.data.get(type) ?? []
-  }
-
-  static mapping(type: Class, key: string): ModelMapping | undefined {
-    return (ModelRegistry.data.get(type) ?? []).find(x => x.key === key)
+  static modelMappings(): Mapping[] {
+    return [...ModelRegistry.data]
   }
 }
 
-export function createModelDecorator(source: string, to: ToDest, key?: string) {
-  return function (target: object | Class, prop: string, descriptor?: PropertyDescriptor): void {
-    const type: ModelMapSourceTypes = typeof target === 'function' ? 'static' : descriptor ? 'method' : 'property'
-    const k = key || prop
+export function createModelDecorator(to: ToDest, key?: string, field?: string) {
+  return function (target: object | Class, decorated: string, _descriptor?: PropertyDescriptor | number): void {
+    if (!decorated && field) {
+      throw new Error('The parameter "field" is not allowed when decorating a class property or method.')
+    }
+
+    if (!decorated && !key && !field) {
+      throw new Error(
+        'When using a @Model() argument with constructor decorated parameters, ' +
+          'you must provide at least the key. If the "key" differs from the constructor parameter name, ' +
+          'you must provide the field parameter with the value matching the parameter name.'
+      )
+    }
+
+    const dec = (decorated || key || field) as string
+    const type: DecoratedTypes = typeof target === 'function' && decorated ? 'static' : 'instance'
+    const model = typeof target === 'function' ? (target as Class) : (target.constructor as Class)
+    const k = key || dec
+
     let parameter: Parameter
 
     switch (to) {
@@ -82,15 +85,11 @@ export function createModelDecorator(source: string, to: ToDest, key?: string) {
       case 'body':
         parameter = new BodyParameter(-1)
         break
+      case 'bodypart':
+        parameter = new Parameter(-1, 'bodypart')
+        break
     }
 
-    ModelRegistry.register(
-      typeof target === 'function' ? (target as Class) : (target.constructor as Class),
-      to,
-      k,
-      source,
-      type,
-      parameter
-    )
+    ModelRegistry.register(to, k, dec, type, parameter, model)
   }
 }

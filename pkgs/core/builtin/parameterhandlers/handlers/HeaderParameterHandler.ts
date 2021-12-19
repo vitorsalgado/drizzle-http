@@ -13,10 +13,10 @@ export class HeaderParameter extends Parameter {
   }
 }
 
-export class HeaderParameterHandler implements ParameterHandler<HeaderParameter, string | string[]> {
+export class HeaderParameterHandler implements ParameterHandler<string | string[]> {
   constructor(readonly parameter: HeaderParameter) {}
 
-  apply(requestValues: RequestParameterization, value: string | string[]): void {
+  handle(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -34,11 +34,7 @@ export class HeaderParameterHandler implements ParameterHandler<HeaderParameter,
 export class HeaderParameterHandlerFactory implements ParameterHandlerFactory<HeaderParameter, string | string[]> {
   static INSTANCE: HeaderParameterHandlerFactory = new HeaderParameterHandlerFactory()
 
-  provide(
-    drizzle: Drizzle,
-    rf: RequestFactory,
-    p: HeaderParameter
-  ): ParameterHandler<HeaderParameter, string | string[]> | null {
+  provide(drizzle: Drizzle, rf: RequestFactory, p: HeaderParameter): ParameterHandler<string | string[]> | null {
     if (p.type === HeaderParameter.Type) {
       return new HeaderParameterHandler(p)
     }

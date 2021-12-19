@@ -1,12 +1,10 @@
 import { createParameterDecorator } from '../ApiParameterization'
-import { ModelArgumentParameter } from '../builtin'
+import { ModelParameter } from '../builtin'
 import { Class } from '../internal'
 
-export function Model() {
+export function Model(model: Class) {
   return createParameterDecorator(Model, ctx => {
     ctx.requestFactory.skipCheckIfPathParamsAreInSyncWithUrl()
-    ctx.requestFactory.addParameter(
-      new ModelArgumentParameter(ctx.parameterIndex, ctx.method, ctx.target.constructor as Class)
-    )
+    ctx.requestFactory.addParameter(new ModelParameter(ctx.parameterIndex, ctx.method, model))
   })
 }

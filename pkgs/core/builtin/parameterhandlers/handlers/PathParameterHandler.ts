@@ -14,10 +14,10 @@ export class PathParameter extends Parameter {
   }
 }
 
-export class PathParameterHandler implements ParameterHandler<PathParameter, string | string[]> {
+export class PathParameterHandler implements ParameterHandler<string | string[]> {
   constructor(readonly parameter: PathParameter) {}
 
-  apply(requestValues: RequestParameterization, value: string | string[]): void {
+  handle(requestValues: RequestParameterization, value: string | string[]): void {
     if (value === null || typeof value === 'undefined') {
       throw new TypeError(`Path parameter "${this.parameter.key}" must not be null or undefined.`)
     }
@@ -39,11 +39,7 @@ export class PathParameterHandler implements ParameterHandler<PathParameter, str
 export class PathParameterHandlerFactory implements ParameterHandlerFactory<PathParameter, string | string[]> {
   static INSTANCE: PathParameterHandlerFactory = new PathParameterHandlerFactory()
 
-  provide(
-    drizzle: Drizzle,
-    rf: RequestFactory,
-    p: PathParameter
-  ): ParameterHandler<PathParameter, string | string[]> | null {
+  provide(drizzle: Drizzle, rf: RequestFactory, p: PathParameter): ParameterHandler<string | string[]> | null {
     if (p.type === PathParameter.Type) {
       return new PathParameterHandler(p)
     }

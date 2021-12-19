@@ -19,6 +19,7 @@ import { PathParameterHandlerFactory } from './builtin'
 import { SignalParameterHandlerFactory } from './builtin'
 import { RawResponseHandlerFactory } from './builtin'
 import { PlainTextResponseConverterFactory } from './builtin'
+import { ModelArgumentParameterHandlerFactory } from './builtin'
 import { Interceptor } from './Interceptor'
 import { InterceptorFactory } from './Interceptor'
 import { InterceptorFunction } from './Interceptor'
@@ -305,6 +306,7 @@ export class DrizzleBuilder {
     this.addParameterHandlerFactory(FormParameterHandlerFactory.INSTANCE)
     this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE)
     this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE)
+    this.addParameterHandlerFactory(ModelArgumentParameterHandlerFactory.INSTANCE)
 
     this.addRequestConverterFactories(new JsonRequestConverterFactory())
     this.addRequestConverterFactories(new FormRequestConverterFactory())

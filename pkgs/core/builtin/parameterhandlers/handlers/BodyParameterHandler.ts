@@ -15,14 +15,13 @@ export class BodyParameter extends Parameter {
   }
 }
 
-export class BodyParameterHandler implements ParameterHandler<BodyParameter, BodyType> {
+export class BodyParameterHandler implements ParameterHandler<BodyType> {
   constructor(
     private readonly converter: RequestBodyConverter<BodyType>,
-    private readonly requestFactory: RequestFactory,
-    readonly parameter: BodyParameter
+    private readonly requestFactory: RequestFactory
   ) {}
 
-  apply(requestValues: RequestParameterization, value: BodyType): void {
+  handle(requestValues: RequestParameterization, value: BodyType): void {
     if (value === null || typeof value === 'undefined') {
       return
     }
@@ -34,19 +33,11 @@ export class BodyParameterHandler implements ParameterHandler<BodyParameter, Bod
 export class BodyParameterHandlerFactory implements ParameterHandlerFactory<BodyParameter, BodyType> {
   static INSTANCE: BodyParameterHandlerFactory = new BodyParameterHandlerFactory()
 
-  provide(
-    drizzle: Drizzle,
-    requestFactory: RequestFactory,
-    p: BodyParameter
-  ): ParameterHandler<BodyParameter, BodyType> | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory, p: BodyParameter): ParameterHandler<BodyType> | null {
     if (p.type !== BodyParameter.Type) {
       return null
     }
 
-    return new BodyParameterHandler(
-      drizzle.requestBodyConverter(requestFactory.method, requestFactory),
-      requestFactory,
-      p
-    )
+    return new BodyParameterHandler(drizzle.requestBodyConverter(requestFactory.method, requestFactory), requestFactory)
   }
 }

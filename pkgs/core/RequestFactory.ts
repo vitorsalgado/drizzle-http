@@ -43,7 +43,7 @@ export class RequestFactory {
     public defaultHeaders: HttpHeaders = new HttpHeaders(),
     public readTimeout: number | undefined = undefined,
     public connectTimeout: number | undefined = undefined,
-    public parameterHandlers: ParameterHandler<Parameter, unknown>[] = [],
+    public parameterHandlers: { parameter: Parameter; handler: ParameterHandler }[] = [],
     public parameters: Parameter[] = [],
     public signal: unknown = null,
     public noResponseConverter: boolean = false,
@@ -208,7 +208,12 @@ export class RequestFactory {
 
     this.parameters
       .sort((a, b) => a.index - b.index)
-      .forEach(parameter => this.parameterHandlers.push(drizzle.parameterHandler(this, parameter)))
+      .forEach(parameter =>
+        this.parameterHandlers.push({
+          parameter,
+          handler: drizzle.parameterHandler(this, parameter)
+        })
+      )
 
     this.preProcessed = true
   }
@@ -591,8 +596,8 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       this.requestFactory.signal
     )
 
-    for (const parameterHandler of this.requestFactory.parameterHandlers) {
-      parameterHandler.apply(requestParameterization, args[parameterHandler.parameter.index])
+    for (const p of this.requestFactory.parameterHandlers) {
+      p.handler.handle(requestParameterization, args[p.parameter.index])
     }
 
     if (requestParameterization.body === null && this.requestFactory.hasBody()) {
