@@ -3,6 +3,6 @@
 import { createMethodDecorator } from '@drizzle-http/core'
 import { MapFunctionKey } from '../Keys'
 
-export function Map<R = any, TR = any>(mapper: (response: R) => TR) {
+export function Map<FROM = any, TO = any>(mapper: (response: FROM) => TO) {
   return createMethodDecorator(Map, ctx => ctx.requestFactory.addConfig(MapFunctionKey, mapper))
 }
