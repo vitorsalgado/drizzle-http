@@ -56,29 +56,6 @@ export class RequestFactory {
     private invokerFn: (<T>(...args: unknown[]) => T) | null = null
   ) {}
 
-  static copyFrom(other: RequestFactory): RequestFactory {
-    return new RequestFactory(
-      other.method,
-      other.httpMethod,
-      other.path,
-      other.argLen,
-      other.bodyIndex,
-      new HttpHeaders(Array.from(other.defaultHeaders.entries())),
-      other.readTimeout,
-      other.connectTimeout,
-      [...other.parameterHandlers],
-      [...other.parameters],
-      other.signal,
-      other.noResponseConverter,
-      other.noResponseHandler,
-      new Map<string, unknown>(other.bag),
-      other.checkIfPathParamsAreInSyncWithUrl,
-      other.preProcessed,
-      [...other.decorators],
-      other.invokerFn
-    )
-  }
-
   private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
     for (const param of params) {
       if (!param.key || !param.regex) {
@@ -251,8 +228,8 @@ export class RequestFactory {
    *
    * @param defaults - instance with default values for all methods
    */
-  mergeWithApiDefaults(defaults: ApiDefaults): void {
-    if (defaults === null || typeof defaults === 'undefined') {
+  mergeWithApiDefaults(defaults: ApiDefaults | null): void {
+    if (defaults === null) {
       return
     }
 
