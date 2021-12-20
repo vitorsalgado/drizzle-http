@@ -7,6 +7,7 @@ import { PathParameterHandlerFactory } from '../builtin'
 import { SignalParameterHandlerFactory } from '../builtin'
 import { HeaderParameterHandlerFactory } from '../builtin'
 import { RequestFactory } from '../RequestFactory'
+import { ModelArgumentParameterHandlerFactory } from '../builtin'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Drizzle Builder', function () {
@@ -80,7 +81,7 @@ describe('Drizzle Builder', function () {
     const parameterHandlerFactories = drizzle.parameterHandlerFactories()
 
     expect(drizzle.interceptors('test', new RequestFactory())).toHaveLength(0)
-    expect(parameterHandlerFactories).toHaveLength(7)
+    expect(parameterHandlerFactories).toHaveLength(8)
     expect(parameterHandlerFactories.some(x => x instanceof QueryParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof FormParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof PathParameterHandlerFactory)).toBeTruthy()
@@ -88,6 +89,7 @@ describe('Drizzle Builder', function () {
     expect(parameterHandlerFactories.some(x => x instanceof BodyParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof HeaderParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof SignalParameterHandlerFactory)).toBeTruthy()
+    expect(parameterHandlerFactories.some(x => x instanceof ModelArgumentParameterHandlerFactory)).toBeTruthy()
   })
 
   it('should set default drizzle-http user-agent header when builder .useDrizzleUserAgent() is called', function () {
