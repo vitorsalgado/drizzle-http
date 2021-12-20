@@ -70,7 +70,7 @@
     "@jest/types": "^27.2.5",
     "@types/benchmark": "^2.1.1",
     "@types/node": "^16.11.12",
-    "@types/node-fetch": "^2.5.12",
+    "@types/node-fetch": "^3.0.3",
     "@types/opossum": "^6.2.0",
     "@types/pino": "^7.0.5",
     "@types/puppeteer": "^5.4.4",
