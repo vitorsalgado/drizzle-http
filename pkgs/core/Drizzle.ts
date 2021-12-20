@@ -238,30 +238,21 @@ export class Drizzle {
    * @returns A proxy instance of the target API class
    */
   create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
-    const requestFactories = new Map<string, RequestFactory>()
     const createApiInvocationMethod = serviceInvoker(this)
     const parameterization = parameterizationForTarget(TargetApi)
 
     function MIXIN<TBase extends AnyCtor>(superclass: TBase) {
-      return class extends superclass {
-        constructor(...args: any[]) {
-          super(...args)
-
-          for (const [method, requestFactory] of parameterization.requestFactories) {
-            requestFactories.set(method, RequestFactory.copyFrom(requestFactory))
-          }
-        }
-      }
+      return class extends superclass {}
     }
 
     const Extended = MIXIN(TargetApi)
     const extendedApi = new Extended(...args)
 
-    for (const [method, requestFactory] of requestFactories) {
+    for (const [method, requestFactory] of parameterization.requestFactories) {
       requestFactory.mergeWithApiDefaults(parameterization.meta)
       requestFactory.preProcessAndValidate(this)
 
-      Extended.prototype[method] = createApiInvocationMethod(requestFactory, method)
+      requestFactory.defineInvoker(createApiInvocationMethod(requestFactory, method))
     }
 
     return extendedApi

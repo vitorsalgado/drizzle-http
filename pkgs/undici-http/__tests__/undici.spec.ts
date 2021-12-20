@@ -30,6 +30,7 @@ const evtMethod = new EventEmitter()
 
 @Abort(evtCls)
 @Timeout(2500, 2500)
+@ContentType(MediaTypes.APPLICATION_JSON)
 class API {
   @GET('/{id}/projects')
   @RawResponse()
@@ -78,7 +79,6 @@ class API {
 
   @GET('/group/{id}/owner/{name}/projects')
   @HeaderMap({ 'x-id': '100' })
-  @AsJSON()
   complete(
     @Param('id') id: string,
     @Param('name') name: string,
@@ -127,7 +127,6 @@ describe('Undici Call', function () {
               .build()
           )
         )
-        .addDefaultHeader('Content-Type', 'application/json')
         .build()
       api = drizzle.create(API)
     })

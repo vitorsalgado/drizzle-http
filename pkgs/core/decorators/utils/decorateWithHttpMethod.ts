@@ -27,6 +27,10 @@ export function decorateWithHttpMethod(
       requestFactory.path = path
       requestFactory.httpMethod = httpMethod
       requestFactory.argLen = descriptor.value.length
+
+      descriptor.value = function (...args: unknown[]) {
+        return requestFactory.invoker()?.(...args)
+      }
     })
   }
 }

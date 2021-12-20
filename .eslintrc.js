@@ -17,7 +17,7 @@ module.exports = {
     'no-dupe-class-members': 'off',
     '@typescript-eslint/no-dupe-class-members': ['error'],
 
-    '@typescript-eslint/no-empty-function': ['warn'],
+    '@typescript-eslint/no-empty-function': ['error', { allow: ['decoratedFunctions'] }],
 
     'eslint-disable-next-line': 'off',
     '@typescript-eslint/no-explicit-any': ['warn'],

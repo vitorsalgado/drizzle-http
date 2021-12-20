@@ -51,7 +51,8 @@ export class RequestFactory {
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
     public checkIfPathParamsAreInSyncWithUrl: boolean = true,
     private preProcessed: boolean = false,
-    private readonly decorators: Function[] = []
+    private readonly decorators: Function[] = [],
+    private invokerFn: (<T>(...args: unknown[]) => T) | null = null
   ) {}
 
   static copyFrom(other: RequestFactory): RequestFactory {
@@ -72,7 +73,8 @@ export class RequestFactory {
       new Map<string, unknown>(other.bag),
       other.checkIfPathParamsAreInSyncWithUrl,
       other.preProcessed,
-      [...other.decorators]
+      [...other.decorators],
+      other.invokerFn
     )
   }
 
@@ -88,6 +90,29 @@ export class RequestFactory {
 
   private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
     return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
+  }
+
+  /**
+   * Set the invoker for the API method associated with this instance.
+   *
+   * @internal
+   * @param invoker - API method invoker function
+   */
+  defineInvoker(invoker: <T>(...args: unknown[]) => T): void {
+    notNull(invoker)
+    isFunction(invoker)
+
+    this.invokerFn = invoker
+  }
+
+  /**
+   * Returns the invocation function for the associated API method of this RequestFactory instance.
+   * Must be called after defineInvoker() method is called.
+   *
+   * @internal
+   */
+  invoker(): (<T>(...args: unknown[]) => T) | null {
+    return this.invokerFn
   }
 
   /**
