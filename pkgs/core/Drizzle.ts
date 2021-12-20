@@ -12,7 +12,6 @@ import { Parameter, ParameterHandlerFactory } from './builtin'
 import { ParameterHandler } from './builtin'
 import { NoParameterHandlerError } from './internal'
 import { AnyCtor } from './internal'
-import { HttpHeaders } from './HttpHeaders'
 import { ResponseConverter } from './ResponseConverter'
 import { ResponseConverterFactory } from './ResponseConverter'
 import { CallAdapter } from './CallAdapter'
@@ -39,7 +38,6 @@ import { NoopResponseHandler } from './ResponseHandler'
 export class Drizzle {
   constructor(
     private readonly _baseUrl: string,
-    private readonly _headers: HttpHeaders,
     private readonly _callFactory: CallFactory,
     private readonly _interceptors: Interceptor[],
     private readonly _interceptorFactories: InterceptorFactory[],
@@ -62,15 +60,6 @@ export class Drizzle {
    */
   baseUrl(): string {
     return this._baseUrl
-  }
-
-  /**
-   * Get registered global {@link HttpHeaders}
-   *
-   * @returns HttpHeaders
-   */
-  headers(): HttpHeaders {
-    return this._headers
   }
 
   /**
@@ -249,6 +238,10 @@ export class Drizzle {
     const extendedApi = new Extended(...args)
 
     for (const [method, requestFactory] of parameterization.requestFactories) {
+      if (requestFactory.isPreProcessed()) {
+        continue
+      }
+
       requestFactory.mergeWithApiDefaults(parameterization.meta)
       requestFactory.preProcessAndValidate(this)
 

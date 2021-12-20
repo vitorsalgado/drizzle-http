@@ -10,6 +10,7 @@ import { BodyParameter } from '../builtin'
 import { PathParameter } from '../builtin'
 import { FormParameter } from '../builtin'
 import { ApiDefaults } from '../ApiParameterization'
+import { NoDrizzleUserAgent } from '../decorators'
 import { TestCallFactory } from './TestCallFactory'
 
 describe('Request Factory', () => {
@@ -345,9 +346,10 @@ describe('Request Factory', () => {
       requestFactory.addParameter(new QueryNameParameter(0))
 
       expect(() => requestFactory.preProcessAndValidate(drizzle)).not.toThrowError()
+      expect(requestFactory.defaultHeaders.get('user-agent')).toEqual('Drizzle-HTTP')
     })
 
-    it('should merge with values from ApiInstanceMeta', () => {
+    it('should merge with values from ApiDefaults', () => {
       class TestEmitter extends EventEmitter {}
 
       const testEmitter = new TestEmitter()
@@ -378,8 +380,23 @@ describe('Request Factory', () => {
       expect(requestFactory.defaultHeaders.toObject()).toStrictEqual({
         'x-id': '100',
         'x-trace-id': '200',
-        'user-agent': 'Drizzle-Http'
+        'user-agent': 'Drizzle-HTTP'
       })
+    })
+
+    it('should not add drizzle user agent header when decorated with NoDrizzleUserAgent() decorator', function () {
+      const requestFactory = new RequestFactory()
+
+      requestFactory.method = 'example'
+      requestFactory.httpMethod = 'GET'
+      requestFactory.path = '/test/{id}'
+      requestFactory.addDefaultHeader('x-id', '100')
+      requestFactory.addParameter(new PathParameter('id', pathParameterRegex('id'), 0))
+      requestFactory.registerDecorator(NoDrizzleUserAgent)
+
+      requestFactory.preProcessAndValidate(drizzle)
+
+      expect(requestFactory.defaultHeaders.get('user-agent')).toBeNull()
     })
 
     it('should return a light weight request builder when there is no dynamic parameter in the request', () => {

@@ -18,6 +18,7 @@ import { ParameterHandler } from './builtin'
 import { QueryNameParameter } from './builtin'
 import { Parameter } from './builtin'
 import { HeaderParameter } from './builtin'
+import { NoDrizzleUserAgent } from './decorators'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/
@@ -219,8 +220,8 @@ export class RequestFactory {
       throw new Error('This RequestFactory instance is already Pre Processed.')
     }
 
-    if (!drizzle.headers().isEmpty()) {
-      this.defaultHeaders.merge(drizzle.headers())
+    if (!this.hasDecorator(NoDrizzleUserAgent)) {
+      this.defaultHeaders.append('user-agent', 'Drizzle-HTTP')
     }
 
     if (!this.path.startsWith('http:') || !this.path.startsWith('https:')) {
@@ -286,6 +287,13 @@ export class RequestFactory {
     }
 
     this.decorators.push(...defaults.decorators)
+  }
+
+  /**
+   * Check if this instance was already pre-processed
+   */
+  isPreProcessed(): boolean {
+    return this.preProcessed
   }
 
   /**

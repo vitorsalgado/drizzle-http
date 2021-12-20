@@ -472,33 +472,28 @@ describe('Drizzle Http', () => {
     })
   })
 
-  describe.skip('when two instances of same API class', function () {
-    it('should create instance applying only new global values from Drizzle instance', async function () {
-      const d = new DrizzleBuilder()
-        .baseUrl(address)
-        .callFactory(TestCallFactory.INSTANCE)
-        .addDefaultHeader('x-second-api', 'true')
-        .build()
-
+  describe('when two instances of same API class', function () {
+    it('should create instance with parameters', async function () {
+      const d = new DrizzleBuilder().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
       const second = d.create(TestAPI)
 
       const res = await second.testGET()
 
       expect(res.headers['global-header']).toEqual('Global-Value')
       expect(res.headers.accept).toEqual(MediaTypes.TEXT_PLAIN)
-      expect(res.headers['x-second-api']).toEqual('true')
 
       const original = await api.testGET()
 
       expect(original.headers['global-header']).toEqual('Global-Value')
       expect(original.headers.accept).toEqual(MediaTypes.TEXT_PLAIN)
-      expect(original.headers['x-second-api']).toBeUndefined()
+
+      expect(original.headers.size).toEqual(res.headers.size)
 
       await d.shutdown()
     })
   })
 
-  describe.skip('when using an api instance from and abstract class', function () {
+  describe('when using an api instance from and abstract class', function () {
     it('should be able to create api instances with abstract classes', async function () {
       @Accept(MediaTypes.TEXT_PLAIN)
       @ContentType(MediaTypes.TEXT_PLAIN)

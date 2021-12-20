@@ -1,7 +1,6 @@
 import { Drizzle } from './Drizzle'
 import { notNull } from './internal'
 import { notEmpty } from './internal'
-import { notBlank } from './internal'
 import { JsonResponseConverterFactory } from './builtin'
 import { BodyParameterHandlerFactory } from './builtin'
 import { ParameterHandlerFactory } from './builtin'
@@ -23,7 +22,6 @@ import { ModelArgumentParameterHandlerFactory } from './builtin'
 import { Interceptor } from './Interceptor'
 import { InterceptorFactory } from './Interceptor'
 import { InterceptorFunction } from './Interceptor'
-import { HttpHeaders } from './HttpHeaders'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { CallAdapterFactory } from './CallAdapter'
 import { CallFactory } from './Call'
@@ -43,7 +41,6 @@ export function initDrizzleHttp(): DrizzleBuilder {
  */
 export class DrizzleBuilder {
   private _baseURL!: string
-  private readonly _headers: HttpHeaders
   private _callFactory!: CallFactory
   private readonly _interceptors: Interceptor[]
   private readonly _interceptorFactories: InterceptorFactory[]
@@ -52,11 +49,9 @@ export class DrizzleBuilder {
   private readonly _requestConverterFactories: RequestBodyConverterFactory[]
   private readonly _responseConverterFactories: ResponseConverterFactory[]
   private readonly _responseHandlerFactories: ResponseHandlerFactory[]
-  private _enableDrizzleUserAgent: boolean
   private _useDefaults: boolean
 
   constructor() {
-    this._headers = new HttpHeaders({})
     this._interceptors = []
     this._interceptorFactories = []
     this._callAdapterFactories = []
@@ -64,7 +59,6 @@ export class DrizzleBuilder {
     this._requestConverterFactories = []
     this._responseConverterFactories = []
     this._responseHandlerFactories = []
-    this._enableDrizzleUserAgent = true
     this._useDefaults = true
   }
 
@@ -210,34 +204,6 @@ export class DrizzleBuilder {
   }
 
   /**
-   * Sets the default Content-Type for when don't specify one.
-   * Set a Content-Type at method level to override this one.
-   *
-   * @param key - header key
-   * @param value - header value
-   * @returns Same {@link DrizzleBuilder} instance
-   */
-  addDefaultHeader(key: string, value: string): this {
-    notBlank(key, 'Parameters "key" must not be null or empty')
-    notNull(value, 'Parameters "value" must not be null. If you want a empty Header value, provide a empty string.')
-
-    this._headers.append(key, value)
-
-    return this
-  }
-
-  /**
-   * Enable/Disable Drizzle-Http default User-Agent
-   *
-   * @param enable - enable/disable - defaults to true
-   * @returns Same {@link DrizzleBuilder} instance
-   */
-  useDrizzleUserAgent(enable = true): this {
-    this._enableDrizzleUserAgent = enable
-    return this
-  }
-
-  /**
    * Enable/Disable the use of builtin components
    * @param enable - enable/disable - defaults to true
    * @returns Same {@link DrizzleBuilder} instance
@@ -278,13 +244,8 @@ export class DrizzleBuilder {
         'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."'
     )
 
-    if (this._enableDrizzleUserAgent && !this._headers.has('user-agent')) {
-      this.addDefaultHeader('user-agent', 'Drizzle-Http')
-    }
-
     return new Drizzle(
       this._baseURL,
-      this._headers,
       this._callFactory,
       this._interceptors,
       this._interceptorFactories,
