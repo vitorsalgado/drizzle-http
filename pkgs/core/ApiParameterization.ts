@@ -14,6 +14,7 @@ export class ApiDefaults {
   readTimeout: number | undefined = undefined
   connectTimeout: number | undefined = undefined
   signal: unknown | null = null
+  bag: Map<string, unknown> = new Map()
 
   get path(): string {
     return this._path

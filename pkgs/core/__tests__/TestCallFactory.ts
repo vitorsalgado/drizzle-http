@@ -3,7 +3,6 @@ import { Readable } from 'stream'
 import { request as Request } from 'undici'
 import { Dispatcher } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
-import { HttpMethod } from 'undici/types/dispatcher'
 import { HttpRequest } from '../HttpRequest'
 import { Call } from '../Call'
 import { CallFactory } from '../Call'
@@ -13,6 +12,7 @@ import { HttpResponse } from '../HttpResponse'
 import { isOK } from '../HttpResponse'
 import { isAbsolute } from '../internal'
 import { RequestFactory } from '../RequestFactory'
+import { HttpMethod } from '../decorators/utils'
 
 class TestCall implements Call<HttpResponse<Readable>> {
   constructor(readonly baseUrl: URL) {}

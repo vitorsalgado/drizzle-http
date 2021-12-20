@@ -244,6 +244,12 @@ export class RequestFactory {
       this.signal = defaults.signal
     }
 
+    for (const [key, value] of defaults.bag) {
+      if (!this.hasConfig(key)) {
+        this.addConfig(key, value)
+      }
+    }
+
     const p = defaults.path
 
     if (p) {
