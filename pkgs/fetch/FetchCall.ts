@@ -1,11 +1,7 @@
 import { Call, HttpRequest, Internals } from '@drizzle-http/core'
 
 export class FetchCall implements Call<Response> {
-  constructor(
-    private readonly baseUrl: URL,
-    private readonly requestInit: RequestInit,
-    private readonly options: RequestInit
-  ) {}
+  constructor(private readonly baseUrl: URL, private readonly requestInit: RequestInit) {}
 
   execute(request: HttpRequest): Promise<Response> {
     const url = !Internals.isAbsolute(request.url) ? new URL(request.url, this.baseUrl).href : request.url
@@ -18,19 +14,13 @@ export class FetchCall implements Call<Response> {
 
     const timer = setTimeout(() => controller.abort(), timeout)
 
-    return fetch(url, FetchCall.requestInit(this.requestInit, this.options, request, controller.signal)).finally(() =>
+    return fetch(url, FetchCall.requestInit(this.requestInit, request, controller.signal)).finally(() =>
       clearTimeout(timer)
     )
   }
 
-  static requestInit(
-    requestInit: RequestInit,
-    options: RequestInit,
-    request: HttpRequest,
-    signal: AbortSignal
-  ): RequestInit {
+  static requestInit(requestInit: RequestInit, request: HttpRequest, signal: AbortSignal): RequestInit {
     return {
-      ...options,
       ...requestInit,
       method: request.method,
       headers: new Headers([...request.headers.entries()]),

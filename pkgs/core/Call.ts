@@ -32,8 +32,7 @@ export interface CallFactory {
    * It should return a Function you all stuff ready to make the request fast.
    *
    * @param drizzle - Drizzle instance
-   * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<unknown>
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<unknown>
 }

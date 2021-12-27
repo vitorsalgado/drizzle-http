@@ -36,6 +36,7 @@ interface RequestBuilder {
  */
 export class RequestFactory {
   constructor(
+    public apiType: Function | null = null,
     public method: string = '',
     public httpMethod: string = '',
     public path: string = '',
@@ -51,8 +52,12 @@ export class RequestFactory {
     public noResponseHandler: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
     public checkIfPathParamsAreInSyncWithUrl: boolean = true,
+    public requestType: string = '',
+    public responseType: string = '',
+    public errorType: string = '',
     private preProcessed: boolean = false,
     private readonly decorators: Function[] = [],
+    private readonly classDecorators: Function[] = [],
     private invokerFn: (<T>(...args: unknown[]) => T) | null = null
   ) {}
 
@@ -253,6 +258,18 @@ export class RequestFactory {
       }
     }
 
+    if (!this.requestType) {
+      this.requestType = defaults.requestType
+    }
+
+    if (!this.responseType) {
+      this.responseType = defaults.responseType
+    }
+
+    if (!this.errorType) {
+      this.errorType = defaults.errorType
+    }
+
     const p = defaults.path
 
     if (p) {
@@ -263,7 +280,11 @@ export class RequestFactory {
       }
     }
 
-    this.decorators.push(...defaults.decorators)
+    this.classDecorators.push(...defaults.decorators)
+  }
+
+  apiOwner(): Function {
+    return notNull(this.apiType)
   }
 
   /**
@@ -280,7 +301,7 @@ export class RequestFactory {
    */
   requestBuilder(drizzle: Drizzle): RequestBuilder {
     if (this.containsDynamicParameters()) {
-      return new DynamicParametrizedRequestBuilder(this, drizzle.requestBodyConverter(this.method, this))
+      return new DynamicParametrizedRequestBuilder(this, drizzle.requestBodyConverter(this))
     }
 
     return new NoParametersRequestBuilder(this)
@@ -322,7 +343,7 @@ export class RequestFactory {
     notNull(decorator)
     isFunction(decorator)
 
-    return this.decorators.some(x => x === decorator)
+    return this.decorators.includes(decorator) || this.classDecorators.includes(decorator)
   }
 
   /**
@@ -367,6 +388,33 @@ export class RequestFactory {
    */
   allConfigs(): Map<string, unknown> {
     return new Map<string, unknown>(this.bag)
+  }
+
+  /**
+   * Check if request type matches the provided value
+   *
+   * @param type - request type
+   */
+  requestTypeIs(type: string): boolean {
+    return this.requestType === notBlank(type)
+  }
+
+  /**
+   * Check if response type matches the provided value
+   *
+   * @param type - response type
+   */
+  responseTypeIs(type: string): boolean {
+    return this.responseType === notBlank(type)
+  }
+
+  /**
+   * Check if error type matches provided value
+   *
+   * @param type - error type
+   */
+  errorTypeIs(type: string): boolean {
+    return this.errorType === notBlank(type)
   }
 
   /**

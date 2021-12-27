@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function Navigate() {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.mode = 'navigate'))
-  }
+  return createFetchDecorator(Navigate, requestInit => (requestInit.mode = 'navigate'))
 }

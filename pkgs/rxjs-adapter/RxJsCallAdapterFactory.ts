@@ -27,10 +27,10 @@ export class RxJsCallAdapterFactory implements CallAdapterFactory {
 
   constructor(private readonly decorated?: CallAdapterFactory) {}
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasDecorator(RxJs)) {
       if (this.decorated) {
-        const adapter = this.decorated.provide(drizzle, method, requestFactory)
+        const adapter = this.decorated.provide(drizzle, requestFactory)
 
         if (adapter) {
           if (requestFactory.hasDecorator(RxJs)) {

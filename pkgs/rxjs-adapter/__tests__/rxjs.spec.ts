@@ -1,5 +1,4 @@
 import {
-  AsJSON,
   Call,
   Drizzle,
   DrizzleBuilder,
@@ -15,6 +14,8 @@ import { CallAdapterFactory } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
 import { createMethodDecorator } from '@drizzle-http/core'
 import { RawResponse } from '@drizzle-http/core'
+import { ContentType } from '@drizzle-http/core'
+import { MediaTypes } from '@drizzle-http/core'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Observable } from 'rxjs'
@@ -26,7 +27,7 @@ function Custom() {
 }
 
 class CustomCallAdapterFactory implements CallAdapterFactory {
-  provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provide(_drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasDecorator(Custom)) {
       return {
         adapt(call: Call<unknown>): (request: HttpRequest, argv: unknown[]) => unknown {
@@ -40,7 +41,7 @@ class CustomCallAdapterFactory implements CallAdapterFactory {
   }
 }
 
-@AsJSON()
+@ContentType(MediaTypes.APPLICATION_JSON)
 class API {
   @GET('/{id}/projects')
   @RxJs()

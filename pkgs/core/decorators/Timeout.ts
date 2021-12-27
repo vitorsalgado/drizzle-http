@@ -1,5 +1,5 @@
-import { setupMethodOrParameterDecorator } from '../ApiParameterization'
-import { setupClassDecorator } from '../ApiParameterization'
+import { setupRequestFactory } from '../ApiParameterization'
+import { setupApiDefaults } from '../ApiParameterization'
 import { TargetClass } from '../internal'
 
 /**
@@ -13,13 +13,13 @@ import { TargetClass } from '../internal'
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
   return (target: object | TargetClass, method?: string): void => {
     if (method) {
-      return setupMethodOrParameterDecorator(Timeout, target, method, requestFactory => {
+      return setupRequestFactory(Timeout, target, method, requestFactory => {
         requestFactory.readTimeout = readTimeoutInMs
         requestFactory.connectTimeout = connectTimeoutInMs
       })
     }
 
-    setupClassDecorator(Timeout, target, parameters => {
+    setupApiDefaults(Timeout, target, parameters => {
       parameters.readTimeout = readTimeoutInMs
       parameters.connectTimeout = connectTimeoutInMs
     })

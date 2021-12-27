@@ -1,15 +1,15 @@
-import { RequestFactory } from '../../../RequestFactory'
 import { Drizzle } from '../../../Drizzle'
-import { MediaTypes } from '../../../MediaTypes'
 import { ResponseConverter } from '../../../ResponseConverter'
 import { ResponseConverterFactory } from '../../../ResponseConverter'
+import { BuiltInConv } from '../../BuiltInConv'
+import { RequestFactory } from '../../../RequestFactory'
 import { JsonResponseConverter } from './JsonResponseConverter'
 
 export class JsonResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()
 
-  provide<T>(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): ResponseConverter<T> | null {
-    if (requestFactory.contentTypeContains(MediaTypes.APPLICATION_JSON)) {
+  provide<T>(drizzle: Drizzle, responseType: string, requestFactory: RequestFactory): ResponseConverter<T> | null {
+    if (responseType === BuiltInConv.JSON) {
       return JsonResponseConverter.INSTANCE
     }
 

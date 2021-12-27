@@ -1,5 +1,5 @@
-import { setupMethodOrParameterDecorator } from '../ApiParameterization'
-import { setupClassDecorator } from '../ApiParameterization'
+import { setupRequestFactory } from '../ApiParameterization'
+import { setupApiDefaults } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
 import { TargetClass } from '../internal'
 
@@ -12,11 +12,11 @@ import { TargetClass } from '../internal'
 export function Accept(value: string) {
   return function (target: object | TargetClass, method?: string) {
     if (method) {
-      return setupMethodOrParameterDecorator(Accept, target, method, requestFactory =>
+      return setupRequestFactory(Accept, target, method, requestFactory =>
         requestFactory.defaultHeaders.append(HttpHeaders.ACCEPT, value)
       )
     }
 
-    setupClassDecorator(Accept, target, parameters => parameters.headers.append(HttpHeaders.ACCEPT, value))
+    setupApiDefaults(Accept, target, parameters => parameters.headers.append(HttpHeaders.ACCEPT, value))
   }
 }

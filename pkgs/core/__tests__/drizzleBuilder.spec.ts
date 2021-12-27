@@ -68,7 +68,7 @@ describe('Drizzle Builder', function () {
     const drizzle = builder.build()
     const parameterHandlerFactories = drizzle.parameterHandlerFactories()
 
-    expect(drizzle.interceptors('test', new RequestFactory())).toHaveLength(0)
+    expect(drizzle.interceptors(new RequestFactory())).toHaveLength(0)
     expect(parameterHandlerFactories).toHaveLength(8)
     expect(parameterHandlerFactories.some(x => x instanceof QueryParameterHandlerFactory)).toBeTruthy()
     expect(parameterHandlerFactories.some(x => x instanceof FormParameterHandlerFactory)).toBeTruthy()

@@ -64,14 +64,14 @@ describe('Raw Converter', function () {
     await drizzle.shutdown()
   })
 
-  it('should return raw response converter when generic return type is Response', function () {
+  it('should return raw response converter when method contains @RawResponse() decorator', function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
     requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
-    requestFactory.registerDecorator(RawResponse)
 
+    requestFactory.registerDecorator(RawResponse)
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new RawResponseConverterFactory()
@@ -80,7 +80,7 @@ describe('Raw Converter', function () {
     expect(converter).toBeInstanceOf(RawResponseConverter)
   })
 
-  it('should return null response converter when generic return type is not Response', function () {
+  it('should return null response converter when method does not contain @RawResponse() decorator', function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
@@ -111,7 +111,7 @@ describe('Raw Converter', function () {
     expect(converter).toBeInstanceOf(RawRequestConverter)
   })
 
-  it('should set full response when using @FullResponse() decorator', () => {
+  it('should set full response when using @RawResponse() decorator', () => {
     expect.assertions(3)
 
     return api.test('text').then(response => {

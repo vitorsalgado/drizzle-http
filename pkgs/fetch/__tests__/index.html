@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Test</title>
-  </head>
-  <body>
-    <div id="txt">waiting for text!</div>
-    <div id="json">waiting for json!</div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>Test</title>
+</head>
+<body>
+<div id="txt">waiting for text!</div>
+<div id="json">waiting for json!</div>
+
+<input id="part1" type="file" name="part1" /><br />
+<input id="part2" type="file" name="part2" /><br />
+<input id="part3" type="text" name="part3" /><br />
+<button id="btnParts">Test Parts</button>
+<p id="partsResult"></p>
+<br/>
+
+<form id="frm">
+  <input id="frmText" type="text" name="frmText" /><br/>
+  <input id="frmFile" type="file" name="frmFile" /><br />
+  <button id="frmBtn" type="button">Submit</button>
+</form>
+<p id="formResult"></p>
+<br/>
+
+<input id="singleFile" type="file" name="singleFile" /><br />
+<button id="btnSingleFile" type="button">Send Single File</button>
+<p id="singleFileResult"></p>
+<br/>
+
+<input id="multipleFiles" type="file" name="multipleFiles" multiple>
+<button id="btnMultipleFiles" type="button">Send Multiple Files</button>
+<p id="multipleFilesResult"></p>
+<br/>
+
+<input id="filesDOM" type="file" name="filesDOM" multiple>
+<button id="btnFilesDOM" type="button">Send Multiple Files</button>
+<p id="filesDOMResult"></p>
+<br/>
+</body>
 </html>

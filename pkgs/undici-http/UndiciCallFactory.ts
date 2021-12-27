@@ -32,7 +32,9 @@ export class UndiciCallFactory implements CallFactory {
     })
   }
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
+    const method = requestFactory.method
+
     if (!this._pool) {
       throw new Error('Undici pool must not be null or undefined.')
     }

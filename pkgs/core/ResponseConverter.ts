@@ -17,5 +17,5 @@ export interface ResponseConverterFactory {
    * This will be called outside the context of a request.
    * Every request will already contain a {@link ResponseConverter} instance ready.
    */
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): ResponseConverter<unknown> | null
+  provide(drizzle: Drizzle, responseType: string, requestFactory: RequestFactory): ResponseConverter<unknown> | null
 }

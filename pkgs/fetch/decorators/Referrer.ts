@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function Referrer(referrer: string) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.referrer = referrer))
-  }
+  return createFetchDecorator(Referrer, requestInit => (requestInit.referrer = referrer))
 }

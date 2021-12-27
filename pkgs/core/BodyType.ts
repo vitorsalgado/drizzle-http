@@ -1,1 +1,1 @@
-export type BodyType = Buffer | Uint8Array | string | null
+export type BodyType = any | null

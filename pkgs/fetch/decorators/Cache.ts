@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function Cache(cache: RequestCache) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.cache = cache))
-  }
+  return createFetchDecorator(Cache, requestInit => (requestInit.cache = cache))
 }

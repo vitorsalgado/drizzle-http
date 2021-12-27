@@ -8,3 +8,5 @@ export * from './converters/text'
 export * from './interceptors'
 
 export * from './parameterhandlers'
+
+export * from './BuiltInConv'

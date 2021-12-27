@@ -8,7 +8,6 @@ import { Accept } from '@drizzle-http/core'
 import { POST } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
 import { Param } from '@drizzle-http/core'
-import { AsJSON } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
 import { HttpError } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
@@ -209,7 +208,7 @@ describe('Browser Logging Interceptor', function () {
   it('should not log when level is NONE', () => {
     class API4 {
       @POST('/test-logging')
-      @AsJSON()
+      @ContentType(MediaTypes.APPLICATION_JSON)
       @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)

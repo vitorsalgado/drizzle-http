@@ -1,19 +1,27 @@
 import { DrizzleError } from './internal'
-import { HttpResponse } from './HttpResponse'
 import { HttpRequest } from './HttpRequest'
+import { HttpHeaders } from './HttpHeaders'
+
+interface Res<B = unknown, H = HttpHeaders> {
+  readonly ok: boolean
+  readonly headers: H
+  readonly status: number
+  readonly statusText: string
+  readonly url: string
+  readonly body: B
+}
 
 export class HttpError extends DrizzleError {
-  private readonly status?: number
-  private readonly url?: string
-
-  constructor(public readonly request: HttpRequest, public readonly response: HttpResponse) {
+  constructor(public readonly request: HttpRequest, public readonly response: Res) {
     super(`Request failed with status code: ${response.status}`, 'DZ_ERR_HTTP')
 
     Error.captureStackTrace(this, HttpError)
 
-    this.name = 'DrizzleHttpError'
-    this.status = this.response.status
-    this.url = this.response.url
+    this.name = 'DzHttpError'
+  }
+
+  responseBody<T>(): T {
+    return this.response.body as T
   }
 
   toJSON() {
@@ -21,13 +29,13 @@ export class HttpError extends DrizzleError {
       message: this.message,
       name: this.name,
       code: this.code,
-      url: this.url,
-      status: this.status,
+      url: this.response.url,
+      status: this.response.status,
       stack: this.stack
     }
   }
 
   toString() {
-    return `HttpError{ ${this.message} }`
+    return `HttpError{ url:${this.response.url}, status: ${this.response.status}, reason: ${this.message} }`
   }
 }

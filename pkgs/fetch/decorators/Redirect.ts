@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function Redirect(redirect: RequestRedirect) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.redirect = redirect))
-  }
+  return createFetchDecorator(Redirect, requestInit => (requestInit.redirect = redirect))
 }

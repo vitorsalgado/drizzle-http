@@ -1,3 +1,4 @@
 export const Keys = {
-  ConfigKeyRequestInit: 'fetch:request_init'
+  RequestInitDefaults: 'fetch:defaults:request_init',
+  RequestInitMethod: 'fetch:method:request_init'
 }

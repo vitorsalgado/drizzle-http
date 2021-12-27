@@ -13,7 +13,7 @@ describe('Form Converter', function () {
     .callFactory(new TestCallFactory())
     .build()
 
-  it(`should return form request converter when content type contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED}`, function () {
+  it(`should return form request converter when request type is "form-url-encoded"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
@@ -28,7 +28,7 @@ describe('Form Converter', function () {
     expect(converter).toBeInstanceOf(FormRequestConverter)
   })
 
-  it(`should return null when content type does not contains ${MediaTypes.APPLICATION_FORM_URL_ENCODED}`, function () {
+  it(`should return null when request type is not "form-url-encoded"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'

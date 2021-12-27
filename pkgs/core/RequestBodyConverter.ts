@@ -17,5 +17,5 @@ export interface RequestBodyConverterFactory {
    * This will be called outside the context of a request.
    * Every request will already contain a {@link RequestBodyConverter} instance ready.
    */
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null
+  provide(drizzle: Drizzle, requestType: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null
 }

@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function Integrity(integrity: string) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.integrity = integrity))
-  }
+  return createFetchDecorator(Integrity, requestInit => (requestInit.integrity = integrity))
 }

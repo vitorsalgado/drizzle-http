@@ -1,21 +1,24 @@
 import { ResponseConverterFactory } from '../../../ResponseConverter'
 import { ResponseConverter } from '../../../ResponseConverter'
-import { RequestFactory } from '../../../RequestFactory'
 import { Drizzle } from '../../../Drizzle'
 import { HttpResponse } from '../../../HttpResponse'
-import { MediaTypes } from '../../../MediaTypes'
+import { BuiltInConv } from '../../BuiltInConv'
 
 class PlainTextResponseConverter implements ResponseConverter<string> {
   static INSTANCE: PlainTextResponseConverter = new PlainTextResponseConverter()
 
-  convert(from: HttpResponse): Promise<string> {
+  async convert(from: HttpResponse): Promise<string> {
+    if (from.status === 204) {
+      return ''
+    }
+
     return from.text()
   }
 }
 
 export class PlainTextResponseConverterFactory implements ResponseConverterFactory {
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): ResponseConverter<unknown> | null {
-    if (requestFactory.contentTypeContains(MediaTypes.TEXT_PLAIN)) {
+  provide(drizzle: Drizzle, responseType: string): ResponseConverter<unknown> | null {
+    if (responseType === BuiltInConv.TEXT) {
       return PlainTextResponseConverter.INSTANCE
     }
 

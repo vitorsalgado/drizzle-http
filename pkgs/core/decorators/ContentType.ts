@@ -1,5 +1,5 @@
-import { setupMethodOrParameterDecorator } from '../ApiParameterization'
-import { setupClassDecorator } from '../ApiParameterization'
+import { setupRequestFactory } from '../ApiParameterization'
+import { setupApiDefaults } from '../ApiParameterization'
 import { HttpHeaders } from '../HttpHeaders'
 import { TargetClass } from '../internal'
 
@@ -12,11 +12,11 @@ import { TargetClass } from '../internal'
 export function ContentType(value: string) {
   return function (target: object | TargetClass, method?: string) {
     if (method) {
-      return setupMethodOrParameterDecorator(ContentType, target, method, requestFactory =>
+      return setupRequestFactory(ContentType, target, method, requestFactory =>
         requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
       )
     }
 
-    setupClassDecorator(ContentType, target, parameters => parameters.headers.append(HttpHeaders.CONTENT_TYPE, value))
+    setupApiDefaults(ContentType, target, parameters => parameters.headers.append(HttpHeaders.CONTENT_TYPE, value))
   }
 }

@@ -104,10 +104,7 @@ export class ModelArgumentParameterHandlerFactory implements ParameterHandlerFac
         case 'body':
           parameterHandlers.set(
             prop,
-            new BodyParameterHandler(
-              drizzle.requestBodyConverter(requestFactory.method, requestFactory),
-              requestFactory
-            )
+            new BodyParameterHandler(drizzle.requestBodyConverter(requestFactory), requestFactory)
           )
           break
       }
@@ -118,7 +115,7 @@ export class ModelArgumentParameterHandlerFactory implements ParameterHandlerFac
       mappings,
       parameterHandlers,
       requestFactory,
-      drizzle.requestBodyConverter(requestFactory.method, requestFactory)
+      drizzle.requestBodyConverter(requestFactory)
     )
   }
 }

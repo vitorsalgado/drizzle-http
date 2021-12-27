@@ -6,7 +6,7 @@ import { CallbackCallAdapter } from './CallbackCallAdapter'
 import { Callback } from './Callback'
 
 export class CallbackCallAdapterFactory implements CallAdapterFactory {
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasDecorator(Callback)) {
       return CallbackCallAdapter.INSTANCE
     }

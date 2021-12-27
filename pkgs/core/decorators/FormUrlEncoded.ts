@@ -1,5 +1,5 @@
-import { setupMethodOrParameterDecorator } from '../ApiParameterization'
-import { setupClassDecorator } from '../ApiParameterization'
+import { setupRequestFactory } from '../ApiParameterization'
+import { setupApiDefaults } from '../ApiParameterization'
 import { MediaTypes } from '../MediaTypes'
 import { HttpHeaders } from '../HttpHeaders'
 import { TargetClass } from '../internal'
@@ -17,12 +17,12 @@ import { TargetClass } from '../internal'
 export function FormUrlEncoded() {
   return function (target: object | TargetClass, method?: string): void {
     if (method) {
-      return setupMethodOrParameterDecorator(FormUrlEncoded, target, method, requestFactory =>
+      return setupRequestFactory(FormUrlEncoded, target, method, requestFactory =>
         requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       )
     }
 
-    setupClassDecorator(FormUrlEncoded, target, parameters =>
+    setupApiDefaults(FormUrlEncoded, target, parameters =>
       parameters.headers.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     )
   }

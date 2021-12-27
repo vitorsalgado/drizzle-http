@@ -35,7 +35,7 @@ export class TestCallFactory implements CallFactory {
     // no setup
   }
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Call<unknown> {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<unknown> {
     return new TestCall(new URL(drizzle.baseUrl()))
   }
 }
@@ -55,6 +55,7 @@ function toRequest(url: string, request: HttpRequest): RequestOptions {
 class TestDzResponse implements HttpResponse<Readable | null, Blob, never> {
   readonly body: Readable
   readonly headers: HttpHeaders
+  readonly trailers?: Promise<HttpHeaders>
   readonly status: number
   readonly statusText: string
   readonly url: string
@@ -62,6 +63,7 @@ class TestDzResponse implements HttpResponse<Readable | null, Blob, never> {
   constructor(url: string, private readonly response: Dispatcher.ResponseData) {
     this.body = response.body
     this.headers = new HttpHeaders(response.headers as Record<string, string>)
+    this.trailers = Promise.resolve(new HttpHeaders(response.trailers))
     this.status = response.statusCode
     this.statusText = ''
     this.url = url

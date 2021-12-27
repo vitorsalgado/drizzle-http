@@ -2,7 +2,6 @@ import { Readable } from 'stream'
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import {
   Accept,
-  AsJSON,
   Body,
   ContentType,
   DrizzleBuilder,
@@ -247,7 +246,7 @@ describe('Logging Interceptor', function () {
   it('should not log when level is NONE', () => {
     class API4 {
       @POST('/test-logging')
-      @AsJSON()
+      @ContentType(MediaTypes.APPLICATION_JSON)
       @RawResponse()
       execute(@Body() body: unknown): Promise<HttpResponse> {
         return noop(body)

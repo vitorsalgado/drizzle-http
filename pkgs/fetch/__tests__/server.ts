@@ -1,64 +1,62 @@
-import { createServer } from 'http'
-import { Socket } from 'net'
+import Fastify from 'fastify'
+import FastifyMultipart from 'fastify-multipart'
 
+const fastify = Fastify()
 const port = process.env.SERVER_PORT || 3001
-const sockets = new Set<Socket>()
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
+  'Access-Control-Allow-Headers': '*',
+  'Access-Control-Max-Age': 2592000
+}
 
-const server = createServer((req, res) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Max-Age': 2592000
-  }
+fastify.register(FastifyMultipart, { addToBody: true, attachFieldsToBody: true })
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, headers)
-    res.end()
-    return
-  }
-
-  if (['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].indexOf(req.method as string) > -1) {
-    if ((req.url ?? '').indexOf('txt') > -1) {
-      res.writeHead(200, 'OK', { ...{ 'Content-Type': 'text/plain' }, ...headers })
-      res.write('success', 'utf-8')
-      res.end()
-
-      return
-    } else if ((req.url ?? '').indexOf('json') > -1) {
-      const buf: Buffer[] = []
-
-      req.on('data', chunk => buf.push(chunk))
-      req.on('end', () => {
-        res.writeHead(200, 'OK', { ...{ 'Content-Type': 'application/json' }, ...headers })
-        res.write(JSON.stringify({ status: 'ok', data: JSON.parse(buf.join().toString()) }), 'utf-8')
-        res.end()
-      })
-
-      return
-    }
-  }
-
-  res.writeHead(405, headers)
-  res.end(`${req.method} is not allowed for the request.`)
+fastify.options('*', (req, res) => {
+  res.headers(headers).status(204).send()
 })
 
-server.on('connection', socket => {
-  sockets.add(socket)
-  server.once('close', () => sockets.delete(socket))
+fastify.get('*', (req, res) => {
+  console.log('Received GET')
+
+  if ((req.url ?? '').indexOf('txt') > -1) {
+    res.status(200).headers(headers).send('success')
+  } else if ((req.url ?? '').indexOf('json') > -1) {
+    res.status(200).headers(headers).send({ status: 'ok', data: req.body })
+  } else {
+    res.status(405).send('Not Allowed')
+  }
 })
 
-server.on('error', console.error)
+fastify.post('/parts', async (req, res) => {
+  const file = await req.file()
+  const buf = []
+
+  for await (const f of req.files()) {
+    buf.push(f)
+  }
+
+  console.log(file)
+
+  res.status(200).headers(headers).send('ok')
+})
+
+fastify.post('*', (req, res) => {
+  if ((req.url ?? '').indexOf('txt') > -1) {
+    res.status(200).headers(headers).send('success')
+  } else if ((req.url ?? '').indexOf('json') > -1) {
+    res.status(200).headers(headers).send({ status: 'ok', data: req.body })
+  } else {
+    res.status(405).send('Not Allowed')
+  }
+})
 
 export function startServer() {
-  return server.listen(port)
+  return fastify.listen(port)
 }
 
-export function closeServer(callback?: ((err?: Error | undefined) => void) | undefined) {
-  for (const socket of sockets) {
-    socket.destroy()
-    sockets.delete(socket)
-  }
-
-  server.close(callback)
+export function closeServer() {
+  return fastify.close()
 }
+
+startServer()

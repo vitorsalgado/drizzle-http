@@ -17,7 +17,7 @@ describe('JSON Converter', function () {
     .callFactory(new TestCallFactory())
     .build()
 
-  it(`should return form request converter when content contains ${MediaTypes.APPLICATION_JSON}`, function () {
+  it(`should return form request converter when request type is "json"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
@@ -27,12 +27,12 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonRequestConverterFactory()
-    const converter = factory.provide(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'json', requestFactory)
 
     expect(converter).toBeInstanceOf(JsonRequestConverter)
   })
 
-  it(`should return null request converter when content type does not match ${MediaTypes.APPLICATION_JSON}`, function () {
+  it(`should return null request converter when request type is not "json"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
@@ -48,7 +48,7 @@ describe('JSON Converter', function () {
     expect(converter).toBeNull()
   })
 
-  it(`should return form response converter when content contains ${MediaTypes.APPLICATION_JSON}`, function () {
+  it(`should return json response converter when response type is "json"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
@@ -58,12 +58,12 @@ describe('JSON Converter', function () {
     requestFactory.preProcessAndValidate(drizzle)
 
     const factory = new JsonResponseConverterFactory()
-    const converter = factory.provide(drizzle, 'test', requestFactory)
+    const converter = factory.provide(drizzle, 'json', requestFactory)
 
     expect(converter).toBeInstanceOf(JsonResponseConverter)
   })
 
-  it(`should return null response converter when content type does not match ${MediaTypes.APPLICATION_JSON}`, function () {
+  it(`should return null response converter when response type is not "json"`, function () {
     const requestFactory = new RequestFactory()
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'

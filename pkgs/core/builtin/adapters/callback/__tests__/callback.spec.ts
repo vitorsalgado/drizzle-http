@@ -2,6 +2,7 @@ import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-h
 import { Drizzle } from '../../../../Drizzle'
 import { GET, Param } from '../../../../decorators'
 import { ContentType } from '../../../../decorators'
+import { UseJsonConv } from '../../../../decorators'
 import { DrizzleBuilder } from '../../../../DrizzleBuilder'
 import { HttpError } from '../../../../HttpError'
 import { Callback } from '../Callback'
@@ -10,6 +11,7 @@ import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
 import { MediaTypes } from '../../../../MediaTypes'
 
 @ContentType(MediaTypes.APPLICATION_JSON)
+@UseJsonConv()
 class API {
   @GET('/{id}/projects')
   @Callback()

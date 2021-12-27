@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { setupMethodOrParameterDecorator } from '../ApiParameterization'
-import { setupClassDecorator } from '../ApiParameterization'
+import { setupRequestFactory } from '../ApiParameterization'
+import { setupApiDefaults } from '../ApiParameterization'
 import { TargetClass } from '../internal'
 
 /**
@@ -18,11 +18,9 @@ import { TargetClass } from '../internal'
 export function HeaderMap(headers: Record<string, string>) {
   return function (target: object | TargetClass, method?: string): void {
     if (method) {
-      return setupMethodOrParameterDecorator(HeaderMap, target, method, requestFactory =>
-        requestFactory.addDefaultHeaders(headers)
-      )
+      return setupRequestFactory(HeaderMap, target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
     }
 
-    setupClassDecorator(HeaderMap, target, parameters => parameters.headers.mergeObject(headers))
+    setupApiDefaults(HeaderMap, target, parameters => parameters.headers.mergeObject(headers))
   }
 }

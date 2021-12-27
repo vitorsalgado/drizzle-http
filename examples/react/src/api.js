@@ -1,6 +1,6 @@
 'use strict'
 
-import { AsJSON, DrizzleBuilder, GET, Query } from '@drizzle-http/core'
+import { AsJSON, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '@drizzle-http/fetch'
 import { BrowserLoggingInterceptor, Level } from '@drizzle-http/logging-interceptor'
 
@@ -13,7 +13,7 @@ class PartiesClientAPI {
   @GET('/')
   @CORS()
   @KeepAlive(true)
-  @AsJSON()
+  @ContentType(MediaTypes.APPLICATION_JSON)
   parties(@Query('acronym') acronym) {}
 }
 

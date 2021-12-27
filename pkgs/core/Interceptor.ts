@@ -12,5 +12,5 @@ export interface InterceptorFunction {
 }
 
 export interface InterceptorFactory {
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Interceptor | null
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Interceptor | null
 }

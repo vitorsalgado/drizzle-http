@@ -1,7 +1,8 @@
+// @ts-nocheck
+
 import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
-import { noop } from '@drizzle-http/core'
 import { POST } from '@drizzle-http/core'
 import { Param } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
@@ -17,18 +18,14 @@ import { CircuitBreaker } from '@drizzle-http/opossum-circuit-breaker'
 export class TestAPI {
   @GET('/')
   @RawResponse()
-  getArgLess(): Promise<Response> {
-    return noop()
-  }
+  async getArgLess(): Promise<HttpResponse> {}
 
   @POST('/{id}')
   post(
     @Param('id') _id: string,
     @Query('filter') _filter: string,
     @Body() _data: unknown
-  ): Promise<{ id: string; name: string; context: string }[]> {
-    return noop(_id, _filter, _data)
-  }
+  ): Promise<{ id: string; name: string; context: string }[]> {}
 
   @POST('/{id}')
   @CircuitBreaker()
@@ -36,13 +33,9 @@ export class TestAPI {
     @Param('id') _id: string,
     @Query('filter') _filter: string,
     @Body() _data: unknown
-  ): Promise<{ id: string; name: string; context: string }[]> {
-    return noop(_id, _filter, _data)
-  }
+  ): Promise<{ id: string; name: string; context: string }[]> {}
 
   @GET('/')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<HttpResponse> {
-    return noop(target)
-  }
+  streaming(@StreamTo() target: Writable): Promise<HttpResponse> {}
 }

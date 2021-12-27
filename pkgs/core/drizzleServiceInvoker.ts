@@ -35,11 +35,11 @@ export function serviceInvoker(
     notNull(requestFactory, 'RequestFactory instance cannot be null.')
     notBlank(method, 'Method cannot be null or empty.')
 
-    const call = callFactory.provide(drizzle, method, requestFactory) as Call
+    const call = callFactory.provide(drizzle, requestFactory) as Call
     const requestBuilder = requestFactory.requestBuilder(drizzle)
-    const responseConverter = drizzle.responseBodyConverter<T>(method, requestFactory)
-    const interceptors = drizzle.interceptors(method, requestFactory)
-    const responseHandler = drizzle.responseHandler(method, requestFactory)
+    const responseConverter = drizzle.responseConverter<T>(requestFactory)
+    const interceptors = drizzle.interceptors(requestFactory)
+    const responseHandler = drizzle.responseHandler(requestFactory)
 
     interceptors.push(new InterceptorHttpExecutor(call))
 

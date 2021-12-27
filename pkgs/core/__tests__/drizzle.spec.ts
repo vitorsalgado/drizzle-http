@@ -7,7 +7,6 @@ import { TestResult } from '@drizzle-http/test-utils'
 import { Data } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
 import { Timeout } from '../decorators'
-import { AsJSON } from '../decorators'
 import { Header } from '../decorators'
 import { POST } from '../decorators'
 import { PUT } from '../decorators'
@@ -27,6 +26,9 @@ import { FormUrlEncoded } from '../decorators'
 import { GET } from '../decorators'
 import { Param } from '../decorators'
 import { Path } from '../decorators'
+import { UseJsonConv } from '../decorators'
+import { UsePlainTextConv } from '../decorators'
+import { ParseErrorBody } from '../decorators'
 import { MediaTypes } from '../MediaTypes'
 import { noop } from '../noop'
 import { RawResponse } from '../builtin'
@@ -44,12 +46,14 @@ const cancellationInMethod = new EventEmitter()
 @Accept(MediaTypes.TEXT_PLAIN)
 @Abort(cancellation)
 @Path('')
+@ParseErrorBody()
+@UseJsonConv()
 class TestAPI {
   // region GET
 
   @GET('/')
   @HeaderMap({ 'X-Env': 'Test' })
-  @AsJSON()
+  @ContentType(MediaTypes.APPLICATION_JSON)
   testGET(): Promise<TestResult<Ok>> {
     return noop()
   }
@@ -231,7 +235,8 @@ describe('Drizzle Http', () => {
     it('should allow AsJSON() and @Accept() on class level', function () {
       expect.assertions(3)
 
-      @AsJSON()
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      @UseJsonConv()
       @Accept(MediaTypes.APPLICATION_JSON)
       class JsonAPI {
         @GET('/')
@@ -258,6 +263,7 @@ describe('Drizzle Http', () => {
       expect.assertions(2)
 
       @ContentType(MediaTypes.APPLICATION_JSON)
+      @UseJsonConv()
       class TestContentTypeClazzLevelAPI {
         @GET('/')
         test(): Promise<TestResult<Ok>> {
@@ -497,6 +503,7 @@ describe('Drizzle Http', () => {
     it('should be able to create api instances with abstract classes', async function () {
       @Accept(MediaTypes.TEXT_PLAIN)
       @ContentType(MediaTypes.TEXT_PLAIN)
+      @UsePlainTextConv()
       abstract class AbstractApi {
         @GET('/txt')
         txt(): Promise<string> {

@@ -1,5 +1,5 @@
-import { setupMethodOrParameterDecorator } from '../../ApiParameterization'
-import { setupClassDecorator } from '../../ApiParameterization'
+import { setupRequestFactory } from '../../ApiParameterization'
+import { setupApiDefaults } from '../../ApiParameterization'
 import { TargetClass } from '../../internal'
 import { HttpMethod } from '../../decorators/utils'
 
@@ -22,13 +22,13 @@ const Def: RetryOptions = {
 export function Retry(options: Partial<RetryOptions> = Def) {
   return function (target: object | TargetClass, method?: string) {
     if (method) {
-      return setupMethodOrParameterDecorator(Retry, target, method, requestFactory =>
+      return setupRequestFactory(Retry, target, method, requestFactory =>
         requestFactory.addConfig(RetryOptionsKey, options)
       )
     }
 
-    setupClassDecorator(Retry, target, defaults =>
-      defaults.bag.set(RetryOptionsKey, {
+    setupApiDefaults(Retry, target, defaults =>
+      defaults.addConfig(RetryOptionsKey, {
         limit: options.limit ?? Def.limit,
         delay: options.delay ?? Def.delay,
         methods: options.methods ?? Def.methods,

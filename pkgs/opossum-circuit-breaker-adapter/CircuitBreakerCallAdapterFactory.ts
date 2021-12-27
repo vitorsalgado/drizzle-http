@@ -30,11 +30,12 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
     return this.registry
   }
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (!requestFactory.hasDecorator(CircuitBreaker)) {
       return null
     }
 
+    const method = requestFactory.method
     const decoratorOptions = requestFactory.getConfig<OpoCircuitBreaker.Options>(Keys.OptionsForMethod)
     const name = `${this.options.name ? this.options.name : ''}${decoratorOptions.name}`
     const group = `${this.options.group ? this.options.name : ''}${

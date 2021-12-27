@@ -11,6 +11,7 @@ export interface HttpResponse<
   HEADERS extends Headers = HttpHeaders
 > {
   readonly headers: HEADERS
+  readonly trailers?: Promise<HEADERS>
   readonly status: number
   readonly statusText: string
   readonly url: string

@@ -16,7 +16,11 @@ export class RawResponseConverter implements ResponseConverter<HttpResponse> {
 export class RawResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: RawResponseConverterFactory = new RawResponseConverterFactory()
 
-  provide(_drizzle: Drizzle, _method: string, requestFactory: RequestFactory): ResponseConverter<HttpResponse> | null {
+  provide(
+    _drizzle: Drizzle,
+    _responseType: string,
+    requestFactory: RequestFactory
+  ): ResponseConverter<HttpResponse> | null {
     if (requestFactory.hasDecorator(RawResponse)) {
       return RawResponseConverter.INSTANCE
     }

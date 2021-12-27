@@ -1,6 +1,6 @@
 import { InvalidMethodConfigError } from '../../internal'
-import { setupMethodOrParameterDecorator } from '../../ApiParameterization'
-import { registerApiMethod } from '../../ApiParameterization'
+import { setupRequestFactory } from '../../ApiParameterization'
+import { Metadata } from '../../ApiParameterization'
 import { HttpMethod } from './HttpMethod'
 
 /**
@@ -20,17 +20,16 @@ export function decorateWithHttpMethod(
       throw new InvalidMethodConfigError(method, 'Path must start with a /')
     }
 
-    registerApiMethod(target.constructor, method)
+    Metadata.registerApiMethod(target.constructor, method)
 
-    setupMethodOrParameterDecorator(decorator, target, method, requestFactory => {
+    setupRequestFactory(decorator, target, method, requestFactory => {
+      requestFactory.apiType = target.constructor
       requestFactory.method = method
       requestFactory.path = path
       requestFactory.httpMethod = httpMethod
       requestFactory.argLen = descriptor.value.length
 
-      descriptor.value = function (...args: unknown[]) {
-        return requestFactory.invoker()?.(...args)
-      }
+      descriptor.value = (...args: unknown[]) => requestFactory.invoker()?.(...args)
     })
   }
 }

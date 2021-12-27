@@ -38,6 +38,6 @@ export class BodyParameterHandlerFactory implements ParameterHandlerFactory<Body
       return null
     }
 
-    return new BodyParameterHandler(drizzle.requestBodyConverter(requestFactory.method, requestFactory), requestFactory)
+    return new BodyParameterHandler(drizzle.requestBodyConverter(requestFactory), requestFactory)
   }
 }

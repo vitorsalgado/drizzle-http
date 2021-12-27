@@ -1,4 +1,5 @@
 export * from './DrizzleError'
+export * from './ErrorCodes'
 export * from './InvalidMethodConfigError'
 export * from './NoParameterHandlerError'
 export * from './NoRequestConverterError'

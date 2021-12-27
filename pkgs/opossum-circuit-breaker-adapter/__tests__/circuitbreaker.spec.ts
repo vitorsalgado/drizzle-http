@@ -1,11 +1,12 @@
 import { noop } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
-import { AsJSON } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
 import { Param } from '@drizzle-http/core'
 import { Header } from '@drizzle-http/core'
+import { ContentType } from '@drizzle-http/core'
+import { MediaTypes } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { closeTestServer } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'
@@ -22,7 +23,7 @@ const opts = {
   errorThresholdPercentage: 50
 }
 
-@AsJSON()
+@ContentType(MediaTypes.APPLICATION_JSON)
 class API {
   @GET('/no-circuit-breaker')
   noCircuitBreaker(): Promise<{ name: string }> {

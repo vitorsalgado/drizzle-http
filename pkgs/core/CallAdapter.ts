@@ -22,8 +22,7 @@ export interface CallAdapterFactory {
    * Every request will already have an instance of {@link CallAdapter} ready.
    *
    * @param drizzle - Drizzle instance
-   * @param method - caller method name
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null
 }

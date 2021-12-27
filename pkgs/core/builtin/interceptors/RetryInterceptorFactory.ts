@@ -10,7 +10,7 @@ import { NoRetry } from './NoRetry'
 export class RetryInterceptorFactory implements InterceptorFactory {
   static INSTANCE: RetryInterceptorFactory = new RetryInterceptorFactory()
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): Interceptor | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Interceptor | null {
     if (requestFactory.hasDecorator(Retry) && !requestFactory.hasDecorator(NoRetry)) {
       return new RetryInterceptor(requestFactory.getConfig(RetryOptionsKey))
     }

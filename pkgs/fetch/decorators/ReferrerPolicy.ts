@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function ReferrerPolicy(referrerPolicy: ReferrerPolicy) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.referrerPolicy = referrerPolicy))
-  }
+  return createFetchDecorator(ReferrerPolicy, requestInit => (requestInit.referrerPolicy = referrerPolicy))
 }

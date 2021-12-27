@@ -11,7 +11,7 @@ import { Map } from './decorators'
 import { MapTo } from './decorators'
 
 export class MapCallAdapterFactory implements CallAdapterFactory {
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasDecorator(Map)) {
       return new MapCallAdapter(requestFactory.getConfig(MapFunctionKey))
     } else if (requestFactory.hasDecorator(MapTo)) {

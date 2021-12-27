@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function CORS() {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.mode = 'cors'))
-  }
+  return createFetchDecorator(CORS, requestInit => (requestInit.mode = 'cors'))
 }

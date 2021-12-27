@@ -1,7 +1,5 @@
-import { setupRequestInit } from '../setupRequestInit'
+import { createFetchDecorator } from '../setupRequestInit'
 
 export function KeepAlive(keepAlive: boolean) {
-  return function (target: object, method: string): void {
-    setupRequestInit(target, method, requestInit => (requestInit.keepalive = keepAlive))
-  }
+  return createFetchDecorator(KeepAlive, requestInit => (requestInit.keepalive = keepAlive))
 }
