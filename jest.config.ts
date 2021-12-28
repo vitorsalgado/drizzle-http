@@ -42,7 +42,7 @@ const config: JestConfig.InitialOptions = {
     '/out/',
     'internal/*',
     'scripts/*',
-    'packages/fetch'
+    'packages/drizzle-fetch'
   ]
 }
 

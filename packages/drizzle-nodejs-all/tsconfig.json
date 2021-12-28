@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../drizzle-core", "prepend": false },
+    { "path": "../drizzle-undici", "prepend": false },
+    { "path": "../drizzle-logging-interceptor", "prepend": false },
+    { "path": "../drizzle-rxjs", "prepend": false },
+    { "path": "../../internal/test-utils", "prepend": false }
+  ]
+}

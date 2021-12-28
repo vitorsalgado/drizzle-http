@@ -41,7 +41,7 @@ yarn add drizzle-http
 - Define HTTP requests with decorators, including path parameters, querystring, headers, body
 - Extensible
 - Add custom request and response converters
-- Add custom method adapters to use libs like RxJs. See an example [here](../rxjs-adapter).
+- Add custom method adapters to use libs like RxJs. See an example [here](../drizzle-rxjs).
 - Add interceptors
 - Request cancellation
 

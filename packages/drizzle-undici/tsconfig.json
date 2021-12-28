@@ -4,7 +4,7 @@
     "outDir": "./dist"
   },
   "references": [
-    { "path": "../core", "prepend": false },
+    { "path": "../drizzle-core", "prepend": false },
     { "path": "../../internal/test-utils", "prepend": false }
   ]
 }

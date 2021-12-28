@@ -2,7 +2,7 @@
 
 ## Packages
 
-- [Drizzle-Http](drizzle-http)
+- [Drizzle-Http](drizzle-nodejs-all)
 - [Core](drizzle-http-core)
 - [Undici Client](drizzle-http-undici)
 - [Fetch Client](drizzle-http-fetch)

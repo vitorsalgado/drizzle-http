@@ -6,8 +6,8 @@
     "noImplicitAny": false
   },
   "references": [
-    { "path": "../../packages/core", "prepend": false },
-    { "path": "../../packages/undici-http", "prepend": false }
+    { "path": "../../packages/drizzle-core", "prepend": false },
+    { "path": "../../packages/drizzle-undici", "prepend": false }
   ],
   "include": ["src/**/*"]
 }
