@@ -9,6 +9,10 @@ type RetryInterceptorOptions = RetryOptions
 export class RetryInterceptor implements Interceptor {
   constructor(private readonly options: RetryInterceptorOptions) {}
 
+  private static isAsyncIterable(object: any): boolean {
+    return object != null && typeof object[Symbol.asyncIterator] === 'function'
+  }
+
   async intercept(chain: Chain): Promise<HttpResponse> {
     return this.retryable(chain, this.options.limit)
   }
@@ -37,9 +41,5 @@ export class RetryInterceptor implements Interceptor {
         }
       })
     })
-  }
-
-  private static isAsyncIterable(object: any): boolean {
-    return object != null && typeof object[Symbol.asyncIterator] === 'function'
   }
 }

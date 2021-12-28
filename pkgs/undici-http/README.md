@@ -1,11 +1,13 @@
 # Undici Client &middot; [![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions) [![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/undici)](https://www.npmjs.com/package/@drizzle-http/undici) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
-[Drizzle-Http](https://github.com/vitorsalgado/drizzle-http) client implementation based on [Undici](https://github.com/nodejs/undici).
+[Drizzle-Http](https://github.com/vitorsalgado/drizzle-http) client implementation based
+on [Undici](https://github.com/nodejs/undici).
 
 ## Installation
 
 The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
-If you are installing each package individually, make sure to install first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
+If you are installing each package individually, make sure to install
+first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
 
 ### NPM
 
@@ -22,7 +24,8 @@ yarn add @drizzle-http/undici
 ## Features
 
 - Customize undici pool
-- Allows the response to be written direct to a [Writable](https://nodejs.org/api/stream.html#stream_class_stream_writable).
+- Allows the response to be written direct to
+  a [Writable](https://nodejs.org/api/stream.html#stream_class_stream_writable).
 
 ## Usage
 
@@ -34,7 +37,8 @@ const api: API = DrizzleBuilder.newBuilder().baseUrl(addr).callFactory(UndiciCal
 
 ## Stream
 
-This feature uses undici [client.stream](https://github.com/nodejs/undici#clientstreamopts-factorydata-callbackerr-promisevoid) feature.  
+This feature uses
+undici [client.stream](https://github.com/nodejs/undici#clientstreamopts-factorydata-callbackerr-promisevoid) feature.  
 Example:
 
 ```typescript

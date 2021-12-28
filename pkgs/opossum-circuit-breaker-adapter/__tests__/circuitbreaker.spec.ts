@@ -84,9 +84,9 @@ class MessageService {
 }
 
 class Fallbacks {
-  constructor(private readonly messageService: MessageService) {}
-
   readonly prop: string = 'test'
+
+  constructor(private readonly messageService: MessageService) {}
 
   fallback(filter: string, page: string, error: Error): Promise<{ ok: string }> {
     expect(Array.isArray(filter)).toBeFalsy()

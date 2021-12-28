@@ -35,6 +35,12 @@ class Result {
   private static readonly service: Service = new Service('static')
   readonly mapped: Array<Item>
 
+  constructor(response: DataItems) {
+    this.mapped = response.data.map(x => ({
+      context: x.context
+    }))
+  }
+
   static build(response: DataItems): Result {
     return new Result({ data: [response.data.pop() ?? ({} as Item)] })
   }
@@ -51,12 +57,6 @@ class Result {
 
   static buildWithOutsideService(): Result {
     return new Result({ data: [{ context: service.test() }] })
-  }
-
-  constructor(response: DataItems) {
-    this.mapped = response.data.map(x => ({
-      context: x.context
-    }))
   }
 }
 

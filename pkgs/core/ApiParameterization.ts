@@ -10,8 +10,6 @@ type CtorTarget = Function
 type Target = CtorTarget | object
 
 export class ApiDefaults {
-  private _path: string = ''
-
   decorators: Function[] = []
   headers: HttpHeaders = new HttpHeaders({})
   readTimeout: number | undefined = undefined
@@ -21,6 +19,8 @@ export class ApiDefaults {
   requestType: string = Drizzle.DEFAULT_REQUEST_TYPE
   errorType: string = ''
   bag: Map<string, unknown> = new Map()
+
+  private _path: string = ''
 
   get path(): string {
     return this._path

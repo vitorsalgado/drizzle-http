@@ -13,13 +13,13 @@ export class UndiciOptionsBuilder {
   private _headersTimeout?: number
   private _bodyTimeout?: number
 
+  static newBuilder(): UndiciOptionsBuilder {
+    return new UndiciOptionsBuilder()
+  }
+
   connections(conns: number): this {
     this._connections = conns
     return this
-  }
-
-  static newBuilder(): UndiciOptionsBuilder {
-    return new UndiciOptionsBuilder()
   }
 
   socketPath(path: string | null): this {

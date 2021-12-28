@@ -64,6 +64,11 @@ class CtorModel {
 }
 
 class ModelWithMethods {
+  @ToQuery()
+  static sort(): string {
+    return 'asc'
+  }
+
   @ToHeader()
   'trace-id'(): string {
     return '100'
@@ -72,11 +77,6 @@ class ModelWithMethods {
   @ToQuery('filter')
   getFilter(): string {
     return 'all'
-  }
-
-  @ToQuery()
-  static sort(): string {
-    return 'asc'
   }
 }
 
