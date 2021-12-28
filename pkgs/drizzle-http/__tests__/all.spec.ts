@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import EventEmitter from 'events'
 import { TestId, TestResult } from '@drizzle-http/test-utils'
 import { noop } from '@drizzle-http/core'

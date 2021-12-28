@@ -46,8 +46,9 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "@drizzle-http/fetch": "^2.2.0",
     "@drizzle-http/logging-interceptor": "^2.2.0",
+    "@drizzle-http/opossum-circuit-breaker": "^2.2.0",
+    "@drizzle-http/response-mapper-adapter": "^2.2.0",
     "@drizzle-http/rxjs-adapter": "^2.2.0",
     "@drizzle-http/undici": "^2.2.0"
   }
