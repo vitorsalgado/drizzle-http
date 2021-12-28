@@ -15,13 +15,13 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier 'packages/**' 'examples/**' 'benchmarks/**' 'scripts/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier --check",
-    "release": "node scripts/release/index.js publish",
+    "release": "node scripts/packaging.js publish",
     "clean": "lerna clean && npm run clean:dist",
     "clean:dist": "lerna exec -- rm -rf dist && lerna exec -- rm -rf out && lerna exec -- rm -rf tsconfig.tsbuildinfo",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
     "postinstall": "husky install",
-    "pkg:prepare": "node scripts/release/index.js prepare",
-    "pkg:publish": "node scripts/release/index.js publish"
+    "packaging:prepare": "node scripts/packaging.js prepare",
+    "packaging:publish": "node scripts/packaging.js publish"
   },
   "engines": {
     "node": ">=12.4.0"

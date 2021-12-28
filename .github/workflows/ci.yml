@@ -128,7 +128,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npm run pkg:publish
+          npm run packaging:publish
 
       - name: Release
         uses: actions/create-release@v1

@@ -8,7 +8,7 @@ const Path = require('path')
 const FsExt = require('fs-extra')
 const Pino = require('pino')
 const Globby = require('globby')
-const PkgMain = require('../../package.json')
+const PkgMain = require('../package.json')
 const ExecSync = require('child_process').execSync
 const Program = require('commander').program
 
