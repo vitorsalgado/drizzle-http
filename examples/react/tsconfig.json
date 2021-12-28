@@ -6,9 +6,9 @@
     "sourceMap": true
   },
   "references": [
-    { "path": "../../pkgs/core", "prepend": false },
-    { "path": "../../pkgs/undici-http", "prepend": false },
-    { "path": "../../pkgs/logging-interceptor", "prepend": false }
+    { "path": "../../packages/core", "prepend": false },
+    { "path": "../../packages/undici-http", "prepend": false },
+    { "path": "../../packages/logging-interceptor", "prepend": false }
   ],
   "include": ["http/"]
 }

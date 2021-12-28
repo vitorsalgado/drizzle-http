@@ -4,7 +4,7 @@
   "packages": [
     "benchmarks",
     "internal/*",
-    "pkgs/*",
+    "packages/*",
     "examples/*"
   ],
   "ignoreChanges": [

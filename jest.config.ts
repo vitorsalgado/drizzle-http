@@ -29,9 +29,9 @@ const config: JestConfig.InitialOptions = {
     'examples/*',
     'benchmarks/*',
     'scripts/*',
-    'pkgs/.*/dist',
-    'pkgs/.*/out',
-    'pkgs/.*/tsconfig.*',
+    'packages/.*/dist',
+    'packages/.*/out',
+    'packages/.*/tsconfig.*',
     'internal/*'
   ],
   testPathIgnorePatterns: [
@@ -42,7 +42,7 @@ const config: JestConfig.InitialOptions = {
     '/out/',
     'internal/*',
     'scripts/*',
-    'pkgs/fetch'
+    'packages/fetch'
   ]
 }
 

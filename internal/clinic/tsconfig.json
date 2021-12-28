@@ -6,8 +6,8 @@
     "noImplicitAny": false
   },
   "references": [
-    { "path": "../../pkgs/core", "prepend": false },
-    { "path": "../../pkgs/undici-http", "prepend": false }
+    { "path": "../../packages/core", "prepend": false },
+    { "path": "../../packages/undici-http", "prepend": false }
   ],
   "include": ["src/**/*"]
 }

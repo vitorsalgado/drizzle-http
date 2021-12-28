@@ -8,7 +8,6 @@
     { "path": "../core", "prepend": false },
     { "path": "../undici-http", "prepend": false },
     { "path": "../logging-interceptor", "prepend": false },
-    { "path": "../fetch", "prepend": false },
     { "path": "../rxjs-adapter", "prepend": false },
     { "path": "../../internal/test-utils", "prepend": false }
   ]

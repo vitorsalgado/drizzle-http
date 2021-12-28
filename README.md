@@ -51,14 +51,14 @@ yarn add drizzle-http
 
 ## Packages
 
-See all [available packages](pkgs/README.md) in this monorepo.
+See all [available packages](packages/README.md) in this monorepo.
 
 ## Features
 
 - Define HTTP requests with decorators, including path parameters, querystring, headers, body
 - Extensible
 - Add custom request and response converters
-- Add custom method adapters to use libs like RxJs. See an example [here](pkgs/drizzle-http-rxjs-adapter).
+- Add custom method adapters to use libs like RxJs. See an example [here](packages/drizzle-http-rxjs-adapter).
 - Add interceptors
 - Request cancellation
 
