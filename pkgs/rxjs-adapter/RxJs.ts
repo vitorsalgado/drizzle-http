@@ -1,3 +1,3 @@
-import { createMethodDecorator } from '@drizzle-http/core'
+import { createClassAndMethodDecorator } from '@drizzle-http/core'
 
-export const RxJs = () => createMethodDecorator(RxJs)
+export const RxJs = () => createClassAndMethodDecorator(RxJs)
