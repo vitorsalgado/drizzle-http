@@ -24,18 +24,18 @@ export class DefaultResponseHandler implements ResponseHandler {
       return response
     }
 
-    let data = null
+    let body = null
 
-    if (!this.convertErrorBody) {
+    if (this.convertErrorBody) {
+      if (!response.bodyUsed) {
+        body = await this.responseConverter.convert(response)
+      }
+    } else {
       if (!response.bodyUsed && response.body) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const _ of response?.body) {
           // consuming error body ...
         }
-      }
-    } else {
-      if (!response.bodyUsed) {
-        data = await this.responseConverter.convert(response)
       }
     }
 
@@ -45,7 +45,7 @@ export class DefaultResponseHandler implements ResponseHandler {
       statusText: response.statusText,
       url: response.url,
       headers: response.headers,
-      body: data
+      body
     })
   }
 }

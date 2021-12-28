@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "fastify": "^3.25.0",
+    "fastify": "^3.25.2",
     "fastify-formbody": "^5.2.0"
   }
 }

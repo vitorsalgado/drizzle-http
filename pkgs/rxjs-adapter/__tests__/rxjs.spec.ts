@@ -106,8 +106,7 @@ describe('RxJs Call Adapter', () => {
     expect.assertions(1)
 
     api.nowhere().subscribe({
-      next(model) {
-        console.log(model)
+      next(_model) {
         done()
       },
       error(err: HttpError) {

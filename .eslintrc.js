@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
-  extends: ['plugin:@typescript-eslint/recommended', 'standard', 'prettier'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'import', 'eslint-plugin-tsdoc'],
+  extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   root: true,
   env: {
     jest: true,
@@ -11,35 +11,13 @@ module.exports = {
   rules: {
     'tsdoc/syntax': 'error',
 
-    'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-
-    'no-dupe-class-members': 'off',
     '@typescript-eslint/no-dupe-class-members': ['error'],
-
     '@typescript-eslint/no-empty-function': ['error', { allow: ['decoratedFunctions'] }],
-
-    'eslint-disable-next-line': 'off',
     '@typescript-eslint/no-explicit-any': ['warn'],
-
-    'space-before-function-paren': 'off',
-
-    'no-empty-function': 'off',
-
-    'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': ['error'],
-
     '@typescript-eslint/ban-types': ['off'],
     '@typescript-eslint/no-inferrable-types': ['off'],
-
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': [
-      'warn',
-      {
-        classes: false,
-        functions: false
-      }
-    ],
 
     'import/order': [
       'error',
