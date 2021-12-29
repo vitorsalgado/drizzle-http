@@ -19,6 +19,7 @@ import { SignalParameterHandlerFactory } from './builtin'
 import { RawResponseHandlerFactory } from './builtin'
 import { PlainTextResponseConverterFactory } from './builtin'
 import { ModelArgumentParameterHandlerFactory } from './builtin'
+import { RetryInterceptorFactory } from './builtin'
 import { Interceptor } from './Interceptor'
 import { InterceptorFactory } from './Interceptor'
 import { InterceptorFunction } from './Interceptor'
@@ -74,7 +75,7 @@ export class DrizzleBuilder {
    * Set the api base URL
    *
    * @param url- base url for this instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   baseUrl(url: string): this {
     notNull(url, 'Parameter "url" must not be null.')
@@ -92,7 +93,7 @@ export class DrizzleBuilder {
    * Set the factory for {@link Call}.
    *
    * @param factory - {@link CallFactory} instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   callFactory(factory: CallFactory): this {
     notNull(factory, 'Parameter "factory" must not be null.')
@@ -121,7 +122,7 @@ export class DrizzleBuilder {
    * You can also provide a {@link InterceptorFactory} instance expose Drizzle core components during setup phase.
    *
    * @param interceptor - {@link Interceptor} instance or a {@link InterceptorFactory} instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   addInterceptor(interceptor: Interceptor | InterceptorFunction | InterceptorFactory): this {
     notNull(interceptor, 'Parameter "interceptor" must not be null.')
@@ -145,7 +146,7 @@ export class DrizzleBuilder {
    * The order is relevant for the resolution of the adapter to the request.
    *
    * @param callAdapterFactory - {@link CallAdapterFactory} instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   addCallAdapterFactories(...callAdapterFactory: CallAdapterFactory[]): this {
     notNull(callAdapterFactory, 'Parameter "callAdapterFactory" must not be null.')
@@ -161,7 +162,7 @@ export class DrizzleBuilder {
    * You can add multiple factories.
    *
    * @param factory - {@link ParameterHandlerFactory} instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   addParameterHandlerFactory(factory: ParameterHandlerFactory<Parameter, unknown>): this {
     notNull(factory, 'Parameter "factory" must not be null.')
@@ -176,7 +177,7 @@ export class DrizzleBuilder {
    * You can add multiple factories.
    *
    * @param requestConverterFactory - {@link RequestBodyConverterFactory} instance
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   addRequestConverterFactories(...requestConverterFactory: RequestBodyConverterFactory[]): this {
     notNull(requestConverterFactory, 'Parameter "requestConverterFactory" must not be null.')
@@ -192,7 +193,7 @@ export class DrizzleBuilder {
    * You can add multiple factories.
    *
    * @param responseConverterFactory - {@link ResponseConverterFactory}
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   addResponseConverterFactories(...responseConverterFactory: ResponseConverterFactory[]): this {
     notNull(responseConverterFactory, 'Parameter "responseConverterFactory" must not be null.')
@@ -206,7 +207,7 @@ export class DrizzleBuilder {
   /**
    * Enable/Disable the use of builtin components
    * @param enable - enable/disable - defaults to true
-   * @returns Same {@link DrizzleBuilder} instance
+   * @returns DrizzleBuilder
    */
   useDefaults(enable = true): this {
     this._useDefaults = enable
@@ -273,10 +274,12 @@ export class DrizzleBuilder {
     this.addRequestConverterFactories(new FormRequestConverterFactory())
     this.addRequestConverterFactories(new RawRequestConverterFactory())
 
-    this._responseConverterFactories.unshift(new RawResponseConverterFactory())
-
     this.addResponseConverterFactories(new JsonResponseConverterFactory())
     this.addResponseConverterFactories(new PlainTextResponseConverterFactory())
+    this._responseConverterFactories.unshift(new RawResponseConverterFactory())
+
     this.addResponseHandlerFactory(new RawResponseHandlerFactory())
+
+    this.addInterceptor(RetryInterceptorFactory.INSTANCE)
   }
 }

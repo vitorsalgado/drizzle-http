@@ -1,6 +1,11 @@
 import { HttpHeaders } from './HttpHeaders'
 import { BodyType } from './BodyType'
 
+/**
+ * Holds HTTP request parameters to later build an actual HTTP request.
+ * An instance of this class is created in each HTTP request and is passed through
+ * {@link ParameterHandler} and {@link RequestBodyConverter} instances.
+ */
 export class RequestParameterization {
   constructor(
     public readonly argv: unknown[],

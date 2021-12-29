@@ -2,7 +2,7 @@ import { BodyType } from './BodyType'
 import { HttpHeaders } from './HttpHeaders'
 
 /**
- * Minimum contract that every response should follow inside the framework
+ * Minimum contract that every response should follow inside the framework.
  */
 export interface HttpResponse<
   BODY = BodyType,

@@ -44,6 +44,9 @@ describe('Request Factory', () => {
     expect(requestFactory.hasFormFields()).toBeFalsy()
     expect(requestFactory.hasPathParameters()).toBeFalsy()
     expect(requestFactory.containsDynamicParameters()).toBeFalsy()
+    expect(requestFactory.requestTypeIs('')).toBeTruthy()
+    expect(requestFactory.responseTypeIs('')).toBeTruthy()
+    expect(requestFactory.errorTypeIs('')).toBeTruthy()
   })
 
   it('should add configuration', () => {
@@ -122,6 +125,31 @@ describe('Request Factory', () => {
     expect(request.headers.get('x-id')).toEqual('100,8bc')
     expect(request.headers.get('x-client-id')).toEqual('666')
     expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON)
+  })
+
+  it('should return API Class ref that owns current instance', function () {
+    class Test {}
+
+    abstract class AbstractTest {}
+
+    const factory1 = new RequestFactory()
+    factory1.apiType = Test
+
+    const factory2 = new RequestFactory()
+    factory2.apiType = AbstractTest
+
+    expect(factory1.apiOwner()).toEqual(Test)
+    expect(factory2.apiOwner()).toEqual(AbstractTest)
+  })
+
+  it('should mark response handler as ignored when calling .ignoreResponseHandler()', function () {
+    const factory = new RequestFactory()
+
+    expect(factory.noResponseHandler).toBeFalsy()
+
+    factory.ignoreResponseHandler()
+
+    expect(factory.noResponseHandler).toBeTruthy()
   })
 
   describe('Invalid instances', () => {

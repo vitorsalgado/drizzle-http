@@ -12,7 +12,6 @@ import { Call } from './Call'
  *
  * @param drizzle - {@link Drizzle} instance
  * @typeParam V - Type of the response
- * @returns A function wrapping request context related information
  */
 export function serviceInvoker(
   drizzle: Drizzle
@@ -29,7 +28,6 @@ export function serviceInvoker(
    *
    * @param requestFactory - {@link RequestFactory}
    * @param method - caller method name
-   * @returns The function that will execute the HTTP request
    */
   return function <T>(requestFactory: RequestFactory, method: string): (...args: unknown[]) => T {
     notNull(requestFactory, 'RequestFactory instance cannot be null.')
@@ -70,7 +68,6 @@ export function serviceInvoker(
      * This method executes the {@link Call} instance with an adapter, if any.
      *
      * @param args - function arguments usually decorated
-     * @returns The response according to the method setupTestServer, {@link ResponseConverter}, {@link CallAdapter}
      */
     return function (...args: unknown[]): T {
       const request = requestBuilder.toRequest(args)

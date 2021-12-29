@@ -283,6 +283,9 @@ export class RequestFactory {
     this.classDecorators.push(...defaults.decorators)
   }
 
+  /**
+   * Return API Class type that owns this Request Factory instance.
+   */
   apiOwner(): Function {
     return notNull(this.apiType)
   }
@@ -352,7 +355,7 @@ export class RequestFactory {
    * @param key - configuration key
    * @param value - configuration value
    *
-   * @throws {@link DrizzleError}
+   * @throws DrizzleError
    */
   addConfig(key: string, value: unknown): void {
     notBlank(key, 'Parameters "key" cannot be null or empty.')
@@ -366,7 +369,7 @@ export class RequestFactory {
    *
    * @param key - configuration key
    *
-   * @throws {@link DrizzleError}
+   * @throws DrizzleError
    */
   getConfig<R>(key: string): R {
     notBlank(key, 'Parameter "key" cannot be null or empty.')
@@ -461,9 +464,7 @@ export class RequestFactory {
    * @param parameter - {@link Parameter} instance or extended class
    */
   addParameter<T extends Parameter>(parameter: T): void {
-    if (parameter === null) {
-      throw new TypeError('Parameter must not be null.')
-    }
+    notNull(parameter)
 
     if (parameter instanceof BodyParameter) {
       if (this.parameters.find(x => x.type === parameter.type)) {

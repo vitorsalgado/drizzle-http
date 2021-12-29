@@ -32,7 +32,7 @@ import { ParseErrorBody } from './decorators'
  * Create instances using Drizzle.Builder or {@link DrizzleBuilder}.
  *
  * @example
- const api = new Drizzle.Builder()
+ const api = DrizzleBuilder.newBuilder()
  .baseUrl(baseURL)
  .useDefaults()
  .addCallAdapterFactories(new RxJsCallAdapterFactory())
@@ -96,6 +96,8 @@ export class Drizzle {
 
   /**
    * Get all registered {@link ParameterHandlerFactory} instances
+   *
+   * @returns ParameterHandlerFactory[]
    */
   parameterHandlerFactories(): ParameterHandlerFactory<Parameter, unknown>[] {
     return [...this._parameterHandlerFactories]
@@ -104,7 +106,7 @@ export class Drizzle {
   /**
    * Iterates the callAdapterFactories trying to get a {@link CallAdapter} for a request.
    *
-   * @returns {@link CallAdapter} instance or null
+   * @returns CallAdapter
    */
   callAdapter<F, T>(method: string, requestFactory: RequestFactory): CallAdapter<F, T> | null {
     if (!this._callAdapterFactories || this._callAdapterFactories.size === 0) {
@@ -125,8 +127,8 @@ export class Drizzle {
   /**
    * Search a {@link ParameterHandler} that handles the parameter type from argument
    *
-   * @returns {@link ParameterHandler} instance
-   * @throws {@link NoParameterHandlerError} if no handler is found for provided parameter type
+   * @returns ParameterHandler
+   * @throws NoParameterHandlerError
    */
   parameterHandler<V>(requestFactory: RequestFactory, parameter: Parameter): ParameterHandler<V> {
     for (const factory of this._parameterHandlerFactories) {
@@ -144,8 +146,7 @@ export class Drizzle {
    * Iterates through all requestBodyConverterFactories to get {@link RequestBodyConverter}
    * to the request body.
    *
-   * @returns {@link RequestBodyConverter} based on request configuration or
-   *  {@link RawResponseConverter} instance when none is found
+   * @returns RequestBodyConverter
    */
   requestBodyConverter<R>(requestFactory: RequestFactory, requestType?: string): RequestBodyConverter<R> {
     for (const factory of this._requestConverterFactories) {
@@ -162,8 +163,7 @@ export class Drizzle {
   /**
    * Iterates through all responseBodyConverterFactories to get {@link ResponseConverter} to the response body.
    *
-   * @returns {@link ResponseConverter} instance based on request configuration or
-   *  {@link RawResponseConverter} when none is found.
+   * @returns ResponseConverter
    */
   responseConverter<T>(requestFactory: RequestFactory, responseType?: string): ResponseConverter<T> {
     if (requestFactory.noResponseConverter || requestFactory.hasDecorator(RawResponse)) {
@@ -188,7 +188,7 @@ export class Drizzle {
   /**
    * Search for response handler. If no none is found, returns {@link DefaultResponseHandler}.
    *
-   * @returns {@link ResponseHandlerFactory} instance or {@link DefaultResponseHandler} if none is found for method.
+   * @returns ResponseHandler
    */
   responseHandler(requestFactory: RequestFactory): ResponseHandler {
     if (requestFactory.noResponseHandler) {
@@ -238,7 +238,7 @@ export class Drizzle {
    * @param TargetApi - the target API class with decorated methods. use class and abstract class.
    * @param args - optional list of arguments to be passed to the api constructor.
    *
-   * @returns A proxy instance of the target API class
+   * @returns InstanceType<T>
    */
   create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
     const parameterization = Metadata.metadataFor(TargetApi)
