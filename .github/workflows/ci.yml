@@ -15,9 +15,6 @@ on:
       - 'docs/**'
       - '*.md'
 
-env:
-  CI: true
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -109,7 +106,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
-          node-version: 14.x
+          node-version: 16.x
           registry-url: 'https://registry.npmjs.org'
 
       - uses: actions/cache@v2
@@ -130,6 +127,10 @@ jobs:
         run: |
           npm run packaging:publish
 
+      - name: Latest Changelog
+        run: |
+          diff --changed-group-format='%>' --unchanged-group-format='' <( git show HEAD~1:CHANGELOG.md ) CHANGELOG.md > CHANGELOG_LATEST.md || true
+
       - name: Release
         uses: actions/create-release@v1
         env:
@@ -137,7 +138,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body_path: CHANGELOG.md
+          body_path: CHANGELOG_LATEST.md
           draft: false
           prerelease: contains(github.ref, '-rc')
 
@@ -146,8 +147,10 @@ jobs:
     needs:
       - lint
       - build
-
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
-      - uses: fastify/github-action-merge-dependabot@v2.2.0
+      - uses: fastify/github-action-merge-dependabot@v3.0.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

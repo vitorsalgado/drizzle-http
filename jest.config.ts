@@ -11,27 +11,21 @@ const config: JestConfig.InitialOptions = {
       tsconfig: './tsconfig.test.json'
     }
   },
-  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-  collectCoverageFrom: [
-    '!**/bin/**',
-    '!**/__mocks__/**',
-    '!**/__tests__/**',
-    '!**/build/**',
-    '!**/vendor/**',
-    '!**/dist/**',
-    '!**/out/**',
-    '!scripts/*'
-  ],
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  testMatch: ['**/?(*.)+(spec|test).ts'],
+  collectCoverageFrom: ['packages/**'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/dist/', '/coverage/', '/drizzle-fetch/', 'packages/.*/index.ts'],
   modulePathIgnorePatterns: [
     'dist',
-    'dist-*',
+    'coverage',
     'examples/*',
     'benchmarks/*',
     'scripts/*',
     'packages/.*/dist',
+    'packages/.*/coverage',
     'packages/.*/out',
     'packages/.*/tsconfig.*',
+    'packages/.*/jest.config*',
+    'packages/.*/package-*.json',
     'internal/*'
   ],
   testPathIgnorePatterns: [
@@ -40,8 +34,12 @@ const config: JestConfig.InitialOptions = {
     '/examples/',
     '/dist/',
     '/out/',
+    '/coverage/',
     'internal/*',
     'scripts/*',
+    'packages/.*/jest.config*',
+    'packages/.*/index.ts',
+    'packages/.*/package-*.json',
     'packages/drizzle-fetch'
   ]
 }
