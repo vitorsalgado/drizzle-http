@@ -1,3 +1,3 @@
 export const Keys = {
-  ConfigStreamToIndex: 'undici:stream_index'
+  StreamTargetIndex: 'undici:stream_index'
 }

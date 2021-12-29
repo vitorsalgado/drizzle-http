@@ -11,27 +11,18 @@ const Styles = {
   Red: 'color: #F20404'
 }
 
-export interface Init {
+interface Init {
   level?: Level
   headersToRedact?: Set<string>
-  enabled?: boolean
 }
 
 export class BrowserLoggingInterceptor implements Interceptor {
   public level: Level
   private readonly headersToRedact: Set<string> = new Set<string>()
-  private readonly enabled: boolean
 
-  constructor(
-    init: Init = {
-      level: Level.BASIC,
-      headersToRedact: new Set<string>(),
-      enabled: true
-    }
-  ) {
+  constructor(init: Init = {}) {
     this.level = init.level ?? Level.BASIC
     this.headersToRedact = init.headersToRedact ?? new Set<string>()
-    this.enabled = init.enabled ?? true
   }
 
   private static ms(): number {
@@ -150,7 +141,7 @@ export class BrowserLoggingInterceptor implements Interceptor {
               )
             }
           } else {
-            console.log(response.body.toString())
+            console.log(response.body)
             console.log(`<-- END ${request.method}`)
           }
         }

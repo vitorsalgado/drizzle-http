@@ -7,17 +7,15 @@ import { Dispatcher } from 'undici'
 export class UndiciResponse implements HttpResponse<Readable, Blob, never> {
   readonly body: Readable
   readonly headers: HttpHeaders
+  readonly trailers: Promise<HttpHeaders>
   readonly status: number
   readonly statusText: string
   readonly url: string
 
   constructor(url: string, private readonly response: Dispatcher.ResponseData) {
-    const headers = new HttpHeaders(response.headers as Record<string, string>)
-
-    headers.mergeObject(response.trailers)
-
     this.body = response.body
-    this.headers = headers
+    this.headers = new HttpHeaders(response.headers as Record<string, string>)
+    this.trailers = Promise.resolve(new HttpHeaders(response.trailers))
     this.status = response.statusCode
     this.statusText = ''
     this.url = url

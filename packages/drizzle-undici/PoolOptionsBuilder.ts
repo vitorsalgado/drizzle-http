@@ -1,28 +1,31 @@
 import { TlsOptions } from 'tls'
+import { URL } from 'url'
 import Pool from 'undici/types/pool'
+import { Dispatcher } from 'undici'
 
-export class UndiciOptionsBuilder {
+export class PoolOptionsBuilder {
   private _connections?: number
-  private _socketPath?: string | null
+  private _socketPath?: string
   private _keepAliveTimeout?: number
   private _keepAliveMaxTimeout?: number
   private _keepAliveTimeoutThreshold?: number
   private _pipelining?: number
-  private _tls?: TlsOptions | null
+  private _tls?: TlsOptions
   private _maxHeaderSize?: number
   private _headersTimeout?: number
   private _bodyTimeout?: number
+  private _factory?: (origin: URL, opts: object) => Dispatcher
 
-  static newBuilder(): UndiciOptionsBuilder {
-    return new UndiciOptionsBuilder()
+  static newBuilder(): PoolOptionsBuilder {
+    return new PoolOptionsBuilder()
   }
 
-  connections(conns: number): this {
-    this._connections = conns
+  connections(connections: number): this {
+    this._connections = connections
     return this
   }
 
-  socketPath(path: string | null): this {
+  socketPath(path?: string): this {
     this._socketPath = path
     return this
   }
@@ -47,7 +50,7 @@ export class UndiciOptionsBuilder {
     return this
   }
 
-  tls(opts: TlsOptions | null): this {
+  tls(opts?: TlsOptions): this {
     this._tls = opts
     return this
   }
@@ -67,6 +70,11 @@ export class UndiciOptionsBuilder {
     return this
   }
 
+  factory(factory?: (origin: URL, opts: object) => Dispatcher): this {
+    this._factory = factory
+    return this
+  }
+
   build(): Pool.Options {
     return {
       connections: this._connections,
@@ -77,7 +85,8 @@ export class UndiciOptionsBuilder {
       tls: this._tls,
       maxHeaderSize: this._maxHeaderSize,
       headersTimeout: this._headersTimeout,
-      bodyTimeout: this._bodyTimeout
+      bodyTimeout: this._bodyTimeout,
+      factory: this._factory
     }
   }
 }

@@ -4,14 +4,24 @@ import { Logger } from './Logger'
 import { PinoLogger } from './PinoLogger'
 import { isStream } from './isStream'
 
+interface Init {
+  level?: Level
+  headersToRedact?: Set<string>
+  logger?: Logger
+}
+
 export class LoggingInterceptor implements Interceptor {
   static DEFAULT: LoggingInterceptor = new LoggingInterceptor()
 
-  constructor(
-    public level: Level = Level.BASIC,
-    private readonly headersToRedact: Set<string> = new Set<string>(),
-    public readonly logger: Logger = new PinoLogger(PinoLogger.DEFAULT_OPTIONS)
-  ) {}
+  public level: Level
+  private readonly headersToRedact: Set<string>
+  public readonly logger: Logger
+
+  constructor(init: Init = {}) {
+    this.level = init.level ?? Level.BASIC
+    this.headersToRedact = init.headersToRedact ?? new Set<string>()
+    this.logger = init.logger ?? new PinoLogger(PinoLogger.DEFAULT_OPTIONS)
+  }
 
   private static ms(): number {
     if (typeof process === 'undefined') {
@@ -134,7 +144,7 @@ export class LoggingInterceptor implements Interceptor {
 
         return response
       })
-      .catch((error: HttpError) => {
+      .catch(error => {
         const took = LoggingInterceptor.ms() - start
 
         if (error instanceof HttpError) {

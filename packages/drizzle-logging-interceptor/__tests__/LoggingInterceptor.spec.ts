@@ -1,24 +1,22 @@
 import { Readable } from 'stream'
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
-import {
-  Accept,
-  Body,
-  ContentType,
-  DrizzleBuilder,
-  GET,
-  HeaderMap,
-  HttpError,
-  MediaTypes,
-  Param,
-  POST
-} from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 import { RawResponse } from '@drizzle-http/core'
+import { HeaderMap } from '@drizzle-http/core'
+import { ContentType } from '@drizzle-http/core'
+import { Accept } from '@drizzle-http/core'
+import { POST } from '@drizzle-http/core'
+import { GET } from '@drizzle-http/core'
+import { Param } from '@drizzle-http/core'
+import { DrizzleBuilder } from '@drizzle-http/core'
+import { HttpError } from '@drizzle-http/core'
+import { MediaTypes } from '@drizzle-http/core'
+import { Body } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { Level } from '../Level'
-import { Logger } from '../Logger'
 import { LoggingInterceptor } from '../LoggingInterceptor'
+import { Logger } from '../Logger'
+import { Level } from '../Level'
 
 describe('Logging Interceptor', function () {
   let address = ''
@@ -99,7 +97,7 @@ describe('Logging Interceptor', function () {
     const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(new UndiciCallFactory())
-      .addInterceptor(new LoggingInterceptor(Level.BODY))
+      .addInterceptor(new LoggingInterceptor({ level: Level.BODY }))
       .build()
       .create(API)
 
@@ -123,7 +121,7 @@ describe('Logging Interceptor', function () {
     const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(new UndiciCallFactory())
-      .addInterceptor(new LoggingInterceptor(Level.BODY))
+      .addInterceptor(new LoggingInterceptor({ level: Level.BODY }))
       .build()
       .create(API2)
 
@@ -144,7 +142,7 @@ describe('Logging Interceptor', function () {
     const api = DrizzleBuilder.newBuilder()
       .baseUrl(address)
       .callFactory(new UndiciCallFactory())
-      .addInterceptor(new LoggingInterceptor(Level.BODY))
+      .addInterceptor(new LoggingInterceptor({ level: Level.BODY }))
       .build()
       .create(API3)
 
@@ -188,7 +186,7 @@ describe('Logging Interceptor', function () {
     const spy: jest.Mock = jest.fn()
     const fake = new FakeLogger(spy)
 
-    const interceptor = new LoggingInterceptor(Level.BODY, new Set<string>(), fake)
+    const interceptor = new LoggingInterceptor({ level: Level.BODY, logger: fake })
     interceptor.redactHeader('x-super-secret-header')
 
     const api = DrizzleBuilder.newBuilder()
@@ -224,7 +222,7 @@ describe('Logging Interceptor', function () {
 
     const spy: jest.Mock = jest.fn()
     const fake = new SpyLogger(spy)
-    const interceptor = new LoggingInterceptor(Level.BASIC, new Set<string>(), fake)
+    const interceptor = new LoggingInterceptor({ logger: fake })
     interceptor.setLevel(Level.BODY)
 
     const api = DrizzleBuilder.newBuilder()
@@ -238,7 +236,7 @@ describe('Logging Interceptor', function () {
   })
 
   it('should fail when redact a header empty varargs', function () {
-    const interceptor = new LoggingInterceptor(Level.BODY)
+    const interceptor = new LoggingInterceptor({ level: Level.BODY })
 
     expect(() => interceptor.redactHeader()).toThrowError()
   })
@@ -256,7 +254,7 @@ describe('Logging Interceptor', function () {
     const spy: jest.Mock = jest.fn()
     const fake = new SpyLogger(spy)
 
-    const interceptor = new LoggingInterceptor(Level.BASIC, new Set<string>(), fake)
+    const interceptor = new LoggingInterceptor({ level: Level.BASIC, headersToRedact: new Set<string>(), logger: fake })
     interceptor.level = Level.NONE
 
     const api = DrizzleBuilder.newBuilder()

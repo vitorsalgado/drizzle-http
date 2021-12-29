@@ -1,17 +1,19 @@
 import { URL } from 'url'
 import { CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
-import { Internals } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
+import { Internals } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { UndiciStreamCall } from './UndiciStreamCall'
-import { HttpEmptyResponse } from './UndiciStreamCall'
-import { Streaming } from './UndiciStreamCall'
 import { UndiciCall } from './UndiciCall'
 import { Keys } from './Keys'
 import { UndiciResponse } from './UndiciResponse'
+import { Streaming } from './Streaming'
+import { StreamingResponse } from './StreamingResponse'
+
+const { notNull } = Internals
 
 export class UndiciCallFactory implements CallFactory {
-  private _pool?: Pool
+  private _pool!: Pool
   private readonly _options?: Pool.Options
 
   constructor(opts?: Pool.Options) {
@@ -32,31 +34,25 @@ export class UndiciCallFactory implements CallFactory {
     })
   }
 
-  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<UndiciResponse | HttpEmptyResponse> {
-    const method = requestFactory.method
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<UndiciResponse | StreamingResponse> {
+    notNull(this._pool)
 
-    if (!this._pool) {
-      throw new Error('Undici pool must not be null or undefined.')
-    }
+    const streamToIndex = Number(requestFactory.getConfig(Keys.StreamTargetIndex)) as number
 
     if (requestFactory.hasDecorator(Streaming)) {
-      const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
-
-      if (streamToIndex < 0) {
+      if (isNaN(streamToIndex) || streamToIndex < 0) {
         throw new Internals.InvalidMethodConfigError(
           'Method is decorated with @Streaming but there is no argument decorated with @StreamTo().',
-          method
+          requestFactory.method
         )
       }
 
       return new UndiciStreamCall(this._pool, streamToIndex)
     } else {
-      const streamToIndex = requestFactory.getConfig(Keys.ConfigStreamToIndex) as number
-
       if (streamToIndex > -1) {
         throw new Internals.InvalidMethodConfigError(
-          'Found an argument decorated with @StreamTo() but method is not decorated with @Streaming()',
-          method
+          'Found an argument decorated with @StreamTo() but method is not decorated with @Streaming().',
+          requestFactory.method
         )
       }
     }

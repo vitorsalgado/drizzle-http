@@ -45,5 +45,8 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.17.1"
   }
 }
