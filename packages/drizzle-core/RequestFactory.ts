@@ -399,7 +399,7 @@ export class RequestFactory {
    * @param type - request type
    */
   requestTypeIs(type: string): boolean {
-    return this.requestType === notBlank(type)
+    return this.requestType === type
   }
 
   /**
@@ -408,7 +408,7 @@ export class RequestFactory {
    * @param type - response type
    */
   responseTypeIs(type: string): boolean {
-    return this.responseType === notBlank(type)
+    return this.responseType === type
   }
 
   /**
@@ -417,7 +417,7 @@ export class RequestFactory {
    * @param type - error type
    */
   errorTypeIs(type: string): boolean {
-    return this.errorType === notBlank(type)
+    return this.errorType === type
   }
 
   /**
