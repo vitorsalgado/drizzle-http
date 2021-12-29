@@ -45,6 +45,6 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
-    "rxjs": "^7.5.0"
+    "rxjs": "^7.5.1"
   }
 }
