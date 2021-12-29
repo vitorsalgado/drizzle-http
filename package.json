@@ -64,6 +64,8 @@
     "@babel/plugin-transform-runtime": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
     "@babel/runtime": "^7.16.5",
+    "@commitlint/cli": "^16.0.1",
+    "@commitlint/config-conventional": "^16.0.0",
     "@drizzle-http/test-utils": "file:internal/test-utils",
     "@drizzle-http/undici": "file:packages/drizzle-undici",
     "@jest/types": "^27.4.2",
