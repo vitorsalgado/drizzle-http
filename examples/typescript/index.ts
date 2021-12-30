@@ -1,6 +1,8 @@
 import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
+import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+import { Level } from '@drizzle-http/logging-interceptor'
 
 interface Party {
   id: string
@@ -19,6 +21,7 @@ class PartiesAPI {
 const partiesApi = DrizzleBuilder.newBuilder()
   .baseUrl('https://dadosabertos.camara.leg.br/api/v2/')
   .callFactory(new UndiciCallFactory())
+  .addInterceptor(new LoggingInterceptor({ level: Level.BODY }))
   .build()
   .create(PartiesAPI)
 
