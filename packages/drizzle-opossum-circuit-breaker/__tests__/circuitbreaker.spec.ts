@@ -12,10 +12,36 @@ import { closeTestServer } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
 import OpossumCircuitBreaker from 'opossum'
-import { CircuitBreaker } from '../decorators'
-import { Fallback } from '../decorators'
-import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
+import { CallAdapter } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
+import { Call } from '@drizzle-http/core'
+import { CallAdapterFactory } from '@drizzle-http/core'
+import { RequestFactory } from '@drizzle-http/core'
+import { createMethodDecorator } from '@drizzle-http/core'
+import { TestId } from '@drizzle-http/test-utils'
 import { CircuitBreakerCallAdapterFactory } from '../CircuitBreakerCallAdapterFactory'
+import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
+import { Fallback } from '../decorators'
+import { CircuitBreaker } from '../decorators'
+
+function Custom() {
+  return createMethodDecorator(Custom)
+}
+
+class CustomCallAdapterFactory implements CallAdapterFactory {
+  provide(_drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+    if (requestFactory.hasDecorator(Custom)) {
+      return {
+        adapt(call: Call<unknown>): (request: HttpRequest, argv: unknown[]) => unknown {
+          return (request, argv) =>
+            call.execute(request, argv).then(data => ({ id: (data as { result: { id: string } }).result.id }))
+        }
+      }
+    }
+
+    return null
+  }
+}
 
 const opts = {
   timeout: 100,
@@ -74,6 +100,13 @@ class API {
   })
   functionFallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
     return noop(filter, page)
+  }
+
+  @GET('/{id}/projects')
+  @CircuitBreaker()
+  @Custom()
+  decorated(@Param('id') id: string): Promise<TestId> {
+    return noop(id)
   }
 }
 
@@ -380,5 +413,30 @@ describe('Circuit Breaker', function () {
 
     await api.test()
     await d.shutdown()
+  })
+
+  describe('when decorating with another call adapter', function () {
+    it('should use the decorated adapter with the circuit breaker implementation', async function () {
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      class TestApi {
+        @GET('/{id}/projects')
+        @CircuitBreaker()
+        @Custom()
+        decorated(@Param('id') id: string): Promise<TestId> {
+          return noop(id)
+        }
+      }
+
+      const d = DrizzleBuilder.newBuilder()
+        .baseUrl(address)
+        .callFactory(new UndiciCallFactory())
+        .addCallAdapterFactories(new CircuitBreakerCallAdapterFactory({}, new CustomCallAdapterFactory()))
+        .build()
+
+      const api = d.create(TestApi)
+      const response = await api.decorated('test')
+
+      expect(response.id).toEqual('test')
+    })
   })
 })

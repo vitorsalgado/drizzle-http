@@ -20,7 +20,7 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
   private readonly registry: Registry
   private readonly fallbacks?: object | Record<string, (...args: unknown[]) => unknown>
 
-  constructor(init: Init = {}) {
+  constructor(init: Init = {}, private readonly decorated?: CallAdapterFactory) {
     this.options = init.options ?? {}
     this.registry = init.registry ?? new CircuitBreakerRegistry()
     this.fallbacks = init.fallbacks
@@ -35,6 +35,9 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
       return null
     }
 
+    const decorated = this.decorated
+      ? (this.decorated.provide(drizzle, requestFactory) as CallAdapter<unknown, Promise<unknown>>)
+      : null
     const method = requestFactory.method
     const decoratorOptions = requestFactory.getConfig<OpoCircuitBreaker.Options>(Keys.OptionsForMethod)
     const name = `${this.options.name ? this.options.name : ''}${decoratorOptions.name}`
@@ -84,10 +87,13 @@ export class CircuitBreakerCallAdapterFactory implements CallAdapterFactory {
       }
     }
 
-    return new CircuitBreakerCallAdapter({
-      options,
-      fallback,
-      registry: this.registry
-    })
+    return new CircuitBreakerCallAdapter(
+      {
+        options,
+        fallback,
+        registry: this.registry
+      },
+      decorated
+    )
   }
 }

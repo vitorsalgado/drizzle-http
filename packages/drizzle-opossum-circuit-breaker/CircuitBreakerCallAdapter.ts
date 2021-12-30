@@ -15,15 +15,19 @@ export class CircuitBreakerCallAdapter implements CallAdapter<unknown, unknown> 
   private readonly registry: Registry
   private readonly fallback?: (...args: unknown[]) => unknown
 
-  constructor(init: CircuitBreakerInit) {
+  constructor(
+    init: CircuitBreakerInit,
+    private readonly decorated: CallAdapter<unknown, Promise<unknown>> | null = null
+  ) {
     this.options = init.options
     this.registry = init.registry
     this.fallback = init.fallback
   }
 
   adapt(action: Call<unknown>): (request: HttpRequest, argv: unknown[]) => Promise<unknown> {
+    const call = this.decorated?.adapt(action)
     const circuitBreaker = new CircuitBreaker<[HttpRequest, unknown[]], unknown>(
-      (request, argv) => action.execute(request, argv),
+      (request, argv) => (call ? call(request, argv) : action.execute(request, argv)),
       { ...this.options }
     )
 
