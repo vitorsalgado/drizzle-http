@@ -11,11 +11,20 @@ import { Map } from './decorators'
 import { MapTo } from './decorators'
 
 export class MapCallAdapterFactory implements CallAdapterFactory {
+  constructor(private readonly decorated?: CallAdapterFactory) {}
+
   provide(drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
     if (requestFactory.hasDecorator(Map)) {
-      return new MapCallAdapter(requestFactory.getConfig(MapFunctionKey))
+      return new MapCallAdapter(
+        requestFactory.getConfig(MapFunctionKey),
+        this.decorated?.provide(drizzle, requestFactory) as CallAdapter<unknown, Promise<unknown>>
+      )
     } else if (requestFactory.hasDecorator(MapTo)) {
-      return new MapToCallAdapter(requestFactory.getConfig(MapToTypeKey), requestFactory.getConfig(MapToTypeMapperKey))
+      return new MapToCallAdapter(
+        requestFactory.getConfig(MapToTypeKey),
+        requestFactory.getConfig(MapToTypeMapperKey),
+        this.decorated?.provide(drizzle, requestFactory) as CallAdapter<unknown, Promise<unknown>>
+      )
     }
 
     return null

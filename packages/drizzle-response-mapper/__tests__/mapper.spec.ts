@@ -4,6 +4,13 @@ import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
+import { CallAdapter } from '@drizzle-http/core'
+import { HttpRequest } from '@drizzle-http/core'
+import { Call } from '@drizzle-http/core'
+import { RequestFactory } from '@drizzle-http/core'
+import { createMethodDecorator } from '@drizzle-http/core'
+import { CallAdapterFactory } from '@drizzle-http/core'
+import { Param } from '@drizzle-http/core'
 import { setupTestServer } from '@drizzle-http/test-utils'
 import { closeTestServer } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
@@ -11,6 +18,25 @@ import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Map } from '../decorators'
 import { MapTo } from '../decorators'
 import { MapCallAdapterFactory } from '../MapCallAdapterFactory'
+
+function Custom() {
+  return createMethodDecorator(Custom)
+}
+
+class CustomCallAdapterFactory implements CallAdapterFactory {
+  provide(_drizzle: Drizzle, requestFactory: RequestFactory): CallAdapter<unknown, unknown> | null {
+    if (requestFactory.hasDecorator(Custom)) {
+      return {
+        adapt(call: Call<unknown>): (request: HttpRequest, argv: unknown[]) => unknown {
+          return (request, argv) =>
+            call.execute(request, argv).then(data => ({ result: (data as { result: { id: string } }).result }))
+        }
+      }
+    }
+
+    return null
+  }
+}
 
 class Service {
   constructor(private readonly value: string) {}
@@ -60,6 +86,14 @@ class Result {
   }
 }
 
+class JustId {
+  public readonly id: string
+
+  constructor(arg: { result: { id: string } }) {
+    this.id = arg.result.id
+  }
+}
+
 @ContentType(MediaTypes.APPLICATION_JSON)
 class TestApi {
   @GET('/map')
@@ -106,6 +140,7 @@ class TestApi {
 
 describe('Map Adapter', function () {
   let drizzle: Drizzle
+  let address: string
   let api: TestApi
 
   beforeAll(async () => {
@@ -116,6 +151,7 @@ describe('Map Adapter', function () {
     })
 
     await startTestServer().then((addr: string) => {
+      address = addr
       drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(new UndiciCallFactory())
@@ -180,6 +216,40 @@ describe('Map Adapter', function () {
 
         expect(result.mapped).toEqual([{ context: 'pkg' }])
       })
+    })
+  })
+
+  describe('when decorating with another call adapter', function () {
+    it('should use the decorated adapter with the map adapter implementation', async function () {
+      @ContentType(MediaTypes.APPLICATION_JSON)
+      class TestApi {
+        @GET('/{id}/projects')
+        @Custom()
+        @MapTo(JustId)
+        decoratedMapTo(@Param('id') id: string): Promise<JustId> {
+          return noop(id)
+        }
+
+        @GET('/{id}/projects')
+        @Custom()
+        @Map((response: { result: { id: string } }) => new JustId(response))
+        decoratedMap(@Param('id') id: string): Promise<JustId> {
+          return noop(id)
+        }
+      }
+
+      const d = DrizzleBuilder.newBuilder()
+        .baseUrl(address)
+        .callFactory(new UndiciCallFactory())
+        .addCallAdapterFactories(new MapCallAdapterFactory(new CustomCallAdapterFactory()))
+        .build()
+
+      const api = d.create(TestApi)
+      const responseMapTo = await api.decoratedMapTo('test')
+      const responseMap = await api.decoratedMap('dev')
+
+      expect(responseMapTo.id).toEqual('test')
+      expect(responseMap.id).toEqual('dev')
     })
   })
 })
