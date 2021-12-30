@@ -5,7 +5,8 @@
     "benchmarks",
     "internal/*",
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "test"
   ],
   "ignoreChanges": [
     "docs",

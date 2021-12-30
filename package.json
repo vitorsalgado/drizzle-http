@@ -42,7 +42,8 @@
     "benchmarks",
     "internal/*",
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "test"
   ],
   "keywords": [
     "http",

@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../packages/drizzle-core", "prepend": false },
+    { "path": "../packages/drizzle-undici", "prepend": false },
+    { "path": "../packages/drizzle-logging-interceptor", "prepend": false },
+    { "path": "../packages/drizzle-rxjs", "prepend": false },
+    { "path": "../packages/drizzle-response-mapper", "prepend": false },
+    { "path": "../packages/drizzle-opossum-circuit-breaker", "prepend": false },
+    { "path": "../internal/test-utils", "prepend": false }
+  ]
+}
