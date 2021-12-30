@@ -8,3 +8,5 @@ examples/
 scripts/
 
 *.d.ts
+
+deno/
