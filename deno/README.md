@@ -12,11 +12,8 @@
 </p>
 
 <p align='center'>
-  <a href="https://github.com/vitorsalgado/drizzle-http/actions/workflows/ci.yml">
-    <img src="https://github.com/vitorsalgado/drizzle-http/actions/workflows/ci.yml/badge.svg" alt="GitHub Action Status" />
-  </a>
-  <a href="https://codecov.io/gh/vitorsalgado/drizzle-http">
-    <img src="https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH" alt="Codecov" />
+  <a href="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml">
+    <img src="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml/badge.svg" alt="Deno GitHub Action Status" />
   </a>
   <a href="https://www.npmjs.com/settings/drizzle-http/packages">
     <img src="https://img.shields.io/npm/v/@drizzle-http/core?logo=npm" alt="NPM Package" />
