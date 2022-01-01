@@ -3,8 +3,7 @@
 <p align='center'>
   <img src="../docs/assets/drizzle.png" alt="Repository Logo" width='100px' height='100px' />
   <br />
-  <br/>
-  <i>Decorator based HTTP client written in <strong>vanilla Typescript</strong>.</i>
+  <i>Create API clients with <strong>decorators</strong> with this vanilla Typescript library.</i>
 </p>
 
 <p align='center'>
@@ -61,11 +60,11 @@ class CustomerAPI {
   }
 
   @GET("/{id}")
+  @ParseErrorBody()
   byId(@Param("id") id: string): Promise<Customer> {
   }
 
   @POST()
-  @ParseErrorBody()
   add(@Body() customer: Customer): Promise<HttpResponse> {
   }
 
