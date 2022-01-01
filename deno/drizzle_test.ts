@@ -91,6 +91,7 @@ class TestAPI {
   }
 }
 
+const isCI = Deno.env.get("CI") === "true";
 const port: number = Deno.env.get("DENO_TEST_PORT")
   ? parseInt(Deno.env.get("DENO_TEST_PORT") ?? "")
   : 3000;
@@ -110,7 +111,7 @@ const worker = new Worker(new URL("./testServer.ts", import.meta.url).href, {
   },
 });
 
-await delay(3000);
+await delay(isCI ? 15000 : 3000);
 
 const tests: {
   name: string;
