@@ -3,7 +3,7 @@
 <p align='center'>
   <img src="docs/assets/drizzle.png" alt="Repository Logo" width='100px' height='100px' />
   <br />
-  <i>Create API Clients with **Decorators** for Typescript and Javascript.</i>
+  <i>Create API Clients with <strong>Decorators</strong> for Typescript and Javascript.</i>
 </p>
 
 <p align='center'>
@@ -335,18 +335,16 @@ Machine: MacBook Pro (13-inch, 2019)
 Processor: 2,8 GHz Quad-Core Intel Core i7
 Memory: 16 GB 2133 MHz LPDDR3
 Node: 15
-
-drizzle-http - undici x 1,263 ops/sec ±1.13% (76 runs sampled)
-drizzle-http - fetch x 1,034 ops/sec ±2.21% (74 runs sampled)
-undici - pool - request x 1,225 ops/sec ±1.08% (74 runs sampled)
-http x 1,254 ops/sec ±1.41% (75 runs sampled)
-axios x 1,026 ops/sec ±2.04% (78 runs sampled)
-got x 1,054 ops/sec ±1.56% (75 runs sampled)
-undici-fetch x 1,339 ops/sec ±1.47% (79 runs sampled)
-node-fetch x 1,147 ops/sec ±1.42% (78 runs sampled)
-drizzle-http - stream x 3,516 ops/sec ±2.47% (73 runs sampled)
-undici - stream x 3,560 ops/sec ±2.00% (74 runs sampled)
 ```
+
+| Tests                                       | Samples | Result         | Tolerance | Difference with slowest |
+|---------------------------------------------|---------|----------------|-----------|-------------------------|
+| got                                         | 10      | 360.02 req/sec | ± 1.99 %  | -                       |
+| axios                                       | 10      | 622.72 req/sec | ± 2.14 %  | + 72.97 %               |
+| http                                        | 10      | 749.67 req/sec | ± 2.19 %  | + 108.23 %              |
+| drizzle-http - (undici) - (circuit breaker) | 10      | 762.81 req/sec | ± 2.95 %  | + 111.88 %              |
+| drizzle-http - (undici)                     | 10      | 781.68 req/sec | ± 2.22 %  | + 117.12 %              |
+| undici                                      | 10      | 799.53 req/sec | ± 2.05 %  | + 122.08 %              |
 
 This benchmark consists in a client with multiple connections performing calls to a server that responds a 80kb JSON.
 

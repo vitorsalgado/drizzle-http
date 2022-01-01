@@ -51,14 +51,17 @@ export function printResults(c: number, results: Results): unknown {
         alignment: 'right'
       }
     },
-    drawHorizontalLine: (index, size) => index > 0 && index < size,
+    drawHorizontalLine: (index, rowCount) => rowCount === 0,
     border: {
-      bodyLeft: '│',
-      bodyRight: '│',
-      bodyJoin: '│',
+      bodyLeft: '|',
+      bodyRight: '|',
+      bodyJoin: '|',
       joinLeft: '|',
       joinRight: '|',
-      joinJoin: '|'
+      joinJoin: '|',
+      joinBody: '-',
+      bottomBody: '-',
+      topBody: '-'
     }
   })
 }
