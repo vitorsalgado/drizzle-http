@@ -1,10 +1,10 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.ts'
-import { BuiltInConv } from '../builtin/index.ts'
+import { createClassAndMethodDecorator } from "../ApiParameterization.ts";
+import { BuiltInConv } from "../builtin/mod.ts";
 
 export function JsonRequest() {
   return createClassAndMethodDecorator(
     JsonRequest,
-    defaults => (defaults.requestType = BuiltInConv.JSON),
-    requestFactory => (requestFactory.requestType = BuiltInConv.JSON)
-  )
+    (defaults) => (defaults.requestType = BuiltInConv.JSON),
+    (requestFactory) => (requestFactory.requestType = BuiltInConv.JSON),
+  );
 }

@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
-import { setupRequestFactory } from '../ApiParameterization.ts'
-import { setupApiDefaults } from '../ApiParameterization.ts'
-import { TargetClass } from '../internal/index.ts'
+import {
+  setupApiDefaults,
+  setupRequestFactory,
+} from "../ApiParameterization.ts";
+import { TargetCtor, TargetProto } from "../internal/mod.ts";
+import { mergeHeaderWithObject } from "../HttpHeaders.ts";
 
 /**
  * Adds fixed params to the request
@@ -16,11 +17,20 @@ import { TargetClass } from '../internal/index.ts'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function HeaderMap(headers: Record<string, string>) {
-  return function (target: object | TargetClass, method?: string): void {
+  return function (target: TargetProto | TargetCtor, method?: string) {
     if (method) {
-      return setupRequestFactory(HeaderMap, target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
+      return setupRequestFactory(
+        HeaderMap,
+        target,
+        method,
+        (requestFactory) => requestFactory.addDefaultHeaders(headers),
+      );
     }
 
-    setupApiDefaults(HeaderMap, target, parameters => parameters.headers.mergeObject(headers))
-  }
+    setupApiDefaults(
+      HeaderMap,
+      target,
+      (parameters) => mergeHeaderWithObject(parameters.headers, headers),
+    );
+  };
 }

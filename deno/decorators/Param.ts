@@ -1,6 +1,6 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { pathParameterRegex } from '../internal/index.ts'
-import { PathParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { pathParameterRegex } from "../internal/mod.ts";
+import { PathParameter } from "../builtin/mod.ts";
 
 /**
  * Named replacement for a URL path segment
@@ -13,7 +13,11 @@ import { PathParameter } from '../builtin/index.ts'
  *  example(\@Param('id') id: string): Promise<any>
  */
 export function Param(key: string) {
-  return createParameterDecorator(Param, ctx =>
-    ctx.requestFactory.addParameter(new PathParameter(key, pathParameterRegex(key), ctx.parameterIndex))
-  )
+  return createParameterDecorator(
+    Param,
+    (ctx) =>
+      ctx.requestFactory.addParameter(
+        new PathParameter(key, pathParameterRegex(key), ctx.parameterIndex),
+      ),
+  );
 }

@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit.ts'
+import { createClassAndMethodDecorator } from "../../ApiParameterization.ts";
 
-export function KeepAlive(keepAlive: boolean) {
-  return createFetchDecorator(KeepAlive, requestInit => (requestInit.keepalive = keepAlive))
+export function KeepAlive(keepalive: boolean) {
+  return createClassAndMethodDecorator(
+    KeepAlive,
+    (defaults) => defaults.addConfig(KeepAlive.Key, keepalive),
+    (requestFactory) => requestFactory.addConfig(KeepAlive.Key, keepalive),
+  );
 }
+
+KeepAlive.Key = "fetch:keepalive";

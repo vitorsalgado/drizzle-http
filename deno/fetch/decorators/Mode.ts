@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit.ts'
+import { createClassAndMethodDecorator } from "../../ApiParameterization.ts";
 
 export function Mode(mode: RequestMode) {
-  return createFetchDecorator(Mode, requestInit => (requestInit.mode = mode))
+  return createClassAndMethodDecorator(
+    Mode,
+    (defaults) => defaults.addConfig(Mode.Key, mode),
+    (requestFactory) => requestFactory.addConfig(Mode.Key, mode),
+  );
 }
+
+Mode.Key = "fetch:mode";

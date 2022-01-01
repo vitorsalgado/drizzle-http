@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit.ts'
+import { createClassAndMethodDecorator } from "../../ApiParameterization.ts";
 
 export function Cache(cache: RequestCache) {
-  return createFetchDecorator(Cache, requestInit => (requestInit.cache = cache))
+  return createClassAndMethodDecorator(
+    Cache,
+    (defaults) => defaults.addConfig(Cache.Key, cache),
+    (requestFactory) => requestFactory.addConfig(Cache.Key, cache),
+  );
 }
+
+Cache.Key = "fetch:cache";

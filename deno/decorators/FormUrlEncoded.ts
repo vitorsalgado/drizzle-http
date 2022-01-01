@@ -1,8 +1,11 @@
-import { setupRequestFactory } from '../ApiParameterization.ts'
-import { setupApiDefaults } from '../ApiParameterization.ts'
-import { MediaTypes } from '../MediaTypes.ts'
-import { HttpHeaders } from '../HttpHeaders.ts'
-import { TargetClass } from '../internal/index.ts'
+import {
+  setupApiDefaults,
+  setupRequestFactory,
+} from "../ApiParameterization.ts";
+import { MediaTypes } from "../MediaTypes.ts";
+import { HttpHeaders } from "../HttpHeaders.ts";
+import { TargetCtor, TargetProto } from "../internal/mod.ts";
+import { BuiltInConv } from "../builtin/mod.ts";
 
 /**
  * Mark that the request body will use form url-encoding.
@@ -15,15 +18,28 @@ import { TargetClass } from '../internal/index.ts'
  *  example(\@Field('name') name: string, \@Field('id') id: string): Promise<Result>
  */
 export function FormUrlEncoded() {
-  return function (target: object | TargetClass, method?: string): void {
+  return function (target: TargetProto | TargetCtor, method?: string) {
     if (method) {
-      return setupRequestFactory(FormUrlEncoded, target, method, requestFactory =>
-        requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
-      )
+      return setupRequestFactory(
+        FormUrlEncoded,
+        target,
+        method,
+        (requestFactory) => {
+          requestFactory.addDefaultHeader(
+            HttpHeaders.CONTENT_TYPE,
+            MediaTypes.APPLICATION_FORM_URL_ENCODED,
+          );
+          requestFactory.requestType = BuiltInConv.FORM_URL_ENCODED;
+        },
+      );
     }
 
-    setupApiDefaults(FormUrlEncoded, target, parameters =>
-      parameters.headers.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
-    )
-  }
+    setupApiDefaults(FormUrlEncoded, target, (parameters) => {
+      parameters.headers.append(
+        HttpHeaders.CONTENT_TYPE,
+        MediaTypes.APPLICATION_FORM_URL_ENCODED,
+      );
+      parameters.requestType = BuiltInConv.FORM_URL_ENCODED;
+    });
+  };
 }

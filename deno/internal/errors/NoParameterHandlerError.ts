@@ -1,14 +1,18 @@
-import { DrizzleError } from './DrizzleError.ts'
+import { DrizzleError } from "./DrizzleError.ts";
 
 export class NoParameterHandlerError extends DrizzleError {
-  constructor(public readonly type: string, public readonly method: string, public readonly index: number) {
+  constructor(
+    public readonly type: string,
+    public readonly method: string,
+    public readonly index: number,
+  ) {
     super(
       `Type "${type}" does not have a parameter handler associated. Check method "${method}", decorated parameter [${index}].`,
-      'DZ_ERR_NO_PARAMETER_HANDLER_FOR_TYPE'
-    )
+      "DZ_ERR_NO_PARAMETER_HANDLER_FOR_TYPE",
+    );
 
-    Error.captureStackTrace(this, NoParameterHandlerError)
+    Error.captureStackTrace(this, NoParameterHandlerError);
 
-    this.name = 'NoParameterHandlerFoundForType'
+    this.name = "NoParameterHandlerFoundForType";
   }
 }

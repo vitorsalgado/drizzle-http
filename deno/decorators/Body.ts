@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { BodyParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { BodyParameter } from "../builtin/mod.ts";
 
 /**
  * Use this decorator to mark that a method parameter must be sent as the HTTP Request body
@@ -10,5 +10,9 @@ import { BodyParameter } from '../builtin/index.ts'
  *  example(\@Body() data: object): Promise<Result>
  */
 export function Body() {
-  return createParameterDecorator(Body, ctx => ctx.requestFactory.addParameter(new BodyParameter(ctx.parameterIndex)))
+  return createParameterDecorator(
+    Body,
+    (ctx) =>
+      ctx.requestFactory.addParameter(new BodyParameter(ctx.parameterIndex)),
+  );
 }

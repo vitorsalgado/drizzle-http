@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { QueryParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { QueryParameter } from "../builtin/mod.ts";
 
 /**
  * Query parameter appended to the URL.
@@ -12,7 +12,11 @@ import { QueryParameter } from '../builtin/index.ts'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function Query(key: string) {
-  return createParameterDecorator(Query, ctx =>
-    ctx.requestFactory.addParameter(new QueryParameter(key, ctx.parameterIndex))
-  )
+  return createParameterDecorator(
+    Query,
+    (ctx) =>
+      ctx.requestFactory.addParameter(
+        new QueryParameter(key, ctx.parameterIndex),
+      ),
+  );
 }

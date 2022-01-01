@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a DELETE HTTP Request
@@ -10,4 +10,5 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@DELETE('/relative/path/to/:id')
  *  example(\@Param('id') entryId: string): Promise<Result>
  */
-export const DELETE = (path: string) => decorateWithHttpMethod(DELETE, 'DELETE', path)
+export const DELETE = (path = "") =>
+  decorateWithHttpMethod(DELETE, "DELETE", path);

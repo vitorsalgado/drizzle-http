@@ -1,1 +1,1 @@
-export type BodyType = any | null
+export type BodyType = BodyInit | null;

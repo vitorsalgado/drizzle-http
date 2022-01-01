@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { HeaderParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { HeaderParameter } from "../builtin/mod.ts";
 
 /**
  * Named header to be added to the request.
@@ -12,7 +12,11 @@ import { HeaderParameter } from '../builtin/index.ts'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function Header(key: string) {
-  return createParameterDecorator(Header, ctx =>
-    ctx.requestFactory.addParameter(new HeaderParameter(key, ctx.parameterIndex))
-  )
+  return createParameterDecorator(
+    Header,
+    (ctx) =>
+      ctx.requestFactory.addParameter(
+        new HeaderParameter(key, ctx.parameterIndex),
+      ),
+  );
 }

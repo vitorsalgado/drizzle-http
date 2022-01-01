@@ -1,0 +1,49 @@
+name: Deno
+
+on:
+  push:
+    branches:
+      - main
+      - '[0-9]+.x'
+    tags:
+      - '*'
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+
+jobs:
+  build:
+    name: tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+      fail-fast: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Check Format
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          make fmt-check
+
+      - name: Lint
+        run: |
+          make lint
+
+      - name: Test
+        run: |
+          make test
+
+      - name: Generate Bundle
+        run: |
+          make bundle

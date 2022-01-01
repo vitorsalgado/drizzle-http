@@ -1,7 +1,6 @@
-import { HttpRequest } from './HttpRequest.ts'
-import { Drizzle } from './Drizzle.ts'
-import { RequestFactory } from './RequestFactory.ts'
-import { HttpResponse } from './HttpResponse.ts'
+import { HttpRequest } from "./HttpRequest.ts";
+import { Drizzle } from "./Drizzle.ts";
+import { RequestFactory } from "./RequestFactory.ts";
 
 /**
  * Represents a single HTTP call.
@@ -9,11 +8,11 @@ import { HttpResponse } from './HttpResponse.ts'
  *
  * @typeParam V - type of the response
  */
-export interface Call<T = HttpResponse> {
+export interface Call<T = Response> {
   /**
    * Executes the HTTP request
    */
-  execute(request: HttpRequest, argv: unknown[]): Promise<T>
+  execute(request: HttpRequest, argv: unknown[]): Promise<T>;
 }
 
 /**
@@ -25,7 +24,7 @@ export interface CallFactory {
    * Additional setupTestServer like register a shutdown hook
    * @param drizzle - Drizzle instance
    */
-  setup(drizzle: Drizzle): void
+  setup(drizzle: Drizzle): void;
 
   /**
    * Prepares the Call<V> that will make teh HTTP request.
@@ -34,5 +33,5 @@ export interface CallFactory {
    * @param drizzle - Drizzle instance
    * @param requestFactory - {@link RequestFactory} associated with this call
    */
-  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<unknown>
+  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<unknown>;
 }

@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { FormParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { FormParameter } from "../builtin/mod.ts";
 
 /**
  * Named form parameter for a form url-encode request.
@@ -15,7 +15,11 @@ import { FormParameter } from '../builtin/index.ts'
  *  example(\@Field('name') name: string, \@Field('id') id: string): Promise<Result>
  */
 export function Field(key: string) {
-  return createParameterDecorator(Field, ctx =>
-    ctx.requestFactory.addParameter(new FormParameter(key, ctx.parameterIndex))
-  )
+  return createParameterDecorator(
+    Field,
+    (ctx) =>
+      ctx.requestFactory.addParameter(
+        new FormParameter(key, ctx.parameterIndex),
+      ),
+  );
 }

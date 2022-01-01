@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a GET HTTP Request
@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@GET('/relative/path/to/:id')
  *  example(\@Param('id') id: string): Promise<any>
  */
-export const GET = (path: string) => decorateWithHttpMethod(GET, 'GET', path)
+export const GET = (path = "") => decorateWithHttpMethod(GET, "GET", path);

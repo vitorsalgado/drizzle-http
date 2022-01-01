@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization.ts'
-import { QueryNameParameter } from '../builtin/index.ts'
+import { createParameterDecorator } from "../ApiParameterization.ts";
+import { QueryNameParameter } from "../builtin/mod.ts";
 
 /**
  * Query parameter appended to the URL that has no value.
@@ -11,10 +11,13 @@ import { QueryNameParameter } from '../builtin/index.ts'
  *
  * Calling with: example('super+api+test')
  * Results in: /relative/path?super+api+test
- *
  */
 export function QueryName() {
-  return createParameterDecorator(QueryName, ctx =>
-    ctx.requestFactory.addParameter(new QueryNameParameter(ctx.parameterIndex))
-  )
+  return createParameterDecorator(
+    QueryName,
+    (ctx) =>
+      ctx.requestFactory.addParameter(
+        new QueryNameParameter(ctx.parameterIndex),
+      ),
+  );
 }

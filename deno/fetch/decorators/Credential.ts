@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit.ts'
+import { createClassAndMethodDecorator } from "../../ApiParameterization.ts";
 
 export function Credentials(credentials: RequestCredentials) {
-  return createFetchDecorator(Credentials, requestInit => (requestInit.credentials = credentials))
+  return createClassAndMethodDecorator(
+    Credentials,
+    (defaults) => defaults.addConfig(Credentials.Key, credentials),
+    (requestFactory) => requestFactory.addConfig(Credentials.Key, credentials),
+  );
 }
+
+Credentials.Key = "fetch:credentials";

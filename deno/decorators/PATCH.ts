@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a PATCH HTTP Request
@@ -10,4 +10,5 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@PATCH('/relative/path/to/:id')
  *  example(\@Param('id') entryId: string): Promise<Result>
  */
-export const PATCH = (path: string) => decorateWithHttpMethod(PATCH, 'PATCH', path)
+export const PATCH = (path = "") =>
+  decorateWithHttpMethod(PATCH, "PATCH", path);

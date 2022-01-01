@@ -1,7 +1,11 @@
-import { InvalidMethodConfigError } from '../../internal/index.ts'
-import { setupRequestFactory } from '../../ApiParameterization.ts'
-import { Metadata } from '../../ApiParameterization.ts'
-import { HttpMethod } from './HttpMethod.ts'
+import { Metadata, setupRequestFactory } from "../../ApiParameterization.ts";
+import {
+  AnyClass,
+  Decorator,
+  isFunction,
+  notNull,
+  TargetProto,
+} from "../../internal/mod.ts";
 
 /**
  * Configure a method to perform an HTTP request
@@ -11,25 +15,30 @@ import { HttpMethod } from './HttpMethod.ts'
  * @param path - request path that will be concatenated with the base url
  */
 export function decorateWithHttpMethod(
-  decorator: Function,
-  httpMethod: HttpMethod,
-  path = '/'
-): (target: object, method: string, descriptor: PropertyDescriptor) => void {
-  return function (target: object, method: string, descriptor: PropertyDescriptor): void {
-    if (!path.startsWith('/')) {
-      throw new InvalidMethodConfigError(method, 'Path must start with a /')
-    }
+  decorator: Decorator,
+  httpMethod: string,
+  path: string,
+) {
+  isFunction(decorator);
+  notNull(httpMethod);
+  notNull(path);
 
-    Metadata.registerApiMethod(target.constructor, method)
+  return function (
+    target: TargetProto,
+    method: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    Metadata.registerApiMethod(target.constructor, method);
 
-    setupRequestFactory(decorator, target, method, requestFactory => {
-      requestFactory.apiType = target.constructor
-      requestFactory.method = method
-      requestFactory.path = path
-      requestFactory.httpMethod = httpMethod
-      requestFactory.argLen = descriptor.value.length
+    setupRequestFactory(decorator, target, method, (requestFactory) => {
+      requestFactory.apiType = target.constructor as AnyClass;
+      requestFactory.method = method;
+      requestFactory.path = path.trim();
+      requestFactory.httpMethod = httpMethod.toUpperCase();
+      requestFactory.argLen = descriptor.value.length;
 
-      descriptor.value = (...args: unknown[]) => requestFactory.invoker()?.(...args)
-    })
-  }
+      descriptor.value = (...args: unknown[]) =>
+        requestFactory.invoker()?.(...args);
+    });
+  };
 }

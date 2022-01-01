@@ -1,10 +1,10 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.ts'
-import { BuiltInConv } from '../builtin/index.ts'
+import { createClassAndMethodDecorator } from "../ApiParameterization.ts";
+import { BuiltInConv } from "../builtin/mod.ts";
 
 export function PlainTextResponse() {
   return createClassAndMethodDecorator(
     PlainTextResponse,
-    defaults => (defaults.responseType = BuiltInConv.TEXT),
-    requestFactory => (requestFactory.responseType = BuiltInConv.TEXT)
-  )
+    (defaults) => (defaults.responseType = BuiltInConv.TEXT),
+    (requestFactory) => (requestFactory.responseType = BuiltInConv.TEXT),
+  );
 }

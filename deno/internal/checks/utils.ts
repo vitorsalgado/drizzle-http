@@ -1,3 +1,3 @@
-export function isNullOrUndefined(item: unknown): boolean {
-  return item === null || typeof item === 'undefined'
+export function isNullOrUndefined(item: unknown) {
+  return item === null || typeof item === "undefined";
 }

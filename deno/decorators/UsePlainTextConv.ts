@@ -1,5 +1,5 @@
-import { BuiltInConv } from '../builtin/index.ts'
-import { createRequestAndResponseTypes } from './utils/index.ts'
+import { BuiltInConv } from "../builtin/mod.ts";
+import { createRequestAndResponseTypes } from "./utils/mod.ts";
 
 /**
  * Define a text/plain Content-Type for both request and response
@@ -8,4 +8,9 @@ import { createRequestAndResponseTypes } from './utils/index.ts'
  * @param response - sets the content-type of the response. defaults to true.
  */
 export const UsePlainTextConv = (request = true, response = true) =>
-  createRequestAndResponseTypes(BuiltInConv.TEXT, UsePlainTextConv, request, response)
+  createRequestAndResponseTypes(
+    BuiltInConv.TEXT,
+    UsePlainTextConv,
+    request,
+    response,
+  );

@@ -1,30 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { RequestBodyConverter } from './RequestBodyConverter.ts'
-import { RequestBodyConverterFactory } from './RequestBodyConverter.ts'
-import { serviceInvoker } from './drizzleServiceInvoker.ts'
-import { RequestFactory } from './RequestFactory.ts'
-import { Metadata } from './ApiParameterization.ts'
-import { Interceptor } from './Interceptor.ts'
-import { InterceptorFactory } from './Interceptor.ts'
-import { RawRequestConverter, RawResponseConverter } from './builtin/index.ts'
-import { Parameter, ParameterHandlerFactory } from './builtin/index.ts'
-import { ParameterHandler } from './builtin/index.ts'
-import { RawResponse } from './builtin/index.ts'
-import { NoParameterHandlerError } from './internal/index.ts'
-import { AnyCtor } from './internal/index.ts'
-import { DrizzleError } from './internal/index.ts'
-import { ErrorCodes } from './internal/index.ts'
-import { ResponseConverter } from './ResponseConverter.ts'
-import { ResponseConverterFactory } from './ResponseConverter.ts'
-import { CallAdapter } from './CallAdapter.ts'
-import { CallAdapterFactory } from './CallAdapter.ts'
-import { CallFactory } from './Call.ts'
-import { ResponseHandler } from './ResponseHandler.ts'
-import { ResponseHandlerFactory } from './ResponseHandler.ts'
-import { DefaultResponseHandler } from './ResponseHandler.ts'
-import { NoopResponseHandler } from './ResponseHandler.ts'
-import { ParseErrorBody } from './decorators/index.ts'
+import { RequestBodyConverter } from "./RequestBodyConverter.ts";
+import { RequestBodyConverterFactory } from "./RequestBodyConverter.ts";
+import { serviceInvoker } from "./drizzleServiceInvoker.ts";
+import { RequestFactory } from "./RequestFactory.ts";
+import { Metadata } from "./ApiParameterization.ts";
+import { Interceptor } from "./Interceptor.ts";
+import { InterceptorFactory } from "./Interceptor.ts";
+import { RawRequestConverter, RawResponseConverter } from "./builtin/mod.ts";
+import { Parameter, ParameterHandlerFactory } from "./builtin/mod.ts";
+import { ParameterHandler } from "./builtin/mod.ts";
+import { RawResponse } from "./builtin/mod.ts";
+import { NoParameterHandlerError } from "./internal/mod.ts";
+import { AnyCtor } from "./internal/mod.ts";
+import { DrizzleError } from "./internal/mod.ts";
+import { ErrorCodes } from "./internal/mod.ts";
+import { ResponseConverter } from "./ResponseConverter.ts";
+import { ResponseConverterFactory } from "./ResponseConverter.ts";
+import { CallAdapter } from "./CallAdapter.ts";
+import { CallAdapterFactory } from "./CallAdapter.ts";
+import { CallFactory } from "./Call.ts";
+import { ResponseHandler } from "./ResponseHandler.ts";
+import { ResponseHandlerFactory } from "./ResponseHandler.ts";
+import { DefaultResponseHandler } from "./ResponseHandler.ts";
+import { NoopResponseHandler } from "./ResponseHandler.ts";
+import { ParseErrorBody } from "./decorators/mod.ts";
 
 /**
  * Drizzle adapts a class to perform HTTP calls by using the decorators on the declared methods
@@ -33,15 +31,14 @@ import { ParseErrorBody } from './decorators/index.ts'
  *
  * @example
  const api = DrizzleBuilder.newBuilder()
- .baseUrl(baseURL)
- .useDefaults()
+ .baseUrl(addr)
  .addCallAdapterFactories(new RxJsCallAdapterFactory())
  .build()
  .create(API)
  */
 export class Drizzle {
-  public static DEFAULT_REQUEST_TYPE = 'json'
-  public static DEFAULT_RESPONSE_TYPE = 'json'
+  public static DEFAULT_REQUEST_TYPE = "json";
+  public static DEFAULT_RESPONSE_TYPE = "json";
 
   constructor(
     private readonly _baseUrl: string,
@@ -49,19 +46,24 @@ export class Drizzle {
     private readonly _interceptors: Interceptor[],
     private readonly _interceptorFactories: InterceptorFactory[],
     private readonly _callAdapterFactories: Set<CallAdapterFactory>,
-    private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[],
-    private readonly _requestConverterFactories: Set<RequestBodyConverterFactory>,
+    private readonly _parameterHandlerFactories: ParameterHandlerFactory<
+      Parameter,
+      unknown
+    >[],
+    private readonly _requestConverterFactories: Set<
+      RequestBodyConverterFactory
+    >,
     private readonly _responseConverterFactories: Set<ResponseConverterFactory>,
     private readonly _responseHandlerFactories: ResponseHandlerFactory[],
-    private readonly _shutdownHooks: (() => Promise<unknown>)[] = []
+    private readonly _shutdownHooks: (() => Promise<unknown>)[] = [],
   ) {}
 
   get [Symbol.toStringTag](): string {
-    return this.constructor.name
+    return this.constructor.name;
   }
 
   private static MIXIN<TBase extends AnyCtor>(superclass: TBase) {
-    return class extends superclass {}
+    return class extends superclass {};
   }
 
   /**
@@ -69,8 +71,8 @@ export class Drizzle {
    *
    * @returns string
    */
-  baseUrl(): string {
-    return this._baseUrl
+  baseUrl() {
+    return this._baseUrl;
   }
 
   /**
@@ -78,8 +80,8 @@ export class Drizzle {
    *
    * @returns CallFactory
    */
-  callFactory(): CallFactory {
-    return this._callFactory
+  callFactory() {
+    return this._callFactory;
   }
 
   /**
@@ -87,11 +89,12 @@ export class Drizzle {
    *
    * @returns Array<Interceptor>
    */
-  interceptors(requestFactory: RequestFactory): Interceptor[] {
+  interceptors(requestFactory: RequestFactory) {
     return [
       ...this._interceptors,
-      ...(this._interceptorFactories.map(x => x.provide(this, requestFactory)).filter(x => x !== null) as Interceptor[])
-    ]
+      ...(this._interceptorFactories.map((x) => x.provide(this, requestFactory))
+        .filter((x) => x !== null) as Interceptor[]),
+    ];
   }
 
   /**
@@ -99,8 +102,8 @@ export class Drizzle {
    *
    * @returns ParameterHandlerFactory[]
    */
-  parameterHandlerFactories(): ParameterHandlerFactory<Parameter, unknown>[] {
-    return [...this._parameterHandlerFactories]
+  parameterHandlerFactories() {
+    return [...this._parameterHandlerFactories];
   }
 
   /**
@@ -108,20 +111,22 @@ export class Drizzle {
    *
    * @returns CallAdapter
    */
-  callAdapter<F, T>(method: string, requestFactory: RequestFactory): CallAdapter<F, T> | null {
+  callAdapter<F, T>(
+    requestFactory: RequestFactory,
+  ) {
     if (!this._callAdapterFactories || this._callAdapterFactories.size === 0) {
-      return null
+      return null;
     }
 
     for (const factory of this._callAdapterFactories) {
-      const adapter = factory.provide(this, requestFactory)
+      const adapter = factory.provide(this, requestFactory);
 
       if (adapter !== null) {
-        return adapter as CallAdapter<F, T>
+        return adapter as CallAdapter<F, T>;
       }
     }
 
-    return null
+    return null;
   }
 
   /**
@@ -130,16 +135,23 @@ export class Drizzle {
    * @returns ParameterHandler
    * @throws NoParameterHandlerError
    */
-  parameterHandler<V>(requestFactory: RequestFactory, parameter: Parameter): ParameterHandler<V> {
+  parameterHandler<V>(
+    requestFactory: RequestFactory,
+    parameter: Parameter,
+  ) {
     for (const factory of this._parameterHandlerFactories) {
-      const handler = factory.provide(this, requestFactory, parameter)
+      const handler = factory.provide(this, requestFactory, parameter);
 
       if (handler !== null) {
-        return handler as ParameterHandler<V>
+        return handler as ParameterHandler<V>;
       }
     }
 
-    throw new NoParameterHandlerError(parameter.type, requestFactory.method, parameter.index)
+    throw new NoParameterHandlerError(
+      parameter.type,
+      requestFactory.method,
+      parameter.index,
+    );
   }
 
   /**
@@ -148,16 +160,23 @@ export class Drizzle {
    *
    * @returns RequestBodyConverter
    */
-  requestBodyConverter<R>(requestFactory: RequestFactory, requestType?: string): RequestBodyConverter<R> {
+  requestBodyConverter<R>(
+    requestFactory: RequestFactory,
+    requestType?: string,
+  ) {
     for (const factory of this._requestConverterFactories) {
-      const converter = factory.provide(this, requestType || requestFactory.requestType, requestFactory)
+      const converter = factory.provide(
+        this,
+        requestType || requestFactory.requestType,
+        requestFactory,
+      );
 
       if (converter !== null) {
-        return converter as RequestBodyConverter<R>
+        return converter as RequestBodyConverter<R>;
       }
     }
 
-    return RawRequestConverter.INSTANCE as unknown as RequestBodyConverter<R>
+    return RawRequestConverter.INSTANCE as unknown as RequestBodyConverter<R>;
   }
 
   /**
@@ -165,24 +184,34 @@ export class Drizzle {
    *
    * @returns ResponseConverter
    */
-  responseConverter<T>(requestFactory: RequestFactory, responseType?: string): ResponseConverter<T> {
-    if (requestFactory.noResponseConverter || requestFactory.hasDecorator(RawResponse)) {
-      return RawResponseConverter.INSTANCE as unknown as ResponseConverter<T>
+  responseConverter<T>(
+    requestFactory: RequestFactory,
+    responseType?: string,
+  ) {
+    if (
+      requestFactory.noResponseConverter ||
+      requestFactory.hasDecorator(RawResponse)
+    ) {
+      return RawResponseConverter.INSTANCE as unknown as ResponseConverter<T>;
     }
 
     for (const factory of this._responseConverterFactories) {
-      const converter = factory.provide(this, responseType || requestFactory.responseType, requestFactory)
+      const converter = factory.provide(
+        this,
+        responseType || requestFactory.responseType,
+        requestFactory,
+      );
 
       if (converter !== null) {
-        return converter as ResponseConverter<T>
+        return converter as ResponseConverter<T>;
       }
     }
 
     throw new DrizzleError(
       `No ResponseConverter for type "${responseType}" was found for method "${requestFactory.method}". ` +
-        'Specify the response type on responseType/class level.',
-      ErrorCodes.ERR_NO_RESPONSE_CONVERTER
-    )
+        "Specify the response type on responseType/class level.",
+      ErrorCodes.ERR_NO_RESPONSE_CONVERTER,
+    );
   }
 
   /**
@@ -192,23 +221,26 @@ export class Drizzle {
    */
   responseHandler(requestFactory: RequestFactory): ResponseHandler {
     if (requestFactory.noResponseHandler) {
-      return NoopResponseHandler.INSTANCE
+      return NoopResponseHandler.INSTANCE;
     }
 
     for (const factory of this._responseHandlerFactories) {
-      const handler = factory.provide(this, requestFactory)
+      const handler = factory.provide(this, requestFactory);
 
       if (handler !== null) {
-        return handler
+        return handler;
       }
     }
 
-    const convertErrorBody = requestFactory.hasDecorator(ParseErrorBody)
+    const convertErrorBody = requestFactory.hasDecorator(ParseErrorBody);
     const responseConverter = requestFactory.errorType
-      ? this.responseConverter<unknown>(requestFactory, requestFactory.errorType)
-      : this.responseConverter<unknown>(requestFactory)
+      ? this.responseConverter<unknown>(
+        requestFactory,
+        requestFactory.errorType,
+      )
+      : this.responseConverter<unknown>(requestFactory);
 
-    return new DefaultResponseHandler(convertErrorBody, responseConverter)
+    return new DefaultResponseHandler(convertErrorBody, responseConverter);
   }
 
   /**
@@ -218,16 +250,16 @@ export class Drizzle {
    *
    * @param fn - shutdown async function
    */
-  registerShutdownHook(fn: () => Promise<unknown>): void {
-    this._shutdownHooks.push(fn)
+  registerShutdownHook(fn: () => Promise<unknown>) {
+    this._shutdownHooks.push(fn);
   }
 
   /**
    * Executes all registered shutdown hooks
    */
-  async shutdown(): Promise<void> {
+  async shutdown() {
     for (const hook of this._shutdownHooks) {
-      await hook()
+      await hook();
     }
   }
 
@@ -241,29 +273,31 @@ export class Drizzle {
    * @returns InstanceType<T>
    */
   create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
-    const parameterization = Metadata.metadataFor(TargetApi)
+    const parameterization = Metadata.metadataFor(TargetApi);
 
     if (parameterization.requestFactories.size === 0) {
       throw new DrizzleError(
         `Class ${TargetApi.name} does not contain any api call method.`,
-        ErrorCodes.ERR_EMPTY_API_CLASS
-      )
+        ErrorCodes.ERR_EMPTY_API_CLASS,
+      );
     }
 
-    const Extended = Drizzle.MIXIN(TargetApi)
-    const extendedApi = new Extended(...args)
-    const createApiInvocationMethod = serviceInvoker(this)
+    const Extended = Drizzle.MIXIN(TargetApi);
+    const extendedApi = new Extended(...args);
+    const createApiInvocationMethod = serviceInvoker(this);
 
     for (const [method, requestFactory] of parameterization.requestFactories) {
       if (requestFactory.isPreProcessed()) {
-        break
+        break;
       }
 
-      requestFactory.mergeWithApiDefaults(parameterization.meta)
-      requestFactory.preProcessAndValidate(this)
-      requestFactory.defineInvoker(createApiInvocationMethod(requestFactory, method))
+      requestFactory.mergeWithApiDefaults(parameterization.meta);
+      requestFactory.preProcessAndValidate(this);
+      requestFactory.defineInvoker(
+        createApiInvocationMethod(requestFactory, method),
+      );
     }
 
-    return extendedApi
+    return extendedApi;
   }
 }

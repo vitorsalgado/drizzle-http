@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a PUT HTTP Request
@@ -9,4 +9,4 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@PUT('/relative/path')
  *  example(\@Body data: object): Promise<Result>
  */
-export const PUT = (path: string) => decorateWithHttpMethod(PUT, 'PUT', path)
+export const PUT = (path = "") => decorateWithHttpMethod(PUT, "PUT", path);

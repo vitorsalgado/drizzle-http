@@ -1,16 +1,15 @@
 /**
  * Converts a value from its HTTP representation to another type
  */
-import { Drizzle } from './Drizzle.ts'
-import { RequestFactory } from './RequestFactory.ts'
-import { HttpResponse } from './HttpResponse.ts'
+import { Drizzle } from "./Drizzle.ts";
+import { RequestFactory } from "./RequestFactory.ts";
 
 /**
- * Converts an {@link HttpResponse} to another object type.
+ * Converts an {@link Response} to another object type.
  * Instances are created by {@link ResponseConverterFactory}.
  */
 export interface ResponseConverter<T> {
-  convert(from: HttpResponse): Promise<T>
+  convert(from: Response): Promise<T>;
 }
 
 /**
@@ -26,5 +25,9 @@ export interface ResponseConverterFactory {
    * @param responseType - response type. E.g.: json, text-plain
    * @param requestFactory - {@link RequestFactory} associated with an api method
    */
-  provide(drizzle: Drizzle, responseType: string, requestFactory: RequestFactory): ResponseConverter<unknown> | null
+  provide(
+    drizzle: Drizzle,
+    responseType: string,
+    requestFactory: RequestFactory,
+  ): ResponseConverter<unknown> | null;
 }

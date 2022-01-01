@@ -1,39 +1,42 @@
-import { Drizzle } from './Drizzle.ts'
-import { notNull } from './internal/index.ts'
-import { notEmpty } from './internal/index.ts'
-import { JsonResponseConverterFactory } from './builtin/index.ts'
-import { BodyParameterHandlerFactory } from './builtin/index.ts'
-import { ParameterHandlerFactory } from './builtin/index.ts'
-import { HeaderParameterHandlerFactory } from './builtin/index.ts'
-import { RawRequestConverterFactory } from './builtin/index.ts'
-import { QueryNameParameterHandlerFactory } from './builtin/index.ts'
-import { RawResponseConverterFactory } from './builtin/index.ts'
-import { FormParameterHandlerFactory } from './builtin/index.ts'
-import { QueryParameterHandlerFactory } from './builtin/index.ts'
-import { JsonRequestConverterFactory } from './builtin/index.ts'
-import { CallbackCallAdapterFactory } from './builtin/index.ts'
-import { Parameter } from './builtin/index.ts'
-import { FormRequestConverterFactory } from './builtin/index.ts'
-import { PathParameterHandlerFactory } from './builtin/index.ts'
-import { SignalParameterHandlerFactory } from './builtin/index.ts'
-import { RawResponseHandlerFactory } from './builtin/index.ts'
-import { PlainTextResponseConverterFactory } from './builtin/index.ts'
-import { ModelArgumentParameterHandlerFactory } from './builtin/index.ts'
-import { RetryInterceptorFactory } from './builtin/index.ts'
-import { Interceptor } from './Interceptor.ts'
-import { InterceptorFactory } from './Interceptor.ts'
-import { InterceptorFunction } from './Interceptor.ts'
-import { RequestBodyConverterFactory } from './RequestBodyConverter.ts'
-import { CallAdapterFactory } from './CallAdapter.ts'
-import { CallFactory } from './Call.ts'
-import { ResponseConverterFactory } from './ResponseConverter.ts'
-import { ResponseHandlerFactory } from './ResponseHandler.ts'
+import { Drizzle } from "./Drizzle.ts";
+import { AnyCtor, notEmpty, notNull } from "./internal/mod.ts";
+import {
+  BodyParameterHandlerFactory,
+  CallbackCallAdapterFactory,
+  FormParameterHandlerFactory,
+  FormRequestConverterFactory,
+  HeaderParameterHandlerFactory,
+  JsonRequestConverterFactory,
+  JsonResponseConverterFactory,
+  ModelArgumentParameterHandlerFactory,
+  Parameter,
+  ParameterHandlerFactory,
+  PathParameterHandlerFactory,
+  PlainTextResponseConverterFactory,
+  QueryNameParameterHandlerFactory,
+  QueryParameterHandlerFactory,
+  RawRequestConverterFactory,
+  RawResponseConverterFactory,
+  RawResponseHandlerFactory,
+  RetryInterceptorFactory,
+  SignalParameterHandlerFactory,
+} from "./builtin/mod.ts";
+import {
+  Interceptor,
+  InterceptorFactory,
+  InterceptorFunction,
+} from "./Interceptor.ts";
+import { RequestBodyConverterFactory } from "./RequestBodyConverter.ts";
+import { CallAdapterFactory } from "./CallAdapter.ts";
+import { CallFactory } from "./Call.ts";
+import { ResponseConverterFactory } from "./ResponseConverter.ts";
+import { ResponseHandlerFactory } from "./ResponseHandler.ts";
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
  */
-export function initDrizzleHttp(): DrizzleBuilder {
-  return DrizzleBuilder.newBuilder()
+export function newAPI() {
+  return DrizzleBuilder.newBuilder();
 }
 
 /**
@@ -41,34 +44,37 @@ export function initDrizzleHttp(): DrizzleBuilder {
  * baseUrl is required to be called before calling build.
  */
 export class DrizzleBuilder {
-  private _baseURL!: string
-  private _callFactory!: CallFactory
-  private readonly _interceptors: Interceptor[]
-  private readonly _interceptorFactories: InterceptorFactory[]
-  private readonly _callAdapterFactories: CallAdapterFactory[]
-  private readonly _parameterHandlerFactories: ParameterHandlerFactory<Parameter, unknown>[]
-  private readonly _requestConverterFactories: RequestBodyConverterFactory[]
-  private readonly _responseConverterFactories: ResponseConverterFactory[]
-  private readonly _responseHandlerFactories: ResponseHandlerFactory[]
-  private _useDefaults: boolean
+  private _baseURL!: string;
+  private _callFactory!: CallFactory;
+  private readonly _interceptors: Interceptor[];
+  private readonly _interceptorFactories: InterceptorFactory[];
+  private readonly _callAdapterFactories: CallAdapterFactory[];
+  private readonly _parameterHandlerFactories: ParameterHandlerFactory<
+    Parameter,
+    unknown
+  >[];
+  private readonly _requestConverterFactories: RequestBodyConverterFactory[];
+  private readonly _responseConverterFactories: ResponseConverterFactory[];
+  private readonly _responseHandlerFactories: ResponseHandlerFactory[];
+  private _useDefaults: boolean;
 
   constructor() {
-    this._interceptors = []
-    this._interceptorFactories = []
-    this._callAdapterFactories = []
-    this._parameterHandlerFactories = []
-    this._requestConverterFactories = []
-    this._responseConverterFactories = []
-    this._responseHandlerFactories = []
-    this._useDefaults = true
+    this._interceptors = [];
+    this._interceptorFactories = [];
+    this._callAdapterFactories = [];
+    this._parameterHandlerFactories = [];
+    this._requestConverterFactories = [];
+    this._responseConverterFactories = [];
+    this._responseHandlerFactories = [];
+    this._useDefaults = true;
   }
 
   get [Symbol.toStringTag](): string {
-    return this.constructor.name
+    return this.constructor.name;
   }
 
-  static newBuilder(): DrizzleBuilder {
-    return new DrizzleBuilder()
+  static newBuilder() {
+    return new DrizzleBuilder();
   }
 
   /**
@@ -77,16 +83,16 @@ export class DrizzleBuilder {
    * @param url- base url for this instance
    * @returns DrizzleBuilder
    */
-  baseUrl(url: string): this {
-    notNull(url, 'Parameter "url" must not be null.')
+  baseUrl(url: string) {
+    notNull(url, 'Parameter "url" must not be null.');
 
-    if (url.endsWith('/')) {
-      url = url.substring(0, url.length - 1)
+    if (url.endsWith("/")) {
+      url = url.substring(0, url.length - 1);
     }
 
-    this._baseURL = url
+    this._baseURL = url;
 
-    return this
+    return this;
   }
 
   /**
@@ -95,12 +101,12 @@ export class DrizzleBuilder {
    * @param factory - {@link CallFactory} instance
    * @returns DrizzleBuilder
    */
-  callFactory(factory: CallFactory): this {
-    notNull(factory, 'Parameter "factory" must not be null.')
+  callFactory(factory: CallFactory) {
+    notNull(factory, 'Parameter "factory" must not be null.');
 
-    this._callFactory = factory
+    this._callFactory = factory;
 
-    return this
+    return this;
   }
 
   /**
@@ -108,13 +114,13 @@ export class DrizzleBuilder {
    *
    * @param factories - list of {@link ResponseHandlerFactory} to be added
    */
-  addResponseHandlerFactory(...factories: ResponseHandlerFactory[]): this {
-    notNull(factories)
-    notEmpty(factories)
+  addResponseHandlerFactory(...factories: ResponseHandlerFactory[]) {
+    notNull(factories);
+    notEmpty(factories);
 
-    this._responseHandlerFactories.push(...factories)
+    this._responseHandlerFactories.push(...factories);
 
-    return this
+    return this;
   }
 
   /**
@@ -124,20 +130,22 @@ export class DrizzleBuilder {
    * @param interceptor - {@link Interceptor} instance or a {@link InterceptorFactory} instance
    * @returns DrizzleBuilder
    */
-  addInterceptor(interceptor: Interceptor | InterceptorFunction | InterceptorFactory): this {
-    notNull(interceptor, 'Parameter "interceptor" must not be null.')
+  addInterceptor(
+    interceptor: Interceptor | InterceptorFunction | InterceptorFactory,
+  ) {
+    notNull(interceptor, 'Parameter "interceptor" must not be null.');
 
-    if (typeof interceptor === 'function') {
-      this._interceptors.push({ intercept: interceptor })
+    if (typeof interceptor === "function") {
+      this._interceptors.push({ intercept: interceptor });
     } else {
-      if ('provide' in interceptor) {
-        this._interceptorFactories.push(interceptor)
-      } else if ('intercept' in interceptor) {
-        this._interceptors.push(interceptor)
+      if ("provide" in interceptor) {
+        this._interceptorFactories.push(interceptor);
+      } else if ("intercept" in interceptor) {
+        this._interceptors.push(interceptor);
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -148,13 +156,19 @@ export class DrizzleBuilder {
    * @param callAdapterFactory - {@link CallAdapterFactory} instance
    * @returns DrizzleBuilder
    */
-  addCallAdapterFactories(...callAdapterFactory: CallAdapterFactory[]): this {
-    notNull(callAdapterFactory, 'Parameter "callAdapterFactory" must not be null.')
-    notEmpty(callAdapterFactory, 'Parameter "callAdapterFactory" must not be empty.')
+  addCallAdapterFactories(...callAdapterFactory: CallAdapterFactory[]) {
+    notNull(
+      callAdapterFactory,
+      'Parameter "callAdapterFactory" must not be null.',
+    );
+    notEmpty(
+      callAdapterFactory,
+      'Parameter "callAdapterFactory" must not be empty.',
+    );
 
-    this._callAdapterFactories.push(...callAdapterFactory)
+    this._callAdapterFactories.push(...callAdapterFactory);
 
-    return this
+    return this;
   }
 
   /**
@@ -164,12 +178,14 @@ export class DrizzleBuilder {
    * @param factory - {@link ParameterHandlerFactory} instance
    * @returns DrizzleBuilder
    */
-  addParameterHandlerFactory(factory: ParameterHandlerFactory<Parameter, unknown>): this {
-    notNull(factory, 'Parameter "factory" must not be null.')
+  addParameterHandlerFactory(
+    factory: ParameterHandlerFactory<Parameter, unknown>,
+  ) {
+    notNull(factory, 'Parameter "factory" must not be null.');
 
-    this._parameterHandlerFactories.push(factory)
+    this._parameterHandlerFactories.push(factory);
 
-    return this
+    return this;
   }
 
   /**
@@ -179,13 +195,21 @@ export class DrizzleBuilder {
    * @param requestConverterFactory - {@link RequestBodyConverterFactory} instance
    * @returns DrizzleBuilder
    */
-  addRequestConverterFactories(...requestConverterFactory: RequestBodyConverterFactory[]): this {
-    notNull(requestConverterFactory, 'Parameter "requestConverterFactory" must not be null.')
-    notEmpty(requestConverterFactory, 'Parameter "requestConverterFactory" must not be empty.')
+  addRequestConverterFactories(
+    ...requestConverterFactory: RequestBodyConverterFactory[]
+  ) {
+    notNull(
+      requestConverterFactory,
+      'Parameter "requestConverterFactory" must not be null.',
+    );
+    notEmpty(
+      requestConverterFactory,
+      'Parameter "requestConverterFactory" must not be empty.',
+    );
 
-    this._requestConverterFactories.push(...requestConverterFactory)
+    this._requestConverterFactories.push(...requestConverterFactory);
 
-    return this
+    return this;
   }
 
   /**
@@ -195,13 +219,21 @@ export class DrizzleBuilder {
    * @param responseConverterFactory - {@link ResponseConverterFactory}
    * @returns DrizzleBuilder
    */
-  addResponseConverterFactories(...responseConverterFactory: ResponseConverterFactory[]): this {
-    notNull(responseConverterFactory, 'Parameter "responseConverterFactory" must not be null.')
-    notEmpty(responseConverterFactory, 'Parameter "responseConverterFactory" must not be empty.')
+  addResponseConverterFactories(
+    ...responseConverterFactory: ResponseConverterFactory[]
+  ) {
+    notNull(
+      responseConverterFactory,
+      'Parameter "responseConverterFactory" must not be null.',
+    );
+    notEmpty(
+      responseConverterFactory,
+      'Parameter "responseConverterFactory" must not be empty.',
+    );
 
-    this._responseConverterFactories.push(...responseConverterFactory)
+    this._responseConverterFactories.push(...responseConverterFactory);
 
-    return this
+    return this;
   }
 
   /**
@@ -209,9 +241,9 @@ export class DrizzleBuilder {
    * @param enable - enable/disable - defaults to true
    * @returns DrizzleBuilder
    */
-  useDefaults(enable = true): this {
-    this._useDefaults = enable
-    return this
+  useDefaults(enable = true) {
+    this._useDefaults = enable;
+    return this;
   }
 
   /**
@@ -220,30 +252,35 @@ export class DrizzleBuilder {
    *
    * @param configurators - configuration functions that receive the {@link DrizzleBuilder} instance as a parameter.
    */
-  configurer(...configurators: ((drizzleBuilder: DrizzleBuilder) => void)[]): this {
+  configurer(
+    ...configurators: ((drizzleBuilder: DrizzleBuilder) => void)[]
+  ) {
     for (const configurer of configurators) {
-      configurer(this)
+      configurer(this);
     }
 
-    return this
+    return this;
   }
 
   /**
    * Builds a new {@link Drizzle} instance using the configured values.
    */
-  build(): Drizzle {
+  build() {
     if (this._useDefaults) {
-      this.setDefaults()
+      this.setDefaults();
     }
 
-    notNull(this._baseURL, '"BaseUrl" must not be null or undefined.')
-    notNull(this._callFactory, 'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.')
+    notNull(this._baseURL, '"BaseUrl" must not be null or undefined.');
+    notNull(
+      this._callFactory,
+      'No "CallFactory" set. Use "callFactory()" method to set a "CallFactory" configuration.',
+    );
     notEmpty(
       this._parameterHandlerFactories,
       'No "Parameter Handler Factories" set. ' +
         'Use "parameterHandlerFactory()" method to add a "ParameterHandlerFactory" instance. ' +
-        'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."'
-    )
+        'You can use the default handlers by calling "useDefaults(true) (Will add other default components too."',
+    );
 
     return new Drizzle(
       this._baseURL,
@@ -254,32 +291,49 @@ export class DrizzleBuilder {
       this._parameterHandlerFactories,
       new Set<RequestBodyConverterFactory>(this._requestConverterFactories),
       new Set<ResponseConverterFactory>(this._responseConverterFactories),
-      this._responseHandlerFactories
-    )
+      this._responseHandlerFactories,
+    );
   }
 
-  private setDefaults(): void {
-    this.addCallAdapterFactories(new CallbackCallAdapterFactory())
+  /**
+   * Builds a new {@link Drizzle} instance and create an API instance from T
+   *
+   * @param TargetApi - the target API class with decorated methods. use class and abstract class.
+   * @param args - optional list of arguments to be passed to the api constructor.
+   *
+   * @returns InstanceType<T>
+   */
+  createAPI<T extends AnyCtor>(
+    TargetApi: T,
+    ...args: unknown[]
+  ): InstanceType<T> {
+    return this.build().create(TargetApi, args);
+  }
 
-    this.addParameterHandlerFactory(QueryParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(QueryNameParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(PathParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(HeaderParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(FormParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE)
-    this.addParameterHandlerFactory(ModelArgumentParameterHandlerFactory.INSTANCE)
+  private setDefaults() {
+    this.addCallAdapterFactories(new CallbackCallAdapterFactory());
 
-    this.addRequestConverterFactories(new JsonRequestConverterFactory())
-    this.addRequestConverterFactories(new FormRequestConverterFactory())
-    this.addRequestConverterFactories(new RawRequestConverterFactory())
+    this.addParameterHandlerFactory(QueryParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(QueryNameParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(PathParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(HeaderParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(FormParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(BodyParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(SignalParameterHandlerFactory.INSTANCE);
+    this.addParameterHandlerFactory(
+      ModelArgumentParameterHandlerFactory.INSTANCE,
+    );
 
-    this.addResponseConverterFactories(new JsonResponseConverterFactory())
-    this.addResponseConverterFactories(new PlainTextResponseConverterFactory())
-    this._responseConverterFactories.unshift(new RawResponseConverterFactory())
+    this.addRequestConverterFactories(new JsonRequestConverterFactory());
+    this.addRequestConverterFactories(new FormRequestConverterFactory());
+    this.addRequestConverterFactories(new RawRequestConverterFactory());
 
-    this.addResponseHandlerFactory(new RawResponseHandlerFactory())
+    this.addResponseConverterFactories(new JsonResponseConverterFactory());
+    this.addResponseConverterFactories(new PlainTextResponseConverterFactory());
+    this._responseConverterFactories.unshift(new RawResponseConverterFactory());
 
-    this.addInterceptor(RetryInterceptorFactory.INSTANCE)
+    this.addResponseHandlerFactory(new RawResponseHandlerFactory());
+
+    this.addInterceptor(RetryInterceptorFactory.INSTANCE);
   }
 }

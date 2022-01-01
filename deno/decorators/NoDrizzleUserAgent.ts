@@ -1,3 +1,4 @@
-import { createClassDecorator } from '../ApiParameterization.ts'
+import { createClassDecorator } from "../ApiParameterization.ts";
 
-export const NoDrizzleUserAgent = () => createClassDecorator(NoDrizzleUserAgent)
+export const NoDrizzleUserAgent = () =>
+  createClassDecorator(NoDrizzleUserAgent);

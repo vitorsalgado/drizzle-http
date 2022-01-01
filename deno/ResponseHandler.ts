@@ -1,22 +1,30 @@
-import { HttpResponse } from './HttpResponse.ts'
-import { RequestFactory } from './RequestFactory.ts'
-import { Drizzle } from './Drizzle.ts'
-import { HttpError } from './HttpError.ts'
-import { HttpRequest } from './HttpRequest.ts'
-import { ResponseConverter } from './ResponseConverter.ts'
+// deno-lint-ignore-file no-unused-vars
+
+import { RequestFactory } from "./RequestFactory.ts";
+import { Drizzle } from "./Drizzle.ts";
+import { HttpError } from "./HttpError.ts";
+import { HttpRequest } from "./HttpRequest.ts";
+import { ResponseConverter } from "./ResponseConverter.ts";
 
 /**
- * Handles a {@link HttpResponse}.
+ * Handles a {@link Response}.
  */
 export interface ResponseHandler {
-  handle(argv: unknown[], request: HttpRequest, response: HttpResponse): Promise<HttpResponse>
+  handle(
+    argv: unknown[],
+    request: HttpRequest,
+    response: Response,
+  ): Promise<Response>;
 }
 
 /**
  * Builds a {@link ResponseHandler} instance.
  */
 export interface ResponseHandlerFactory {
-  provide(drizzle: Drizzle, requestFactory: RequestFactory): ResponseHandler | null
+  provide(
+    drizzle: Drizzle,
+    requestFactory: RequestFactory,
+  ): ResponseHandler | null;
 }
 
 /**
@@ -27,8 +35,9 @@ export interface ResponseHandlerFactory {
 export class DefaultResponseHandler implements ResponseHandler {
   constructor(
     private readonly convertErrorBody: boolean,
-    private readonly responseConverter: ResponseConverter<unknown>
-  ) {}
+    private readonly responseConverter: ResponseConverter<unknown>,
+  ) {
+  }
 
   /**
    * Handles the HTTP response and throws an error if status code is not success.
@@ -38,23 +47,29 @@ export class DefaultResponseHandler implements ResponseHandler {
    * @param response - actual HTTP response
    *
    * @throws HttpError
-   * @returns Promise<HttpResponse>
+   * @returns Promise<Response>
    */
-  async handle(argv: unknown[], request: HttpRequest, response: HttpResponse): Promise<HttpResponse> {
+  async handle(
+    argv: unknown[],
+    request: HttpRequest,
+    response: Response,
+  ): Promise<Response> {
     if (response.ok) {
-      return response
+      return response;
     }
 
-    let body = null
+    let body = null;
 
     if (this.convertErrorBody) {
       if (!response.bodyUsed) {
-        body = await this.responseConverter.convert(response)
+        body = await this.responseConverter.convert(response);
       }
     } else {
-      if (!response.bodyUsed && response.body) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const _ of response?.body) {
+      if (
+        !response.bodyUsed && response.body &&
+        response.body instanceof ReadableStream
+      ) {
+        for await (const _ of response.body) {
           // consuming error body ...
         }
       }
@@ -66,19 +81,23 @@ export class DefaultResponseHandler implements ResponseHandler {
       statusText: response.statusText,
       url: response.url,
       headers: response.headers,
-      body
-    })
+      body,
+    });
   }
 }
 
 /**
  * Empty {@link ResponseHandler} implementation.
- * Used when {@link HttpResponse} should be returned as is.
+ * Used when {@link Response} should be returned as is.
  */
 export class NoopResponseHandler implements ResponseHandler {
-  static INSTANCE: NoopResponseHandler = new NoopResponseHandler()
+  static INSTANCE = new NoopResponseHandler();
 
-  async handle(argv: unknown[], request: HttpRequest, response: HttpResponse): Promise<HttpResponse> {
-    return response
+  handle(
+    argv: unknown[],
+    request: HttpRequest,
+    response: Response,
+  ): Promise<Response> {
+    return Promise.resolve(response);
   }
 }

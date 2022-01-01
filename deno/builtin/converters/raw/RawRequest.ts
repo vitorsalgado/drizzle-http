@@ -1,3 +1,3 @@
-import { createMethodDecorator } from '../../../ApiParameterization.ts'
+import { createMethodDecorator } from "../../../ApiParameterization.ts";
 
-export const RawRequest = () => createMethodDecorator(RawRequest)
+export const RawRequest = () => createMethodDecorator(RawRequest);

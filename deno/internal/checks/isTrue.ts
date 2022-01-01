@@ -1,7 +1,10 @@
-import { InvalidArgumentError } from './InvalidArgumentError.ts'
+import { InvalidArgumentError } from "./InvalidArgumentError.ts";
 
-export function isTrue(condition: boolean, message: string = 'Argument does not meet required condition.'): void {
+export function isTrue(
+  condition: boolean,
+  message = "Argument does not meet required condition.",
+) {
   if (!condition) {
-    throw new InvalidArgumentError(message)
+    throw new InvalidArgumentError(message);
   }
 }

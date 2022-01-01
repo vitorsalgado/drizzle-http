@@ -1,10 +1,10 @@
-import { Interceptor } from './Interceptor.ts'
-import { HttpRequest } from './HttpRequest.ts'
-import { Call } from './Call.ts'
-import { ResponseConverter } from './ResponseConverter.ts'
-import { ChainExecutor } from './ChainExecutor.ts'
-import { ResponseHandler } from './ResponseHandler.ts'
-import { RequestFactory } from './RequestFactory.ts'
+import { Interceptor } from "./Interceptor.ts";
+import { HttpRequest } from "./HttpRequest.ts";
+import { Call } from "./Call.ts";
+import { ResponseConverter } from "./ResponseConverter.ts";
+import { ChainExecutor } from "./ChainExecutor.ts";
+import { ResponseHandler } from "./ResponseHandler.ts";
+import { RequestFactory } from "./RequestFactory.ts";
 
 /**
  * This is the entrypoint for all requests.
@@ -25,13 +25,19 @@ export class EntryPointInvoker<T> implements Call<T> {
     private readonly responseConverter: ResponseConverter<T>,
     private readonly interceptors: Interceptor[],
     private readonly method: string,
-    private readonly requestFactory: RequestFactory
+    private readonly requestFactory: RequestFactory,
   ) {}
 
   execute(request: HttpRequest, argv: unknown[]): Promise<T> {
-    return ChainExecutor.first(this.interceptors, this.method, this.requestFactory, request, argv)
+    return ChainExecutor.first(
+      this.interceptors,
+      this.method,
+      this.requestFactory,
+      request,
+      argv,
+    )
       .proceed(request)
-      .then(response => this.responseHandler.handle(argv, request, response))
-      .then(this.responseConverter.convert)
+      .then((response) => this.responseHandler.handle(argv, request, response))
+      .then(this.responseConverter.convert);
   }
 }

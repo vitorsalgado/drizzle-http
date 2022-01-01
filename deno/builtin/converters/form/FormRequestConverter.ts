@@ -1,48 +1,53 @@
-import { RequestFactory } from '../../../RequestFactory.ts'
-import { RequestBodyConverter } from '../../../RequestBodyConverter.ts'
-import { BodyType } from '../../../BodyType.ts'
-import { MediaTypes } from '../../../MediaTypes.ts'
-import { encodeFormFieldIfNecessary } from '../../../internal/index.ts'
-import { RequestBodyTypeNotAllowedError } from '../../../internal/index.ts'
-import { RequestParameterization } from '../../../RequestParameterization.ts'
+import { RequestFactory } from "../../../RequestFactory.ts";
+import { RequestBodyConverter } from "../../../RequestBodyConverter.ts";
+import { BodyType } from "../../../BodyType.ts";
+import { MediaTypes } from "../../../MediaTypes.ts";
+import { RequestBodyTypeNotAllowedError } from "../../../internal/mod.ts";
+import { RequestParameterization } from "../../../RequestParameterization.ts";
 
 export class FormRequestConverter implements RequestBodyConverter<unknown> {
-  static INSTANCE: FormRequestConverter = new FormRequestConverter()
+  static INSTANCE = new FormRequestConverter();
 
-  convert(requestFactory: RequestFactory, requestValues: RequestParameterization, value: object | Array<string>): void {
-    if (value.constructor === Object) {
-      const res: string[] = []
+  convert(
+    requestFactory: RequestFactory,
+    requestValues: RequestParameterization,
+    value: Record<string, string> | Array<string>,
+  ) {
+    if (value instanceof URLSearchParams) {
+      requestValues.body = value.toString();
+    } else if (value.constructor === Object) {
+      const params = new URLSearchParams();
 
       for (const [prop, v] of Object.entries(value)) {
-        if (typeof v === 'string') {
-          res.push(prop + '=' + encodeFormFieldIfNecessary(v))
+        if (typeof v === "string") {
+          params.append(prop, v);
         } else {
-          res.push(prop + '=' + String(v))
+          params.append(prop, String(v));
         }
       }
 
-      requestValues.body = res.join('&')
+      requestValues.body = params.toString();
 
-      return
+      return;
     } else if (Array.isArray(value) && value.length > 0) {
       if (!Array.isArray(value[0])) {
         throw new RequestBodyTypeNotAllowedError(
           requestFactory.method,
-          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} @Body() arg must be a object, 2d Array or string.`
-        )
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} @Body() arg must be a object, 2d Array or string.`,
+        );
       }
 
-      const res: string[] = []
+      const params = new URLSearchParams();
 
       for (let i = 0; i < value.length; i++) {
-        res.push(value[i][0] + '=' + encodeFormFieldIfNecessary(value[i][1]))
+        params.append(value[i][0], value[i][1]);
       }
 
-      requestValues.body = res.join('&')
+      requestValues.body = params.toString();
 
-      return
+      return;
     }
 
-    requestValues.body = value as BodyType
+    requestValues.body = value as unknown as BodyType;
   }
 }

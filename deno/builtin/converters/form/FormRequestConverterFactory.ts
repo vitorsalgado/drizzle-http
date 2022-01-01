@@ -1,18 +1,30 @@
-import { RequestBodyConverter } from '../../../RequestBodyConverter.ts'
-import { RequestBodyConverterFactory } from '../../../RequestBodyConverter.ts'
-import { RequestFactory } from '../../../RequestFactory.ts'
-import { Drizzle } from '../../../Drizzle.ts'
-import { BuiltInConv } from '../../BuiltInConv.ts'
-import { FormRequestConverter } from './FormRequestConverter.ts'
+// deno-lint-ignore-file no-unused-vars
 
-export class FormRequestConverterFactory implements RequestBodyConverterFactory {
-  static INSTANCE: FormRequestConverterFactory = new FormRequestConverterFactory()
+import {
+  RequestBodyConverter,
+  RequestBodyConverterFactory,
+} from "../../../RequestBodyConverter.ts";
+import { RequestFactory } from "../../../RequestFactory.ts";
+import { Drizzle } from "../../../Drizzle.ts";
+import { BuiltInConv } from "../../BuiltInConv.ts";
+import { FormRequestConverter } from "./FormRequestConverter.ts";
 
-  provide(drizzle: Drizzle, method: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null {
-    if (requestFactory.isFormUrlEncoded() || requestFactory.requestTypeIs(BuiltInConv.FORM_URL_ENCODED)) {
-      return FormRequestConverter.INSTANCE
+export class FormRequestConverterFactory
+  implements RequestBodyConverterFactory {
+  static INSTANCE = new FormRequestConverterFactory();
+
+  provide(
+    drizzle: Drizzle,
+    method: string,
+    requestFactory: RequestFactory,
+  ): RequestBodyConverter<unknown> | null {
+    if (
+      requestFactory.isFormUrlEncoded() ||
+      requestFactory.requestTypeIs(BuiltInConv.FORM_URL_ENCODED)
+    ) {
+      return FormRequestConverter.INSTANCE;
     }
 
-    return null
+    return null;
   }
 }

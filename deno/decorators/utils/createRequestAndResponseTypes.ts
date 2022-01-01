@@ -1,34 +1,40 @@
-import { TargetClass } from '../../internal/index.ts'
-import { createMethodDecorator } from '../../ApiParameterization.ts'
-import { createClassDecorator } from '../../ApiParameterization.ts'
+import { Decorator, TargetCtor, TargetProto } from "../../internal/mod.ts";
+import {
+  createClassDecorator,
+  createMethodDecorator,
+} from "../../ApiParameterization.ts";
 
 export const createRequestAndResponseTypes = (
   type: string,
-  decorator: Function,
-  request: boolean = true,
-  response: boolean = true
+  decorator: Decorator,
+  request = true,
+  response = true,
 ) => {
-  return function (target: object | TargetClass, method?: string, descriptor?: PropertyDescriptor) {
+  return function (
+    target: TargetProto | TargetCtor,
+    method?: string,
+    descriptor?: PropertyDescriptor,
+  ) {
     if (method && descriptor) {
-      return createMethodDecorator(decorator, ctx => {
+      return createMethodDecorator(decorator, (ctx) => {
         if (request) {
-          ctx.requestFactory.requestType = type
+          ctx.requestFactory.requestType = type;
         }
 
         if (response) {
-          ctx.requestFactory.responseType = type
+          ctx.requestFactory.responseType = type;
         }
-      })(target, method, descriptor)
+      })(target, method, descriptor);
     }
 
-    createClassDecorator(decorator, ctx => {
+    createClassDecorator(decorator, (ctx) => {
       if (request) {
-        ctx.defaults.requestType = type
+        ctx.defaults.requestType = type;
       }
 
       if (response) {
-        ctx.defaults.responseType = type
+        ctx.defaults.responseType = type;
       }
-    })(target as TargetClass)
-  }
-}
+    })(target as TargetCtor);
+  };
+};

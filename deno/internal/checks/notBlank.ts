@@ -1,10 +1,13 @@
-import { InvalidArgumentError } from './InvalidArgumentError.ts'
-import { isNullOrUndefined } from './utils.ts'
+import { InvalidArgumentError } from "./InvalidArgumentError.ts";
+import { isNullOrUndefined } from "./utils.ts";
 
-export function notBlank(value: string, message = 'String must not be blank.'): string {
+export function notBlank(
+  value: string,
+  message = "String must not be blank.",
+) {
   if (isNullOrUndefined(value) || value.trim().length === 0) {
-    throw new InvalidArgumentError(message)
+    throw new InvalidArgumentError(message);
   }
 
-  return value
+  return value;
 }

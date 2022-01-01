@@ -1,6 +1,6 @@
-import { setupRequestFactory } from '../ApiParameterization.ts'
-import { setupApiDefaults } from '../ApiParameterization.ts'
-import { TargetClass } from '../internal/index.ts'
+import { setupRequestFactory } from "../ApiParameterization.ts";
+import { setupApiDefaults } from "../ApiParameterization.ts";
+import { TargetCtor, TargetProto } from "../internal/mod.ts";
 
 /**
  * Set the timeouts for an HTTP request.
@@ -11,17 +11,17 @@ import { TargetClass } from '../internal/index.ts'
  * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
-  return (target: object | TargetClass, method?: string): void => {
+  return (target: TargetProto | TargetCtor, method?: string) => {
     if (method) {
-      return setupRequestFactory(Timeout, target, method, requestFactory => {
-        requestFactory.readTimeout = readTimeoutInMs
-        requestFactory.connectTimeout = connectTimeoutInMs
-      })
+      return setupRequestFactory(Timeout, target, method, (requestFactory) => {
+        requestFactory.readTimeout = readTimeoutInMs;
+        requestFactory.connectTimeout = connectTimeoutInMs;
+      });
     }
 
-    setupApiDefaults(Timeout, target, parameters => {
-      parameters.readTimeout = readTimeoutInMs
-      parameters.connectTimeout = connectTimeoutInMs
-    })
-  }
+    setupApiDefaults(Timeout, target, (parameters) => {
+      parameters.readTimeout = readTimeoutInMs;
+      parameters.connectTimeout = connectTimeoutInMs;
+    });
+  };
 }

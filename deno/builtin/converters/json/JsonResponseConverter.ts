@@ -1,14 +1,13 @@
-import { HttpResponse } from '../../../HttpResponse.ts'
-import { ResponseConverter } from '../../../ResponseConverter.ts'
+import { ResponseConverter } from "../../../ResponseConverter.ts";
 
 export class JsonResponseConverter<T> implements ResponseConverter<T> {
-  static INSTANCE: JsonResponseConverter<unknown> = new JsonResponseConverter<unknown>()
+  static INSTANCE = new JsonResponseConverter<unknown>();
 
-  async convert<T>(from: HttpResponse): Promise<T> {
+  convert<T>(from: Response): Promise<T> {
     if (from.status === 204) {
-      return undefined as unknown as T
+      return Promise.resolve(undefined as unknown as T);
     }
 
-    return from.json()
+    return from.json();
   }
 }

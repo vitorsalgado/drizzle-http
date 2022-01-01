@@ -1,232 +1,250 @@
-import { RequestFactory } from './RequestFactory.ts'
-import { HttpHeaders } from './HttpHeaders.ts'
-import { notNull } from './internal/index.ts'
-import { isFunction } from './internal/index.ts'
-import { TargetClass } from './internal/index.ts'
-import { notBlank } from './internal/index.ts'
-import { Drizzle } from './Drizzle.ts'
+import { RequestFactory } from "./RequestFactory.ts";
+import {
+  Decorator,
+  isFunction,
+  notBlank,
+  notNull,
+  TargetCtor,
+  TargetProto,
+} from "./internal/mod.ts";
+import { Drizzle } from "./Drizzle.ts";
 
-type CtorTarget = Function
-type Target = CtorTarget | object
+type Target = TargetCtor | TargetProto;
 
 export class ApiDefaults {
-  decorators: Function[] = []
-  headers: HttpHeaders = new HttpHeaders({})
-  readTimeout: number | undefined = undefined
-  connectTimeout: number | undefined = undefined
-  signal: unknown | null = null
-  responseType: string = Drizzle.DEFAULT_RESPONSE_TYPE
-  requestType: string = Drizzle.DEFAULT_REQUEST_TYPE
-  errorType: string = ''
-  bag: Map<string, unknown> = new Map()
+  decorators: Decorator[] = [];
+  headers = new Headers({});
+  readTimeout: number | undefined = undefined;
+  connectTimeout: number | undefined = undefined;
+  signal: unknown | null = null;
+  responseType = Drizzle.DEFAULT_RESPONSE_TYPE;
+  requestType = Drizzle.DEFAULT_REQUEST_TYPE;
+  errorType = "";
+  bag: Map<string, unknown> = new Map();
 
-  private _path: string = ''
+  private _path = "";
 
-  get path(): string {
-    return this._path
+  get path() {
+    return this._path;
   }
 
   set path(value: string) {
-    notNull(value, 'Parameter "value" cannot be null.')
+    notNull(value, 'Parameter "value" cannot be null.');
 
-    if (!value.startsWith('/')) {
-      value = '/' + value
+    if (!value.startsWith("/")) {
+      value = "/" + value;
     }
 
-    if (value.endsWith('/')) {
-      value = value.substring(0, value.length - 1)
+    if (value.endsWith("/")) {
+      value = value.substring(0, value.length - 1);
     }
 
-    this._path = value
+    this._path = value;
   }
 
-  addConfig(key: string, value: unknown): void {
-    notBlank(key, 'Parameters "key" cannot be null or empty.')
-    notNull(value, 'Parameters "value" cannot be null.')
+  addConfig<T = unknown>(key: string, value: T) {
+    notBlank(key, 'Parameters "key" cannot be null or empty.');
+    notNull(value, 'Parameters "value" cannot be null.');
 
-    this.bag.set(key, value)
+    this.bag.set(key, value);
   }
 
-  getConfig<R>(key: string): R {
-    notBlank(key, 'Parameter "key" cannot be null or empty.')
+  getConfig<R>(key: string) {
+    notBlank(key, 'Parameter "key" cannot be null or empty.');
 
-    return this.bag.get(key) as R
+    return this.bag.get(key) as R;
   }
 
   hasConfig(key: string): boolean {
-    return this.bag.has(key)
+    return this.bag.has(key);
   }
 }
 
 interface Data {
-  meta: ApiDefaults
-  requestFactories: Map<string, RequestFactory>
+  meta: ApiDefaults;
+  requestFactories: Map<string, RequestFactory>;
 }
 
 export class Metadata {
-  private static readonly ENTRIES: Map<CtorTarget, Data> = new Map()
+  private static readonly ENTRIES: Map<TargetCtor, Data> = new Map();
 
-  static apiDefaults(target: Target): ApiDefaults {
-    return Metadata.entries(target).meta
+  static apiDefaults(target: Target) {
+    return Metadata.entries(target).meta;
   }
 
   static requestFactory(target: Target, method: string): RequestFactory {
-    const data = Metadata.entries(target)
-    let requestFactory = data.requestFactories.get(method)
+    const data = Metadata.entries(target);
+    let requestFactory = data.requestFactories.get(method);
 
     if (!requestFactory) {
-      requestFactory = new RequestFactory()
-      data.requestFactories.set(method, requestFactory)
+      requestFactory = new RequestFactory();
+      data.requestFactories.set(method, requestFactory);
     }
 
-    return requestFactory
+    return requestFactory;
   }
 
-  static registerApiMethod(target: CtorTarget, method: string): void {
-    const data = Metadata.entries(target)
+  static registerApiMethod(target: TargetCtor, method: string) {
+    const data = Metadata.entries(target);
 
     if (!data.requestFactories.has(method)) {
-      data.requestFactories.set(method, new RequestFactory())
+      data.requestFactories.set(method, new RequestFactory());
     }
   }
 
-  static metadataFor(api: CtorTarget): Data {
-    const data = Metadata.ENTRIES.get(api)
+  static metadataFor(api: TargetCtor): Data {
+    const data = Metadata.ENTRIES.get(api);
 
     if (!data) {
-      throw new TypeError(`Invalid API state. No metadata found for API definition: ${api}.`)
+      throw new TypeError(
+        `Invalid API state. No metadata found for API definition: ${api}.`,
+      );
     }
 
-    return data
+    return data;
   }
 
   private static entries(target: Target): Data {
-    const arg = typeof target === 'function' ? target : target.constructor
+    const arg = typeof target === "function" ? target : target.constructor;
 
-    let data = Metadata.ENTRIES.get(arg)
+    let data = Metadata.ENTRIES.get(arg);
 
     if (!data) {
       data = {
         meta: new ApiDefaults(),
-        requestFactories: new Map()
-      }
+        requestFactories: new Map(),
+      };
 
-      Metadata.ENTRIES.set(arg, data)
+      Metadata.ENTRIES.set(arg, data);
     }
 
-    return data
+    return data;
   }
 }
 
 export function setupApiDefaults(
-  decorator: Function,
+  decorator: Decorator,
   target: Target,
-  callback?: (parameters: ApiDefaults) => void
-): void {
-  const defaults = Metadata.apiDefaults(target)
-  defaults.decorators.push(decorator)
+  callback?: (parameters: ApiDefaults) => void,
+) {
+  const defaults = Metadata.apiDefaults(target);
+  defaults.decorators.push(decorator);
 
-  callback?.(defaults)
+  callback?.(defaults);
 }
 
 export function setupRequestFactory(
-  decorator: Function,
+  decorator: Decorator,
   target: Target,
   method: string,
-  callback?: (requestFactory: RequestFactory) => void
+  callback?: (requestFactory: RequestFactory) => void,
 ): void {
-  const requestFactory = Metadata.requestFactory(target, method)
-  requestFactory.registerDecorator(decorator)
+  const requestFactory = Metadata.requestFactory(target, method);
+  requestFactory.registerDecorator(decorator);
 
-  callback?.(requestFactory)
+  callback?.(requestFactory);
 }
 
 interface ClassDecoratorContext {
-  target: Function
-  defaults: ApiDefaults
+  target: TargetCtor;
+  defaults: ApiDefaults;
 }
 
-export function createClassDecorator(decorator: Function, configurer?: (ctx: ClassDecoratorContext) => void) {
-  isFunction(decorator)
+export function createClassDecorator(
+  decorator: Decorator,
+  configurer?: (ctx: ClassDecoratorContext) => void,
+) {
+  isFunction(decorator);
 
-  return function (target: Function) {
-    const defaults = Metadata.apiDefaults(target)
-    defaults.decorators.push(decorator)
+  return function (target: Decorator) {
+    const defaults = Metadata.apiDefaults(target);
+    defaults.decorators.push(decorator);
 
     configurer?.({
       target,
-      defaults
-    })
-  }
+      defaults,
+    });
+  };
 }
 
 interface MethodDecoratorContext<T = unknown> {
-  target: object
-  method: string
-  descriptor: PropertyDescriptor
-  requestFactory: RequestFactory
+  target: TargetProto;
+  method: string;
+  descriptor: PropertyDescriptor;
+  requestFactory: RequestFactory;
 }
 
-export function createMethodDecorator<T = any>(
-  decorator: Function,
-  configurer?: (ctx: MethodDecoratorContext<T>) => void
+export function createMethodDecorator<T = unknown>(
+  decorator: Decorator,
+  configurer?: (ctx: MethodDecoratorContext<T>) => void,
 ) {
-  isFunction(decorator)
+  isFunction(decorator);
 
-  return function (target: object, method: string, descriptor: PropertyDescriptor): void {
-    const requestFactory = Metadata.requestFactory(target, method)
-    requestFactory.registerDecorator(decorator)
+  return function (
+    target: TargetProto,
+    method: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    const requestFactory = Metadata.requestFactory(target, method);
+    requestFactory.registerDecorator(decorator);
 
     configurer?.({
       target,
       method,
       descriptor,
-      requestFactory
-    })
-  }
+      requestFactory,
+    });
+  };
 }
 
-export function createClassAndMethodDecorator<T = any>(
-  decorator: Function,
+export function createClassAndMethodDecorator(
+  decorator: Decorator,
   onClass?: (defaults: ApiDefaults) => void,
-  onMethod?: (requestFactory: RequestFactory) => void
+  onMethod?: (requestFactory: RequestFactory) => void,
 ) {
-  isFunction(decorator)
+  isFunction(decorator);
 
-  return function (target: object | TargetClass, method?: string) {
+  return function (target: TargetProto | TargetCtor, method?: string) {
     if (method) {
-      const requestFactory = Metadata.requestFactory(target, method)
-      requestFactory.registerDecorator(decorator)
+      const requestFactory = Metadata.requestFactory(target, method);
+      requestFactory.registerDecorator(decorator);
 
-      onMethod?.(requestFactory)
+      onMethod?.(requestFactory);
     } else {
-      const defaults = Metadata.apiDefaults(target)
-      defaults.decorators.push(decorator)
+      const defaults = Metadata.apiDefaults(target);
+      defaults.decorators.push(decorator);
 
-      onClass?.(defaults)
+      onClass?.(defaults);
     }
-  }
+  };
 }
 
 interface ParameterDecoratorContext {
-  target: object
-  method: string
-  parameterIndex: number
-  requestFactory: RequestFactory
+  target: TargetProto;
+  method: string;
+  parameterIndex: number;
+  requestFactory: RequestFactory;
 }
 
-export function createParameterDecorator(decorator: Function, configurer?: (ctx: ParameterDecoratorContext) => void) {
-  isFunction(decorator)
+export function createParameterDecorator(
+  decorator: Decorator,
+  configurer?: (ctx: ParameterDecoratorContext) => void,
+) {
+  isFunction(decorator);
 
-  return function (target: object, method: string, parameterIndex: number) {
-    const requestFactory = Metadata.requestFactory(target, method)
-    requestFactory.registerDecorator(decorator)
+  return function (
+    target: TargetProto,
+    method: string,
+    parameterIndex: number,
+  ) {
+    const requestFactory = Metadata.requestFactory(target, method);
+    requestFactory.registerDecorator(decorator);
 
     configurer?.({
       target,
       method,
       parameterIndex,
-      requestFactory
-    })
-  }
+      requestFactory,
+    });
+  };
 }

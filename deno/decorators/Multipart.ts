@@ -1,9 +1,9 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.ts'
-import { BuiltInConv } from '../builtin/index.ts'
+import { createClassAndMethodDecorator } from "../ApiParameterization.ts";
+import { BuiltInConv } from "../builtin/mod.ts";
 
 export const Multipart = () =>
   createClassAndMethodDecorator(
     Multipart,
-    defaults => (defaults.requestType = BuiltInConv.MULTIPART),
-    requestFactory => (requestFactory.requestType = BuiltInConv.MULTIPART)
-  )
+    (defaults) => (defaults.requestType = BuiltInConv.MULTIPART),
+    (requestFactory) => (requestFactory.requestType = BuiltInConv.MULTIPART),
+  );

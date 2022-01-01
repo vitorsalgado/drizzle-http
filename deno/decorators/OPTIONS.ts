@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a HEAD HTTP Request
@@ -10,4 +10,5 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@OPTIONS('/relative/path')
  *  example(): Promise<any>
  */
-export const OPTIONS = (path: string) => decorateWithHttpMethod(OPTIONS, 'OPTIONS', path)
+export const OPTIONS = (path = "") =>
+  decorateWithHttpMethod(OPTIONS, "OPTIONS", path);

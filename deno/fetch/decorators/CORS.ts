@@ -1,5 +1,10 @@
-import { createFetchDecorator } from '../setupRequestInit.ts'
+import { Mode } from "./Mode.ts";
+import { createClassAndMethodDecorator } from "../../ApiParameterization.ts";
 
 export function CORS() {
-  return createFetchDecorator(CORS, requestInit => (requestInit.mode = 'cors'))
+  return createClassAndMethodDecorator(
+    CORS,
+    (defaults) => defaults.addConfig<RequestMode>(Mode.Key, "cors"),
+    (requestFactory) => requestFactory.addConfig<RequestMode>(Mode.Key, "cors"),
+  );
 }

@@ -1,15 +1,14 @@
-import { HttpRequest } from './HttpRequest.ts'
-import { HttpResponse } from './HttpResponse.ts'
-import { RequestFactory } from './RequestFactory.ts'
+import { HttpRequest } from "./HttpRequest.ts";
+import { RequestFactory } from "./RequestFactory.ts";
 
 export interface Chain {
-  requestFactory(): RequestFactory
+  requestFactory(): RequestFactory;
 
-  method(): string
+  method(): string;
 
-  request(): HttpRequest
+  request(): HttpRequest;
 
-  argv(): unknown[]
+  argv(): unknown[];
 
-  proceed(request: HttpRequest): Promise<HttpResponse>
+  proceed(request: HttpRequest): Promise<Response>;
 }

@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils/index.ts'
+import { decorateWithHttpMethod } from "./utils/mod.ts";
 
 /**
  * Make a POST HTTP Request
@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils/index.ts'
  *  \@POST('/relative/path')
  *  example(\@Body data: object): Promise<Result>
  */
-export const POST = (path: string) => decorateWithHttpMethod(POST, 'POST', path)
+export const POST = (path = "") => decorateWithHttpMethod(POST, "POST", path);

@@ -1,5 +1,5 @@
-import { ApiDefaults } from './ApiParameterization.ts'
-import { BodyType } from './BodyType.ts'
+import { ApiDefaults } from "./ApiParameterization.ts";
+import { BodyType } from "./BodyType.ts";
 import {
   BodyParameter,
   FormParameter,
@@ -8,25 +8,32 @@ import {
   ParameterHandler,
   PathParameter,
   QueryNameParameter,
-  QueryParameter
-} from './builtin/index.ts'
-import { NoDrizzleUserAgent } from './decorators/index.ts'
-import { Drizzle } from './Drizzle.ts'
-import { HttpHeaders } from './HttpHeaders.ts'
-import { HttpRequest } from './HttpRequest.ts'
-import { InvalidMethodConfigError, isFunction, notBlank, notNull } from './internal/index.ts'
-import { MediaTypes } from './MediaTypes.ts'
-import { RequestBodyConverter } from './RequestBodyConverter.ts'
-import { RequestParameterization } from './RequestParameterization.ts'
+  QueryParameter,
+} from "./builtin/mod.ts";
+import { NoDrizzleUserAgent } from "./decorators/mod.ts";
+import { Drizzle } from "./Drizzle.ts";
+import { HttpHeaders, mergeHeaders } from "./HttpHeaders.ts";
+import { HttpRequest } from "./HttpRequest.ts";
+import {
+  AnyClass,
+  Decorator,
+  InvalidMethodConfigError,
+  isFunction,
+  notBlank,
+  notNull,
+} from "./internal/mod.ts";
+import { MediaTypes } from "./MediaTypes.ts";
+import { RequestBodyConverter } from "./RequestBodyConverter.ts";
+import { RequestParameterization } from "./RequestParameterization.ts";
 
-const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
-const REGEX_QUERY_STRING = /\?.+=*.*/
+const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g;
+const REGEX_QUERY_STRING = /\?.+=*.*/;
 
 /**
  * Builds a {@link Request} instance
  */
 interface RequestBuilder {
-  toRequest(args: unknown[]): HttpRequest
+  toRequest(args: unknown[]): HttpRequest;
 }
 
 /**
@@ -35,43 +42,49 @@ interface RequestBuilder {
  */
 export class RequestFactory {
   constructor(
-    public apiType: Function | null = null,
-    public method: string = '',
-    public httpMethod: string = '',
-    public path: string = '',
-    public argLen: number = 0,
-    public bodyIndex: number = -1,
-    public defaultHeaders: HttpHeaders = new HttpHeaders(),
+    public apiType: AnyClass | null = null,
+    public method = "",
+    public httpMethod = "",
+    public path = "",
+    public argLen = 0,
+    public bodyIndex = -1,
+    public defaultHeaders = new Headers(),
     public readTimeout: number | undefined = undefined,
     public connectTimeout: number | undefined = undefined,
-    public parameterHandlers: { parameter: Parameter; handler: ParameterHandler }[] = [],
+    public parameterHandlers: {
+      parameter: Parameter;
+      handler: ParameterHandler;
+    }[] = [],
     public parameters: Parameter[] = [],
     public signal: unknown = null,
-    public noResponseConverter: boolean = false,
-    public noResponseHandler: boolean = false,
+    public noResponseConverter = false,
+    public noResponseHandler = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
-    public checkIfPathParamsAreInSyncWithUrl: boolean = true,
-    public requestType: string = '',
-    public responseType: string = '',
-    public errorType: string = '',
-    private preProcessed: boolean = false,
-    private readonly decorators: Function[] = [],
-    private readonly classDecorators: Function[] = [],
-    private invokerFn: (<T>(...args: unknown[]) => T) | null = null
-  ) {}
+    public checkIfPathParamsAreInSyncWithUrl = true,
+    public requestType = "",
+    public responseType = "",
+    public errorType = "",
+    private preProcessed = false,
+    private readonly decorators: Decorator[] = [],
+    private readonly classDecorators: Decorator[] = [],
+    private invokerFn: (<T>(...args: unknown[]) => T) | null = null,
+  ) {
+  }
 
-  private static allPathParamsHaveKeys(params: Array<PathParameter>): boolean {
+  private static allPathParamsHaveKeys(params: Array<PathParameter>) {
     for (const param of params) {
       if (!param.key || !param.regex) {
-        return false
+        return false;
       }
     }
 
-    return true
+    return true;
   }
 
-  private static hasKey(p: QueryParameter | HeaderParameter | PathParameter | FormParameter): boolean {
-    return p.key !== null && typeof p.key !== 'undefined' && p.key.length > 0
+  private static hasKey(
+    p: QueryParameter | HeaderParameter | PathParameter | FormParameter,
+  ) {
+    return p.key !== null && typeof p.key !== "undefined" && p.key.length > 0;
   }
 
   /**
@@ -80,11 +93,11 @@ export class RequestFactory {
    * @internal
    * @param invoker - API method invoker function
    */
-  defineInvoker(invoker: <T>(...args: unknown[]) => T): void {
-    notNull(invoker)
-    isFunction(invoker)
+  defineInvoker(invoker: <T>(...args: unknown[]) => T) {
+    notNull(invoker);
+    isFunction(invoker);
 
-    this.invokerFn = invoker
+    this.invokerFn = invoker;
   }
 
   /**
@@ -94,83 +107,99 @@ export class RequestFactory {
    * @internal
    */
   invoker(): (<T>(...args: unknown[]) => T) | null {
-    return this.invokerFn
+    return this.invokerFn;
   }
 
   /**
    * Pre Process and validate in sequence
    * @param drizzle - Drizzle instance associated with this RequestFactory
    */
-  preProcessAndValidate(drizzle: Drizzle): void {
-    this.preProcess(drizzle)
-    this.validate()
+  preProcessAndValidate(drizzle: Drizzle) {
+    this.preProcess(drizzle);
+    this.validate();
   }
 
   /**
    * Validates a RequestFactory instance.
    * This should be called outside a request context.
    */
-  validate(): void {
+  validate() {
     if (!this.preProcessed) {
-      throw new Error(`RequestFactory for: ${this.method}. Called validate() before preProcess().`)
+      throw new Error(
+        `RequestFactory for: ${this.method}. Called validate() before preProcess().`,
+      );
     }
 
     if (!this.method) {
-      throw this.invalidArgErr('No function reference')
+      throw this.invalidArgErr("No function reference");
     }
 
     if (!this.httpMethod) {
       throw this.invalidArgErr(
-        'No HTTP Method. Use @GET(), @POST(), @PUT(), @DELETE(), @PATCH(), @OPTIONS() or @HEAD() decorators on method level.'
-      )
+        "No HTTP Method. Use @GET(), @POST(), @PUT(), @DELETE(), @PATCH(), @OPTIONS() or @HEAD() decorators on method level.",
+      );
     }
 
-    if ((this.httpMethod === 'GET' || this.httpMethod === 'HEAD' || this.httpMethod === 'OPTIONS') && this.hasBody()) {
-      throw this.invalidArgErr(`Request with ${this.httpMethod} cannot have body.`)
+    if (
+      (this.httpMethod === "GET" || this.httpMethod === "HEAD" ||
+        this.httpMethod === "OPTIONS") && this.hasBody()
+    ) {
+      throw this.invalidArgErr(
+        `Request with ${this.httpMethod} cannot have body.`,
+      );
     }
 
-    const queryParameters = this.getQueryParameters()
-    const headerParameters = this.getHeaderParameters()
-    const pathParameters = this.getPathParameters()
-    const formParameters = this.getFormParameters()
+    const queryParameters = this.getQueryParameters();
+    const headerParameters = this.getHeaderParameters();
+    const pathParameters = this.getPathParameters();
+    const formParameters = this.getFormParameters();
 
     if (!queryParameters.every(RequestFactory.hasKey)) {
-      throw this.invalidArgErr('There is a query parameter without key')
+      throw this.invalidArgErr("There is a query parameter without key");
     }
 
     if (!headerParameters.every(RequestFactory.hasKey)) {
-      throw this.invalidArgErr('There is a header parameter without key')
+      throw this.invalidArgErr("There is a header parameter without key");
     }
 
     if (!formParameters.every(RequestFactory.hasKey)) {
-      throw this.invalidArgErr('There is a form field parameter without key')
+      throw this.invalidArgErr("There is a form field parameter without key");
     }
 
     if (!RequestFactory.allPathParamsHaveKeys(pathParameters)) {
-      throw this.invalidArgErr('There is a path parameter without key')
+      throw this.invalidArgErr("There is a path parameter without key");
     }
 
     if (this.path.match(REGEX_QUERY_STRING)) {
       const paramsInQuery = this.path
-        .substring(this.path.indexOf('?'), this.path.length)
-        .match(REGEX_EXTRACT_TEMPLATE_PARAMS)
+        .substring(this.path.indexOf("?"), this.path.length)
+        .match(REGEX_EXTRACT_TEMPLATE_PARAMS);
 
       if (paramsInQuery !== null && paramsInQuery.length > 0) {
-        throw this.invalidArgErr('URL query string must not have replace parameters with {}. Use @Query() decorator.')
+        throw this.invalidArgErr(
+          "URL query string must not have replace parameters with {}. Use @Query() decorator.",
+        );
       }
     }
 
-    const nonDupPathParams = new Set(this.path.match(REGEX_EXTRACT_TEMPLATE_PARAMS) ?? [])
+    const nonDupPathParams = new Set(
+      this.path.match(REGEX_EXTRACT_TEMPLATE_PARAMS) ?? [],
+    );
 
-    if (pathParameters.length !== nonDupPathParams.size && this.checkIfPathParamsAreInSyncWithUrl) {
+    if (
+      pathParameters.length !== nonDupPathParams.size &&
+      this.checkIfPathParamsAreInSyncWithUrl
+    ) {
       throw this.invalidArgErr(
-        'Path parameter configuration is not in sync with URL. ' +
-          'Check your path and arguments decorated with @Param().'
-      )
+        "Path parameter configuration is not in sync with URL. " +
+          "Check your path and arguments decorated with @Param().",
+      );
     } else {
       for (const param of pathParameters) {
         if (!nonDupPathParams.has(`{${param.key}}`)) {
-          throw this.invalidArgErr(`Parameter "${param.key}" doesn't exist in the URL replace parameters.`)
+          throw this.invalidArgErr(
+            `Parameter "${param.key}" doesn't exist in the URL replace parameters.`,
+          );
         }
       }
     }
@@ -178,14 +207,14 @@ export class RequestFactory {
     if (this.isFormUrlEncoded()) {
       if (this.bodyIndex > 0 && formParameters.length > 0) {
         throw this.invalidArgErr(
-          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} request cannot contain both @Body() and @Field() decorators.`
-        )
+          `${MediaTypes.APPLICATION_FORM_URL_ENCODED} request cannot contain both @Body() and @Field() decorators.`,
+        );
       }
     } else {
       if (formParameters.length > 0) {
         throw this.invalidArgErr(
-          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED} requests. Maybe you are missing @FormUrlEncoded() decorator?`
-        )
+          `@Field() argument decorators can only be used with ${MediaTypes.APPLICATION_FORM_URL_ENCODED} requests. Maybe you are missing @FormUrlEncoded() decorator?`,
+        );
       }
     }
   }
@@ -196,33 +225,33 @@ export class RequestFactory {
    *
    * @param drizzle - Drizzle instance
    */
-  preProcess(drizzle: Drizzle): void {
+  preProcess(drizzle: Drizzle) {
     if (this.preProcessed) {
-      throw new Error('This RequestFactory instance is already Pre Processed.')
+      throw new Error("This RequestFactory instance is already Pre Processed.");
     }
 
     if (!this.hasDecorator(NoDrizzleUserAgent)) {
-      this.defaultHeaders.append('user-agent', 'Drizzle-HTTP')
+      this.defaultHeaders.append("user-agent", "Drizzle-HTTP");
     }
 
-    if (!this.path.startsWith('http:') || !this.path.startsWith('https:')) {
-      const url = new URL(drizzle.baseUrl())
+    if (!this.path.startsWith("http:") || !this.path.startsWith("https:")) {
+      const url = new URL(drizzle.baseUrl());
 
       if (/\/.+/.test(url.pathname)) {
-        this.path = url.pathname + this.path
+        this.path = url.pathname + this.path;
       }
     }
 
     this.parameters
       .sort((a, b) => a.index - b.index)
-      .forEach(parameter =>
+      .forEach((parameter) =>
         this.parameterHandlers.push({
           parameter,
-          handler: drizzle.parameterHandler(this, parameter)
+          handler: drizzle.parameterHandler(this, parameter),
         })
-      )
+      );
 
-    this.preProcessed = true
+    this.preProcessed = true;
   }
 
   /**
@@ -232,68 +261,70 @@ export class RequestFactory {
    *
    * @param defaults - instance with default values for all methods
    */
-  mergeWithApiDefaults(defaults: ApiDefaults | null): void {
+  mergeWithApiDefaults(defaults: ApiDefaults | null) {
     if (defaults === null) {
-      return
+      return;
     }
 
-    this.defaultHeaders.merge(defaults.headers)
+    mergeHeaders(defaults.headers, this.defaultHeaders);
 
-    if (this.readTimeout === null || typeof this.readTimeout === 'undefined') {
-      this.readTimeout = defaults.readTimeout
+    if (this.readTimeout === null || typeof this.readTimeout === "undefined") {
+      this.readTimeout = defaults.readTimeout;
     }
 
-    if (this.connectTimeout === null || typeof this.connectTimeout === 'undefined') {
-      this.connectTimeout = defaults.connectTimeout
+    if (
+      this.connectTimeout === null || typeof this.connectTimeout === "undefined"
+    ) {
+      this.connectTimeout = defaults.connectTimeout;
     }
 
-    if (this.signal === null || typeof this.signal === 'undefined') {
-      this.signal = defaults.signal
+    if (this.signal === null || typeof this.signal === "undefined") {
+      this.signal = defaults.signal;
     }
 
     for (const [key, value] of defaults.bag) {
       if (!this.hasConfig(key)) {
-        this.addConfig(key, value)
+        this.addConfig(key, value);
       }
     }
 
     if (!this.requestType) {
-      this.requestType = defaults.requestType
+      this.requestType = defaults.requestType;
     }
 
     if (!this.responseType) {
-      this.responseType = defaults.responseType
+      this.responseType = defaults.responseType;
     }
 
     if (!this.errorType) {
-      this.errorType = defaults.errorType
+      this.errorType = defaults.errorType;
     }
 
-    const p = defaults.path
+    const p = defaults.path;
 
     if (p) {
-      if (this.path.startsWith('/')) {
-        this.path = p + this.path
+      if (this.path.startsWith("/")) {
+        this.path = p + this.path;
       } else {
-        this.path = p + '/' + this.path
+        this.path = p + (this.path === "" ? "" : "/" + this.path);
       }
     }
 
-    this.classDecorators.push(...defaults.decorators)
+    this.classDecorators.push(...defaults.decorators);
   }
 
   /**
    * Return API Class type that owns this Request Factory instance.
    */
-  apiOwner(): Function {
-    return notNull(this.apiType)
+  apiOwner(): AnyClass {
+    return notNull(this.apiType);
   }
 
   /**
    * Check if this instance was already pre-processed
    */
-  isPreProcessed(): boolean {
-    return this.preProcessed
+  isPreProcessed() {
+    return this.preProcessed;
   }
 
   /**
@@ -301,26 +332,29 @@ export class RequestFactory {
    *
    * @param drizzle - Drizzle instance
    */
-  requestBuilder(drizzle: Drizzle): RequestBuilder {
+  requestBuilder(drizzle: Drizzle) {
     if (this.containsDynamicParameters()) {
-      return new DynamicParametrizedRequestBuilder(this, drizzle.requestBodyConverter(this))
+      return new DynamicParametrizedRequestBuilder(
+        this,
+        drizzle.requestBodyConverter(this),
+      );
     }
 
-    return new NoParametersRequestBuilder(this)
+    return new NoParametersRequestBuilder(this);
   }
 
   /**
    * Skip path params validation. Use this when customizing path params building.
    */
-  skipCheckIfPathParamsAreInSyncWithUrl(): void {
-    this.checkIfPathParamsAreInSyncWithUrl = false
+  skipCheckIfPathParamsAreInSyncWithUrl() {
+    this.checkIfPathParamsAreInSyncWithUrl = false;
   }
 
   /**
    * Checks if there is any argument decorated with \@Body
    */
-  hasBody(): boolean {
-    return this.bodyIndex > -1
+  hasBody() {
+    return this.bodyIndex > -1;
   }
 
   /**
@@ -328,11 +362,11 @@ export class RequestFactory {
    *
    * @param decorator - decorator function reference
    */
-  registerDecorator(decorator: Function): void {
-    notNull(decorator)
-    isFunction(decorator)
+  registerDecorator(decorator: Decorator) {
+    notNull(decorator);
+    isFunction(decorator);
 
-    this.decorators.push(decorator)
+    this.decorators.push(decorator);
   }
 
   /**
@@ -341,11 +375,12 @@ export class RequestFactory {
    * @param decorator - decorator function reference
    * @returns boolean
    */
-  hasDecorator(decorator: Function): boolean {
-    notNull(decorator)
-    isFunction(decorator)
+  hasDecorator(decorator: Decorator): boolean {
+    notNull(decorator);
+    isFunction(decorator);
 
-    return this.decorators.includes(decorator) || this.classDecorators.includes(decorator)
+    return this.decorators.includes(decorator) ||
+      this.classDecorators.includes(decorator);
   }
 
   /**
@@ -356,11 +391,11 @@ export class RequestFactory {
    *
    * @throws DrizzleError
    */
-  addConfig(key: string, value: unknown): void {
-    notBlank(key, 'Parameters "key" cannot be null or empty.')
-    notNull(value, 'Parameters "value" cannot be null.')
+  addConfig<T = unknown>(key: string, value: T) {
+    notBlank(key, 'Parameters "key" cannot be null or empty.');
+    notNull(value, 'Parameters "value" cannot be null.');
 
-    this.bag.set(key, value)
+    this.bag.set(key, value);
   }
 
   /**
@@ -370,10 +405,10 @@ export class RequestFactory {
    *
    * @throws DrizzleError
    */
-  getConfig<R>(key: string): R {
-    notBlank(key, 'Parameter "key" cannot be null or empty.')
+  getConfig<R>(key: string) {
+    notBlank(key, 'Parameter "key" cannot be null or empty.');
 
-    return this.bag.get(key) as R
+    return this.bag.get(key) as R;
   }
 
   /**
@@ -382,14 +417,14 @@ export class RequestFactory {
    * @param key - configuration key
    */
   hasConfig(key: string): boolean {
-    return this.bag.has(key)
+    return this.bag.has(key);
   }
 
   /**
    * Get all configurations
    */
   allConfigs(): Map<string, unknown> {
-    return new Map<string, unknown>(this.bag)
+    return new Map<string, unknown>(this.bag);
   }
 
   /**
@@ -397,8 +432,8 @@ export class RequestFactory {
    *
    * @param type - request type
    */
-  requestTypeIs(type: string): boolean {
-    return this.requestType === type
+  requestTypeIs(type: string) {
+    return this.requestType === type;
   }
 
   /**
@@ -406,8 +441,8 @@ export class RequestFactory {
    *
    * @param type - response type
    */
-  responseTypeIs(type: string): boolean {
-    return this.responseType === type
+  responseTypeIs(type: string) {
+    return this.responseType === type;
   }
 
   /**
@@ -415,8 +450,8 @@ export class RequestFactory {
    *
    * @param type - error type
    */
-  errorTypeIs(type: string): boolean {
-    return this.errorType === type
+  errorTypeIs(type: string) {
+    return this.errorType === type;
   }
 
   /**
@@ -425,14 +460,14 @@ export class RequestFactory {
    *
    * @param value - content-type
    */
-  contentTypeContains(value: string): boolean {
-    const h = this.defaultHeaders.get(HttpHeaders.CONTENT_TYPE)
+  contentTypeContains(value: string) {
+    const h = this.defaultHeaders.get(HttpHeaders.CONTENT_TYPE);
 
-    if (h !== null && typeof h !== 'undefined') {
-      return h.indexOf(value) > -1
+    if (h !== null && typeof h !== "undefined") {
+      return h.indexOf(value) > -1;
     }
 
-    return false
+    return false;
   }
 
   /**
@@ -442,7 +477,7 @@ export class RequestFactory {
    * @param key - header
    */
   hasHeader(key: string): boolean {
-    return this.defaultHeaders.has(key)
+    return this.defaultHeaders.has(key);
   }
 
   /**
@@ -452,8 +487,8 @@ export class RequestFactory {
    * @param key - header key
    * @param value - header value
    */
-  hasHeaderWithValue(key: string, value: string | string[]): boolean {
-    return this.defaultHeaders.get(key) === value
+  hasHeaderWithValue(key: string, value: string | string[]) {
+    return this.defaultHeaders.get(key) === value;
   }
 
   /**
@@ -462,18 +497,20 @@ export class RequestFactory {
    *
    * @param parameter - {@link Parameter} instance or extended class
    */
-  addParameter<T extends Parameter>(parameter: T): void {
-    notNull(parameter)
+  addParameter<T extends Parameter>(parameter: T) {
+    notNull(parameter);
 
     if (parameter instanceof BodyParameter) {
-      if (this.parameters.find(x => x.type === parameter.type)) {
-        throw this.invalidArgErr('Only one parameter decorated with @Body() is allowed.')
+      if (this.parameters.find((x) => x.type === parameter.type)) {
+        throw this.invalidArgErr(
+          "Only one parameter decorated with @Body() is allowed.",
+        );
       }
 
-      this.bodyIndex = parameter.index
+      this.bodyIndex = parameter.index;
     }
 
-    this.parameters.push(parameter)
+    this.parameters.push(parameter);
   }
 
   /**
@@ -482,66 +519,82 @@ export class RequestFactory {
    *
    * @param parameters - array of {@link Parameter}
    */
-  addParameters<T extends Parameter>(...parameters: T[]): void {
+  addParameters<T extends Parameter>(...parameters: T[]) {
     for (const parameter of parameters) {
-      this.addParameter(parameter)
+      this.addParameter(parameter);
     }
   }
 
   /**
    * Check if request contains dynamic query parameters
    */
-  hasQuery(): boolean {
-    return this.getQueryParameters().length > 0
+  hasQuery() {
+    return this.getQueryParameters().length > 0;
   }
 
   /**
    * Return registered query parameters
    */
   getQueryParameters(): Array<QueryParameter> {
-    return [...(this.parameters.filter(x => x.type === QueryParameter.Type) as Array<QueryParameter>)]
+    return [
+      ...(this.parameters.filter((x) =>
+        x.type === QueryParameter.Type
+      ) as Array<QueryParameter>),
+    ];
   }
 
   /**
    * Check if request contains dynamic query name parameters
    */
-  hasQueryNames(): boolean {
-    return this.getQueryNameParameters().length > 0
+  hasQueryNames() {
+    return this.getQueryNameParameters().length > 0;
   }
 
   /**
    * Return registered query name parameters
    */
   getQueryNameParameters(): Array<QueryNameParameter> {
-    return [...(this.parameters.filter(x => x.type === QueryNameParameter.Type) as Array<QueryNameParameter>)]
+    return [
+      ...(this.parameters.filter((x) =>
+        x.type === QueryNameParameter.Type
+      ) as Array<QueryNameParameter>),
+    ];
   }
 
   /**
    * Check if request contains dynamic form field parameters
    */
-  hasFormFields(): boolean {
-    return this.getFormParameters().length > 0
+  hasFormFields() {
+    return this.getFormParameters().length > 0;
   }
 
   /**
    * Return registered form field parameters
    */
   getFormParameters(): Array<FormParameter> {
-    return [...(this.parameters.filter(x => x.type === FormParameter.Type) as Array<FormParameter>)]
+    return [
+      ...(this.parameters.filter((x) => x.type === FormParameter.Type) as Array<
+        FormParameter
+      >),
+    ];
   }
 
   /**
    * Check if request contains dynamic path parameters
    */
-  hasPathParameters(): boolean {
-    return this.getPathParameters().length > 0
+  hasPathParameters() {
+    return this.getPathParameters().length > 0;
   }
 
   /**
    * Return registered path parameters
    */
   getPathParameters(): Array<PathParameter> {
-    return [...(this.parameters.filter(x => x.type === PathParameter.Type) as Array<PathParameter>)]
+    return [
+      ...(this.parameters.filter((x) => x.type === PathParameter.Type) as Array<
+        PathParameter
+      >),
+    ];
   }
 
   /**
@@ -549,9 +602,9 @@ export class RequestFactory {
    *
    * @param value - headers key/value object
    */
-  addDefaultHeaders(value: Record<string, string>): void {
+  addDefaultHeaders(value: Record<string, string>) {
     for (const [k, v] of Object.entries(value)) {
-      this.defaultHeaders.append(k, v)
+      this.defaultHeaders.append(k, v);
     }
   }
 
@@ -561,58 +614,62 @@ export class RequestFactory {
    * @param name - header name
    * @param value - header value
    */
-  addDefaultHeader(name: string, value: string): void {
-    this.defaultHeaders.append(name, value)
+  addDefaultHeader(name: string, value: string) {
+    this.defaultHeaders.append(name, value);
   }
 
   /**
    * Return registered header parameters
    */
   getHeaderParameters(): Array<HeaderParameter> {
-    return [...(this.parameters.filter(x => x.type === HeaderParameter.Type) as Array<HeaderParameter>)]
+    return [
+      ...(this.parameters.filter((x) =>
+        x.type === HeaderParameter.Type
+      ) as Array<HeaderParameter>),
+    ];
   }
 
   /**
    * Check if request function contains any argument
    */
-  hasArgs(): boolean {
-    return this.argLen > 0
+  hasArgs() {
+    return this.argLen > 0;
   }
 
   /**
    * Check if current request contains dynamic parameters.
    * This is useful to avoid unnecessary parameter processing in some Drizzle-Http components.
    */
-  containsDynamicParameters(): boolean {
-    return this.hasArgs() || this.parameters.length > 0 || this.hasBody()
+  containsDynamicParameters() {
+    return this.hasArgs() || this.parameters.length > 0 || this.hasBody();
   }
 
   /**
    * Check if {@link RequestFactory} contains a Content-Type header with: application/x-www-form-urlencoded
    */
-  isFormUrlEncoded(): boolean {
-    return this.contentTypeContains(MediaTypes.APPLICATION_FORM_URL_ENCODED)
+  isFormUrlEncoded() {
+    return this.contentTypeContains(MediaTypes.APPLICATION_FORM_URL_ENCODED);
   }
 
   /**
    * Skip response converters for a request.
    * @param value - yes/no to ignore response converters. defaults to true
    */
-  ignoreResponseConverter(value = true): void {
-    this.noResponseConverter = value
+  ignoreResponseConverter(value = true) {
+    this.noResponseConverter = value;
   }
 
   /**
-   * Uses a noop response handler. Good when using caller or adapters that returns response types different from {@link HttpResponse}.
+   * Uses a noop response handler. Good when using caller or adapters that returns response types different from {@link Response}.
    *
    * @param value - yes/on to ignore response handlers. defaults to true
    */
-  ignoreResponseHandler(value = true): void {
-    this.noResponseHandler = value
+  ignoreResponseHandler(value = true) {
+    this.noResponseHandler = value;
   }
 
-  private invalidArgErr(message: string): InvalidMethodConfigError {
-    return new InvalidMethodConfigError(this.method ?? '', message)
+  private invalidArgErr(message: string) {
+    return new InvalidMethodConfigError(this.method ?? "", message);
   }
 }
 
@@ -621,7 +678,7 @@ export class RequestFactory {
  * should be used for requests that doesn't contain dynamic parameters.
  */
 export class NoParametersRequestBuilder implements RequestBuilder {
-  private readonly request: HttpRequest
+  private readonly request: HttpRequest;
 
   constructor(requestFactory: RequestFactory) {
     this.request = new HttpRequest({
@@ -631,12 +688,12 @@ export class NoParametersRequestBuilder implements RequestBuilder {
       headersTimeout: requestFactory.connectTimeout,
       bodyTimeout: requestFactory.readTimeout,
       signal: requestFactory.signal,
-      body: null
-    })
+      body: null,
+    });
   }
 
-  toRequest(): HttpRequest {
-    return this.request
+  toRequest() {
+    return this.request;
   }
 }
 
@@ -646,30 +703,30 @@ export class NoParametersRequestBuilder implements RequestBuilder {
 export class DynamicParametrizedRequestBuilder implements RequestBuilder {
   constructor(
     private readonly requestFactory: RequestFactory,
-    private readonly requestBodyConverter: RequestBodyConverter<BodyType>
-  ) {}
+    private readonly requestBodyConverter: RequestBodyConverter<BodyType>,
+  ) {
+  }
 
-  toRequest(args: unknown[]): HttpRequest {
-    const requestParameterization = new RequestParameterization(
+  toRequest(args: unknown[]) {
+    const requestParameterization = RequestParameterization.newRequest(
       args,
       this.requestFactory.path,
-      [],
       this.requestFactory.defaultHeaders,
-      [],
-      null,
-      this.requestFactory.signal
-    )
+      this.requestFactory.signal,
+    );
 
     for (const p of this.requestFactory.parameterHandlers) {
-      p.handler.handle(requestParameterization, args[p.parameter.index])
+      p.handler.handle(requestParameterization, args[p.parameter.index]);
     }
 
-    if (requestParameterization.body === null && this.requestFactory.hasBody()) {
+    if (
+      requestParameterization.body === null && this.requestFactory.hasBody()
+    ) {
       this.requestBodyConverter.convert(
         this.requestFactory,
         requestParameterization,
-        args[this.requestFactory.bodyIndex] as BodyType
-      )
+        args[this.requestFactory.bodyIndex] as BodyType,
+      );
     }
 
     return new HttpRequest({
@@ -679,7 +736,7 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       body: requestParameterization.buildBody(),
       headersTimeout: this.requestFactory.connectTimeout,
       bodyTimeout: this.requestFactory.readTimeout,
-      signal: requestParameterization.signal
-    })
+      signal: requestParameterization.signal,
+    });
   }
 }

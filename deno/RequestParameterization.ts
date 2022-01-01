@@ -1,5 +1,6 @@
-import { HttpHeaders } from './HttpHeaders.ts'
-import { BodyType } from './BodyType.ts'
+import { BodyType } from "./BodyType.ts";
+import { MediaTypes } from "./MediaTypes.ts";
+import { headerToObj } from "./HttpHeaders.ts";
 
 /**
  * Holds HTTP request parameters to later build an actual HTTP request.
@@ -7,28 +8,64 @@ import { BodyType } from './BodyType.ts'
  * {@link ParameterHandler} and {@link RequestBodyConverter} instances.
  */
 export class RequestParameterization {
+  public path = "";
+  public readonly query: string[];
+  public readonly headers: Headers;
+  public readonly formFields: URLSearchParams;
+  public body: BodyType;
+  public signal: unknown | null;
+
   constructor(
     public readonly argv: unknown[],
-    public path: string = '',
-    public readonly query: string[] = [],
-    public readonly headers: HttpHeaders = new HttpHeaders({}),
-    public readonly formFields: string[] = [],
-    public body: BodyType = null,
-    public signal: unknown | null = null
-  ) {}
-
-  buildPath(): string {
-    return this.path + (this.query.length > 0 ? '?' + this.query.join('&') : '')
+    path = "",
+    query: string[] = [],
+    headers = new Headers({}),
+    formFields = new URLSearchParams(),
+    body: BodyType = null,
+    signal: unknown | null = null,
+  ) {
+    this.path = path;
+    this.query = query;
+    this.headers = new Headers(headerToObj(headers));
+    this.formFields = formFields;
+    this.body = body;
+    this.signal = signal;
   }
 
-  buildBody(): BodyType {
+  public static newRequest(
+    argv: unknown[],
+    path: string,
+    headers: Headers,
+    signal: unknown | null,
+  ) {
+    return new RequestParameterization(
+      argv,
+      path,
+      [],
+      headers,
+      new URLSearchParams(),
+      null,
+      signal,
+    );
+  }
+
+  buildPath() {
+    return this.path +
+      (this.query.length > 0 ? "?" + this.query.join("&") : "");
+  }
+
+  buildBody() {
     if (this.body === null) {
-      if (this.formFields.length > 0) {
-        return this.formFields.join('&')
+      if (
+        this.headers.get("content-type")?.includes(
+          MediaTypes.APPLICATION_FORM_URL_ENCODED,
+        )
+      ) {
+        return this.formFields.toString();
       }
-      return null
+      return null;
     }
 
-    return this.body
+    return this.body;
   }
 }

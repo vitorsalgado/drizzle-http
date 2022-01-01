@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.ts'
+import { createClassAndMethodDecorator } from "../ApiParameterization.ts";
 
 /**
  * Define that errors should be parsed with a {@link ResponseConverter} instance.
@@ -6,9 +6,9 @@ import { createClassAndMethodDecorator } from '../ApiParameterization.ts'
  *
  * @param errorType - error type that a {@link ResponseConverter} will try to match. defaults to empty to use the same converter from success responses.
  */
-export const ParseErrorBody = (errorType: string = '') =>
+export const ParseErrorBody = (errorType = "") =>
   createClassAndMethodDecorator(
     ParseErrorBody,
-    defaults => (defaults.errorType = errorType),
-    requestFactory => (requestFactory.errorType = errorType)
-  )
+    (defaults) => (defaults.errorType = errorType),
+    (requestFactory) => (requestFactory.errorType = errorType),
+  );

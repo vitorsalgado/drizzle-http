@@ -1,10 +1,10 @@
-import { Drizzle } from './Drizzle.ts'
-import { RequestFactory } from './RequestFactory.ts'
-import { InterceptorHttpExecutor } from './InterceptorHttpExecutor.ts'
-import { notNull } from './internal/index.ts'
-import { notBlank } from './internal/index.ts'
-import { EntryPointInvoker } from './EntryPointInvoker.ts'
-import { Call } from './Call.ts'
+import { Drizzle } from "./Drizzle.ts";
+import { RequestFactory } from "./RequestFactory.ts";
+import { InterceptorHttpExecutor } from "./InterceptorHttpExecutor.ts";
+import { notNull } from "./internal/mod.ts";
+import { notBlank } from "./internal/mod.ts";
+import { EntryPointInvoker } from "./EntryPointInvoker.ts";
+import { Call } from "./Call.ts";
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on
@@ -14,13 +14,16 @@ import { Call } from './Call.ts'
  * @typeParam V - Type of the response
  */
 export function serviceInvoker(
-  drizzle: Drizzle
-): <T>(requestFactory: RequestFactory, method: string) => (...args: unknown[]) => T {
-  notNull(drizzle, 'Drizzle instance cannot be null.')
+  drizzle: Drizzle,
+): <T>(
+  requestFactory: RequestFactory,
+  method: string,
+) => (...args: unknown[]) => T {
+  notNull(drizzle, "Drizzle instance cannot be null.");
 
-  const callFactory = drizzle.callFactory()
+  const callFactory = drizzle.callFactory();
 
-  callFactory.setup(drizzle)
+  callFactory.setup(drizzle);
 
   /**
    * Holding Drizzle instance for each API decorated method
@@ -29,38 +32,42 @@ export function serviceInvoker(
    * @param requestFactory - {@link RequestFactory}
    * @param method - caller method name
    */
-  return function <T>(requestFactory: RequestFactory, method: string): (...args: unknown[]) => T {
-    notNull(requestFactory, 'RequestFactory instance cannot be null.')
-    notBlank(method, 'Method cannot be null or empty.')
+  return function <T>(
+    requestFactory: RequestFactory,
+    method: string,
+  ): (...args: unknown[]) => T {
+    notNull(requestFactory, "RequestFactory instance cannot be null.");
+    notBlank(method, "Method cannot be null or empty.");
 
-    const call = callFactory.provide(drizzle, requestFactory) as Call
-    const requestBuilder = requestFactory.requestBuilder(drizzle)
-    const responseConverter = drizzle.responseConverter<T>(requestFactory)
-    const interceptors = drizzle.interceptors(requestFactory)
-    const responseHandler = drizzle.responseHandler(requestFactory)
+    const call = callFactory.provide(drizzle, requestFactory) as Call;
+    const requestBuilder = requestFactory.requestBuilder(drizzle);
+    const responseConverter = drizzle.responseConverter<T>(requestFactory);
+    const interceptors = drizzle.interceptors(requestFactory);
+    const responseHandler = drizzle.responseHandler(requestFactory);
 
-    interceptors.push(new InterceptorHttpExecutor(call))
+    interceptors.push(new InterceptorHttpExecutor(call));
 
     const entrypoint: Call<unknown> = new EntryPointInvoker<T>(
       responseHandler,
       responseConverter,
       interceptors,
       method,
-      requestFactory
-    )
-    const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)?.adapt(entrypoint)
-    const hasAdapter = typeof callAdapter === 'function'
+      requestFactory,
+    );
+    const callAdapter = drizzle.callAdapter<unknown, T>(requestFactory)
+      ?.adapt(entrypoint);
+    const hasAdapter = typeof callAdapter === "function";
 
     // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.
     // Instead, we create the Call instance before entering the request execution context
     if (!requestFactory.containsDynamicParameters()) {
-      const request = requestBuilder.toRequest([])
+      const request = requestBuilder.toRequest([]);
 
       if (hasAdapter) {
-        return (): T => callAdapter(request, [])
+        return () => callAdapter(request, []);
       }
 
-      return (): T => entrypoint.execute(request, []) as unknown as T
+      return () => entrypoint.execute(request, []) as unknown as T;
     }
 
     /**
@@ -69,14 +76,14 @@ export function serviceInvoker(
      *
      * @param args - function arguments usually decorated
      */
-    return function (...args: unknown[]): T {
-      const request = requestBuilder.toRequest(args)
+    return function (...args: unknown[]) {
+      const request = requestBuilder.toRequest(args);
 
       if (hasAdapter) {
-        return callAdapter(request, args)
+        return callAdapter(request, args);
       }
 
-      return entrypoint.execute(request, args) as unknown as T
-    }
-  }
+      return entrypoint.execute(request, args) as unknown as T;
+    };
+  };
 }
