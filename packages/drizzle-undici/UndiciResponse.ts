@@ -1,11 +1,10 @@
 import { Blob } from 'buffer'
 import { Readable } from 'stream'
-import { HttpHeaders, HttpResponse } from '@drizzle-http/core'
-import { isOK } from '@drizzle-http/core'
+import { HttpHeaders, HttpResponse, isOK } from '@drizzle-http/core'
 import { Dispatcher } from 'undici'
 
-export class UndiciResponse implements HttpResponse<Readable, Blob, never> {
-  readonly body: Readable
+export class UndiciResponse implements HttpResponse<Readable & Dispatcher.BodyMixin, Blob, never> {
+  readonly body: Readable & Dispatcher.BodyMixin
   readonly headers: HttpHeaders
   readonly trailers: Promise<HttpHeaders>
   readonly status: number

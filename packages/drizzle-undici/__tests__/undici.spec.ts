@@ -1,22 +1,25 @@
-import { Writable } from 'stream'
+import { Readable, Writable } from 'stream'
 import EventEmitter from 'events'
 import { URL } from 'url'
 import { closeTestServer, Ok, setupTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { ContentType } from '@drizzle-http/core'
-import { Query } from '@drizzle-http/core'
-import { Drizzle } from '@drizzle-http/core'
-import { Timeout } from '@drizzle-http/core'
-import { DrizzleBuilder } from '@drizzle-http/core'
-import { QueryName } from '@drizzle-http/core'
-import { Abort } from '@drizzle-http/core'
-import { HeaderMap } from '@drizzle-http/core'
-import { Header } from '@drizzle-http/core'
-import { GET } from '@drizzle-http/core'
-import { Param } from '@drizzle-http/core'
-import { noop } from '@drizzle-http/core'
-import { HttpResponse } from '@drizzle-http/core'
-import { MediaTypes } from '@drizzle-http/core'
-import { RawResponse } from '@drizzle-http/core'
+import {
+  Abort,
+  ContentType,
+  Drizzle,
+  DrizzleBuilder,
+  GET,
+  Header,
+  HeaderMap,
+  HttpResponse,
+  MediaTypes,
+  noop,
+  Param,
+  Query,
+  QueryName,
+  RawResponse,
+  Timeout
+} from '@drizzle-http/core'
+import { Dispatcher } from 'undici'
 import { UndiciCallFactory } from '../UndiciCallFactory'
 import { PoolOptionsBuilder } from '../PoolOptionsBuilder'
 import { Streaming } from '../Streaming'
@@ -377,7 +380,7 @@ describe('Undici Call', function () {
       statusCode,
       headers,
       trailers,
-      body: res.body,
+      body: res.body as unknown as Readable & Dispatcher.BodyMixin,
       opaque: undefined,
       context: {}
     })
