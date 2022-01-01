@@ -17,7 +17,7 @@
     "postpublish": "pinst --enable"
   },
   "engines": {
-    "node": ">=12.4.0"
+    "node": ">=16"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
@@ -28,15 +28,24 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/core"
+    "directory": "packages/drizzle-core"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
   },
   "keywords": [
     "drizzle-http",
-    "undici",
     "http",
-    "api"
+    "api",
+    "http",
+    "http client",
+    "rest",
+    "api",
+    "node",
+    "typescript",
+    "decorator",
+    "easy",
+    "annotations",
+    "deno"
   ]
 }

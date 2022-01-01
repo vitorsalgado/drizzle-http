@@ -24,11 +24,11 @@
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/undici-http",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/drizzle-undici",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/undici-http"
+    "directory": "packages/drizzle-undici"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -37,7 +37,9 @@
     "drizzle-http",
     "undici",
     "http",
-    "api"
+    "api",
+    "decorators",
+    "rest"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",

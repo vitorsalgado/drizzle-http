@@ -24,14 +24,14 @@
     "url": "https://github.com/vitorsalgado"
   },
   "engines": {
-    "node": ">=12.4.0"
+    "node": ">=16"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/fetch",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/packages/drizzle-fetch",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/fetch"
+    "directory": "packages/drizzle-fetch"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -41,7 +41,10 @@
     "fetch",
     "browser",
     "http",
-    "api"
+    "api",
+    "decorator",
+    "rest",
+    "typescript"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0"

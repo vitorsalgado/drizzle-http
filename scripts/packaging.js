@@ -77,7 +77,7 @@ Program.command('publish')
     Logger.info('Tag: ' + preid)
 
     for (const pkgRef of pkgRefs) {
-      const pkg = require(pkgRef)
+      const pkg = JSON.parse(Fs.readFileSync(pkgRef).toString())
       const pkgPath = pkgRef.replace('/package.json', '')
 
       Logger.info('Package: ' + pkg.name)

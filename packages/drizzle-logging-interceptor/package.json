@@ -17,18 +17,18 @@
     "postpublish": "pinst --enable"
   },
   "engines": {
-    "node": ">=12.4.0"
+    "node": ">=16"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/logging-interceptor",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/packages/drizzle-logging-interceptor",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/logging-interceptor"
+    "directory": "packages/drizzle-logging-interceptor"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -41,7 +41,9 @@
     "log",
     "http",
     "api",
-    "debug"
+    "debug",
+    "decorators",
+    "rest"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",

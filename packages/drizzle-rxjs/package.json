@@ -17,18 +17,18 @@
     "postpublish": "pinst --enable"
   },
   "engines": {
-    "node": ">=12.4.0"
+    "node": ">=16"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/rxjs-adapter",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/packages/drizzle-rxjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/rxjs-adapter"
+    "directory": "packages/drizzle-rxjs"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -41,7 +41,8 @@
     "http",
     "http client",
     "api",
-    "typescript"
+    "typescript",
+    "decorators"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",

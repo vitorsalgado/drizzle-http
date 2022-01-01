@@ -18,18 +18,18 @@
     "postpublish": "pinst --enable"
   },
   "engines": {
-    "node": ">=12.4.0"
+    "node": ">=16"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"
   },
   "license": "MIT",
-  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/pkgs/opossum-circuit-breaker-adapter",
+  "homepage": "https://github.com/vitorsalgado/drizzle-http/tree/main/packages/drizzle-opossum-circuit-breaker",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/drizzle-http.git",
-    "directory": "pkgs/undici-http"
+    "directory": "packages/drizzle-opossum-circuit-breaker"
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/drizzle-http/issues"
@@ -42,7 +42,9 @@
     "resilience",
     "fail-fast",
     "http",
-    "api"
+    "api",
+    "rest",
+    "decorators"
   ],
   "dependencies": {
     "@drizzle-http/core": "^2.2.0",
