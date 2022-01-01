@@ -6,7 +6,7 @@ const port = process.env.PORT || '3000'
 const PlaywrightConfig: PlaywrightTestConfig = {
   forbidOnly: !isCI,
   retries: isCI ? 2 : 0,
-  testDir: '__tests__/',
+  testDir: 'e2e/',
   webServer: {
     command: `npm run webpack:server-dev`,
     port: parseInt(port),

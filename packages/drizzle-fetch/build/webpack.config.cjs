@@ -11,7 +11,7 @@ module.exports = {
   mode: 'production',
   bail: true,
   target: 'web',
-  entry: './__tests__/app.ts',
+  entry: './e2e/app.ts',
   devtool: 'inline-source-map',
   devServer: {
     hot: false,
@@ -31,7 +31,7 @@ module.exports = {
     new CleanPlugin(),
     new HtmlWebPackPlugin({
       inject: true,
-      template: './__tests__/index.html'
+      template: './e2e/index.html'
     })
   ],
   module: {
@@ -66,6 +66,6 @@ module.exports = {
   stats: 'errors-only',
   output: {
     filename: '[name].js',
-    path: Path.join(Cwd, '__tests__/dist')
+    path: Path.join(Cwd, 'e2e/dist')
   }
 }

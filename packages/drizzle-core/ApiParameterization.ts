@@ -1,26 +1,22 @@
 import { RequestFactory } from './RequestFactory'
 import { HttpHeaders } from './HttpHeaders'
-import { notNull } from './internal'
-import { isFunction } from './internal'
-import { TargetClass } from './internal'
-import { notBlank } from './internal'
+import { Decorator, isFunction, notBlank, notNull, TargetCtor, TargetProto } from './internal'
 import { Drizzle } from './Drizzle'
 
-type CtorTarget = Function
-type Target = CtorTarget | object
+type Target = TargetCtor | TargetProto
 
 export class ApiDefaults {
-  decorators: Function[] = []
+  decorators: Decorator[] = []
   headers: HttpHeaders = new HttpHeaders({})
   readTimeout: number | undefined = undefined
   connectTimeout: number | undefined = undefined
   signal: unknown | null = null
   responseType: string = Drizzle.DEFAULT_RESPONSE_TYPE
   requestType: string = Drizzle.DEFAULT_REQUEST_TYPE
-  errorType: string = ''
+  errorType = ''
   bag: Map<string, unknown> = new Map()
 
-  private _path: string = ''
+  private _path = ''
 
   get path(): string {
     return this._path
@@ -40,7 +36,7 @@ export class ApiDefaults {
     this._path = value
   }
 
-  addConfig(key: string, value: unknown): void {
+  addConfig<T = unknown>(key: string, value: T): void {
     notBlank(key, 'Parameters "key" cannot be null or empty.')
     notNull(value, 'Parameters "value" cannot be null.')
 
@@ -64,7 +60,7 @@ interface Data {
 }
 
 export class Metadata {
-  private static readonly ENTRIES: Map<CtorTarget, Data> = new Map()
+  private static readonly ENTRIES: Map<TargetCtor, Data> = new Map()
 
   static apiDefaults(target: Target): ApiDefaults {
     return Metadata.entries(target).meta
@@ -82,7 +78,7 @@ export class Metadata {
     return requestFactory
   }
 
-  static registerApiMethod(target: CtorTarget, method: string): void {
+  static registerApiMethod(target: TargetCtor, method: string): void {
     const data = Metadata.entries(target)
 
     if (!data.requestFactories.has(method)) {
@@ -90,7 +86,7 @@ export class Metadata {
     }
   }
 
-  static metadataFor(api: CtorTarget): Data {
+  static metadataFor(api: TargetCtor): Data {
     const data = Metadata.ENTRIES.get(api)
 
     if (!data) {
@@ -119,7 +115,7 @@ export class Metadata {
 }
 
 export function setupApiDefaults(
-  decorator: Function,
+  decorator: Decorator,
   target: Target,
   callback?: (parameters: ApiDefaults) => void
 ): void {
@@ -130,7 +126,7 @@ export function setupApiDefaults(
 }
 
 export function setupRequestFactory(
-  decorator: Function,
+  decorator: Decorator,
   target: Target,
   method: string,
   callback?: (requestFactory: RequestFactory) => void
@@ -142,14 +138,14 @@ export function setupRequestFactory(
 }
 
 interface ClassDecoratorContext {
-  target: Function
+  target: TargetCtor
   defaults: ApiDefaults
 }
 
-export function createClassDecorator(decorator: Function, configurer?: (ctx: ClassDecoratorContext) => void) {
+export function createClassDecorator(decorator: Decorator, configurer?: (ctx: ClassDecoratorContext) => void) {
   isFunction(decorator)
 
-  return function (target: Function) {
+  return function (target: TargetCtor) {
     const defaults = Metadata.apiDefaults(target)
     defaults.decorators.push(decorator)
 
@@ -160,17 +156,14 @@ export function createClassDecorator(decorator: Function, configurer?: (ctx: Cla
   }
 }
 
-interface MethodDecoratorContext<T = unknown> {
+interface MethodDecoratorContext {
   target: object
   method: string
   descriptor: PropertyDescriptor
   requestFactory: RequestFactory
 }
 
-export function createMethodDecorator<T = any>(
-  decorator: Function,
-  configurer?: (ctx: MethodDecoratorContext<T>) => void
-) {
+export function createMethodDecorator(decorator: Decorator, configurer?: (ctx: MethodDecoratorContext) => void) {
   isFunction(decorator)
 
   return function (target: object, method: string, descriptor: PropertyDescriptor): void {
@@ -186,14 +179,14 @@ export function createMethodDecorator<T = any>(
   }
 }
 
-export function createClassAndMethodDecorator<T = any>(
-  decorator: Function,
+export function createClassAndMethodDecorator(
+  decorator: Decorator,
   onClass?: (defaults: ApiDefaults) => void,
   onMethod?: (requestFactory: RequestFactory) => void
 ) {
   isFunction(decorator)
 
-  return function (target: object | TargetClass, method?: string) {
+  return function (target: object | TargetCtor, method?: string) {
     if (method) {
       const requestFactory = Metadata.requestFactory(target, method)
       requestFactory.registerDecorator(decorator)
@@ -215,7 +208,7 @@ interface ParameterDecoratorContext {
   requestFactory: RequestFactory
 }
 
-export function createParameterDecorator(decorator: Function, configurer?: (ctx: ParameterDecoratorContext) => void) {
+export function createParameterDecorator(decorator: Decorator, configurer?: (ctx: ParameterDecoratorContext) => void) {
   isFunction(decorator)
 
   return function (target: object, method: string, parameterIndex: number) {

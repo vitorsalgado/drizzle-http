@@ -1,29 +1,15 @@
 # Fetch Client &middot; [![ci](https://github.com/vitorsalgado/drizzle-http/workflows/ci/badge.svg)](https://github.com/vitorsalgado/drizzle-http/actions) [![npm (scoped)](https://img.shields.io/npm/v/@drizzle-http/fetch)](https://www.npmjs.com/package/@drizzle-http/fetch) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vitorsalgado/drizzle-http/blob/main/LICENSE)
 
 Fetch based HTTP client implementation for [Drizzle-Http](https://github.com/vitorsalgado/drizzle-http).  
-This library contains several [decorators](#additional-decorators) to facilitate the definition of some request
-parameters for Fetch.  
-When used on Browser based applications, `window.fetch` will be used. On
-Node.js, [Node-Fetch](https://github.com/node-fetch/node-fetch).  
-**NOTE**: Different from Fetch default behaviour, in this library, 3xx-5xx are **exceptions** and should be handled
-on `.catch()` method.
+This library contains several [decorators](#fetch-specific-decorators) to facilitate the definition of a Fetch request.
 
 ## Installation
 
-The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
-If you are installing each package individually, make sure to install
-first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
-
-### NPM
+Make sure we have the core module [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) installed.
 
 ```
+npm i @drizzle-http/core
 npm i @drizzle-http/fetch
-```
-
-### Yarn
-
-```
-yarn add @drizzle-http/fetch
 ```
 
 ## Usage
@@ -31,75 +17,64 @@ yarn add @drizzle-http/fetch
 ### Typescript
 
 ```typescript
-class ApiTs {
+import { FetchCallFactory } from "@drizzle-http/fetch";
+import { CORS } from "@drizzle-http/fetch";
+import { GET } from "@drizzle-http/core";
+import { DrizzleBuilder } from "@drizzle-http/core";
+import { RawResponse } from "@drizzle-http/core";
+import { Multipart } from "@drizzle-http/core";
+import { POST } from "@drizzle-http/core";
+import { Part } from "@drizzle-http/core";
+
+@CORS()
+class API {
   @GET('/')
-  @ContentType('application/json;charset=utf-8')
-  @CORS()
-  @KeepAlive(true)
-  test(): Promise<Response> {
-    return theTypes(Promise, Response)
-  }
+  @RawResponse()
+  raw(): Promise<Response> { }
+
+  @GET('/customer')
+  customers(): Promise<Customer[]> { }
+
+  @POST('/')
+  @Multipart()
+  send(@Part() desc: string, @Part() file: File): Promise<Response> { }
 }
 
-const apiTs: ApiTs = DrizzleBuilder.newBuilder()
-  .baseUrl('http://localhost:3001/')
-  .callFactory(FetchCallFactory.DEFAULT)
+const api = DrizzleBuilder
+  .newBuilder()
+  .baseUrl(addr)
+  .callFactory(new FetchCallFactory())
   .build()
-  .create(ApiTs)
+  .create(API)
 ```
 
-## Javascript
+## Fetch Specific Decorators
 
-```javascript
-class ApiJs {
-  @GET('/')
-  @ContentType('application/json;charset=utf-8')
-  @CORS()
-  @KeepAlive(true)
-  test() {
-    return theTypes(Promise, Response)
-  }
-}
+| Decorator         | Description                                                      | Target        |
+|-------------------|------------------------------------------------------------------|---------------|
+| @Cache()          | Configure RequestInit.cache. Parameter: RequestCache             | Class, Method |
+| @CORS()           | Set RequestInit.mode to 'cors'                                   | Class, Method |
+| @Credentials()    | Configure RequestInit.credentials. Parameter: RequestCredentials | Class, Method |
+| @Integrity()      | Configure RequestInit.integrity                                  | Class, Method |
+| @KeepAlive()      | Configure RequestInit.keepAlive                                  | Class, Method |
+| @Mode()           | Configure RequestInit.mode                                       | Class, Method |
+| @Redirect()       | Configure RequestInit.redirect                                   | Class, Method |
+| @Referrer()       | Configure RequestInit.referrer                                   | Class, Method |
+| @ReferrerPolicy() | Configure RequestInit.referrerPolicy                             | Class, Method |
+| @Multipart()      | Create a multipart/form-data request                             | Class, Method |
+| @Part()           | Mark a parameter as a part of multipart/form-data request body   | Parameter     |
+| @BodyKey()        | Change the name of part in a multipart/form-data request         | Parameter     |
 
-constapiJs = DrizzleBuilder.newBuilder()
-  .baseUrl('http://localhost:3001/')
-  .callFactory(FetchCallFactory.DEFAULT)
-  .build()
-  .create(ApiJs)
-```
+## Features
 
-### Minimum Babel Setup for Javascript
+### Raw Fetch Response
 
-```
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": [
-    "@babel/transform-runtime",
-    "@babel/plugin-proposal-nullish-coalescing-operator",
-    "@babel/plugin-proposal-optional-chaining",
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    "babel-plugin-parameter-decorator",
-    ["@babel/plugin-proposal-class-properties", { "loose": true }]
-  ]
-}
-```
+By the default, http success responses you be parsed and resolved and http errors will be rejected. If you want the raw
+Fetch http response, decorate your method with `@RawResponse()` and the return will be a `Promise<Response>`, same as
+Fetch. In this case, http errors will be not rejected.
 
-## Additional Decorators
+### Multi Part
 
-| Decorator         | Description                                                      | Target |
-| ----------------- | ---------------------------------------------------------------- | ------ |
-| @Mode()           | Configure RequestInit.mode                                       | Method |
-| @CORS()           | Set RequestInit.mode to 'cors'                                   | Method |
-| @SameOrigin()     | Set RequestInit.mode to 'same-origin'                            | Method |
-| @NoCORS()         | Set RequestInit.mode to 'no-cors'                                | Method |
-| @Navigate()       | Set RequestInit.mode to 'navigate'                               | Method |
-| @Cache()          | Configure RequestInit.cache. Parameter: RequestCache             | Method |
-| @Credentials()    | Configure RequestInit.credentials. Parameter: RequestCredentials | Method |
-| @Redirect()       | Configure RequestInit.redirect                                   | Method |
-| @Referrer()       | Configure RequestInit.referrer                                   | Method |
-| @ReferrerPolicy() | Configure RequestInit.referrerPolicy                             | Method |
-| @KeepAlive()      | Configure RequestInit.keepAlive                                  | Method |
-| @Integrity()      | Configure RequestInit.integrity                                  | Method |
-| @Follow()         | Configure Node-Fetch **follow** option                           | Method |
-| @Compress()       | Configure Node-Fetch **compress** option                         | Method |
-| @Size()           | Configure Node-Fetch **size** option                             | Method |
+To make a `multipart/form-data` request, decorate your method with `@Multipart()`.  
+Use the decorator `@Part()` to mark a parameter as an entry in a FormData object.  
+You can also send a `@Body()` parameter with a `File`, `File[]`, `FormData` or an `HTML Form`.

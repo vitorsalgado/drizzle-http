@@ -4,13 +4,13 @@
   "description": "Browser Fetch HTTP client for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "scripts": {
     "webpack:server-dev": "webpack server --config build/webpack.config.cjs",
+    "test": "jest --detectOpenHandles",
     "test:e2e:prepare": "npx playwright install-deps && npx playwright install",
     "test:e2e": "playwright test",
     "build": "rm -rf dist && tsc --build --force tsconfig.build.json",

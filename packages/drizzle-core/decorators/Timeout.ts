@@ -1,6 +1,6 @@
 import { setupRequestFactory } from '../ApiParameterization'
 import { setupApiDefaults } from '../ApiParameterization'
-import { TargetClass } from '../internal'
+import { TargetCtor, TargetProto } from '../internal'
 
 /**
  * Set the timeouts for an HTTP request.
@@ -11,7 +11,7 @@ import { TargetClass } from '../internal'
  * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
-  return (target: object | TargetClass, method?: string): void => {
+  return (target: TargetProto | TargetCtor, method?: string): void => {
     if (method) {
       return setupRequestFactory(Timeout, target, method, requestFactory => {
         requestFactory.readTimeout = readTimeoutInMs

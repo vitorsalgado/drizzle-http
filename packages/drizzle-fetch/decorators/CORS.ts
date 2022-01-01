@@ -1,5 +1,10 @@
-import { createFetchDecorator } from '../setupRequestInit'
+import { createClassAndMethodDecorator } from '@drizzle-http/core'
+import { Mode } from './Mode'
 
 export function CORS() {
-  return createFetchDecorator(CORS, requestInit => (requestInit.mode = 'cors'))
+  return createClassAndMethodDecorator(
+    CORS,
+    defaults => defaults.addConfig<RequestMode>(Mode.Key, 'cors'),
+    requestFactory => requestFactory.addConfig<RequestMode>(Mode.Key, 'cors')
+  )
 }

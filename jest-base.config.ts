@@ -7,7 +7,7 @@ const config: JestConfig.InitialOptions = {
   collectCoverage: false,
   resetModules: true,
   restoreMocks: true,
-  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: ['**/__tests__/?(*.)+(spec|test).ts'],
   transform: { '^.+\\.tsx?$': 'ts-jest' },
   globals: {
     'ts-jest': {

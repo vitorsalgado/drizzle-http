@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
@@ -31,10 +32,10 @@ export class PartyAPI {
     @Query('dataInicio') dataInicio: string | null = null,
     @Query('dataFim') dataFim: string | null = null,
     @Query('idLegislatura') idLegislatura: number | null = null,
-    @Query('pagina') pagina: number = 1,
-    @Query('itens') itens: number = 10,
+    @Query('pagina') pagina = 1,
+    @Query('itens') itens = 10,
     @Query('ordem') ordem: Order = Order.ASC,
-    @Query('ordenarPor') ordenarPor: string = 'nome'
+    @Query('ordenarPor') ordenarPor = 'nome'
   ): Promise<ApiResult<PartySimple[]>> {}
 
   @GET('/partidos/{id}')

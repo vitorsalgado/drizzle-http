@@ -1,28 +1,27 @@
 import { Drizzle } from './Drizzle'
-import { notNull } from './internal'
-import { notEmpty } from './internal'
-import { JsonResponseConverterFactory } from './builtin'
-import { BodyParameterHandlerFactory } from './builtin'
-import { ParameterHandlerFactory } from './builtin'
-import { HeaderParameterHandlerFactory } from './builtin'
-import { RawRequestConverterFactory } from './builtin'
-import { QueryNameParameterHandlerFactory } from './builtin'
-import { RawResponseConverterFactory } from './builtin'
-import { FormParameterHandlerFactory } from './builtin'
-import { QueryParameterHandlerFactory } from './builtin'
-import { JsonRequestConverterFactory } from './builtin'
-import { CallbackCallAdapterFactory } from './builtin'
-import { Parameter } from './builtin'
-import { FormRequestConverterFactory } from './builtin'
-import { PathParameterHandlerFactory } from './builtin'
-import { SignalParameterHandlerFactory } from './builtin'
-import { RawResponseHandlerFactory } from './builtin'
-import { PlainTextResponseConverterFactory } from './builtin'
-import { ModelArgumentParameterHandlerFactory } from './builtin'
-import { RetryInterceptorFactory } from './builtin'
-import { Interceptor } from './Interceptor'
-import { InterceptorFactory } from './Interceptor'
-import { InterceptorFunction } from './Interceptor'
+import { AnyCtor, notEmpty, notNull } from './internal'
+import {
+  BodyParameterHandlerFactory,
+  CallbackCallAdapterFactory,
+  FormParameterHandlerFactory,
+  FormRequestConverterFactory,
+  HeaderParameterHandlerFactory,
+  JsonRequestConverterFactory,
+  JsonResponseConverterFactory,
+  ModelArgumentParameterHandlerFactory,
+  Parameter,
+  ParameterHandlerFactory,
+  PathParameterHandlerFactory,
+  PlainTextResponseConverterFactory,
+  QueryNameParameterHandlerFactory,
+  QueryParameterHandlerFactory,
+  RawRequestConverterFactory,
+  RawResponseConverterFactory,
+  RawResponseHandlerFactory,
+  RetryInterceptorFactory,
+  SignalParameterHandlerFactory
+} from './builtin'
+import { Interceptor, InterceptorFactory, InterceptorFunction } from './Interceptor'
 import { RequestBodyConverterFactory } from './RequestBodyConverter'
 import { CallAdapterFactory } from './CallAdapter'
 import { CallFactory } from './Call'
@@ -32,7 +31,7 @@ import { ResponseHandlerFactory } from './ResponseHandler'
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance
  */
-export function initDrizzleHttp(): DrizzleBuilder {
+export function newAPI(): DrizzleBuilder {
   return DrizzleBuilder.newBuilder()
 }
 
@@ -256,6 +255,18 @@ export class DrizzleBuilder {
       new Set<ResponseConverterFactory>(this._responseConverterFactories),
       this._responseHandlerFactories
     )
+  }
+
+  /**
+   * Builds a new {@link Drizzle} instance and create an API instance from T
+   *
+   * @param TargetApi - the target API class with decorated methods. use class and abstract class.
+   * @param args - optional list of arguments to be passed to the api constructor.
+   *
+   * @returns InstanceType<T>
+   */
+  createAPI<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
+    return this.build().create(TargetApi, args)
   }
 
   private setDefaults(): void {

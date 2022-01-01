@@ -276,6 +276,7 @@ describe('Circuit Breaker', function () {
 
   describe('when api is unstable', function () {
     it('should eventually trip the circuit', async function () {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const _ of Array.from(Array(10))) {
         await api.longRunning().catch(err => expect(err).toBeDefined())
       }

@@ -10,7 +10,7 @@ import { ContentType } from '../decorators'
 import { RawResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { noop } from '../noop'
-import { initDrizzleHttp } from '../DrizzleBuilder'
+import { newAPI } from '../DrizzleBuilder'
 import { MediaTypes } from '../MediaTypes'
 import { TestCallFactory } from './TestCallFactory'
 
@@ -25,7 +25,7 @@ class InterceptorAPI {
   }
 }
 
-describe.skip('when using interceptors', function () {
+describe('when using interceptors', function () {
   let address = ''
 
   beforeAll(() => {
@@ -50,7 +50,7 @@ describe.skip('when using interceptors', function () {
     const spy = jest.fn()
     const value = 'interceptor-header-value'
 
-    const d = initDrizzleHttp()
+    const d = newAPI()
       .baseUrl(address)
       .callFactory(TestCallFactory.INSTANCE)
       .addInterceptor(chain => {

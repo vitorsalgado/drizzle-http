@@ -14,10 +14,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-dupe-class-members': ['error'],
     '@typescript-eslint/no-empty-function': ['error', { allow: ['decoratedFunctions'] }],
-    '@typescript-eslint/no-explicit-any': ['warn'],
     '@typescript-eslint/no-useless-constructor': ['error'],
-    '@typescript-eslint/ban-types': ['off'],
-    '@typescript-eslint/no-inferrable-types': ['off'],
 
     'import/order': [
       'error',

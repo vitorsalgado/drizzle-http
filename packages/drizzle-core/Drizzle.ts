@@ -34,7 +34,6 @@ import { ParseErrorBody } from './decorators'
  * @example
  const api = DrizzleBuilder.newBuilder()
  .baseUrl(baseURL)
- .useDefaults()
  .addCallAdapterFactories(new RxJsCallAdapterFactory())
  .build()
  .create(API)
@@ -108,7 +107,7 @@ export class Drizzle {
    *
    * @returns CallAdapter
    */
-  callAdapter<F, T>(method: string, requestFactory: RequestFactory): CallAdapter<F, T> | null {
+  callAdapter<F, T>(requestFactory: RequestFactory): CallAdapter<F, T> | null {
     if (!this._callAdapterFactories || this._callAdapterFactories.size === 0) {
       return null
     }

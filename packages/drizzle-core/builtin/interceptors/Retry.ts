@@ -1,6 +1,6 @@
 import { setupRequestFactory } from '../../ApiParameterization'
 import { setupApiDefaults } from '../../ApiParameterization'
-import { TargetClass } from '../../internal'
+import { TargetCtor, TargetProto } from '../../internal'
 import { HttpMethod } from '../../decorators/utils'
 
 export const RetryOptionsKey = 'retry:options'
@@ -20,7 +20,7 @@ const Def: RetryOptions = {
 }
 
 export function Retry(options: Partial<RetryOptions> = Def) {
-  return function (target: object | TargetClass, method?: string) {
+  return function (target: TargetProto | TargetCtor, method?: string) {
     if (method) {
       return setupRequestFactory(Retry, target, method, requestFactory =>
         requestFactory.addConfig(RetryOptionsKey, options)

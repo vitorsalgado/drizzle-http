@@ -1,5 +1,5 @@
 {
-  "presets": [["@babel/preset-env"]],
+  "presets": [["@babel/env", { "targets": ["last 2 versions"] }]],
   "plugins": [
     "@babel/transform-runtime",
     ["@babel/plugin-proposal-decorators", { "legacy": true }],

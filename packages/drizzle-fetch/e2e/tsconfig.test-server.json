@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "lib": [],
-    "module": "ESNext",
+    "module": "CommonJS",
     "target": "ESNext"
   },
   "include": ["server.ts"]

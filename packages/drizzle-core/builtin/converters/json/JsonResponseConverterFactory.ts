@@ -8,7 +8,7 @@ import { JsonResponseConverter } from './JsonResponseConverter'
 export class JsonResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()
 
-  provide<T>(drizzle: Drizzle, responseType: string, requestFactory: RequestFactory): ResponseConverter<T> | null {
+  provide<T>(drizzle: Drizzle, responseType: string, _requestFactory: RequestFactory): ResponseConverter<T> | null {
     if (responseType === BuiltInConv.JSON) {
       return JsonResponseConverter.INSTANCE
     }

@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@HEAD('/relative/path')
  *  example(): Promise<any>
  */
-export const HEAD = (path: string) => decorateWithHttpMethod(HEAD, 'HEAD', path)
+export const HEAD = (path = '') => decorateWithHttpMethod(HEAD, 'HEAD', path)

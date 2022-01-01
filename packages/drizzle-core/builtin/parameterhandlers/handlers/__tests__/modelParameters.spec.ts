@@ -29,7 +29,7 @@ import { HttpResponse } from '../../../../HttpResponse'
 
 class Search {
   @ToHeader('trace-id')
-  static traceId: string = 'traceId'
+  static traceId = 'traceId'
 
   @ToHeader('x-correlation-id')
   correlationId!: string

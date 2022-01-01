@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "lint": "eslint --fix --ext .ts .",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },

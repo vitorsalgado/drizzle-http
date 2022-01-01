@@ -11,17 +11,13 @@ interface Res<B = unknown, H = HttpHeaders> {
   readonly body: B
 }
 
-export class HttpError extends DrizzleError {
-  constructor(public readonly request: HttpRequest, public readonly response: Res) {
+export class HttpError<B = unknown> extends DrizzleError {
+  constructor(public readonly request: HttpRequest, public readonly response: Res<B>) {
     super(`Request failed with status code: ${response.status}`, 'DZ_ERR_HTTP')
 
     Error.captureStackTrace(this, HttpError)
 
     this.name = 'DzHttpError'
-  }
-
-  responseBody<T>(): T {
-    return this.response.body as T
   }
 
   toJSON() {

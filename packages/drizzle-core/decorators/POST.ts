@@ -10,4 +10,4 @@ import { decorateWithHttpMethod } from './utils'
  *  \@POST('/relative/path')
  *  example(\@Body data: object): Promise<Result>
  */
-export const POST = (path: string) => decorateWithHttpMethod(POST, 'POST', path)
+export const POST = (path = '') => decorateWithHttpMethod(POST, 'POST', path)

@@ -1,7 +1,7 @@
-import { InvalidMethodConfigError } from '../../internal'
 import { setupRequestFactory } from '../../ApiParameterization'
 import { Metadata } from '../../ApiParameterization'
-import { HttpMethod } from './HttpMethod'
+import { AnyClass, Decorator, isFunction, TargetProto } from '../../internal'
+import { notNull } from '../../internal'
 
 /**
  * Configure a method to perform an HTTP request
@@ -11,23 +11,23 @@ import { HttpMethod } from './HttpMethod'
  * @param path - request path that will be concatenated with the base url
  */
 export function decorateWithHttpMethod(
-  decorator: Function,
-  httpMethod: HttpMethod,
-  path = '/'
-): (target: object, method: string, descriptor: PropertyDescriptor) => void {
-  return function (target: object, method: string, descriptor: PropertyDescriptor): void {
-    if (!path.startsWith('/')) {
-      throw new InvalidMethodConfigError(method, 'Path must start with a /')
-    }
+  decorator: Decorator,
+  httpMethod: string,
+  path: string
+): (target: TargetProto, method: string, descriptor: PropertyDescriptor) => void {
+  isFunction(decorator)
+  notNull(httpMethod)
+  notNull(path)
 
+  return function (target: TargetProto, method: string, descriptor: PropertyDescriptor): void {
     Metadata.registerApiMethod(target.constructor, method)
 
     setupRequestFactory(decorator, target, method, requestFactory => {
-      requestFactory.apiType = target.constructor
+      requestFactory.apiType = target.constructor as AnyClass
       requestFactory.method = method
-      requestFactory.path = path
-      requestFactory.httpMethod = httpMethod
-      requestFactory.argLen = descriptor.value.length
+      requestFactory.path = path.trim()
+      requestFactory.httpMethod = httpMethod.toUpperCase()
+      requestFactory.argLen = descriptor.value && typeof descriptor.value === 'function' ? descriptor.value.length : 0
 
       descriptor.value = (...args: unknown[]) => requestFactory.invoker()?.(...args)
     })

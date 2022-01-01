@@ -48,7 +48,7 @@ export function serviceInvoker(
       method,
       requestFactory
     )
-    const callAdapter = drizzle.callAdapter<unknown, T>(method, requestFactory)?.adapt(entrypoint)
+    const callAdapter = drizzle.callAdapter<unknown, T>(requestFactory)?.adapt(entrypoint)
     const hasAdapter = typeof callAdapter === 'function'
 
     // if method does not contain dynamic arguments, we don't need to resolve the Call<> instance on each method call.

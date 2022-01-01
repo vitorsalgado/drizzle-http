@@ -3,7 +3,7 @@ import { isNullOrUndefined } from './utils'
 
 export function noNullElements<K, V = unknown>(
   value: Array<K> | Map<K, V> | Set<K>,
-  message: string = 'Collection argument must not be empty.'
+  message = 'Collection argument must not be empty.'
 ): Array<K> | Map<K, V> | Set<K> {
   if (Array.isArray(value)) {
     if (value.some(isNullOrUndefined)) {

@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit'
+import { createClassAndMethodDecorator } from '@drizzle-http/core'
 
 export function Cache(cache: RequestCache) {
-  return createFetchDecorator(Cache, requestInit => (requestInit.cache = cache))
+  return createClassAndMethodDecorator(
+    Cache,
+    defaults => defaults.addConfig(Cache.Key, cache),
+    requestFactory => requestFactory.addConfig(Cache.Key, cache)
+  )
 }
+
+Cache.Key = 'fetch:cache'

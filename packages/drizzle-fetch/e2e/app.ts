@@ -1,4 +1,4 @@
-import { ContentType, DrizzleBuilder, GET } from '@drizzle-http/core'
+import { ContentType, DrizzleBuilder, FormUrlEncoded, GET } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { POST } from '@drizzle-http/core'
@@ -14,7 +14,6 @@ import { ReferrerPolicy } from '../decorators'
 import { Referrer } from '../decorators'
 import { Redirect } from '../decorators'
 import { Cache } from '../decorators'
-import { Navigate } from '../decorators'
 import { KeepAlive } from '../decorators'
 import { FetchCallFactory } from '../FetchCallFactory'
 import { PartParameterHandlerFactory } from '../MultipartParameterHandler'
@@ -22,6 +21,7 @@ import { MultipartRequestBodyConverterFactory } from '../MultipartRequestBodyCon
 
 @CORS()
 @KeepAlive(true)
+@UseJsonConv()
 class ApiTs {
   @GET('/txt')
   @ContentType(MediaTypes.TEXT_PLAIN)
@@ -69,6 +69,12 @@ class ApiTs {
     return noop(input)
   }
 
+  @POST('/form')
+  @FormUrlEncoded()
+  formUrlEncoded(@Body() form: Record<string, string>): Promise<Response> {
+    return noop(form)
+  }
+
   @POST('/json')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Mode('cors')
@@ -76,7 +82,6 @@ class ApiTs {
   @Referrer('ref')
   @Redirect('manual')
   @Cache('no-cache')
-  @Navigate()
   @UseJsonConv()
   json(@Body() data: unknown): Promise<{ status: string; data: { test: string } }> {
     return noop(data)
@@ -160,5 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
       .fromDOM(files)
       .then(response => response.text())
       .then(response => ((document.getElementById('filesDOMResult') as HTMLParagraphElement).textContent = response))
+  })
+
+  document.getElementById?.('sendFormUrlEncoded')?.addEventListener('click', ev => {
+    ev.preventDefault()
+
+    tsApi
+      .formUrlEncoded({ doc1: 'one', doc2: 'two' })
+      .then(response => response.text())
+      .then(txt => console.log(txt))
   })
 })

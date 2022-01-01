@@ -1,23 +1,19 @@
 import { Blob } from 'buffer'
 import { Readable } from 'stream'
-import { request as Request } from 'undici'
-import { Dispatcher } from 'undici'
+import { Dispatcher, request as Request } from 'undici'
 import { RequestOptions } from 'undici/types/dispatcher'
 import { HttpRequest } from '../HttpRequest'
-import { Call } from '../Call'
-import { CallFactory } from '../Call'
+import { Call, CallFactory } from '../Call'
 import { HttpHeaders } from '../HttpHeaders'
 import { Drizzle } from '../Drizzle'
-import { HttpResponse } from '../HttpResponse'
-import { isOK } from '../HttpResponse'
+import { HttpResponse, isOK } from '../HttpResponse'
 import { isAbsolute } from '../internal'
-import { RequestFactory } from '../RequestFactory'
 import { HttpMethod } from '../decorators/utils'
 
 class TestCall implements Call<HttpResponse<Readable>> {
   constructor(readonly baseUrl: URL) {}
 
-  async execute(request: HttpRequest, argv: unknown[]): Promise<HttpResponse<Readable>> {
+  async execute(request: HttpRequest): Promise<HttpResponse<Readable>> {
     const url = !isAbsolute(request.url) ? new URL(request.url, this.baseUrl.href).href : request.url
 
     const res = await Request(url, {
@@ -35,7 +31,7 @@ export class TestCallFactory implements CallFactory {
     // no setup
   }
 
-  provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<unknown> {
+  provide(drizzle: Drizzle): Call<unknown> {
     return new TestCall(new URL(drizzle.baseUrl()))
   }
 }

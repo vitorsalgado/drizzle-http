@@ -4,7 +4,6 @@ import { Drizzle } from '../../../Drizzle'
 import { Parameter } from '../Parameter'
 import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
 import { RequestParameterization } from '../../../RequestParameterization'
-import { encodeFormFieldIfNecessary } from '../../../internal'
 
 export class FormParameter extends Parameter {
   static Type = 'form_field'
@@ -23,13 +22,13 @@ export class FormParameterHandler implements ParameterHandler<string | string[]>
     }
 
     if (typeof value === 'string') {
-      requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(value))
+      requestValues.formFields.append(this.parameter.key, value)
     } else if (Array.isArray(value)) {
       for (const item of value) {
-        requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(item))
+        requestValues.formFields.append(this.parameter.key, item)
       }
     } else {
-      requestValues.formFields.push(this.parameter.key + '=' + encodeFormFieldIfNecessary(String(value)))
+      requestValues.formFields.append(this.parameter.key, String(value))
     }
   }
 }

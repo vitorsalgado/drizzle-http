@@ -1,25 +1,63 @@
-import { expect, test } from '@playwright/test'
-import { startServer } from './server'
-import { closeServer } from './server'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
-const devUrl = 'http://localhost:3000'
+import { DrizzleBuilder, GET, HttpHeaders, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
+import { MultipartRequestBodyConverterFactory } from '../MultipartRequestBodyConverter'
+import { PartParameterHandlerFactory } from '../MultipartParameterHandler'
+import { FetchCallFactory } from '../FetchCallFactory'
+import { CORS, KeepAlive } from '../decorators'
 
-test.describe('Fetch Client', () => {
-  test.beforeEach(({ page }) => page.goto(devUrl))
-  test.beforeAll(() => startServer())
-  test.afterAll(() => closeServer())
+@KeepAlive(true)
+@CORS()
+class TestAPI {
+  @GET('/txt')
+  @PlainTextResponse()
+  @RawResponse()
+  txt(): Promise<Response> {
+    return noop()
+  }
+}
 
-  test('check GET and POST requests with default fetch response and parsed json body', async ({ page }) => {
-    await expect(page.locator('#txt')).toHaveText('success')
+const url = 'https://example.com'
+const api = DrizzleBuilder.newBuilder()
+  .baseUrl(url)
+  .callFactory(FetchCallFactory.DEFAULT)
+  .addParameterHandlerFactory(new PartParameterHandlerFactory())
+  .addRequestConverterFactories(new MultipartRequestBodyConverterFactory())
+  .build()
+  .create(TestAPI)
 
-    const json = await page.innerText('#json')
-    const response = JSON.parse(json)
+const makeUrl = (url: string, path: string) => url + path
 
-    expect(response).toEqual({
-      status: 'ok',
-      data: {
-        test: 'json'
-      }
+describe('Fetch', function () {
+  beforeEach(() => {
+    // @ts-ignore
+    global.Headers = HttpHeaders
+  })
+
+  afterEach(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    global.fetch.mockClear()
+  })
+
+  describe('when using decorators on class level', function () {
+    // @ts-ignore
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        headers: new HttpHeaders(),
+        text: () => Promise.resolve('txt')
+      })
+    )
+
+    it('should execute request using class decorators values', async function () {
+      const response = await api.txt()
+      const txt = await response.text()
+      const args = (global.fetch as jest.Mock).mock.calls[0]
+
+      expect(txt).toEqual('txt')
+      expect(args[0]).toEqual(makeUrl(url, '/txt'))
+      expect(args[1]).toHaveProperty('mode', 'cors')
+      expect(args[1]).toHaveProperty('keepalive', true)
     })
   })
 })

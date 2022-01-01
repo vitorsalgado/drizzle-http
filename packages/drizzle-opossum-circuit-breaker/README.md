@@ -4,16 +4,11 @@ Circuit breaker adapter with [Opossum](https://github.com/nodeshift/opossum).
 
 ## Installation
 
-### NPM
+Make sure we have the core module [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) installed.
 
 ```
+npm i @drizzle-http/core
 npm i @drizzle-http/opossum-circuit-breaker
-```
-
-### Yarn
-
-```
-yarn add @drizzle-http/opossum-circuit-breaker
 ```
 
 ## Usage
@@ -21,13 +16,18 @@ yarn add @drizzle-http/opossum-circuit-breaker
 Usage typically looks like the example below:
 
 ```typescript
+import { CircuitBreakerCallAdapterFactory } from "@drizzle-http/opossum-circuit-breaker";
+import { DrizzleBuilder } from "@drizzle-http/core";
+import { UndiciCallFactory } from "@drizzle-http/undici";
+import { CircuitBreaker } from "@drizzle-http/opossum-circuit-breaker";
+import { Fallback } from "@drizzle-http/opossum-circuit-breaker";
+import { GET } from "@drizzle-http/core";
+
 class CustomerApi {
-  @GET('/customers/{id}')
-  @UseCircuitBreaker({ /* Opossum CircuitBreaker.Options */ })
+  @GET('/customers')
+  @CircuitBreaker({ /* Opossum CircuitBreaker.Options */ })
   @Fallback('customersAlt')
-  customers(@Param('id') id: string): Promise<Customer[]> {
-    return noop(id, filter, test)
-  }
+  customers(): Promise<Customer[]> { }
 }
 
 class CustomerApiFallbacks {
@@ -36,18 +36,14 @@ class CustomerApiFallbacks {
   }
 }
 
-const factory = new CircuitBreakerCallAdapterFactory({
-  options: { /* global options */ },
-  fallbacks: new CustomerApiFallbacks()
-})
-const api = DrizzleBuilder.newBuilder()
+const factory = new CircuitBreakerCallAdapterFactory({ options: { /* global options */ }, fallbacks: new CustomerApiFallbacks() })
+const api = DrizzleBuilder
+  .newBuilder()
   .baseUrl(/* base url */)
-  .callFactory(new UndiciCallFactory() /* any call factory */)
+  .callFactory(new UndiciCallFactory())
   .addCallAdapterFactories(factory)
   .build()
   .create(CustomerApi)
-
-api.customers('100').then(customers => console.log(customers))
 ```
 
 ## Features
@@ -75,17 +71,3 @@ All circuit breakers associated with a CircuitBreakerCallAdapterFactory are stor
 `CircuitBreakerCallAdapterFactory` accepts a parameter `registry`. You can pass a custom `Registry` implementation.
 
 > The circuit breaker instance is only stored in the registry after the first execution. If you want to change the circuit breaker behaviour, prefer to use a LifeCycleListener implementation.
-
-### LifeCycle Listener
-
-**LifeCycle Listener** allows listening to some events in the circuit breaker life cycle.  
-Pass your `LifeCycleListener` implementation to the `CircuitBreakerCallAdapterFactory` constructor `lifecycle` parameter
-following the contract:
-
-```
-interface LifeCycleListener {
-  onRegistered(circuitBreaker: CircuitBreaker): void
-
-  onBeforeExecution(circuitBreaker: CircuitBreaker): void
-}
-```

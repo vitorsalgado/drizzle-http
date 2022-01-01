@@ -6,7 +6,7 @@ import { DrizzleBuilder, GET, HttpError, Query } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { StreamTo, UndiciCallFactory } from '@drizzle-http/undici'
 import { Streaming } from '@drizzle-http/undici'
-import { HttpEmptyResponse } from '@drizzle-http/undici'
+import { StreamingResponse } from '@drizzle-http/undici'
 import { createServer } from 'http'
 import { Writable } from 'stream'
 import url from 'url'
@@ -14,7 +14,7 @@ import url from 'url'
 class PartiesAPI {
   @GET('/partidos')
   @Streaming()
-  parties(@Query('sigla') acronym: string, @StreamTo() target: Writable): Promise<HttpEmptyResponse> {
+  parties(@Query('sigla') acronym: string, @StreamTo() target: Writable): Promise<StreamingResponse> {
     return noop(acronym, target)
   }
 }

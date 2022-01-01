@@ -8,7 +8,11 @@ import { JsonRequestConverter } from './JsonRequestConverter'
 export class JsonRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: JsonRequestConverterFactory = new JsonRequestConverterFactory()
 
-  provide(drizzle: Drizzle, requestType: string, requestFactory: RequestFactory): RequestBodyConverter<unknown> | null {
+  provide(
+    drizzle: Drizzle,
+    requestType: string,
+    _requestFactory: RequestFactory
+  ): RequestBodyConverter<unknown> | null {
     if (requestType === BuiltInConv.JSON) {
       return JsonRequestConverter.INSTANCE
     }

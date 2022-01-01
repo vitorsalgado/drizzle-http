@@ -11,3 +11,7 @@ temp
 *.md
 *.json
 *.d.ts
+
+deno
+
+README.md

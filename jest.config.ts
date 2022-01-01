@@ -11,7 +11,7 @@ const config: JestConfig.InitialOptions = {
       tsconfig: './tsconfig.test.json'
     }
   },
-  testMatch: ['**/?(*.)+(spec|test).ts'],
+  testMatch: ['**/__tests__/?(*.)+(spec|test).ts'],
   collectCoverageFrom: ['packages/**'],
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/', '/coverage/', '/drizzle-fetch/', 'packages/.*/index.ts'],
   modulePathIgnorePatterns: [

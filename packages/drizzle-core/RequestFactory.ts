@@ -1,8 +1,5 @@
 import { Drizzle } from './Drizzle'
-import { InvalidMethodConfigError } from './internal'
-import { notNull } from './internal'
-import { notBlank } from './internal'
-import { isFunction } from './internal'
+import { AnyClass, Decorator, InvalidMethodConfigError, isFunction, notBlank, notNull } from './internal'
 import { BodyType } from './BodyType'
 import { RequestBodyConverter } from './RequestBodyConverter'
 import { ApiDefaults } from './ApiParameterization'
@@ -10,14 +7,16 @@ import { RequestParameterization } from './RequestParameterization'
 import { MediaTypes } from './MediaTypes'
 import { HttpHeaders } from './HttpHeaders'
 import { HttpRequest } from './HttpRequest'
-import { QueryParameter } from './builtin'
-import { BodyParameter } from './builtin'
-import { PathParameter } from './builtin'
-import { FormParameter } from './builtin'
-import { ParameterHandler } from './builtin'
-import { QueryNameParameter } from './builtin'
-import { Parameter } from './builtin'
-import { HeaderParameter } from './builtin'
+import {
+  BodyParameter,
+  FormParameter,
+  HeaderParameter,
+  Parameter,
+  ParameterHandler,
+  PathParameter,
+  QueryNameParameter,
+  QueryParameter
+} from './builtin'
 import { NoDrizzleUserAgent } from './decorators'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
@@ -36,7 +35,7 @@ interface RequestBuilder {
  */
 export class RequestFactory {
   constructor(
-    public apiType: Function | null = null,
+    public apiType: AnyClass | null = null,
     public method: string = '',
     public httpMethod: string = '',
     public path: string = '',
@@ -56,8 +55,8 @@ export class RequestFactory {
     public responseType: string = '',
     public errorType: string = '',
     private preProcessed: boolean = false,
-    private readonly decorators: Function[] = [],
-    private readonly classDecorators: Function[] = [],
+    private readonly decorators: Decorator[] = [],
+    private readonly classDecorators: Decorator[] = [],
     private invokerFn: (<T>(...args: unknown[]) => T) | null = null
   ) {}
 
@@ -276,7 +275,7 @@ export class RequestFactory {
       if (this.path.startsWith('/')) {
         this.path = p + this.path
       } else {
-        this.path = p + '/' + this.path
+        this.path = p + (this.path === '' ? '' : '/' + this.path)
       }
     }
 
@@ -286,7 +285,7 @@ export class RequestFactory {
   /**
    * Return API Class type that owns this Request Factory instance.
    */
-  apiOwner(): Function {
+  apiOwner(): AnyClass {
     return notNull(this.apiType)
   }
 
@@ -329,7 +328,7 @@ export class RequestFactory {
    *
    * @param decorator - decorator function reference
    */
-  registerDecorator(decorator: Function): void {
+  registerDecorator(decorator: Decorator): void {
     notNull(decorator)
     isFunction(decorator)
 
@@ -342,7 +341,7 @@ export class RequestFactory {
    * @param decorator - decorator function reference
    * @returns boolean
    */
-  hasDecorator(decorator: Function): boolean {
+  hasDecorator(decorator: Decorator): boolean {
     notNull(decorator)
     isFunction(decorator)
 
@@ -357,7 +356,7 @@ export class RequestFactory {
    *
    * @throws DrizzleError
    */
-  addConfig(key: string, value: unknown): void {
+  addConfig<T = unknown>(key: string, value: T): void {
     notBlank(key, 'Parameters "key" cannot be null or empty.')
     notNull(value, 'Parameters "value" cannot be null.')
 
@@ -651,13 +650,10 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
   ) {}
 
   toRequest(args: unknown[]): HttpRequest {
-    const requestParameterization = new RequestParameterization(
+    const requestParameterization = RequestParameterization.newRequest(
       args,
       this.requestFactory.path,
-      [],
       this.requestFactory.defaultHeaders,
-      [],
-      null,
       this.requestFactory.signal
     )
 
@@ -677,7 +673,7 @@ export class DynamicParametrizedRequestBuilder implements RequestBuilder {
       url: requestParameterization.buildPath(),
       headers: requestParameterization.headers,
       method: this.requestFactory.httpMethod,
-      body: requestParameterization.buildBody(),
+      body: requestParameterization.buildBody() as BodyType,
       headersTimeout: this.requestFactory.connectTimeout,
       bodyTimeout: this.requestFactory.readTimeout,
       signal: requestParameterization.signal

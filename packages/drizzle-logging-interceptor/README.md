@@ -5,20 +5,11 @@ The default Logger implementation uses [Pino](https://getpino.io/).
 
 ## Installation
 
-The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
-If you are installing each package individually, make sure to install
-first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
-
-### NPM
+Make sure we have the core module [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) installed.
 
 ```
+npm i @drizzle-http/core
 npm i @drizzle-http/logging-interceptor
-```
-
-### Yarn
-
-```
-yarn add @drizzle-http/logging-interceptor
 ```
 
 ## Node
@@ -27,10 +18,13 @@ yarn add @drizzle-http/logging-interceptor
 
 ```typescript
 import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+import { DrizzleBuilder } from "@drizzle-http/core";
+import { UndiciCallFactory } from "@drizzle-http/undici";
 
 const interceptor = new LoggingInterceptor()
 
-const api = Drizzle.builder()
+const api = DrizzleBuilder
+  .newBuilder()
   .baseUrl(address)
   .callFactory(new UndiciCallFactory())
   .addInterceptor(interceptor)
@@ -42,12 +36,16 @@ const api = Drizzle.builder()
 
 ```typescript
 import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
+import { Level } from "@drizzle-http/logging-interceptor";
+import { DrizzleBuilder } from "@drizzle-http/core";
+import { UndiciCallFactory } from "@drizzle-http/undici";
 
-const interceptor = new LoggingInterceptor(fake, Level.BODY)
+const interceptor = new LoggingInterceptor({ level: Level.Body, logger: customLogger })
 interceptor.redactHeader('x-super-secret-header')
 interceptor.redactHeaders(['x-other-secret-header', 'x-one-more-secret-header'])
 
-const api = DrizzleBuilder.newBuilder()
+const api = DrizzleBuilder
+  .newBuilder()
   .baseUrl(address)
   .callFactory(new UndiciCallFactory())
   .addInterceptor(interceptor)
@@ -62,7 +60,8 @@ const api = DrizzleBuilder.newBuilder()
 ```typescript
 import { BrowserLoggingInterceptor } from '@drizzle-http/logging-interceptor'
 
-const api = DrizzleBuilder.newBuilder()
+const api = DrizzleBuilder
+  .newBuilder()
   .baseUrl(address)
   .callFactory(new UndiciCallFactory())
   .addInterceptor(new BrowserLoggingInterceptor())
@@ -71,28 +70,3 @@ const api = DrizzleBuilder.newBuilder()
 ```
 
 > It's not possible to change the logger implementation from BrowserLoggingInterceptor. It will use console.log.
-
-## Features
-
-You can change the level using the following values: `NONE, BASIC, HEADERS, BODY`.  
-To customize the default Pino implementation, provide a custom instance of **PinoLogger**. E.g.:
-
-```typescript
-import { Level } from '@drizzle-http/logging-interceptor'
-import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
-
-const customPinoLogger = new PinoLogger({ /* pino.LoggerOptions */ })
-
-const api = DrizzleBuilder.newBuilder()
-  .baseUrl(address)
-  .callFactory(new UndiciCallFactory())
-  .addInterceptor(new LoggingInterceptor(Level.BODY, new Set(), customPinoLogger))
-  .build()
-  .create(API)
-```
-
-To avoid logging sensitive information on Headers, use:
-
-```typescript
-loggingInterceptor.redactHeader('secret-header')
-```

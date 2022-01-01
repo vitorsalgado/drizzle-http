@@ -1,5 +1,11 @@
-import { createFetchDecorator } from '../setupRequestInit'
+import { createClassAndMethodDecorator } from '@drizzle-http/core'
 
 export function Integrity(integrity: string) {
-  return createFetchDecorator(Integrity, requestInit => (requestInit.integrity = integrity))
+  return createClassAndMethodDecorator(
+    Integrity,
+    defaults => defaults.addConfig(Integrity.Key, integrity),
+    requestFactory => requestFactory.addConfig(Integrity.Key, integrity)
+  )
 }
+
+Integrity.Key = 'fetch:integrity'

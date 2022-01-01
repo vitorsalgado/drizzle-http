@@ -1,10 +1,9 @@
-import { setupRequestFactory } from '../ApiParameterization'
-import { setupApiDefaults } from '../ApiParameterization'
+import { setupApiDefaults, setupRequestFactory } from '../ApiParameterization'
 import { SignalParameter } from '../builtin'
-import { TargetClass } from '../internal'
+import { TargetCtor, TargetProto } from '../internal'
 
 export function Abort(value: string | unknown | null = null) {
-  return function (target: object | TargetClass, method?: string, desc?: number | PropertyDescriptor): void {
+  return function (target: TargetProto | TargetCtor, method?: string, desc?: number | PropertyDescriptor): void {
     if (method !== null && typeof method !== 'undefined') {
       return setupRequestFactory(Abort, target, method, requestFactory => {
         if (desc !== null && typeof desc === 'number') {

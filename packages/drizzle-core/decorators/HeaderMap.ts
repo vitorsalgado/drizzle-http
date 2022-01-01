@@ -2,7 +2,7 @@
 
 import { setupRequestFactory } from '../ApiParameterization'
 import { setupApiDefaults } from '../ApiParameterization'
-import { TargetClass } from '../internal'
+import { TargetCtor, TargetProto } from '../internal'
 
 /**
  * Adds fixed params to the request
@@ -16,7 +16,7 @@ import { TargetClass } from '../internal'
  *  example(\@Header('name') name: string): Promise<Result>
  */
 export function HeaderMap(headers: Record<string, string>) {
-  return function (target: object | TargetClass, method?: string): void {
+  return function (target: TargetProto | TargetCtor, method?: string): void {
     if (method) {
       return setupRequestFactory(HeaderMap, target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
     }

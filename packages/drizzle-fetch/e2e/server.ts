@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
 import FastifyMultipart from 'fastify-multipart'
+import FastifyFormBody from 'fastify-formbody'
 
 const fastify = Fastify()
 const port = process.env.SERVER_PORT || 3001
@@ -11,6 +12,7 @@ const headers = {
 }
 
 fastify.register(FastifyMultipart, { addToBody: true, attachFieldsToBody: true })
+fastify.register(FastifyFormBody)
 
 fastify.options('*', (req, res) => {
   res.headers(headers).status(204).send()
@@ -58,5 +60,3 @@ export function startServer() {
 export function closeServer() {
   return fastify.close()
 }
-
-startServer()

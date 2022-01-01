@@ -3,7 +3,7 @@ import { isNullOrUndefined } from './utils'
 
 export function notEmpty<K, V = unknown>(
   value: Array<K> | Map<K, V> | Set<K> | string,
-  message: string = 'Collection argument must not be null or empty.'
+  message = 'Collection argument must not be null or empty.'
 ): Array<K> | Map<K, V> | Set<K> | string {
   if (isNullOrUndefined(value)) {
     throw new InvalidArgumentError(message)

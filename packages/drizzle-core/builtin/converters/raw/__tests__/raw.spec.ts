@@ -1,7 +1,7 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { RequestFactory } from '../../../../RequestFactory'
 import { MediaTypes } from '../../../../MediaTypes'
-import { DrizzleBuilder, initDrizzleHttp } from '../../../../DrizzleBuilder'
+import { DrizzleBuilder, newAPI } from '../../../../DrizzleBuilder'
 import { Body, ContentType, POST } from '../../../../decorators'
 import { GET } from '../../../../decorators'
 import { HttpResponse } from '../../../../HttpResponse'
@@ -55,7 +55,7 @@ describe('Raw Converter', function () {
 
     return startTestServer().then((addr: string) => {
       address = addr
-      api = initDrizzleHttp().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
+      api = newAPI().callFactory(new TestCallFactory()).baseUrl(address).build().create(API)
     })
   })
 

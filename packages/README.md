@@ -2,9 +2,11 @@
 
 ## Packages
 
-- [Drizzle-Http](drizzle-nodejs-all)
-- [Core](drizzle-http-core)
-- [Undici Client](drizzle-http-undici)
-- [Fetch Client](drizzle-http-fetch)
-- [RxJs Adapter](drizzle-http-rxjs-adapter)
-- [Logging Interceptor](drizzle-http-logging-interceptor)
+- [Core](drizzle-core)
+- [Fetch](drizzle-fetch)
+- [Logging Interceptor](drizzle-logging-interceptor)
+- [Node.js All](drizzle-nodejs-all)
+- [Opossum Circuit Breaker](drizzle-opossum-circuit-breaker)
+- [Response Mapper](drizzle-response-mapper)
+- [RxJs](drizzle-rxjs)
+- [Undici](drizzle-undici)

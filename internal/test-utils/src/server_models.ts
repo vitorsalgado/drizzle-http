@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export class TestResult<T> {
   url!: string
   method!: string

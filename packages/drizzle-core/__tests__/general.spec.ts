@@ -33,7 +33,7 @@ import { MediaTypes } from '../MediaTypes'
 import { noop } from '../noop'
 import { RawResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
-import { DrizzleBuilder, initDrizzleHttp } from '../DrizzleBuilder'
+import { DrizzleBuilder, newAPI } from '../DrizzleBuilder'
 import { Drizzle } from '../Drizzle'
 import { HttpError } from '../HttpError'
 import { TestCallFactory } from './TestCallFactory'
@@ -224,7 +224,7 @@ describe('Drizzle Http', () => {
   describe('General', function () {
     it('should call registered shutdown', async () => {
       const shutdownSpy = jest.fn()
-      const d = initDrizzleHttp().callFactory(TestCallFactory.INSTANCE).baseUrl('http://www.test.com.br').build()
+      const d = newAPI().callFactory(TestCallFactory.INSTANCE).baseUrl('http://www.test.com.br').build()
       d.registerShutdownHook(async () => shutdownSpy())
 
       await d.shutdown()
@@ -245,7 +245,7 @@ describe('Drizzle Http', () => {
         }
       }
 
-      const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
+      const d = newAPI().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
       const api: JsonAPI = d.create(JsonAPI)
 
@@ -271,7 +271,7 @@ describe('Drizzle Http', () => {
         }
       }
 
-      const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
+      const d = newAPI().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
       const api: TestContentTypeClazzLevelAPI = d.create(TestContentTypeClazzLevelAPI)
 
@@ -296,7 +296,7 @@ describe('Drizzle Http', () => {
         }
       }
 
-      const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
+      const d = newAPI().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
 
       const api: FormAPI = d.create(FormAPI)
 
@@ -511,7 +511,7 @@ describe('Drizzle Http', () => {
         }
       }
 
-      const d = initDrizzleHttp().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
+      const d = newAPI().baseUrl(address).callFactory(TestCallFactory.INSTANCE).build()
       const absApi = d.create(AbstractApi)
       const txt = await absApi.txt()
 

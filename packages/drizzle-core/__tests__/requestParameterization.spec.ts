@@ -10,7 +10,7 @@ describe('RequestValues', function () {
     expect(rv.headers).toEqual(new HttpHeaders({}))
     expect(rv.signal).toBeNull()
     expect(rv.query).toEqual([])
-    expect(rv.formFields).toEqual([])
+    expect(rv.formFields).toEqual(new URLSearchParams())
     expect(rv.body).toBeNull()
   })
 })

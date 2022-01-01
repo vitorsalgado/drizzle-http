@@ -1,12 +1,9 @@
-import { CallAdapter } from '@drizzle-http/core'
-import { HttpRequest } from '@drizzle-http/core'
-import { Call } from '@drizzle-http/core'
-import { Internals } from '@drizzle-http/core'
+import { Call, CallAdapter, HttpRequest, Internals } from '@drizzle-http/core'
 
 export class MapToCallAdapter<F, T> implements CallAdapter<F, Promise<T>> {
   constructor(
     private readonly Type: Internals.Class,
-    private readonly mapper?: Function,
+    private readonly mapper?: (from: F) => T,
     private readonly decorated?: CallAdapter<unknown, Promise<F>> | null
   ) {}
 
@@ -18,7 +15,7 @@ export class MapToCallAdapter<F, T> implements CallAdapter<F, Promise<T>> {
           if (this.mapper) {
             return this.mapper(response)
           } else {
-            return new this.Type(response)
+            return new this.Type(response) as T
           }
         })
     }
@@ -28,7 +25,7 @@ export class MapToCallAdapter<F, T> implements CallAdapter<F, Promise<T>> {
         if (this.mapper) {
           return this.mapper(response)
         } else {
-          return new this.Type(response)
+          return new this.Type(response) as T
         }
       })
   }

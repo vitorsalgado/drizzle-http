@@ -1,24 +1,22 @@
-import { closeTestServer } from '@drizzle-http/test-utils'
-import { setupTestServer } from '@drizzle-http/test-utils'
-import { startTestServer } from '@drizzle-http/test-utils'
-import { ContentType } from '../decorators'
-import { GET } from '../decorators'
-import { Param } from '../decorators'
-import { POST } from '../decorators'
-import { Body } from '../decorators'
-import { FormUrlEncoded } from '../decorators'
-import { UseJsonConv } from '../decorators'
-import { PlainTextResponse } from '../decorators'
-import { PUT } from '../decorators'
-import { DELETE } from '../decorators'
-import { UsePlainTextConv } from '../decorators'
-import { ParseErrorBody } from '../decorators'
+import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
+import {
+  Body,
+  ContentType,
+  DELETE,
+  FormUrlEncoded,
+  GET,
+  Param,
+  ParseErrorBody,
+  PlainTextResponse,
+  POST,
+  PUT,
+  UsePlainTextConv
+} from '../decorators'
 import { MediaTypes } from '../MediaTypes'
 import { noop } from '../noop'
 import { Drizzle } from '../Drizzle'
 import { DrizzleBuilder } from '../DrizzleBuilder'
-import { RawResponse } from '../builtin'
-import { BuiltInConv } from '../builtin'
+import { BuiltInConv, RawResponse } from '../builtin'
 import { HttpResponse } from '../HttpResponse'
 import { HttpError } from '../HttpError'
 import { TestCallFactory } from './TestCallFactory'
@@ -29,7 +27,6 @@ interface User {
 }
 
 @ContentType(MediaTypes.APPLICATION_JSON)
-@UseJsonConv()
 class RealApi {
   @GET('/customers')
   list(): Promise<[{ name: string }]> {
@@ -101,7 +98,7 @@ describe('Given an API with JSON converter as default', function () {
         res.status(200).send({ name: (req.params as Record<string, string>).id })
       })
       fastify.post('/customers', (req, res) => {
-        res.status(201).send({ id: (req.body as any).id })
+        res.status(201).send({ id: (req.body as { id: string }).id })
       })
       fastify.delete('/customers/:id', (req, res) => {
         res.status(204).send()
@@ -109,7 +106,8 @@ describe('Given an API with JSON converter as default', function () {
       fastify.put('/customers/:id', (req, res) => {
         res
           .status(204)
-          .header('x-id', (req.params as any).id)
+          .header('x-id', (req.params as { id: string }).id)
+          .header('x-ctx', req.headers['x-ctx'])
           .send()
       })
       fastify.post('/form', (req, res) => {
@@ -127,7 +125,14 @@ describe('Given an API with JSON converter as default', function () {
     })
 
     return startTestServer().then((addr: string) => {
-      drizzle = DrizzleBuilder.newBuilder().baseUrl(addr).callFactory(TestCallFactory.INSTANCE).build()
+      drizzle = DrizzleBuilder.newBuilder()
+        .baseUrl(addr)
+        .callFactory(TestCallFactory.INSTANCE)
+        .addInterceptor(chain => {
+          chain.request().headers.append('x-ctx', 'node')
+          return chain.proceed(chain.request())
+        })
+        .build()
       api = drizzle.create(RealApi)
     })
   })
@@ -165,6 +170,17 @@ describe('Given an API with JSON converter as default', function () {
         expect(response.ok).toBeTruthy()
         expect(response.status).toEqual(204)
         expect(response.headers.get('x-id')).toEqual(id)
+        expect(response.headers.get('x-ctx')).toEqual('node')
+      })
+    })
+
+    it('should apply values set by the interceptor', function () {
+      const id = 'test'
+      return api.update(id, { name: 'new-name' }).then(response => {
+        expect(response.ok).toBeTruthy()
+        expect(response.status).toEqual(204)
+        expect(response.headers.get('x-id')).toEqual(id)
+        expect(response.headers.get('x-ctx')).toEqual('node')
       })
     })
   })
@@ -192,7 +208,7 @@ describe('Given an API with JSON converter as default', function () {
 
         return api.byId('404').catch((err: HttpError) => {
           expect(err.response.status).toEqual(404)
-          expect(err.responseBody()).toEqual({ message: 'Customer not found', code: 'ERR_NOT_FOUND' })
+          expect(err.response.body).toEqual({ message: 'Customer not found', code: 'ERR_NOT_FOUND' })
         })
       })
 
@@ -201,7 +217,7 @@ describe('Given an API with JSON converter as default', function () {
 
         return api.err({ context: 'test' }).catch((err: HttpError) => {
           expect(err.response.status).toEqual(400)
-          expect(err.responseBody()).toEqual('Fail')
+          expect(err.response.body).toEqual('Fail')
         })
       })
     })

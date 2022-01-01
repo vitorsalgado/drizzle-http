@@ -1,14 +1,9 @@
-import { TargetClass } from '../../internal'
+import { Decorator, TargetCtor, TargetProto } from '../../internal'
 import { createMethodDecorator } from '../../ApiParameterization'
 import { createClassDecorator } from '../../ApiParameterization'
 
-export const createRequestAndResponseTypes = (
-  type: string,
-  decorator: Function,
-  request: boolean = true,
-  response: boolean = true
-) => {
-  return function (target: object | TargetClass, method?: string, descriptor?: PropertyDescriptor) {
+export const createRequestAndResponseTypes = (type: string, decorator: Decorator, request = true, response = true) => {
+  return function (target: TargetProto | TargetCtor, method?: string, descriptor?: PropertyDescriptor) {
     if (method && descriptor) {
       return createMethodDecorator(decorator, ctx => {
         if (request) {
@@ -29,6 +24,6 @@ export const createRequestAndResponseTypes = (
       if (response) {
         ctx.defaults.responseType = type
       }
-    })(target as TargetClass)
+    })(target as TargetCtor)
   }
 }

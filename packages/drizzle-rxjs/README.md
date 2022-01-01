@@ -4,44 +4,35 @@
 
 ## Installation
 
-The main package, [Drizzle-Http](https://www.npmjs.com/package/drizzle-http), already contains this module.  
-If you are installing each package individually, make sure to install
-first [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) with: `npm i @drizzle-http/core`
-
-### NPM
+Make sure we have the core module [@Drizzle-Http/core](https://www.npmjs.com/package/@drizzle-http/core) installed.
 
 ```
+npm i @drizzle-http/core
 npm i @drizzle-http/rxjs-adapter
-```
-
-### Yarn
-
-```
-yarn add @drizzle-http/rxjs-adapter
 ```
 
 ## Usage
 
+After adding the `RxJsCallAdapterFactory` to Drizzle instance, decorate your class or methods with `@RxJs()`.  
+See the example below.
+
 ```typescript
+import { GET } from "@drizzle-http/core";
+import { Param } from "@drizzle-http/core";
+import { RxJs } from "@drizzle-http/rxjs-adapter";
+import { DrizzleBuilder } from "@drizzle-http/core";
+import { RxJsCallAdapterFactory } from "@drizzle-http/rxjs-adapter";
+
+@RxJs()
 class API {
   @GET('/{id}/projects')
-  @RxJs()
-  getRx(@Path('id') id: string): Observable<TestResult<TestId>> {
-    return theTypes(Observable, TestResult)
-  }
+  projects(@Param('id') id: string): Observable<Project[]> { }
 }
 
-const api = DrizzleBuilder.newBuilder()
+const api = DrizzleBuilder
+  .newBuilder()
   .baseUrl(addr)
   .addCallAdapterFactories(new RxJsCallAdapterFactory(/* optional: you can pass another adapter factory */))
   .build()
   .create(API)
 ```
-
-There are 3 things you need to do in order to enable **RxJs** return type for you API calls:
-
-- Add **RxJsCallAdapterFactory** to your **Drizzle** instance.
-- Your method return type must be: **Observable\<V\>**. Import the Observable from RxJs.
-- Add: **return theTypes(Observable)** in the method body. This way, Drizzle knows the return handledType during the
-  setup and can set the **RxJsCallAdapter** for the request.  
-  If you don't want to use the **theTypes(..)** function, use the decorator **@RxJs()** on the method. It's the same.

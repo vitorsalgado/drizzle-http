@@ -1,4 +1,4 @@
-import { initDrizzleHttp } from '../DrizzleBuilder'
+import { newAPI } from '../DrizzleBuilder'
 import { QueryNameParameterHandlerFactory } from '../builtin'
 import { FormParameterHandlerFactory } from '../builtin'
 import { QueryParameterHandlerFactory } from '../builtin'
@@ -12,7 +12,7 @@ import { TestCallFactory } from './TestCallFactory'
 
 describe('Drizzle Builder', function () {
   it('should remove end back slash from url', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
     builder.baseUrl('http://www.test.com.br/')
     builder.callFactory(new TestCallFactory())
 
@@ -22,38 +22,38 @@ describe('Drizzle Builder', function () {
   })
 
   it('should not allow set call adapters with empty array', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
 
     expect(() => builder.addCallAdapterFactories()).toThrowError()
   })
 
   it('should not allow set request converters with empty array', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
 
     expect(() => builder.addRequestConverterFactories()).toThrowError()
   })
 
   it('should not allow set response converters with empty array', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
 
     expect(() => builder.addResponseConverterFactories()).toThrowError()
   })
 
   it('should not allow base url null or undefined', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
 
     expect(() => builder.build()).toThrowError()
   })
 
   it('should not allow call factory null or undefined', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
     builder.baseUrl('http://www.test.com.br/')
 
     expect(() => builder.build()).toThrowError()
   })
 
   it('should not allow empty parameter handlers', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
     builder.baseUrl('http://www.test.com.br/')
     builder.useDefaults(false)
 
@@ -61,7 +61,7 @@ describe('Drizzle Builder', function () {
   })
 
   it('should build with default values', function () {
-    const builder = initDrizzleHttp()
+    const builder = newAPI()
     builder.baseUrl('http://www.test.com.br/')
     builder.callFactory(new TestCallFactory())
 
@@ -81,6 +81,6 @@ describe('Drizzle Builder', function () {
   })
 
   it('should contain to string tag symbol', function () {
-    expect(initDrizzleHttp()[Symbol.toStringTag]).toEqual('DrizzleBuilder')
+    expect(newAPI()[Symbol.toStringTag]).toEqual('DrizzleBuilder')
   })
 })
