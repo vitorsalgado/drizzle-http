@@ -1,27 +1,28 @@
 #!/usr/bin/env node
 
-/* eslint-disable */
+import * as Fs from 'fs'
+import Path from 'path'
+import FsExt from 'fs-extra'
+import Pino from 'pino'
+import { globby } from 'globby'
+import { execSync as ExecSync } from 'child_process'
+import { program as Program } from 'commander'
 
-'use strict'
-
-const Path = require('path')
-const FsExt = require('fs-extra')
-const Pino = require('pino')
-const Globby = require('globby')
-const PkgMain = require('../package.json')
-const ExecSync = require('child_process').execSync
-const Program = require('commander').program
-
+const PkgMain = JSON.parse(Fs.readFileSync(Path.join(process.cwd(), 'package.json')).toString())
 const argv = process.argv
 if (argv.length <= 2) argv.push('--help')
 
 const Logger = Pino({
   level: 'info',
-  prettyPrint: {
-    colorize: true,
-    messageFormat: '{msg}',
-    translateTime: true,
-    ignore: 'hostname'
+  transport: {
+    target: 'pino-pretty',
+    worker: { autoEnd: true },
+    options: {
+      colorize: true,
+      messageFormat: '{msg}',
+      translateTime: true,
+      ignore: 'hostname'
+    }
   }
 })
 
@@ -33,7 +34,7 @@ Program.command('prepare')
     Logger.info('Version: ' + options.version)
 
     Logger.info('Building ...')
-    ExecSync('yarn build')
+    ExecSync('npm run build')
 
     Logger.info('Lerna Version ...')
     ExecSync(
@@ -41,7 +42,8 @@ Program.command('prepare')
     )
 
     Logger.info('Updating yarn.lock ...')
-    ExecSync('yarn')
+    ExecSync('npm i')
+    ExecSync('npm run bootstrap')
 
     Logger.info('Reading Lerna JSON ...')
     const lerna = FsExt.readJsonSync('./lerna.json')
@@ -63,11 +65,11 @@ Program.command('publish')
     Logger.info('--> Publishing Packages\n')
 
     const preid = getPreid()
-    const criteria = 'pkgs/**/package.json'
-    const pkgRefs = await Globby(criteria, {
+    const criteria = 'packages/**/package.json'
+    const pkgRefs = await globby(criteria, {
       cwd: process.cwd(),
       absolute: true,
-      ignore: ['**/node_modules/**', '**/out/**', '**/temp/**']
+      ignore: ['**/node_modules/**', '**/out/**', '**/dist/**', '**/temp/**']
     })
 
     Logger.info('Context:')

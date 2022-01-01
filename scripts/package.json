@@ -1,0 +1,9 @@
+{
+  "name": "drizzle-http-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Drizzle-HTTP support scripts",
+  "type": "module",
+  "author": "@vitorsalgado",
+  "license": "MIT"
+}

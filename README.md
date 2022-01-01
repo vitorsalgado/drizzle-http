@@ -3,7 +3,7 @@
 <p align='center'>
   <img src="docs/assets/drizzle.png" alt="Repository Logo" width='100px' height='100px' />
   <br />
-  <i>Create API clients with <strong>decorators</strong> with this vanilla Typescript library.</i>
+  <i>Create API Clients with **Decorators** for Typescript and Javascript.</i>
 </p>
 
 <p align='center'>
