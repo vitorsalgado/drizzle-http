@@ -23,6 +23,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
       fail-fast: true
+    defaults:
+      run:
+        working-directory: deno
     steps:
       - name: Checkout
         uses: actions/checkout@v2
