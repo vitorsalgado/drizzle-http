@@ -24,8 +24,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "workspace:^",
-    "@drizzle-http/undici": "workspace:^",
+    "@drizzle-http/core": "^2.2.0",
+    "@drizzle-http/undici": "^2.2.0",
     "@nestjs/common": "^8.2.4",
     "@nestjs/core": "^8.2.4",
     "@nestjs/platform-express": "^8.2.4",

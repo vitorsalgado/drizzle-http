@@ -56,6 +56,6 @@
     "deno"
   ],
   "devDependencies": {
-    "@drizzle-http/test-utils": "workspace:^"
+    "@drizzle-http/test-utils": "^2.2.0"
   }
 }

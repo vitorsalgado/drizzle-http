@@ -53,12 +53,12 @@
     "rest"
   ],
   "dependencies": {
-    "@drizzle-http/core": "workspace:^",
+    "@drizzle-http/core": "^2.2.0",
     "pino": "^7.6.2",
     "pino-pretty": "^7.3.0"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "workspace:^",
-    "@drizzle-http/undici": "workspace:^"
+    "@drizzle-http/test-utils": "^2.2.0",
+    "@drizzle-http/undici": "^2.2.0"
   }
 }

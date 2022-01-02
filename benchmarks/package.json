@@ -15,9 +15,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "workspace:^",
-    "@drizzle-http/opossum-circuit-breaker": "workspace:^",
-    "@drizzle-http/undici": "workspace:^",
+    "@drizzle-http/core": "^2.2.0",
+    "@drizzle-http/opossum-circuit-breaker": "^2.2.0",
+    "@drizzle-http/undici": "^2.2.0",
     "axios": "^0.24.0",
     "benchmark": "^2.1.4",
     "cronometro": "^1.0.2",

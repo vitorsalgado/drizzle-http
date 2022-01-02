@@ -54,10 +54,10 @@
     "typescript"
   ],
   "dependencies": {
-    "@drizzle-http/core": "workspace:^"
+    "@drizzle-http/core": "^2.2.0"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "workspace:^",
+    "@drizzle-http/test-utils": "^2.2.0",
     "@playwright/test": "^1.17.1"
   }
 }
