@@ -45,7 +45,7 @@ export class DefaultResponseHandler implements ResponseHandler {
       return response
     }
 
-    let body = null
+    let body: unknown = null
 
     if (this.convertErrorBody) {
       if (!response.bodyUsed) {

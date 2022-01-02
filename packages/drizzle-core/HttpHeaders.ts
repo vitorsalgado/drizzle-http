@@ -87,7 +87,7 @@ export class HttpHeaders implements Headers {
   // region Utils
 
   toString(): string {
-    const str = []
+    const str: string[] = []
 
     for (const [key, value] of this.entries()) {
       str.push(key + ': ' + value)
