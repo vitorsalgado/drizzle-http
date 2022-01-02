@@ -9,3 +9,12 @@ updates:
       include: scope
     open-pull-requests-limit: 5
     target-branch: main
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+      include: scope
+    open-pull-requests-limit: 5
+    target-branch: main
