@@ -50,6 +50,13 @@ jobs:
         run: |
           yarn --immutable
 
+      - name: Info
+        run: |
+          node -v
+          npm -v
+          yarn -v
+          yarn tsc -v
+
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -105,13 +112,6 @@ jobs:
       - name: Deps
         run: |
           yarn --immutable
-
-      - name: Info
-        run: |
-          node -v
-          npm -v
-          yarn -v
-          yarn tsc -v
 
       - name: Build
         run: |
