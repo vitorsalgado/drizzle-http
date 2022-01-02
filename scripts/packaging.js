@@ -96,7 +96,8 @@ Program.command('publish')
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
       FsExt.removeSync(Path.join(pkgPath, 'dist', 'tsconfig.build.tsbuildinfo'))
 
-      ExecSync(`npm publish --access public --tag=${preid}`, { cwd: pkgPath })
+      ExecSync(`yarn pack --out package.tgz`)
+      ExecSync(`npm publish package.tgz --access public --tag=${preid}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
       FsExt.copySync(Path.join(pkgPath, 'temp', 'package.json'), Path.join(pkgPath, 'package.json'))
