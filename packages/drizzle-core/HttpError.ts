@@ -3,11 +3,9 @@ import { HttpRequest } from './HttpRequest'
 import { HttpHeaders } from './HttpHeaders'
 
 interface Res<B = unknown, H = HttpHeaders> {
-  readonly ok: boolean
   readonly headers: H
   readonly status: number
   readonly statusText: string
-  readonly url: string
   readonly body: B
 }
 
@@ -25,13 +23,13 @@ export class HttpError<B = unknown> extends DrizzleError {
       message: this.message,
       name: this.name,
       code: this.code,
-      url: this.response.url,
+      url: this.request.url,
       status: this.response.status,
       stack: this.stack
     }
   }
 
   toString() {
-    return `HttpError{ url:${this.response.url}, status: ${this.response.status}, reason: ${this.message} }`
+    return `HttpError{ url:${this.request.url}, status: ${this.response.status}, reason: ${this.message} }`
   }
 }

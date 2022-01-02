@@ -53,18 +53,16 @@ export class DefaultResponseHandler implements ResponseHandler {
       }
     } else {
       if (!response.bodyUsed && response.body) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const _ of response?.body) {
-          // consuming error body ...
+        try {
+          body = await response.text()
+        } finally {
         }
       }
     }
 
     throw new HttpError(request, {
-      ok: response.ok,
       status: response.status,
       statusText: response.statusText,
-      url: response.url,
       headers: response.headers,
       body
     })

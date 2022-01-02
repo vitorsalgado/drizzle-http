@@ -15,9 +15,6 @@
   <a href="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml">
     <img src="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml/badge.svg" alt="Deno GitHub Action Status" />
   </a>
-  <a href="https://www.npmjs.com/settings/drizzle-http/packages">
-    <img src="https://img.shields.io/npm/v/@drizzle-http/core?logo=npm" alt="NPM Package" />
-  </a>
   <a href="https://deno.land/x/drizzle_http">
     <img src="https://img.shields.io/badge/available%20on-deno.land-lightgrey?logo=deno&labelColor=black" alt="Deno Package"/>
   </a>
@@ -155,6 +152,45 @@ const customer = await api.byId("100");
 | @Multipart()      | Create a multipart/form-data request                             | Class, Method |
 | @Part()           | Mark a parameter as a part of multipart/form-data request body   | Parameter     |
 | @BodyKey()        | Change the name of part in a multipart/form-data request         | Parameter     |
+
+### Defaults
+
+Default values that Drizzle starts with. All values can be overridden using
+decorators.
+
+- Timeout: **30 seconds**
+- Request Body Converter: **JSON**
+- Response Body Converter: **JSON**
+
+### Error Handling
+
+When methods are not decorated with `@RawResponse()`, Drizzle throws an
+`HttpError` with the following structure:
+
+```
+{
+  message: 'Request failed with status code: 400',
+  code: 'DZ_ERR_HTTP',
+  request: {
+    url: 'https://example.com/test,
+    method: 'GET',
+    headers: Headers,
+    body: ''
+  },
+  response: {
+    headers: Headers,
+    status: 400,
+    statusText: ''
+    body: 'error from server'
+  }
+}
+```
+
+When you want to parse the error response body to, for example a JSON object,
+use `@ParseErrorBody()`. By default, @ParseErrorBody() use the same response
+converter used by the success scenario. If you need a different converter for
+the error body, pass the name of the converter to the decorator. E.g.:
+`@ParseErrorBody(BuiltInConv.TEXT)`.
 
 ## Features
 

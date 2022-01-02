@@ -522,11 +522,10 @@ describe('Drizzle Http', () => {
   describe('when an HTTP error occurs', function () {
     describe('and response handler is default and not using the raw response return', function () {
       it('should throw an HttpError with request and response information', function () {
-        expect.assertions(2)
+        expect.assertions(1)
 
-        return api.notFound().catch((res: HttpError) => {
-          expect(res.response.ok).toBeFalsy()
-          expect(res.response.status).toEqual(404)
+        return api.notFound().catch((err: HttpError) => {
+          expect(err.response.status).toEqual(404)
         })
       })
     })

@@ -3,6 +3,7 @@ import {
   Body,
   ContentType,
   DELETE,
+  Field,
   FormUrlEncoded,
   GET,
   Param,
@@ -57,8 +58,18 @@ class RealApi {
 
   @POST('/form')
   @FormUrlEncoded()
-  form(@Body() payload: unknown): Promise<{ name: string }> {
+  form(@Body() payload: unknown): Promise<unknown> {
     return noop(payload)
+  }
+
+  @POST('/form')
+  @FormUrlEncoded()
+  formFields(
+    @Field('name') name: string,
+    @Field('age') age: number,
+    @Field('active') active: boolean
+  ): Promise<unknown> {
+    return noop(name, age, active)
   }
 
   @GET('/health')
@@ -73,9 +84,25 @@ class RealApi {
     return noop()
   }
 
+  @GET('/error')
+  nonParsedErrJson(): Promise<unknown> {
+    return noop()
+  }
+
   @POST('/error')
   @ParseErrorBody(BuiltInConv.TEXT)
   err(@Body() payload: unknown): Promise<unknown> {
+    return noop(payload)
+  }
+
+  @POST('/error/empty')
+  emptyErr(@Body() payload: unknown): Promise<unknown> {
+    return noop(payload)
+  }
+
+  @POST('/error/empty')
+  @ParseErrorBody(BuiltInConv.TEXT)
+  emptyParsedErr(@Body() payload: unknown): Promise<unknown> {
     return noop(payload)
   }
 }
@@ -111,7 +138,7 @@ describe('Given an API with JSON converter as default', function () {
           .send()
       })
       fastify.post('/form', (req, res) => {
-        res.send({ name: 'dev' })
+        res.send(req.body)
       })
       fastify.get('/health', (req, res) => {
         res.status(200).send('ok')
@@ -121,6 +148,12 @@ describe('Given an API with JSON converter as default', function () {
       })
       fastify.post('/error', (req, res) => {
         res.status(400).send('Fail')
+      })
+      fastify.post('/error/empty', (req, res) => {
+        res.status(400).send()
+      })
+      fastify.get('/error', (req, res) => {
+        res.status(400).send({ message: 'fail' })
       })
     })
 
@@ -142,10 +175,18 @@ describe('Given an API with JSON converter as default', function () {
     await drizzle.shutdown()
   })
 
-  describe('when posting form-url-encoded to a endpoint that returns a JSON', function () {
-    it('should return the parsed object', async function () {
-      const res = await api.form({ f1: 'field-1', f2: 'field-2' })
-      expect(res.name).toEqual('dev')
+  describe('when posting form-url-encoded', function () {
+    it('should send form body and return the json response from server', async function () {
+      const form = { f1: 'field-1', f2: 'field-2' }
+      const res = await api.form(form)
+
+      expect(res).toEqual(form)
+    })
+
+    it('should form using parameters decorated with @Field() converting then to string when needed', async function () {
+      const res = await api.formFields('dev', 33, true)
+
+      expect(res).toEqual({ name: 'dev', age: '33', active: 'true' })
     })
   })
 
@@ -219,6 +260,35 @@ describe('Given an API with JSON converter as default', function () {
           expect(err.response.status).toEqual(400)
           expect(err.response.body).toEqual('Fail')
         })
+      })
+
+      it('should return error empty body when server respond with no body and no converter is used', function () {
+        expect.assertions(2)
+
+        return api.emptyErr({ context: 'test' }).catch((err: HttpError) => {
+          expect(err.response.status).toEqual(400)
+          expect(err.response.body).toEqual('')
+        })
+      })
+    })
+
+    describe('and error response body is empty', function () {
+      it('should return response and parse with custom converter without errors', function () {
+        expect.assertions(2)
+
+        return api.emptyParsedErr({ context: 'test' }).catch((err: HttpError) => {
+          expect(err.response.status).toEqual(400)
+          expect(err.response.body).toEqual('')
+        })
+      })
+    })
+
+    it('should consume error response and set http error body', function () {
+      expect.assertions(2)
+
+      return api.nonParsedErrJson().catch((err: HttpError) => {
+        expect(err.response.status).toEqual(400)
+        expect(err.response.body).toEqual('{"message":"fail"}')
       })
     })
   })

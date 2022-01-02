@@ -184,9 +184,36 @@ const customer = await api.byId('100')
 
 Default values that Drizzle starts with. All values can be overridden using decorators.
 
-- Timeout: 30 seconds
-- Request Body Converter: JSON
-- Response Body Converter: JSON
+- Timeout: **30 seconds**
+- Request Body Converter: **JSON**
+- Response Body Converter: **JSON**
+
+### Error Handling
+
+When methods are not decorated with `@RawResponse()`, Drizzle throws an `HttpError` with the following structure:
+
+```
+{
+  message: 'Request failed with status code: 400',
+  code: 'DZ_ERR_HTTP',
+  request: {
+    url: 'https://example.com/test,
+    method: 'GET',
+    headers: Headers,
+    body: ''
+  },
+  response: {
+    headers: Headers,
+    status: 400,
+    statusText: ''
+    body: 'error from server'
+  }
+}
+```
+
+When you want to parse the error response body to, for example a JSON object, use `@ParseErrorBody()`. By default,
+@ParseErrorBody() use the same response converter used by the success scenario. If you need a different converter for
+the error body, pass the name of the converter to the decorator. E.g.: `@ParseErrorBody(BuiltInConv.TEXT)`.
 
 ## Features
 
