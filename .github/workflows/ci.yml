@@ -74,9 +74,12 @@ jobs:
       - name: Coverage
         uses: codecov/codecov-action@v2
         if: matrix.os == 'ubuntu-latest'
+        timeout-minutes: 5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+          files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
 
   release:
     runs-on: ubuntu-latest
