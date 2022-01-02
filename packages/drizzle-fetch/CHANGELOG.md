@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.2.0...v3.0.0) (2022-01-02)
+
+
+### Features
+
+* **deno:** improve Deno version and ci for Deno ([6a1c857](https://github.com/vitorsalgado/drizzle-http/commit/6a1c8577c785103a44d5e7124b3936ce940e8cbc))
+
+
+
+
+
 # [2.2.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.1.0...v2.2.0) (2021-06-14)
 
 ### Bug Fixes

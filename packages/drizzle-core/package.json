@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/core",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Drizzle-Http core module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -56,6 +56,6 @@
     "deno"
   ],
   "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0"
+    "@drizzle-http/test-utils": "^3.0.0"
   }
 }

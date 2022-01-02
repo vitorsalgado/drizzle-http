@@ -2866,9 +2866,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/benchmarks@workspace:benchmarks"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/opossum-circuit-breaker": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/opossum-circuit-breaker": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     axios: ^0.24.0
     benchmark: ^2.1.4
     cronometro: ^1.0.2
@@ -2883,18 +2883,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/clinic-test@workspace:internal/clinic"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     autocannon: ^7.5.1
     clinic: ^11.0.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/core@^2.2.0, @drizzle-http/core@workspace:packages/drizzle-core":
+"@drizzle-http/core@^3.0.0, @drizzle-http/core@workspace:packages/drizzle-core":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/core@workspace:packages/drizzle-core"
   dependencies:
-    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/test-utils": ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -2908,8 +2908,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.16.7
     "@babel/preset-env": ^7.16.7
     "@babel/runtime": ^7.16.7
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     "@rollup/plugin-babel": ^5.3.0
     babel-plugin-parameter-decorator: ^1.0.16
     babel-plugin-transform-decorators-legacy: ^1.3.5
@@ -2927,8 +2927,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.16.7
     "@babel/preset-env": ^7.16.7
     "@babel/runtime": ^7.16.7
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     babel-plugin-parameter-decorator: ^1.0.16
     babel-plugin-transform-decorators-legacy: ^1.3.5
   languageName: unknown
@@ -2938,8 +2938,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/example-nestjs@workspace:examples/nestjs"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     "@nestjs/cli": ^8.1.6
     "@nestjs/common": ^8.2.4
     "@nestjs/core": ^8.2.4
@@ -2973,10 +2973,10 @@ __metadata:
     "@babel/preset-env": ^7.16.7
     "@babel/preset-react": ^7.16.7
     "@babel/runtime": ^7.16.7
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/fetch": ^2.2.0
-    "@drizzle-http/logging-interceptor": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/fetch": ^3.0.0
+    "@drizzle-http/logging-interceptor": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     "@types/react": ^17.0.38
     "@types/react-dom": ^17.0.11
     "@types/react-router-dom": ^5.3.2
@@ -3003,29 +3003,29 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/example-typescript@workspace:examples/typescript"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/logging-interceptor": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/logging-interceptor": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/fetch@^2.2.0, @drizzle-http/fetch@workspace:packages/drizzle-fetch":
+"@drizzle-http/fetch@^3.0.0, @drizzle-http/fetch@workspace:packages/drizzle-fetch":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/fetch@workspace:packages/drizzle-fetch"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
     "@playwright/test": ^1.17.1
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/logging-interceptor@^2.2.0, @drizzle-http/logging-interceptor@workspace:packages/drizzle-logging-interceptor":
+"@drizzle-http/logging-interceptor@^3.0.0, @drizzle-http/logging-interceptor@workspace:packages/drizzle-logging-interceptor":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/logging-interceptor@workspace:packages/drizzle-logging-interceptor"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     pino: ^7.6.2
     pino-pretty: ^7.3.0
   languageName: unknown
@@ -3096,39 +3096,39 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/opossum-circuit-breaker@^2.2.0, @drizzle-http/opossum-circuit-breaker@workspace:packages/drizzle-opossum-circuit-breaker":
+"@drizzle-http/opossum-circuit-breaker@^3.0.0, @drizzle-http/opossum-circuit-breaker@workspace:packages/drizzle-opossum-circuit-breaker":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/opossum-circuit-breaker@workspace:packages/drizzle-opossum-circuit-breaker"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     opossum: ^6.2.1
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/response-mapper-adapter@^2.2.0, @drizzle-http/response-mapper-adapter@workspace:packages/drizzle-response-mapper":
+"@drizzle-http/response-mapper-adapter@^3.0.0, @drizzle-http/response-mapper-adapter@workspace:packages/drizzle-response-mapper":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/response-mapper-adapter@workspace:packages/drizzle-response-mapper"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/rxjs-adapter@^2.2.0, @drizzle-http/rxjs-adapter@workspace:packages/drizzle-rxjs":
+"@drizzle-http/rxjs-adapter@^3.0.0, @drizzle-http/rxjs-adapter@workspace:packages/drizzle-rxjs":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/rxjs-adapter@workspace:packages/drizzle-rxjs"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
     rxjs: ^7.5.1
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/test-utils@^2.2.0, @drizzle-http/test-utils@workspace:internal/test-utils":
+"@drizzle-http/test-utils@^3.0.0, @drizzle-http/test-utils@workspace:internal/test-utils":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/test-utils@workspace:internal/test-utils"
   dependencies:
@@ -3141,21 +3141,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@drizzle-http/test@workspace:test"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/logging-interceptor": ^2.2.0
-    "@drizzle-http/opossum-circuit-breaker": ^2.2.0
-    "@drizzle-http/response-mapper-adapter": ^2.2.0
-    "@drizzle-http/rxjs-adapter": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/logging-interceptor": ^3.0.0
+    "@drizzle-http/opossum-circuit-breaker": ^3.0.0
+    "@drizzle-http/response-mapper-adapter": ^3.0.0
+    "@drizzle-http/rxjs-adapter": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@drizzle-http/undici@^2.2.0, @drizzle-http/undici@workspace:packages/drizzle-undici":
+"@drizzle-http/undici@^3.0.0, @drizzle-http/undici@workspace:packages/drizzle-undici":
   version: 0.0.0-use.local
   resolution: "@drizzle-http/undici@workspace:packages/drizzle-undici"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
     undici: ^4.12.1
   languageName: unknown
   linkType: soft
@@ -9572,13 +9572,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "drizzle-http@workspace:packages/drizzle-nodejs-all"
   dependencies:
-    "@drizzle-http/core": ^2.2.0
-    "@drizzle-http/logging-interceptor": ^2.2.0
-    "@drizzle-http/opossum-circuit-breaker": ^2.2.0
-    "@drizzle-http/response-mapper-adapter": ^2.2.0
-    "@drizzle-http/rxjs-adapter": ^2.2.0
-    "@drizzle-http/test-utils": ^2.2.0
-    "@drizzle-http/undici": ^2.2.0
+    "@drizzle-http/core": ^3.0.0
+    "@drizzle-http/logging-interceptor": ^3.0.0
+    "@drizzle-http/opossum-circuit-breaker": ^3.0.0
+    "@drizzle-http/response-mapper-adapter": ^3.0.0
+    "@drizzle-http/rxjs-adapter": ^3.0.0
+    "@drizzle-http/test-utils": ^3.0.0
+    "@drizzle-http/undici": ^3.0.0
   languageName: unknown
   linkType: soft
 

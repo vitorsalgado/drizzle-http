@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/benchmarks",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Benchmarks",
   "private": true,
   "main": "./dist/index.js",
@@ -15,9 +15,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
-    "@drizzle-http/opossum-circuit-breaker": "^2.2.0",
-    "@drizzle-http/undici": "^2.2.0",
+    "@drizzle-http/core": "^3.0.0",
+    "@drizzle-http/opossum-circuit-breaker": "^3.0.0",
+    "@drizzle-http/undici": "^3.0.0",
     "axios": "^0.24.0",
     "benchmark": "^2.1.4",
     "cronometro": "^1.0.2",

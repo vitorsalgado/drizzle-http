@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/opossum-circuit-breaker",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Opossum implementation for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -54,11 +54,11 @@
     "decorators"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
+    "@drizzle-http/core": "^3.0.0",
     "opossum": "^6.2.1"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "^2.2.0",
-    "@drizzle-http/undici": "^2.2.0"
+    "@drizzle-http/test-utils": "^3.0.0",
+    "@drizzle-http/undici": "^3.0.0"
   }
 }

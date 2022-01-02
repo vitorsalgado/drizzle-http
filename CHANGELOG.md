@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.2.0...v3.0.0) (2022-01-02)
+
+
+* refactor!: upgrade pino + change interceptor public interface ([6a8c1fe](https://github.com/vitorsalgado/drizzle-http/commit/6a8c1fe6aef5d97741dce8d52d918f200b216826))
+* feat!: remove HttpBody and Response classes ([257f6f1](https://github.com/vitorsalgado/drizzle-http/commit/257f6f128c1ce1dcbb700f91fa09a2ef12dc3c3a))
+* refactor!: remove Request class ([81310de](https://github.com/vitorsalgado/drizzle-http/commit/81310deb307e50864ffed05068fc4c59dc0e48fe))
+
+
+### Features
+
+* add circuit breaker adapter + major refactor of core components ([f0dbbbc](https://github.com/vitorsalgado/drizzle-http/commit/f0dbbbc26bc428bf1d42d222c2ded4ac4411a9f6))
+* add Deno version ([9dfee28](https://github.com/vitorsalgado/drizzle-http/commit/9dfee2874ce94642be704d8b998587ccd188536e))
+* add more http methods to HttpMethod constants ([ce7fd6e](https://github.com/vitorsalgado/drizzle-http/commit/ce7fd6ee2f8d32272e65028ca975a5e5276c39af))
+* add response mapper adapter package ([469ca47](https://github.com/vitorsalgado/drizzle-http/commit/469ca479952c5aa71d02f8b085339ceb53fcde74))
+* add ResponseHandler + no longer returns error by default + simplify core components type system ([21740fa](https://github.com/vitorsalgado/drizzle-http/commit/21740fa533c8d2a0ca63c94fcef5e27fe01e5f00))
+* **circuit-breaker:** add possibility to combine adapters ([6b2ed71](https://github.com/vitorsalgado/drizzle-http/commit/6b2ed71f151c3123c68aa9a0e43f1dbab46de978))
+* **core:** add configurer function to builder ([88cf142](https://github.com/vitorsalgado/drizzle-http/commit/88cf142014b3e23383e7c8ff9a4044d85bb657f1))
+* **core:** add hasConfig to RequestFactory ([9fc2aa4](https://github.com/vitorsalgado/drizzle-http/commit/9fc2aa43118f8f20df326b862588b4aa013d1145))
+* **core:** add option to ignore response handler on request factory ([2c47836](https://github.com/vitorsalgado/drizzle-http/commit/2c478365061ac3ce8ceddc7522ba424f800d882f))
+* **core:** add retry interceptor ([0363ab7](https://github.com/vitorsalgado/drizzle-http/commit/0363ab78697c80fabb53ac2fc8a6a5ab7b7b6847))
+* **deno:** improve Deno version and ci for Deno ([6a1c857](https://github.com/vitorsalgado/drizzle-http/commit/6a1c8577c785103a44d5e7124b3936ce940e8cbc))
+* **example-nestjs:** add NestJS example ([e162c74](https://github.com/vitorsalgado/drizzle-http/commit/e162c74a70187ef3023cc04916cd5bfa4f9fe024))
+* **example-nestjs:** add NestJS example ([fc1f0f4](https://github.com/vitorsalgado/drizzle-http/commit/fc1f0f42c2c172b85fb628136cbd1999539c9556))
+* **examples:** add nodejs es modules example ([d8a5126](https://github.com/vitorsalgado/drizzle-http/commit/d8a5126404df6d49ea2baec6504bc8c0f6ad0d06))
+* **examples:** re-add javascript backend example ([077d5c0](https://github.com/vitorsalgado/drizzle-http/commit/077d5c02f7fb260b725564cfeefd7fec781559ea))
+* expose undici pool from call factory ([ec1b223](https://github.com/vitorsalgado/drizzle-http/commit/ec1b223dc43e5c956f6a27da8ec2782e7c003938))
+* **fetch:** use fetch only + simplify module + upgrade deps ([514631f](https://github.com/vitorsalgado/drizzle-http/commit/514631fdbb0cec31c9ed5b64199dca9ceca35f3f))
+* **logging:** add logging interceptor optimized for browser ([c745d73](https://github.com/vitorsalgado/drizzle-http/commit/c745d73489f1bfe0ef07b293a338f53885a34d9e))
+* **mapper:** add possibility to combine adapters ([5fc4d75](https://github.com/vitorsalgado/drizzle-http/commit/5fc4d757c03ac4b669527aabf238a4bf39689c92))
+* multipart + req and res identifiers + core components refactor ([ba53066](https://github.com/vitorsalgado/drizzle-http/commit/ba530663210eb0f06b8782de28aa1bb4a0cfd2d2))
+* request model arg parameter handler ([e138039](https://github.com/vitorsalgado/drizzle-http/commit/e138039f07b55c4370c2c61ee6eb2e300795476e))
+* request model args + refactor parameter handler components WIP ([1cba0f4](https://github.com/vitorsalgado/drizzle-http/commit/1cba0f4a1b2310e3f047e13904699adb8eb798f2))
+* use npm + improve test and lint configuration + upgrade deps ([4b27404](https://github.com/vitorsalgado/drizzle-http/commit/4b27404f723594ac1cdd3c70184dfacd5e2cee62))
+
+
+### BREAKING CHANGES
+
+* change the order of the parameters in the interceptor constructor
+* removed HttpBody and Response. Now using the simpler DzResponse. Clients must implement the methods to consume and parse response data.
+* remove Request class to use DzRequest which is simpler and just hold values. Clients should do all required validations and conversions.
+
+
+
+
+
 # [2.2.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.1.0...v2.2.0) (2021-06-14)
 
 

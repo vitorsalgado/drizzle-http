@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/test-utils",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Test utilities for Drizzle-Http",
   "private": true,
   "main": "dist/index.js",
