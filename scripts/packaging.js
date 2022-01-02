@@ -41,9 +41,8 @@ Program.command('prepare')
       `lerna version ${options.version} --conventional-commits --no-push --force-publish --no-git-tag-version --yes`
     )
 
-    Logger.info('Updating yarn.lock ...')
-    ExecSync('npm i')
-    ExecSync('npm run bootstrap')
+    Logger.info('Updating package-lock.json ...')
+    ExecSync('npm run bootstrap --hoist --ignore-prepublish --force-local')
 
     Logger.info('Reading Lerna JSON ...')
     const lerna = FsExt.readJsonSync('./lerna.json')

@@ -8,7 +8,7 @@
     "test:ci": "npm test -- --colors --coverage --ci",
     "test:failures": "npm test --onlyFailures",
     "prepare": "husky install",
-    "bootstrap": "lerna bootstrap --hoist && lerna link",
+    "bootstrap": "lerna bootstrap --hoist --ignore-prepublish && lerna link",
     "build": "lerna run build",
     "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint -- --fix",
