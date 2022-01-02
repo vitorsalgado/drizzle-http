@@ -105,6 +105,13 @@ jobs:
         run: |
           yarn --immutable
 
+      - name: Info
+        run: |
+          node -v
+          npm -v
+          yarn -v
+          yarn tsc -v
+
       - name: Build
         run: |
           yarn build
