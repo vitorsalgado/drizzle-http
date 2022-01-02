@@ -1,8 +1,13 @@
+__tests__
+coverage
+build
 temp
 out
 src
+dist/e2e
 tsconfig.json
-tsconfig.tsbuildinfo
+tsconfig.build.json
+*.tsbuildinfo
 *.log
 *.tgz
 *.spec.ts
@@ -11,3 +16,4 @@ tsconfig.tsbuildinfo
 .eslintrc.js
 webpack.config.js
 webpack.test.config.js
+.babelrc

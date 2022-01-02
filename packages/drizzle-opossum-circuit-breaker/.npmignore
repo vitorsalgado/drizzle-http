@@ -1,9 +1,13 @@
+__tests__
+coverage
 temp
 out
 src
 tsconfig.json
-tsconfig.tsbuildinfo
+tsconfig.build.json
+*.tsbuildinfo
 *.log
 *.tgz
 *.spec.ts
 *.spec.js
+.eslintignore

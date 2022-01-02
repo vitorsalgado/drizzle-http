@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import * as Fs from 'fs'
-import Path from 'path'
-import FsExt from 'fs-extra'
-import Pino from 'pino'
-import { globby } from 'globby'
 import { execSync as ExecSync } from 'child_process'
 import { program as Program } from 'commander'
+import * as Fs from 'fs'
+import FsExt from 'fs-extra'
+import { globby } from 'globby'
+import Path from 'path'
+import Pino from 'pino'
 
 const PkgMain = JSON.parse(Fs.readFileSync(Path.join(process.cwd(), 'package.json')).toString())
 const argv = process.argv
@@ -69,7 +69,7 @@ Program.command('publish')
     const pkgRefs = await globby(criteria, {
       cwd: process.cwd(),
       absolute: true,
-      ignore: ['**/node_modules/**', '**/out/**', '**/dist/**', '**/temp/**']
+      ignore: ['**/node_modules/**', '**/out/**', '**/temp/**']
     })
 
     Logger.info('Context:')
@@ -95,6 +95,7 @@ Program.command('publish')
       FsExt.mkdirpSync(temp)
       FsExt.copySync(Path.join(pkgPath, 'package.json'), Path.join(pkgPath, 'temp', 'package.json'))
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
+      FsExt.removeSync(Path.join(pkgPath, 'dist', 'tsconfig.build.tsbuildinfo'))
 
       ExecSync(`npm publish --access public --tag=${preid}`, { cwd: pkgPath })
 
