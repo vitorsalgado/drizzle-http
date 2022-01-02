@@ -17,8 +17,8 @@
     "clean": "yarn workspaces foreach exec rm -rf dist",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
     "postinstall": "husky install",
-    "packaging:prepare": "node scripts/packaging.js prepare",
-    "packaging:publish": "node scripts/packaging.js publish"
+    "release:prepare": "node scripts/packaging.js prepare",
+    "release:publish": "node scripts/packaging.js publish"
   },
   "engines": {
     "node": ">=16"

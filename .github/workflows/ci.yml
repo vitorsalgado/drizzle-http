@@ -114,7 +114,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          yarn packaging:publish
+          yarn release:publish
 
       - name: Latest Changelog
         run: |

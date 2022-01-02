@@ -26,20 +26,17 @@ const Logger = Pino({
   }
 })
 
-Program.command('prepare')
+Program.command('prepare <version>')
   .description('Prepare release')
-  .option('-v, --version <version>', 'Version')
-  .action(options => {
+  .action(version => {
     Logger.info('--> Preparing ...')
-    Logger.info('Version: ' + options.version)
+    Logger.info('Version: ' + version)
 
     Logger.info('Building ...')
     ExecSync('yarn build')
 
     Logger.info('Lerna Version ...')
-    ExecSync(
-      `lerna version ${options.version} --conventional-commits --no-push --force-publish --no-git-tag-version --yes`
-    )
+    ExecSync(`lerna version ${version} --conventional-commits --no-push --force-publish --no-git-tag-version --yes`)
 
     Logger.info('Updating yarn.json ...')
     ExecSync('yarn')
@@ -52,7 +49,7 @@ Program.command('prepare')
 
     Logger.info('Commit and Tagging ...')
     ExecSync('git add .')
-    ExecSync(`git commit -m "chore(release): publish v${newVersion}"`)
+    ExecSync(`git commit -m "chore(release): v${newVersion}"`)
     ExecSync(`git tag v${newVersion} -m v${newVersion}`)
 
     Logger.info('<-- Preparation Finished')
@@ -96,7 +93,7 @@ Program.command('publish')
       FsExt.writeJsonSync(Path.join(pkgPath, 'package.json'), rewritePkg(pkg, PkgMain), { spaces: 2 })
       FsExt.removeSync(Path.join(pkgPath, 'dist', 'tsconfig.build.tsbuildinfo'))
 
-      ExecSync(`yarn pack --out package.tgz`)
+      ExecSync(`yarn pack --out package.tgz`, { cwd: pkgPath })
       ExecSync(`npm publish package.tgz --access public --tag=${preid}`, { cwd: pkgPath })
 
       Logger.info('Removing temporary release files')
