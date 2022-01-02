@@ -53,7 +53,7 @@
     "undici",
     "node",
     "typescript",
-    "decorator",
+    "decorators",
     "easy",
     "annotations"
   ],

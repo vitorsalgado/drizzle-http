@@ -154,7 +154,7 @@ export class BrowserLoggingInterceptor implements Interceptor {
         if (error instanceof HttpError) {
           console.groupCollapsed(
             `<-- %c${error.response.status}${error.response.statusText ? ' ' + error.response.statusText : ''} ${
-              error.response.url
+              error.request.url
             }`,
             ...[Styles.Red]
           )

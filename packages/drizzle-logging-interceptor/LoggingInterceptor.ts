@@ -150,7 +150,7 @@ export class LoggingInterceptor implements Interceptor {
         if (error instanceof HttpError) {
           this.logger.error(
             `<-- ${error.response.status}${error.response.statusText ? ' ' + error.response.statusText : ''} ${
-              error.response.url
+              error.request.url
             }`
           )
 
