@@ -50,6 +50,10 @@
     "decorators"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0"
+    "@drizzle-http/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@drizzle-http/test-utils": "workspace:^",
+    "@drizzle-http/undici": "workspace:^"
   }
 }

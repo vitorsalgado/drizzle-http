@@ -49,7 +49,10 @@
     "rest"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
+    "@drizzle-http/core": "workspace:^",
     "undici": "^4.12.1"
+  },
+  "devDependencies": {
+    "@drizzle-http/test-utils": "workspace:^"
   }
 }

@@ -33,31 +33,35 @@ jobs:
         with:
           node-version: 16.x
 
-      - uses: actions/cache@v2
+      - name: Get Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Yarn Cache
+        uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn2-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            yarn2-
 
       - name: Deps
         run: |
-          npm i
-          npm run bootstrap
+          yarn --immutable
 
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
         run: |
-          npm run lint
-          npm run prettier:ci
+          yarn lint
+          yarn prettier:ci
 
       - name: Build
         run: |
-          npm run build
+          yarn build
 
       - name: Test
         run: |
-          npm run test:ci
+          yarn test:ci
 
       - name: Coverage
         uses: codecov/codecov-action@v2
@@ -85,27 +89,31 @@ jobs:
           node-version: 16.x
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: actions/cache@v2
+      - name: Get Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Yarn Cache
+        uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn2-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            yarn2-
 
       - name: Deps
         run: |
-          npm i
-          npm run bootstrap
+          yarn --immutable
 
       - name: Build
         run: |
-          npm run build
+          yarn build
 
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npm run packaging:publish
+          yarn packaging:publish
 
       - name: Latest Changelog
         run: |

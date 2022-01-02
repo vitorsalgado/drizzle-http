@@ -123,10 +123,8 @@ typings/
 .tasks/
 .nvmrc
 .npmrc
-.yarn/
 temp/
-yarn.lock
-.yarnrc.yml
+package-lock.json
 
 # Dist
 dist/

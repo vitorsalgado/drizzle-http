@@ -54,5 +54,8 @@
     "easy",
     "annotations",
     "deno"
-  ]
+  ],
+  "devDependencies": {
+    "@drizzle-http/test-utils": "workspace:^"
+  }
 }

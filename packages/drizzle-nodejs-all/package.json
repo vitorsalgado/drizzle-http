@@ -53,11 +53,14 @@
     "retrofit"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^2.2.0",
-    "@drizzle-http/logging-interceptor": "^2.2.0",
-    "@drizzle-http/opossum-circuit-breaker": "^2.2.0",
-    "@drizzle-http/response-mapper-adapter": "^2.2.0",
-    "@drizzle-http/rxjs-adapter": "^2.2.0",
-    "@drizzle-http/undici": "^2.2.0"
+    "@drizzle-http/core": "workspace:^",
+    "@drizzle-http/logging-interceptor": "workspace:^",
+    "@drizzle-http/opossum-circuit-breaker": "workspace:^",
+    "@drizzle-http/response-mapper-adapter": "workspace:^",
+    "@drizzle-http/rxjs-adapter": "workspace:^",
+    "@drizzle-http/undici": "workspace:^"
+  },
+  "devDependencies": {
+    "@drizzle-http/test-utils": "workspace:^"
   }
 }
