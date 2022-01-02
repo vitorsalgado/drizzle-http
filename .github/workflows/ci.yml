@@ -97,6 +97,10 @@ jobs:
           npm i
           npm run bootstrap
 
+      - name: Build
+        run: |
+          npm run build
+
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
