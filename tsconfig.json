@@ -3,9 +3,8 @@
     "outDir": "dist",
     "baseUrl": ".",
 
-    "lib": ["esnext.asynciterable", "es2018.promise", "DOM", "DOM.Iterable"],
     "module": "CommonJS",
-    "target": "ES2018",
+    "target": "ESNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
