@@ -1,6 +1,3 @@
-# Dev Environment Utilities
-# ---
-
 # Help
 # ---
 .DEFAULT_GOAL := help
@@ -26,4 +23,4 @@ lint: # Run Deno lint in all files
 
 .PHONY: bundle
 bundle: # Generate Javascript bundle
-	@deno bundle mod.ts drizzle.bundle.js
+	@deno bundle --import-map=import_map.json --config=deno.json mod.ts drizzle.bundle.js
