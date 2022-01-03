@@ -126,7 +126,8 @@ const rewritePkg = (pkg, mainPkg) => {
     'main',
     'types',
     'exports',
-    'bin'
+    'bin',
+    'files'
   ]
 
   fieldsToKeep.forEach(field => {
