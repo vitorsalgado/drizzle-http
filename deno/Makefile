@@ -10,7 +10,7 @@ help:
 
 .PHONY: test
 test: # Run Deno tests
-	@deno test --import-map=import_map.json --unstable --allow-net --allow-env --allow-read
+	@deno test --import-map=import_map.json --config=deno.test.json --unstable --allow-net --allow-env --allow-read
 
 .PHONY: fmt
 fmt: # Run Deno fmt to format all source code
