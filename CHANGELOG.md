@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v3.0.0...v3.1.0) (2022-01-03)
+
+
+### Bug Fixes
+
+* add missing libs to packaging script ([489a997](https://github.com/vitorsalgado/drizzle-http/commit/489a99777a3efb1e7ac22d9326baba21e28029ae))
+
+
+### Features
+
+* adjust exported modules ([f7f9cda](https://github.com/vitorsalgado/drizzle-http/commit/f7f9cdac17fa3fc0c25e5a2308562ecc5d15c8b2))
+* **deno:** add fetch module to entrypoint + change decorators index.ts to mod.ts ([b78f8eb](https://github.com/vitorsalgado/drizzle-http/commit/b78f8ebf3123520ab75bed71ef886295cf8371f4))
+* **deno:** add useFetch utility function ([4f13aa3](https://github.com/vitorsalgado/drizzle-http/commit/4f13aa37bd772e951d1bed9b35e5b41b674173d4))
+* **fetch:** add useFetch utility function + remove libs from tsconfig.json ([75dccc9](https://github.com/vitorsalgado/drizzle-http/commit/75dccc91971c0c55afa3bb543fd475a711cc95c7))
+* **fetch:** export multipart components ([40b904d](https://github.com/vitorsalgado/drizzle-http/commit/40b904d61759abae0d1b0b089bf5e04b30388980))
+
+
+
+
+
 # [3.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.2.0...v3.0.0) (2022-01-02)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v3.0.0...v3.1.0) (2022-01-03)
+
+
+### Features
+
+* **fetch:** add useFetch utility function + remove libs from tsconfig.json ([75dccc9](https://github.com/vitorsalgado/drizzle-http/commit/75dccc91971c0c55afa3bb543fd475a711cc95c7))
+* **fetch:** export multipart components ([40b904d](https://github.com/vitorsalgado/drizzle-http/commit/40b904d61759abae0d1b0b089bf5e04b30388980))
+
+
+
+
+
 # [3.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v2.2.0...v3.0.0) (2022-01-02)
 
 

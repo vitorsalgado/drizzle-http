@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/test",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Testing All Components Integrated",
   "private": true,
   "scripts": {
@@ -12,11 +12,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@drizzle-http/core": "^3.0.0",
-    "@drizzle-http/logging-interceptor": "^3.0.0",
-    "@drizzle-http/opossum-circuit-breaker": "^3.0.0",
-    "@drizzle-http/response-mapper-adapter": "^3.0.0",
-    "@drizzle-http/rxjs-adapter": "^3.0.0",
-    "@drizzle-http/undici": "^3.0.0"
+    "@drizzle-http/core": "^3.1.0",
+    "@drizzle-http/logging-interceptor": "^3.1.0",
+    "@drizzle-http/opossum-circuit-breaker": "^3.1.0",
+    "@drizzle-http/response-mapper-adapter": "^3.1.0",
+    "@drizzle-http/rxjs-adapter": "^3.1.0",
+    "@drizzle-http/undici": "^3.1.0"
   }
 }

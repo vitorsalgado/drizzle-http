@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/example-javascript-modules",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Javascript example",
   "type": "module",
   "scripts": {
@@ -15,8 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.16.7",
-    "@drizzle-http/core": "^3.0.0",
-    "@drizzle-http/undici": "^3.0.0"
+    "@drizzle-http/core": "^3.1.0",
+    "@drizzle-http/undici": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",

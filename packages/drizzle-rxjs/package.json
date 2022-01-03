@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/rxjs-adapter",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "RxJs call adapter for Drizzle-HTTP",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -52,11 +52,11 @@
     "decorators"
   ],
   "dependencies": {
-    "@drizzle-http/core": "^3.0.0",
+    "@drizzle-http/core": "^3.1.0",
     "rxjs": "^7.5.1"
   },
   "devDependencies": {
-    "@drizzle-http/test-utils": "^3.0.0",
-    "@drizzle-http/undici": "^3.0.0"
+    "@drizzle-http/test-utils": "^3.1.0",
+    "@drizzle-http/undici": "^3.1.0"
   }
 }
