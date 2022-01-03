@@ -206,12 +206,20 @@ as Fetch. In this case, http errors will be not rejected.
 
 ### Multi Part
 
-To make a `multipart/form-data` request, decorate your method with
-`@Multipart()`.\
-Use the decorator `@Part()` to mark a parameter as an entry in a FormData
-object.\
-You can also send a `@Body()` parameter with a `File`, `File[]`, `FormData` or
-an `HTML Form`.
+`multipart/form-data` requests are only available on browsers.\
+To enable it, add the following components to an api builder instance:
+
+```typescript
+newAPI()
+  .addParameterHandlerFactory(new MultipartParameterHandler())
+  .addRequestConverterFactories(new MultipartRequestBodyConverterFactory());
+//// Other configurations ...
+```
+
+Now, to make a `multipart/form-data` request, decorate your method with
+`@Multipart()`. Use the decorator `@Part()` to mark a parameter as an entry in a
+FormData object. You can also send a `@Body()` parameter with a `File`,
+`File[]`, `FormData` or an `HTML Form`.
 
 ### Interceptors
 

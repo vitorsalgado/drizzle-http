@@ -24,7 +24,8 @@ class IllegalMultipartBodyError extends DrizzleError {
 class MultipartRequestBodyConverter implements RequestBodyConverter<unknown> {
   static INSTANCE = new MultipartRequestBodyConverter();
 
-  constructor(private readonly name?: string) {}
+  constructor(private readonly name?: string) {
+  }
 
   convert(
     requestFactory: RequestFactory,
