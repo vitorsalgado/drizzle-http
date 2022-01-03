@@ -2,11 +2,9 @@ import { DrizzleError } from "./internal/mod.ts";
 import { HttpRequest } from "./HttpRequest.ts";
 
 interface Res<B = unknown> {
-  readonly ok: boolean;
   readonly headers: Headers;
   readonly status: number;
   readonly statusText: string;
-  readonly url: string;
   readonly body: B;
 }
 
@@ -17,9 +15,8 @@ export class HttpError<B = unknown> extends DrizzleError {
   ) {
     super(`Request failed with status code: ${response.status}`, "DZ_ERR_HTTP");
 
-    Error.captureStackTrace(this, HttpError);
-
     this.name = "DzHttpError";
+    this.stack = new Error().stack;
   }
 
   toJSON() {
@@ -27,13 +24,13 @@ export class HttpError<B = unknown> extends DrizzleError {
       message: this.message,
       name: this.name,
       code: this.code,
-      url: this.response.url,
+      url: this.request.url,
       status: this.response.status,
       stack: this.stack,
     };
   }
 
   toString() {
-    return `HttpError{ url:${this.response.url}, status: ${this.response.status}, reason: ${this.message} }`;
+    return `HttpError{ url:${this.request.url}, status: ${this.response.status}, reason: ${this.message} }`;
   }
 }

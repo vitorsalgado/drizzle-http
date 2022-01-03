@@ -1,9 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { getQuery } from "https://deno.land/x/oak@v10.1.0/helpers.ts";
 
-const port: number = Deno.env.get("DENO_TEST_PORT")
-  ? parseInt(Deno.env.get("DENO_TEST_PORT") ?? "")
-  : 3000;
+const port = 3000;
 const router = new Router();
 const app = new Application();
 const controller = new AbortController();

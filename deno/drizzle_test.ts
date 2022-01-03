@@ -18,12 +18,8 @@ import { noop } from "./noop.ts";
 import { BuiltInConv, RawResponse } from "./builtin/mod.ts";
 import { DrizzleBuilder } from "./DrizzleBuilder.ts";
 import { DenoCallFactory } from "./fetch/mod.ts";
-import {
-  assertArrayIncludes,
-  assertEquals,
-} from "https://deno.land/std@0.85.0/testing/asserts.ts";
-import { delay } from "https://deno.land/std@0.85.0/async/delay.ts";
 import { HttpError } from "./HttpError.ts";
+import { assertArrayIncludes, assertEquals, delay } from "./test_deps.ts";
 
 interface Customer {
   id: number;

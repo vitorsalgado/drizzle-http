@@ -58,7 +58,7 @@ export class DefaultResponseHandler implements ResponseHandler {
       return response;
     }
 
-    let body = null;
+    let body: unknown = null;
 
     if (this.convertErrorBody) {
       if (!response.bodyUsed) {
@@ -69,17 +69,19 @@ export class DefaultResponseHandler implements ResponseHandler {
         !response.bodyUsed && response.body &&
         response.body instanceof ReadableStream
       ) {
-        for await (const _ of response.body) {
-          // consuming error body ...
+        if (!response.bodyUsed && response.body) {
+          try {
+            body = await response.text();
+          } finally {
+            // no need to catch error here
+          }
         }
       }
     }
 
     throw new HttpError(request, {
-      ok: response.ok,
       status: response.status,
       statusText: response.statusText,
-      url: response.url,
       headers: response.headers,
       body,
     });

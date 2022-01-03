@@ -10,8 +10,7 @@ export class InvalidMethodConfigError extends DrizzleError {
       "DZ_ERR_INVALID_REQ_METHOD_CONFIG",
     );
 
-    Error.captureStackTrace(this, InvalidMethodConfigError);
-
     this.name = "InvalidRequestMethodConfigurationError";
+    this.stack = new Error().stack;
   }
 }
