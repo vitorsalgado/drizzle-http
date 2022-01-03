@@ -71,6 +71,12 @@ jobs:
         run: |
           yarn test:ci
 
+      - name: Browser Test
+        working-directory: packages/drizzle-fetch
+        run: |
+          yarn test:e2e:prepare
+          yarn test:e2e
+
   release:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
