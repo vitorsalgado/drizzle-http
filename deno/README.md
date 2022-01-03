@@ -1,7 +1,7 @@
 <h1 align='center'>Drizzle HTTP &middot; Deno</h1>
 
 <p align='center'>
-  <img src="../docs/assets/drizzle.png" alt="Repository Logo" width='100px' height='100px' />
+  <img src="./logo.png" alt="Repository Logo" width='100px' height='100px' />
   <br />
   <i>Create API Clients with <strong>Decorators</strong> for Typescript and Javascript.</i>
 </p>
@@ -17,6 +17,9 @@
   </a>
   <a href="https://deno.land/x/drizzle_http">
     <img src="https://img.shields.io/badge/available%20on-deno.land-lightgrey?logo=deno&labelColor=black" alt="Deno Package"/>
+  </a>
+  <a href="https://doc.deno.land/https://deno.land/x/drizzle_http@v3.1.0/mod.ts">
+    <img src="https://doc.deno.land/badge.svg" alt="Deno Doc"/>
   </a>
   <a href="https://conventionalcommits.org">
     <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg?logo=git" alt="Conventional Commits"/>
