@@ -17,35 +17,36 @@ npm i @drizzle-http/fetch
 ### Typescript
 
 ```typescript
-import { FetchCallFactory } from "@drizzle-http/fetch";
-import { CORS } from "@drizzle-http/fetch";
 import { GET } from "@drizzle-http/core";
-import { DrizzleBuilder } from "@drizzle-http/core";
 import { RawResponse } from "@drizzle-http/core";
 import { Multipart } from "@drizzle-http/core";
 import { POST } from "@drizzle-http/core";
 import { Part } from "@drizzle-http/core";
+import { newAPI } from ".@drizzle-http/core";
+import { useFetch } from "@drizzle-http/fetch";
+import { CORS } from "@drizzle-http/fetch";
 
 @CORS()
 class API {
   @GET('/')
   @RawResponse()
-  raw(): Promise<Response> { }
+  raw (): Promise<Response> {
+  }
 
   @GET('/customer')
-  customers(): Promise<Customer[]> { }
+  customers (): Promise<Customer[]> {
+  }
 
   @POST('/')
   @Multipart()
-  send(@Part() desc: string, @Part() file: File): Promise<Response> { }
+  send (@Part() desc: string, @Part() file: File): Promise<Response> {
+  }
 }
 
-const api = DrizzleBuilder
-  .newBuilder()
+const api = newAPI()
   .baseUrl(addr)
-  .callFactory(new FetchCallFactory())
-  .build()
-  .create(API)
+  .configurer(useFetch())
+  .createAPI(API)
 ```
 
 ## Fetch Specific Decorators

@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { DrizzleBuilder, GET, HttpHeaders, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
-import { MultipartRequestBodyConverterFactory } from '../MultipartRequestBodyConverter'
-import { PartParameterHandlerFactory } from '../MultipartParameterHandler'
-import { FetchCallFactory } from '../FetchCallFactory'
+import { GET, HttpHeaders, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
 import { CORS, KeepAlive } from '../decorators'
+import { useFetch } from '../useFetch'
 
 @KeepAlive(true)
 @CORS()
@@ -18,13 +16,7 @@ class TestAPI {
 }
 
 const url = 'https://example.com'
-const api = DrizzleBuilder.newBuilder()
-  .baseUrl(url)
-  .callFactory(FetchCallFactory.DEFAULT)
-  .addParameterHandlerFactory(new PartParameterHandlerFactory())
-  .addRequestConverterFactories(new MultipartRequestBodyConverterFactory())
-  .build()
-  .create(TestAPI)
+const api = newAPI().baseUrl(url).configurer(useFetch()).build().create(TestAPI)
 
 const makeUrl = (url: string, path: string) => url + path
 

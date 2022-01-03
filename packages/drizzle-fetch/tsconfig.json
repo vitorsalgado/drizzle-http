@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "lib": ["dom", "dom.iterable"]
+    "outDir": "./dist"
   },
   "references": [
     { "path": "../drizzle-core", "prepend": false },
