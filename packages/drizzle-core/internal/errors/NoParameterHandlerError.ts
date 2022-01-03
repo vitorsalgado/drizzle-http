@@ -7,7 +7,9 @@ export class NoParameterHandlerError extends DrizzleError {
       'DZ_ERR_NO_PARAMETER_HANDLER_FOR_TYPE'
     )
 
-    Error.captureStackTrace(this, NoParameterHandlerError)
+    if ('captureStackTrace' in Error) {
+      Error.captureStackTrace(this, NoParameterHandlerError)
+    }
 
     this.name = 'NoParameterHandlerFoundForType'
   }

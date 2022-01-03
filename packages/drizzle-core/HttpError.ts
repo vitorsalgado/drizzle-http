@@ -13,7 +13,9 @@ export class HttpError<B = unknown> extends DrizzleError {
   constructor(public readonly request: HttpRequest, public readonly response: Res<B>) {
     super(`Request failed with status code: ${response.status}`, 'DZ_ERR_HTTP')
 
-    Error.captureStackTrace(this, HttpError)
+    if ('captureStackTrace' in Error) {
+      Error.captureStackTrace(this, HttpError)
+    }
 
     this.name = 'DzHttpError'
   }
