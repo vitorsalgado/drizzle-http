@@ -12,7 +12,7 @@ import {
   Redirect,
   Referrer,
   ReferrerPolicy,
-} from "./decorators/index.ts";
+} from "./decorators/mod.ts";
 
 export class DenoCallFactory implements CallFactory {
   static DEFAULT = new DenoCallFactory({});

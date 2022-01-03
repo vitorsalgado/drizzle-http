@@ -5,6 +5,7 @@ export { BuiltIn, Internals };
 
 export * from "./builtin/mod.ts";
 export * from "./decorators/mod.ts";
+export * from "./fetch/mod.ts";
 
 export * from "./BodyType.ts";
 export * from "./Call.ts";
