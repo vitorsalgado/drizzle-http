@@ -84,7 +84,7 @@ class CustomerAPI {
 
 const api = newAPI()
   .baseUrl("https://example.com")
-  .callFactory(new DenoCallFactory())
+  .configurer(useFetch())
   .createAPI(CustomerAPI);
 
 const customer = await api.byId("100");

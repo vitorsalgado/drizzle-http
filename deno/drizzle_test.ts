@@ -16,8 +16,8 @@ import {
 import { MediaTypes } from "./MediaTypes.ts";
 import { noop } from "./noop.ts";
 import { BuiltInConv, RawResponse } from "./builtin/mod.ts";
-import { DrizzleBuilder } from "./DrizzleBuilder.ts";
-import { DenoCallFactory } from "./fetch/mod.ts";
+import { newAPI } from "./DrizzleBuilder.ts";
+import { useFetch } from "./fetch/mod.ts";
 import { HttpError } from "./HttpError.ts";
 import { assertArrayIncludes, assertEquals, delay } from "./test_deps.ts";
 
@@ -91,9 +91,9 @@ const isCI = Deno.env.get("CI") === "true";
 const port: number = Deno.env.get("DENO_TEST_PORT")
   ? parseInt(Deno.env.get("DENO_TEST_PORT") ?? "")
   : 3000;
-const api: TestAPI = DrizzleBuilder.newBuilder()
+const api: TestAPI = newAPI()
   .baseUrl(`http://localhost:${port}`)
-  .callFactory(new DenoCallFactory())
+  .configurer(useFetch())
   .addInterceptor((chain) => {
     chain.request().headers.append("x-ctx", "deno");
     return chain.proceed(chain.request());
