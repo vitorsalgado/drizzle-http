@@ -62,10 +62,12 @@ class CustomerAPI {
   }
 
   @POST()
-  add(@Body() customer: Customer): Promise<HttpResponse> {
+  @RawResponse()
+  add(@Body() customer: Customer): Promise<Response> {
   }
 
   @PUT("/{id}")
+  @RawResponse()
   update(
     @Param("id") id: string,
     @Body() customer: Customer,
@@ -73,11 +75,13 @@ class CustomerAPI {
   }
 
   @DELETE("/{id}")
-  remove(@Param("id") id: string): Promise<HttpResponse> {
+  @RawResponse()
+  remove(@Param("id") id: string): Promise<Response> {
   }
 
   @POST("/{id}/docs")
   @Multipart()
+  @RawResponse()
   sendDoc(@Part() desc: string, @Part() doc: File): Promise<Response> {
   }
 }

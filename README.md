@@ -94,6 +94,7 @@ import { HeaderMap } from "@drizzle-http/core";
 import { UndiciCallFactory } from "@drizzle-http/undici";
 import { ContentType } from "@drizzle-http/core";
 import { MediaTypes } from "@drizzle-http/core";
+import { RawResponse } from "./RawResponse";
 
 @Timeout(15e30)
 @Path('/customers')
@@ -110,14 +111,17 @@ class CustomerAPI {
   }
 
   @POST()
+  @RawResponse()
   add (@Body() customer: Customer): Promise<HttpResponse> {
   }
 
   @PUT('/{id}')
+  @RawResponse()
   update (@Param('id') id: string, @Body() customer: Customer): Promise<HttpResponse> {
   }
 
   @DELETE('/{id}')
+  @RawResponse()
   remove (@Param('id') id: string): Promise<HttpResponse> {
   }
 }
@@ -125,8 +129,7 @@ class CustomerAPI {
 const api = newAPI()
   .baseUrl('https://example.com')
   .callFactory(new UndiciCallFactory())
-  .build()
-  .create(CustomerAPI)
+  .createAPI(CustomerAPI)
 
 const customer = await api.byId('100')
 ```
@@ -338,6 +341,7 @@ class CustomerAPI {
 
   @POST()
   @ParseErrorBody()
+  @RawResponse()
   add (@Body() customer: Customer): Promise<HttpResponse> {
     return noop(customer)
   }
