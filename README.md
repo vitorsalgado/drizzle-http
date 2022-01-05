@@ -94,7 +94,7 @@ import { HeaderMap } from "@drizzle-http/core";
 import { UndiciCallFactory } from "@drizzle-http/undici";
 import { ContentType } from "@drizzle-http/core";
 import { MediaTypes } from "@drizzle-http/core";
-import { RawResponse } from "./RawResponse";
+import { RawResponse } from "@drizzle-http/core";
 
 @Timeout(15e30)
 @Path('/customers')

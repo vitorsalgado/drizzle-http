@@ -10,11 +10,11 @@ on:
       - '*'
     paths-ignore:
       - 'docs/**'
-      - '*.md'
+      - '**.md'
   pull_request:
     paths-ignore:
       - 'docs/**'
-      - '*.md'
+      - '**.md'
 
 jobs:
   build:
