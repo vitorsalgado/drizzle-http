@@ -39,6 +39,7 @@ class API {
 
   @POST('/')
   @Multipart()
+  @RawResponse()
   send (@Part() desc: string, @Part() file: File): Promise<Response> {
   }
 }

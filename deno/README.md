@@ -71,7 +71,7 @@ class CustomerAPI {
   update(
     @Param("id") id: string,
     @Body() customer: Customer,
-  ): Promise<HttpResponse> {
+  ): Promise<Response> {
   }
 
   @DELETE("/{id}")
