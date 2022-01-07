@@ -1,6 +1,3 @@
-# Dev Environment Utilities
-# ---
-
 # Help
 # ---
 .DEFAULT_GOAL := help
