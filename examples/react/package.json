@@ -41,7 +41,7 @@
     "babel-preset-react-app": "^10.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^7.0.0",
-    "dotenv": "^14.0.0",
+    "dotenv": "^15.0.0",
     "html-webpack-plugin": "^5.5.0",
     "joi": "^17.5.0",
     "pm2": "^5.1.2",

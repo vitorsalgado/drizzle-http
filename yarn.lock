@@ -2077,7 +2077,7 @@ __metadata:
     babel-preset-react-app: ^10.0.1
     clean-webpack-plugin: ^4.0.0
     concurrently: ^7.0.0
-    dotenv: ^14.0.0
+    dotenv: ^15.0.0
     html-webpack-plugin: ^5.5.0
     joi: ^17.5.0
     pm2: ^5.1.2
@@ -2156,7 +2156,7 @@ __metadata:
     codecov: ^3.8.3
     commander: ^8.3.0
     concurrently: ^7.0.0
-    dotenv: ^14.0.0
+    dotenv: ^15.0.0
     eslint: ^8.6.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.25.4
@@ -8750,10 +8750,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^14.0.0":
-  version: 14.2.0
-  resolution: "dotenv@npm:14.2.0"
-  checksum: 85a0e44918ef49e64c278f757dab50a156b9a6ca67f708876fd81d265e575e35b67387fc681d910df99368d6c1edca66cd546edeb0f7db3b499cb876c999233e
+"dotenv@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "dotenv@npm:15.0.0"
+  checksum: be5d852b2ad1708780e7038481c0687ce4bb9edf354d439872511e966a5f28c083f296e1d1c182256d695bfdd67e320382eb3b0f2e9d83efa3615cd1757257ab
   languageName: node
   linkType: hard
 
