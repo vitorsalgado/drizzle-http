@@ -39,7 +39,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Yarn Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn2-${{ hashFiles('yarn.lock') }}
@@ -101,7 +101,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Yarn Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn2-${{ hashFiles('yarn.lock') }}
