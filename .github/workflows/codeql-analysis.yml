@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: CodeQL Init
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           languages: javascript
           config-file: ./.github/codeql/codeql-config.yml
@@ -50,4 +50,4 @@ jobs:
           yarn build
 
       - name: CodeQL
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
