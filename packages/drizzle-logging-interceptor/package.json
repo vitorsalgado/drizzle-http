@@ -55,7 +55,7 @@
   "dependencies": {
     "@drizzle-http/core": "^3.1.0",
     "pino": "^7.6.2",
-    "pino-pretty": "^7.3.0"
+    "pino-pretty": "^8.0.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^3.1.0",
