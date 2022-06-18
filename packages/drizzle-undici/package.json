@@ -50,7 +50,7 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^3.1.0",
-    "undici": "^4.12.1"
+    "undici": "^5.0.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^3.1.0"
