@@ -2031,7 +2031,7 @@ __metadata:
     "@drizzle-http/core": ^3.1.0
     "@drizzle-http/undici": ^3.1.0
     "@nestjs/cli": ^8.1.6
-    "@nestjs/common": ^8.2.4
+    "@nestjs/common": ^9.0.0
     "@nestjs/core": ^8.2.4
     "@nestjs/platform-express": ^8.2.4
     "@nestjs/schematics": ^8.0.5
@@ -3407,14 +3407,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:^8.2.4":
-  version: 8.2.6
-  resolution: "@nestjs/common@npm:8.2.6"
+"@nestjs/common@npm:^9.0.0":
+  version: 9.1.2
+  resolution: "@nestjs/common@npm:9.1.2"
   dependencies:
-    axios: 0.24.0
     iterare: 1.2.1
-    tslib: 2.3.1
-    uuid: 8.3.2
+    tslib: 2.4.0
+    uuid: 9.0.0
   peerDependencies:
     cache-manager: "*"
     class-transformer: "*"
@@ -3428,7 +3427,7 @@ __metadata:
       optional: true
     class-validator:
       optional: true
-  checksum: 3999376069a9adade0d5a60bdaabd05756195ee5a8621c0d3b9f77353446188e183dfe5ec6ccb5d696c96f24da48b7edaeb3e554d9d5c3e20946ba1b030c8f54
+  checksum: 70857597b4703113f1fd8e38a4905eec48a4fd2caa21b46a7e58a8dc5259f56066228690e3840fbdfe9697db8785368f4a614a404adcb5cf6031dcc465650b21
   languageName: node
   linkType: hard
 
@@ -5726,15 +5725,6 @@ __metadata:
   version: 1.11.0
   resolution: "aws4@npm:1.11.0"
   checksum: 5a00d045fd0385926d20ebebcfba5ec79d4482fe706f63c27b324d489a04c68edb0db99ed991e19eda09cb8c97dc2452059a34d97545cebf591d7a2b5a10999f
-  languageName: node
-  linkType: hard
-
-"axios@npm:0.24.0":
-  version: 0.24.0
-  resolution: "axios@npm:0.24.0"
-  dependencies:
-    follow-redirects: ^1.14.4
-  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
   languageName: node
   linkType: hard
 
@@ -10143,7 +10133,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.7":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.7":
   version: 1.14.7
   resolution: "follow-redirects@npm:1.14.7"
   peerDependenciesMeta:
@@ -19275,6 +19265,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -19820,6 +19817,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
