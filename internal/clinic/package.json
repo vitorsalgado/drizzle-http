@@ -23,6 +23,6 @@
     "@drizzle-http/core": "^3.1.0",
     "@drizzle-http/undici": "^3.1.0",
     "autocannon": "^7.5.1",
-    "clinic": "^11.0.0"
+    "clinic": "^12.0.0"
   }
 }
