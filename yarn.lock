@@ -2032,7 +2032,7 @@ __metadata:
     "@drizzle-http/undici": ^3.1.0
     "@nestjs/cli": ^8.1.6
     "@nestjs/common": ^8.2.4
-    "@nestjs/core": ^8.2.4
+    "@nestjs/core": ^9.0.0
     "@nestjs/platform-express": ^8.2.4
     "@nestjs/schematics": ^8.0.5
     "@nestjs/testing": ^8.2.4
@@ -3432,22 +3432,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/core@npm:^8.2.4":
-  version: 8.2.6
-  resolution: "@nestjs/core@npm:8.2.6"
+"@nestjs/core@npm:^9.0.0":
+  version: 9.1.2
+  resolution: "@nestjs/core@npm:9.1.2"
   dependencies:
     "@nuxtjs/opencollective": 0.3.2
     fast-safe-stringify: 2.1.1
     iterare: 1.2.1
-    object-hash: 2.2.0
+    object-hash: 3.0.0
     path-to-regexp: 3.2.0
-    tslib: 2.3.1
-    uuid: 8.3.2
+    tslib: 2.4.0
+    uuid: 9.0.0
   peerDependencies:
-    "@nestjs/common": ^8.0.0
-    "@nestjs/microservices": ^8.0.0
-    "@nestjs/platform-express": ^8.0.0
-    "@nestjs/websockets": ^8.0.0
+    "@nestjs/common": ^9.0.0
+    "@nestjs/microservices": ^9.0.0
+    "@nestjs/platform-express": ^9.0.0
+    "@nestjs/websockets": ^9.0.0
     reflect-metadata: ^0.1.12
     rxjs: ^7.1.0
   peerDependenciesMeta:
@@ -3457,7 +3457,7 @@ __metadata:
       optional: true
     "@nestjs/websockets":
       optional: true
-  checksum: abf275dbe309302a16fa77132e362d30ed275ffbca46e51a93bdafdd99daa12a970af3f903a09f9e034af9f4372fe436b7a68bd09c81e9ea7aab00d939482ff2
+  checksum: fe5cbe04c4393abc47e12373dd4a98ef3b1412bd2627710d72b96b907d5a0c22aa9278e1b3569fc9b90964619b13f5d9248a4f833bdf51876ca027ff3ed328f6
   languageName: node
   linkType: hard
 
@@ -14947,10 +14947,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:2.2.0":
-  version: 2.2.0
-  resolution: "object-hash@npm:2.2.0"
-  checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1
+"object-hash@npm:3.0.0":
+  version: 3.0.0
+  resolution: "object-hash@npm:3.0.0"
+  checksum: 80b4904bb3857c52cc1bfd0b52c0352532ca12ed3b8a6ff06a90cd209dfda1b95cee059a7625eb9da29537027f68ac4619363491eedb2f5d3dddbba97494fd6c
   languageName: node
   linkType: hard
 
@@ -19275,6 +19275,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -19820,6 +19827,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
