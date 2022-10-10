@@ -29,7 +29,7 @@ jobs:
         working-directory: deno
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - uses: denoland/setup-deno@v1
         with:
