@@ -55,7 +55,7 @@
   ],
   "dependencies": {
     "@drizzle-http/core": "^3.1.0",
-    "opossum": "^6.2.1"
+    "opossum": "^7.0.0"
   },
   "devDependencies": {
     "@drizzle-http/test-utils": "^3.1.0",

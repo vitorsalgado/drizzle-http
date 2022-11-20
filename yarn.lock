@@ -2196,7 +2196,7 @@ __metadata:
     "@drizzle-http/core": ^3.1.0
     "@drizzle-http/test-utils": ^3.1.0
     "@drizzle-http/undici": ^3.1.0
-    opossum: ^6.2.1
+    opossum: ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -15106,10 +15106,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"opossum@npm:^6.2.1":
-  version: 6.3.0
-  resolution: "opossum@npm:6.3.0"
-  checksum: a6d4ffe14848bebbc8ecae97447a32523d305b96007957ff49d7c9c875674d57a58220e74036108c50ecd1d5b5a158e843a9db79a03204f42b9b18ec803566db
+"opossum@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "opossum@npm:7.0.0"
+  checksum: 7f5ed5d1d930f281d9737f43d570631e064b276e6e484caffe7350367d49a8af0039f8ae8f7f08e817b10b1f6524f96d707e2496e7f5d3055bd288511ce4eabe
   languageName: node
   linkType: hard
 
