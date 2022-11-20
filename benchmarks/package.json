@@ -18,7 +18,7 @@
     "@drizzle-http/core": "^3.1.0",
     "@drizzle-http/opossum-circuit-breaker": "^3.1.0",
     "@drizzle-http/undici": "^3.1.0",
-    "axios": "^0.25.0",
+    "axios": "^1.0.0",
     "benchmark": "^2.1.4",
     "cronometro": "^1.0.2",
     "got": "^12.0.0",
