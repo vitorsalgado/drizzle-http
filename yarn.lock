@@ -2137,7 +2137,7 @@ __metadata:
     "@babel/runtime": ^7.16.7
     "@commitlint/cli": ^16.0.1
     "@commitlint/config-conventional": ^16.0.0
-    "@jest/types": ^27.4.2
+    "@jest/types": ^29.0.0
     "@rollup/plugin-babel": ^5.3.0
     "@types/benchmark": ^2.1.1
     "@types/jest": ^27.4.0
@@ -2486,6 +2486,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/schemas@npm:^29.0.0":
+  version: 29.0.0
+  resolution: "@jest/schemas@npm:29.0.0"
+  dependencies:
+    "@sinclair/typebox": ^0.24.1
+  checksum: 41355c78f09eb1097e57a3c5d0ca11c9099e235e01ea5fa4e3953562a79a6a9296c1d300f1ba50ca75236048829e056b00685cd2f1ff8285e56fd2ce01249acb
+  languageName: node
+  linkType: hard
+
 "@jest/source-map@npm:^27.4.0":
   version: 27.4.0
   resolution: "@jest/source-map@npm:27.4.0"
@@ -2554,6 +2563,20 @@ __metadata:
     "@types/yargs": ^16.0.0
     chalk: ^4.0.0
   checksum: 1191022023e32763063cc1c8b1143fa316fb05db2f9698280a7bdbafcabd989e5fd64f8eb875b8a2e54c53f25dba45ed2eea8ced394d9e484da0fda674cd17a5
+  languageName: node
+  linkType: hard
+
+"@jest/types@npm:^29.0.0":
+  version: 29.0.3
+  resolution: "@jest/types@npm:29.0.3"
+  dependencies:
+    "@jest/schemas": ^29.0.0
+    "@types/istanbul-lib-coverage": ^2.0.0
+    "@types/istanbul-reports": ^3.0.0
+    "@types/node": "*"
+    "@types/yargs": ^17.0.8
+    chalk: ^4.0.0
+  checksum: 3bd33e64d87a5421b860396ac7f7b9b8d5abbf0f300f4379bb20c8e3a6169fbbd078933ce0649827cd63e23330c4effeb6b222fa94e8dd0df638dfff6c1fed41
   languageName: node
   linkType: hard
 
@@ -3978,6 +4001,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sinclair/typebox@npm:^0.24.1":
+  version: 0.24.43
+  resolution: "@sinclair/typebox@npm:0.24.43"
+  checksum: 138fa1f2430a8890b21313b176d7d4d52daaddea363a66a3ba7e599fc158f0e9ff7796ae220e181d71a95e5af016830c04f4b69ca701c74161c3711836980eb8
+  languageName: node
+  linkType: hard
+
 "@sindresorhus/is@npm:^0.14.0":
   version: 0.14.0
   resolution: "@sindresorhus/is@npm:0.14.0"
@@ -4631,6 +4661,15 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: caa21d2c957592fe2184a8368c8cbe5a82a6c2e2f2893722e489f842dc5963293d2f3120bc06fe3933d60a3a0d1e2eb269649fd6b1947fe1820f8841ba611dd9
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:^17.0.8":
+  version: 17.0.13
+  resolution: "@types/yargs@npm:17.0.13"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 0ab269abc2da2223cf0a8c16d578850fbe327d40fb85724b5c3f9f6cf38d03656ef699518c05d4df3bc337339ec6d0aad7df01682a9dca4783ad1ccc7336cf12
   languageName: node
   linkType: hard
 
