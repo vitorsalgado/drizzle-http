@@ -2288,6 +2288,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/error@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@fastify/error@npm:2.0.0"
+  checksum: ecf0834966b2bfb33ff834e3d55fe4dc04cbe9f822fda6c937b12cce4f162be4f8b0577ee665bc856d7012b1640c12472a1829a22ae38d287342c90b0f33a595
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -9755,6 +9762,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-content-type-parse@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "fast-content-type-parse@npm:1.1.0"
+  checksum: c8c995b60ed30c4914aa255f012347f63fffa0c258039977b2080bb5c951dc6ef68a9243eac8ab456190642be44a31a7ada6e74d846e04f4667d40ebf778b94e
+  languageName: node
+  linkType: hard
+
 "fast-decode-uri-component@npm:^1.0.1":
   version: 1.0.1
   resolution: "fast-decode-uri-component@npm:1.0.1"
@@ -9899,14 +9913,15 @@ __metadata:
   linkType: hard
 
 "fastify@npm:^3.25.3":
-  version: 3.27.0
-  resolution: "fastify@npm:3.27.0"
+  version: 3.29.5
+  resolution: "fastify@npm:3.29.5"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
+    "@fastify/error": ^2.0.0
     abstract-logging: ^2.0.0
     avvio: ^7.1.2
+    fast-content-type-parse: ^1.0.0
     fast-json-stringify: ^2.5.2
-    fastify-error: ^0.3.0
     find-my-way: ^4.5.0
     flatstr: ^1.0.12
     light-my-request: ^4.2.0
@@ -9916,8 +9931,8 @@ __metadata:
     rfdc: ^1.1.4
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
-    tiny-lru: ^7.0.0
-  checksum: 258b563001ca11402fcb79f4ed59f30aa1713c7d936238a7e00e3d00489b39081ce9a326514aa3d473dd28ba72725d3065a6ca62a7876431dc80bf509ff5d6c2
+    tiny-lru: ^8.0.1
+  checksum: 6f97e67c25c509c584529aad2ffe0d4bf8943a860f09d847bf34a4736586cf73f5748bde154e0199c022b97ff76aba35c3094006e62b07100ab10c63205541e3
   languageName: node
   linkType: hard
 
@@ -19007,10 +19022,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:^7.0.0":
-  version: 7.0.6
-  resolution: "tiny-lru@npm:7.0.6"
-  checksum: 36a786a9111a3a358a698c9404783ad3f5396f6ed891672ffa4cd7dec4617abb8dfed6af7611bbaf8a3942a9475534c8b80f9bd58d7efa9aa594f395c9805f09
+"tiny-lru@npm:^8.0.1":
+  version: 8.0.2
+  resolution: "tiny-lru@npm:8.0.2"
+  checksum: ec4d884914626760eef05cd57850f21a153adeeb7c4242eb8d44a031f1bd8489f18c1bf5d6f10f0a11c5dcfe03b302f26b00f2b879b38853599486bf0dca8c97
   languageName: node
   linkType: hard
 
