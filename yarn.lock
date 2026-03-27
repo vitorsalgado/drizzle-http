@@ -2038,7 +2038,7 @@ __metadata:
     "@nestjs/testing": ^8.2.4
     "@types/express": ^4.17.13
     "@types/supertest": ^2.0.11
-    reflect-metadata: ^0.1.13
+    reflect-metadata: ^0.2.0
     rimraf: ^3.0.2
     rxjs: ^7.5.1
     source-map-support: ^0.5.21
@@ -16915,10 +16915,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:^0.1.13":
-  version: 0.1.13
-  resolution: "reflect-metadata@npm:0.1.13"
-  checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
+"reflect-metadata@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "reflect-metadata@npm:0.2.2"
+  checksum: a66c7b583e4efdd8f3c3124fbff33da2d0c86d8280617516308b32b2159af7a3698c961db3246387f56f6316b1d33a608f39bb2b49d813316dfc58f6d3bf3210
   languageName: node
   linkType: hard
 
