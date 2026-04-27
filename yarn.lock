@@ -2182,7 +2182,7 @@ __metadata:
     ts-loader: ^9.2.6
     ts-node: 10.4.0
     typescript: ^4.5.4
-    undici: ^4.12.1
+    undici: ^5.0.0
     webpack: ^5.65.0
     webpack-cli: ^4.9.1
     webpack-dev-server: ^4.7.2
@@ -2249,7 +2249,7 @@ __metadata:
   dependencies:
     "@drizzle-http/core": ^3.1.0
     "@drizzle-http/test-utils": ^3.1.0
-    undici: ^4.12.1
+    undici: ^5.0.0
   languageName: unknown
   linkType: soft
 
@@ -2285,6 +2285,13 @@ __metadata:
   dependencies:
     text-decoding: ^1.0.0
   checksum: 96880fd8c035014aed3d675ccf79c70f3d2c3be9240c619994bc1a8cd8b8e6c46ebc6390cee42701b6f49685dddab1177773f7ce884c9bbab1259bfceaf5e855
+  languageName: node
+  linkType: hard
+
+"@fastify/busboy@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "@fastify/busboy@npm:2.1.1"
+  checksum: 42c32ef75e906c9a4809c1e1930a5ca6d4ddc8d138e1a8c8ba5ea07f997db32210617d23b2e4a85fe376316a41a1a0439fc6ff2dedf5126d96f45a9d80754fb2
   languageName: node
   linkType: hard
 
@@ -19574,10 +19581,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^4.12.1":
-  version: 4.12.2
-  resolution: "undici@npm:4.12.2"
-  checksum: e53e144e96afdd097e3289f92ec9baad856dbe162cbb9c0e50b9105244cc7c0867cad3ef444274c78700b3ffc0a96603b26516f59a709008f8dd93eb1482567f
+"undici@npm:^5.0.0":
+  version: 5.29.0
+  resolution: "undici@npm:5.29.0"
+  dependencies:
+    "@fastify/busboy": ^2.0.0
+  checksum: a25b5462c1b6ffb974f5ffc492ffd64146a9983aad0cbda6fde65e2b22f6f1acd43f09beacc66cc47624a113bd0c684ffc60366102b6a21b038fbfafb7d75195
   languageName: node
   linkType: hard
 
