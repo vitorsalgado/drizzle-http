@@ -46,7 +46,7 @@ export class ModelRegistry {
 }
 
 export function createModelDecorator(to: ToDest, key?: string, field?: string) {
-  return function (target: object | Class, decorated: string, _descriptor?: PropertyDescriptor | number): void {
+  return function (target: object | Class, decorated?: string, _descriptor?: PropertyDescriptor | number): void {
     if (!decorated && field) {
       throw new Error('The parameter "field" is not allowed when decorating a class property or method.')
     }
