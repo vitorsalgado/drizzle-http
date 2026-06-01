@@ -1,5 +1,5 @@
-import { vi, type Mock } from 'vitest'
 import { Readable } from 'stream'
+import { vi, type Mock } from 'vitest'
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { noop } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'

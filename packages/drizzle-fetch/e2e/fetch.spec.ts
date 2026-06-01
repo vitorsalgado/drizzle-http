@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
-import { startServer } from './server'
-import { closeServer } from './server'
+import { startServer } from './server.js'
+import { closeServer } from './server.js'
 
 const devUrl = 'http://localhost:3000'
 

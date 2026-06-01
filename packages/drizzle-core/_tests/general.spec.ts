@@ -1,5 +1,5 @@
-import { vi } from 'vitest'
 import EventEmitter from 'events'
+import { vi } from 'vitest'
 import { TestId } from '@drizzle-http/test-utils'
 import { closeTestServer } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'

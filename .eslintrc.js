@@ -31,13 +31,23 @@ module.exports = {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object']
       }
     ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'always',
+        jsx: 'always',
+        ts: 'never',
+        tsx: 'never'
+      }
+    ],
     'import/no-named-as-default': ['off'],
     'import/no-duplicates': ['off'],
     'import/no-mutable-exports': ['error'],
     'import/no-useless-path-segments': [
       'error',
       {
-        noUselessIndex: true
+        noUselessIndex: false
       }
     ],
     'import/no-self-import': ['error'],
