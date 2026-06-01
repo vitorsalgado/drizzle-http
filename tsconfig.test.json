@@ -1,9 +1,18 @@
 {
-  "extends": "./tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noUnusedParameters": false,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true,
     "noUnusedLocals": false,
-    "allowUnusedLabels": true,
-    "outDir": "dist"
-  }
+    "noUnusedParameters": false,
+    "allowUnusedLabels": true
+  },
+  "exclude": [
+    "jest.config.ts",
+    "jest-base.config.ts",
+    "**/jest.config.ts"
+  ]
 }

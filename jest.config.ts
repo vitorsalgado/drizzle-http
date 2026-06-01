@@ -5,11 +5,13 @@ const config: JestConfig.InitialOptions = {
   ...Base,
 
   projects: ['<rootDir>'],
-  transform: { '^.+\\.tsx?$': 'ts-jest' },
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.test.json'
-    }
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: './tsconfig.test.json'
+      }
+    ]
   },
   testMatch: ['**/__tests__/?(*.)+(spec|test).ts'],
   collectCoverageFrom: ['packages/**'],

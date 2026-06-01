@@ -1,14 +1,35 @@
 {
-  "extends": "../../tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./http",
     "outDir": "./http",
-    "sourceMap": true
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ]
   },
   "references": [
-    { "path": "../../packages/drizzle-core", "prepend": false },
-    { "path": "../../packages/drizzle-undici", "prepend": false },
-    { "path": "../../packages/drizzle-logging-interceptor", "prepend": false }
+    {
+      "path": "../../packages/drizzle-core"
+    },
+    {
+      "path": "../../packages/drizzle-undici"
+    },
+    {
+      "path": "../../packages/drizzle-logging-interceptor"
+    }
   ],
-  "include": ["http/"]
+  "include": [
+    "http/"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

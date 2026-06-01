@@ -1,43 +1,39 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
     "baseUrl": ".",
-
-    "module": "CommonJS",
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "lib": ["dom", "dom.iterable"],
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "importHelpers": false,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "declaration": true,
-
-    "strictBindCallApply": true,
-    "removeComments": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "emitDecoratorMetadata": false,
-    "experimentalDecorators": true,
-    "composite": true,
-    "skipLibCheck": true,
-    "noEmitHelpers": false
+    "outDir": "dist",
+    "noEmit": true
   },
+  "files": [],
+  "references": [
+    { "path": "internal/test-utils/tsconfig.build.json" },
+    { "path": "internal/clinic/tsconfig.build.json" },
+    { "path": "packages/drizzle-core/tsconfig.build.json" },
+    { "path": "packages/drizzle-undici/tsconfig.build.json" },
+    { "path": "packages/drizzle-fetch/tsconfig.build.json" },
+    { "path": "packages/drizzle-logging-interceptor/tsconfig.build.json" },
+    { "path": "packages/drizzle-rxjs/tsconfig.build.json" },
+    { "path": "packages/drizzle-response-mapper/tsconfig.build.json" },
+    { "path": "packages/drizzle-opossum-circuit-breaker/tsconfig.build.json" },
+    { "path": "packages/drizzle-nodejs-all/tsconfig.build.json" },
+    { "path": "benchmarks/tsconfig.build.json" },
+    { "path": "test/tsconfig.build.json" },
+    { "path": "examples/typescript/tsconfig.build.json" },
+    { "path": "examples/react/tsconfig.build.json" }
+  ],
   "exclude": [
     "**/node_modules",
     "**/dist",
     ".changeset",
     ".github",
     "assets",
-    "coverage"
+    "coverage",
+    "examples/javascript",
+    "examples/nodejs-es-modules",
+    "examples/nestjs",
+    "jest.config.ts",
+    "jest-base.config.ts"
   ]
 }

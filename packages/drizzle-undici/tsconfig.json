@@ -1,10 +1,19 @@
 {
-  "extends": "../../tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist"
   },
   "references": [
-    { "path": "../drizzle-core", "prepend": false },
-    { "path": "../../internal/test-utils", "prepend": false }
+    {
+      "path": "../drizzle-core"
+    },
+    {
+      "path": "../../internal/test-utils"
+    }
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
   ]
 }

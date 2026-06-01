@@ -5,12 +5,7 @@ import Base from '../../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
   ...Base,
-  displayName: '@drizzle-http/fetch',
-  globals: {
-    'ts-jest': {
-      tsconfig: '../../tsconfig.test.json'
-    }
-  }
+  displayName: '@drizzle-http/fetch'
 }
 
 export default config

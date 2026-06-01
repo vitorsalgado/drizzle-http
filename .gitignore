@@ -120,3 +120,14 @@ temp/
 # Dist
 dist/
 out/
+
+# TypeScript emit outside dist
+**/*.d.ts.map
+jest.config.js
+jest.config.js.map
+jest.config.d.ts
+jest-base.config.js
+jest-base.config.js.map
+jest-base.config.d.ts
+examples/nestjs/src/**/*.js
+examples/nestjs/src/**/*.js.map

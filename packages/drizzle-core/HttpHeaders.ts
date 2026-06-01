@@ -62,6 +62,18 @@ export class HttpHeaders implements Headers {
     return this[sHeaders].has(HttpHeaders.normalizeHeaderName(key))
   }
 
+  getSetCookie(): string[] {
+    const cookies: string[] = []
+
+    for (const [key, value] of this[sHeaders]) {
+      if (key === 'set-cookie') {
+        cookies.push(value)
+      }
+    }
+
+    return cookies
+  }
+
   keys(): IterableIterator<string> {
     return this[sHeaders].keys()
   }

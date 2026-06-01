@@ -1,14 +1,24 @@
 {
-  "extends": "../../tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "dist",
     "sourceMap": false,
-    "target": "ESNext",
-    "module": "ESNext"
+    "module": "ES2022",
+    "moduleResolution": "node10",
+    "target": "ES2022"
   },
   "references": [
-    { "path": "../../packages/drizzle-core", "prepend": false },
-    { "path": "../../packages/drizzle-undici", "prepend": false }
+    {
+      "path": "../../packages/drizzle-core"
+    },
+    {
+      "path": "../../packages/drizzle-undici"
+    }
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
   ]
 }

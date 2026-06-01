@@ -6,10 +6,13 @@ import Base from '../jest-base.config'
 const config: JestConfig.InitialOptions = {
   ...Base,
   displayName: '@drizzle-http/test',
-  globals: {
-    'ts-jest': {
-      tsconfig: '../tsconfig.test.json'
-    }
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '../tsconfig.test.json'
+      }
+    ]
   }
 }
 

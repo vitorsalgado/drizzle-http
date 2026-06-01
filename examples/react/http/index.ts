@@ -60,7 +60,7 @@ createServer((req, res) => {
     .parties(query.acronym as string, res)
     .then(() => {
       if (res.headersSent) {
-        return res.end()
+        res.end()
       }
     })
     .catch((err: HttpError) => {

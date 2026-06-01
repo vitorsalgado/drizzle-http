@@ -4,13 +4,8 @@ import type { Config as JestConfig } from '@jest/types'
 import Base from '../../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
-  displayName: '@drizzle-http/opossum-circuit-breaker',
-  globals: {
-    'ts-jest': {
-      tsconfig: '../../tsconfig.test.json'
-    }
-  },
-  ...Base
+  ...Base,
+  displayName: '@drizzle-http/opossum-circuit-breaker'
 }
 
 export default config
