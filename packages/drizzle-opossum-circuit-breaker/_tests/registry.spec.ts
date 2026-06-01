@@ -1,5 +1,5 @@
 import CircuitBreaker from 'opossum'
-import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
+import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry.js'
 
 describe('Circuit Breaker Registry', function () {
   const registry = new CircuitBreakerRegistry()

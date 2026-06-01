@@ -1,4 +1,4 @@
-import { noop } from '../noop'
+import { noop } from '../noop.js'
 
 describe('Noop', function () {
   it('should do nothing when calling noop() function', function () {

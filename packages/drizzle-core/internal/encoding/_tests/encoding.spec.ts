@@ -1,7 +1,7 @@
-import { isEncoded } from '..'
-import { fixedEncodeURIComponent } from '..'
-import { encodeFormFieldIfNecessary } from '..'
-import { encodeIfNecessary } from '..'
+import { isEncoded } from '../index.js'
+import { fixedEncodeURIComponent } from '../index.js'
+import { encodeFormFieldIfNecessary } from '../index.js'
+import { encodeIfNecessary } from '../index.js'
 
 describe('URL Utils', () => {
   it('should detect when value is encoded and not encoded', () => {

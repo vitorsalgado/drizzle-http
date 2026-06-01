@@ -1,6 +1,6 @@
-export * from './decorators'
+export * from './decorators/index.js'
 
-export * from './CircuitBreakerCallAdapter'
-export * from './CircuitBreakerCallAdapterFactory'
-export * from './CircuitBreakerRegistry'
-export * from './Registry'
+export * from './CircuitBreakerCallAdapter.js'
+export * from './CircuitBreakerCallAdapterFactory.js'
+export * from './CircuitBreakerRegistry.js'
+export * from './Registry.js'

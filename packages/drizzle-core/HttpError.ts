@@ -1,6 +1,6 @@
-import { DrizzleError } from './internal'
-import { HttpRequest } from './HttpRequest'
-import { HttpHeaders } from './HttpHeaders'
+import { DrizzleError } from './internal/index.js'
+import { HttpRequest } from './HttpRequest.js'
+import { HttpHeaders } from './HttpHeaders.js'
 
 interface Res<B = unknown, H = HttpHeaders> {
   readonly headers: H

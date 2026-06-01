@@ -3,8 +3,8 @@ import { IncomingHttpHeaders } from 'http'
 import { Pool } from 'undici'
 import { Call } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
-import { toUndiciRequest } from './toUndiciRequest'
-import { StreamingResponse } from './StreamingResponse'
+import { toUndiciRequest } from './toUndiciRequest.js'
+import { StreamingResponse } from './StreamingResponse.js'
 
 export class UndiciStreamCall implements Call<StreamingResponse> {
   constructor(private readonly client: Pool, private readonly streamTo: number) {}

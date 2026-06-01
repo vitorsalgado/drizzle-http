@@ -1,4 +1,4 @@
-import { HttpHeaders } from '../HttpHeaders'
+import { HttpHeaders } from '../HttpHeaders.js'
 
 describe('Headers', function () {
   it('should init with object/2d array/null', () => {

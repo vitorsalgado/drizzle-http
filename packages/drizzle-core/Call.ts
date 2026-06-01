@@ -1,7 +1,7 @@
-import { HttpRequest } from './HttpRequest'
-import { Drizzle } from './Drizzle'
-import { RequestFactory } from './RequestFactory'
-import { HttpResponse } from './HttpResponse'
+import { HttpRequest } from './HttpRequest.js'
+import { Drizzle } from './Drizzle.js'
+import { RequestFactory } from './RequestFactory.js'
+import { HttpResponse } from './HttpResponse.js'
 
 /**
  * Represents a single HTTP call.

@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { QueryParameter } from '../builtin'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { QueryParameter } from '../builtin/index.js'
 
 /**
  * Query parameter appended to the URL.

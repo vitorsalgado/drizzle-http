@@ -1,7 +1,7 @@
-import { Interceptor } from './Interceptor'
-import { Chain } from './Chain'
-import { HttpResponse } from './HttpResponse'
-import { Call } from './Call'
+import { Interceptor } from './Interceptor.js'
+import { Chain } from './Chain.js'
+import { HttpResponse } from './HttpResponse.js'
+import { Call } from './Call.js'
 
 export class InterceptorHttpExecutor implements Interceptor {
   constructor(private readonly call: Call) {}

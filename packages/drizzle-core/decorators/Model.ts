@@ -1,6 +1,6 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { ModelParameter } from '../builtin'
-import { Class } from '../internal'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { ModelParameter } from '../builtin/index.js'
+import { Class } from '../internal/index.js'
 
 export function Model(model: Class) {
   return createParameterDecorator(Model, ctx => {

@@ -1,7 +1,7 @@
 import { DrizzleBuilder } from '@drizzle-http/core'
-import { FetchCallFactory } from './FetchCallFactory'
-import { PartParameterHandlerFactory } from './MultipartParameterHandler'
-import { MultipartRequestBodyConverterFactory } from './MultipartRequestBodyConverter'
+import { FetchCallFactory } from './FetchCallFactory.js'
+import { PartParameterHandlerFactory } from './MultipartParameterHandler.js'
+import { MultipartRequestBodyConverterFactory } from './MultipartRequestBodyConverter.js'
 
 /**
  * Create a {@link DrizzleBuilder} instance with default configuration to use Fetch.

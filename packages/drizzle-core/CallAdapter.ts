@@ -1,7 +1,7 @@
-import { Call } from './Call'
-import { Drizzle } from './Drizzle'
-import { RequestFactory } from './RequestFactory'
-import { HttpRequest } from './HttpRequest'
+import { Call } from './Call.js'
+import { Drizzle } from './Drizzle.js'
+import { RequestFactory } from './RequestFactory.js'
+import { HttpRequest } from './HttpRequest.js'
 
 /**
  * Adapts a {@link Call} with response F to a type of V

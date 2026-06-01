@@ -1,8 +1,8 @@
-import Pino from 'pino'
-import { Logger } from './Logger'
+import { pino, type Logger, type LoggerOptions } from 'pino'
+import { Logger as DrizzleLogger } from './Logger.js'
 
-export class PinoLogger implements Logger {
-  static DEFAULT_OPTIONS: Pino.LoggerOptions = {
+export class PinoLogger implements DrizzleLogger {
+  static DEFAULT_OPTIONS: LoggerOptions = {
     level: 'info',
     transport: {
       target: 'pino-pretty',
@@ -16,10 +16,10 @@ export class PinoLogger implements Logger {
     }
   }
 
-  private readonly pinoLogger: Pino.Logger
+  private readonly pinoLogger: Logger
 
-  constructor(options: Pino.LoggerOptions) {
-    this.pinoLogger = Pino(options)
+  constructor(options: LoggerOptions) {
+    this.pinoLogger = pino(options)
   }
 
   info(message: string): void {

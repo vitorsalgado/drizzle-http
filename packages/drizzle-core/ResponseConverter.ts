@@ -1,9 +1,9 @@
 /**
  * Converts a value from its HTTP representation to another type
  */
-import { Drizzle } from './Drizzle'
-import { RequestFactory } from './RequestFactory'
-import { HttpResponse } from './HttpResponse'
+import { Drizzle } from './Drizzle.js'
+import { RequestFactory } from './RequestFactory.js'
+import { HttpResponse } from './HttpResponse.js'
 
 /**
  * Converts an {@link HttpResponse} to another object type.

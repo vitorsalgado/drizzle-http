@@ -1,7 +1,7 @@
-import { setupRequestFactory } from '../../ApiParameterization'
-import { setupApiDefaults } from '../../ApiParameterization'
-import { TargetCtor, TargetProto } from '../../internal'
-import { HttpMethod } from '../../decorators/utils'
+import { setupRequestFactory } from '../../ApiParameterization.js'
+import { setupApiDefaults } from '../../ApiParameterization.js'
+import { TargetCtor, TargetProto } from '../../internal/index.js'
+import { HttpMethod } from '../../decorators/utils/index.js'
 
 export const RetryOptionsKey = 'retry:options'
 

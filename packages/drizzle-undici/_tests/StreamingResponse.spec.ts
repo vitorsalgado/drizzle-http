@@ -1,4 +1,4 @@
-import { StreamingResponse } from '../StreamingResponse'
+import { StreamingResponse } from '../StreamingResponse.js'
 
 describe('StreamingResponse', function () {
   it('should fail when calling response body parse functions', function () {

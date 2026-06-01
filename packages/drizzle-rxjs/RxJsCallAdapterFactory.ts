@@ -6,7 +6,7 @@ import { Call } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
 import { Observable } from 'rxjs'
 import { from } from 'rxjs'
-import { RxJs } from './RxJs'
+import { RxJs } from './RxJs.js'
 
 class RxJsCallAdapter<T> implements CallAdapter<T, Observable<T>> {
   constructor(private readonly decorated: CallAdapter<unknown, Promise<T>> | null = null) {}

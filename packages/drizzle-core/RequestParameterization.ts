@@ -1,6 +1,6 @@
-import { HttpHeaders } from './HttpHeaders'
-import { BodyType } from './BodyType'
-import { MediaTypes } from './MediaTypes'
+import { HttpHeaders } from './HttpHeaders.js'
+import { BodyType } from './BodyType.js'
+import { MediaTypes } from './MediaTypes.js'
 
 /**
  * Holds HTTP request parameters to later build an actual HTTP request.

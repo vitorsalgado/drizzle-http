@@ -1,12 +1,12 @@
-import { Drizzle } from './Drizzle'
-import { AnyClass, Decorator, InvalidMethodConfigError, isFunction, notBlank, notNull } from './internal'
-import { BodyType } from './BodyType'
-import { RequestBodyConverter } from './RequestBodyConverter'
-import { ApiDefaults } from './ApiParameterization'
-import { RequestParameterization } from './RequestParameterization'
-import { MediaTypes } from './MediaTypes'
-import { HttpHeaders } from './HttpHeaders'
-import { HttpRequest } from './HttpRequest'
+import { Drizzle } from './Drizzle.js'
+import { AnyClass, Decorator, InvalidMethodConfigError, isFunction, notBlank, notNull } from './internal/index.js'
+import { BodyType } from './BodyType.js'
+import { RequestBodyConverter } from './RequestBodyConverter.js'
+import { ApiDefaults } from './ApiParameterization.js'
+import { RequestParameterization } from './RequestParameterization.js'
+import { MediaTypes } from './MediaTypes.js'
+import { HttpHeaders } from './HttpHeaders.js'
+import { HttpRequest } from './HttpRequest.js'
 import {
   BodyParameter,
   FormParameter,
@@ -16,8 +16,8 @@ import {
   PathParameter,
   QueryNameParameter,
   QueryParameter
-} from './builtin'
-import { NoDrizzleUserAgent } from './decorators'
+} from './builtin/index.js'
+import { NoDrizzleUserAgent } from './decorators/index.js'
 
 const REGEX_EXTRACT_TEMPLATE_PARAMS = /({\w+})/g
 const REGEX_QUERY_STRING = /\?.+=*.*/

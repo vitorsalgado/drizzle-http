@@ -1,10 +1,10 @@
-import { Drizzle } from './Drizzle'
-import { RequestFactory } from './RequestFactory'
-import { InterceptorHttpExecutor } from './InterceptorHttpExecutor'
-import { notNull } from './internal'
-import { notBlank } from './internal'
-import { EntryPointInvoker } from './EntryPointInvoker'
-import { Call } from './Call'
+import { Drizzle } from './Drizzle.js'
+import { RequestFactory } from './RequestFactory.js'
+import { InterceptorHttpExecutor } from './InterceptorHttpExecutor.js'
+import { notNull } from './internal/index.js'
+import { notBlank } from './internal/index.js'
+import { EntryPointInvoker } from './EntryPointInvoker.js'
+import { Call } from './Call.js'
 
 /**
  * Service Invoker setups the method that should execute the actual Http request configured for each decorated method on

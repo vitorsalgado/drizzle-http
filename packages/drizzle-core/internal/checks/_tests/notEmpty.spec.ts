@@ -1,4 +1,4 @@
-import { notEmpty } from '..'
+import { notEmpty } from '../index.js'
 
 describe('notEmpty', function () {
   it('should throw error when value is null or undefined', function () {

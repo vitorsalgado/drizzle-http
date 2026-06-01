@@ -2,8 +2,8 @@
 
 import { vi, type Mock } from 'vitest'
 import { GET, HttpHeaders, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
-import { CORS, KeepAlive } from '../decorators'
-import { useFetch } from '../useFetch'
+import { CORS, KeepAlive } from '../decorators/index.js'
+import { useFetch } from '../useFetch.js'
 
 @KeepAlive(true)
 @CORS()

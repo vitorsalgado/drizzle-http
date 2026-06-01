@@ -1,9 +1,9 @@
-import { ParameterHandler } from '../ParameterHandler'
-import { RequestFactory } from '../../../RequestFactory'
-import { Drizzle } from '../../../Drizzle'
-import { Parameter } from '../Parameter'
-import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
-import { RequestParameterization } from '../../../RequestParameterization'
+import { ParameterHandler } from '../ParameterHandler.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { Parameter } from '../Parameter.js'
+import { ParameterHandlerFactory } from '../ParameterHandlerFactory.js'
+import { RequestParameterization } from '../../../RequestParameterization.js'
 
 export class SignalParameter extends Parameter {
   static Type = 'signal'

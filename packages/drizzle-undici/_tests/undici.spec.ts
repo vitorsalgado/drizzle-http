@@ -20,12 +20,12 @@ import {
   Timeout
 } from '@drizzle-http/core'
 import { Dispatcher } from 'undici'
-import { UndiciCallFactory } from '../UndiciCallFactory'
-import { PoolOptionsBuilder } from '../PoolOptionsBuilder'
-import { Streaming } from '../Streaming'
-import { StreamTo } from '../StreamTo'
-import { StreamingResponse } from '../StreamingResponse'
-import { UndiciResponse } from '../UndiciResponse'
+import { UndiciCallFactory } from '../UndiciCallFactory.js'
+import { PoolOptionsBuilder } from '../PoolOptionsBuilder.js'
+import { Streaming } from '../Streaming.js'
+import { StreamTo } from '../StreamTo.js'
+import { StreamingResponse } from '../StreamingResponse.js'
+import { UndiciResponse } from '../UndiciResponse.js'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()

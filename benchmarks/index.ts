@@ -1,7 +1,8 @@
 import { Pool } from 'undici'
 import { Writable } from 'stream'
 import http from 'http'
-import Axios from 'axios'
+import axiosImport from 'axios'
+import type { AxiosStatic } from 'axios'
 import got from 'got'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { DrizzleBuilder } from '@drizzle-http/core'
@@ -17,6 +18,8 @@ import { errorThreshold } from './variables.js'
 import { iterations } from './variables.js'
 
 const target: any = {}
+
+const axios = axiosImport as unknown as AxiosStatic
 
 if (process.env.PORT) {
   target.port = process.env.PORT
@@ -141,7 +144,7 @@ cronometro(
 
     axios() {
       return makeParallelRequests(parallelRequests, (callback: any) =>
-        Axios.post(target.url, {
+        axios.post(target.url, {
           headers: h,
           data,
           httpAgent: axiosAgent,

@@ -1,10 +1,10 @@
-import { Interceptor } from './Interceptor'
-import { HttpRequest } from './HttpRequest'
-import { Call } from './Call'
-import { ResponseConverter } from './ResponseConverter'
-import { ChainExecutor } from './ChainExecutor'
-import { ResponseHandler } from './ResponseHandler'
-import { RequestFactory } from './RequestFactory'
+import { Interceptor } from './Interceptor.js'
+import { HttpRequest } from './HttpRequest.js'
+import { Call } from './Call.js'
+import { ResponseConverter } from './ResponseConverter.js'
+import { ChainExecutor } from './ChainExecutor.js'
+import { ResponseHandler } from './ResponseHandler.js'
+import { RequestFactory } from './RequestFactory.js'
 
 /**
  * This is the entrypoint for all requests.

@@ -1,6 +1,6 @@
-import { notNull } from '../internal'
-import { oneOf } from '../internal'
-import { createModelDecorator } from '../builtin'
+import { notNull } from '../internal/index.js'
+import { oneOf } from '../internal/index.js'
+import { createModelDecorator } from '../builtin/index.js'
 
 export type ToDest = 'header' | 'query' | 'queryname' | 'param' | 'field' | 'body' | 'bodypart'
 

@@ -1,7 +1,7 @@
-import { setupRequestFactory } from '../../ApiParameterization'
-import { Metadata } from '../../ApiParameterization'
-import { AnyClass, Decorator, isFunction, TargetProto } from '../../internal'
-import { notNull } from '../../internal'
+import { setupRequestFactory } from '../../ApiParameterization.js'
+import { Metadata } from '../../ApiParameterization.js'
+import { AnyClass, Decorator, isFunction, TargetProto } from '../../internal/index.js'
+import { notNull } from '../../internal/index.js'
 
 /**
  * Configure a method to perform an HTTP request

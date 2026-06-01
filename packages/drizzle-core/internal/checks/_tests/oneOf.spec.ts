@@ -1,4 +1,4 @@
-import { oneOf } from '../oneOf'
+import { oneOf } from '../oneOf.js'
 
 describe('oneOf', function () {
   it('should return same value when value is within the accepted values list', function () {

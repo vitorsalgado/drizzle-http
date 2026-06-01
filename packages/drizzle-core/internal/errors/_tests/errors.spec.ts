@@ -4,7 +4,7 @@ import {
   NoParameterHandlerError,
   NoRequestConverterError,
   RequestBodyTypeNotAllowedError
-} from '..'
+} from '../index.js'
 
 describe('Errors', function () {
   it('should contain basic fields name and code', function () {

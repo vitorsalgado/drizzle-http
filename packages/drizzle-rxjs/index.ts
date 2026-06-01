@@ -1,2 +1,2 @@
-export * from './RxJs'
-export * from './RxJsCallAdapterFactory'
+export * from './RxJs.js'
+export * from './RxJsCallAdapterFactory.js'

@@ -1,11 +1,11 @@
-import { InterceptorFactory } from '../../Interceptor'
-import { Interceptor } from '../../Interceptor'
-import { Drizzle } from '../../Drizzle'
-import { RequestFactory } from '../../RequestFactory'
-import { Retry } from './Retry'
-import { RetryOptionsKey } from './Retry'
-import { RetryInterceptor } from './RetryInterceptor'
-import { NoRetry } from './NoRetry'
+import { InterceptorFactory } from '../../Interceptor.js'
+import { Interceptor } from '../../Interceptor.js'
+import { Drizzle } from '../../Drizzle.js'
+import { RequestFactory } from '../../RequestFactory.js'
+import { Retry } from './Retry.js'
+import { RetryOptionsKey } from './Retry.js'
+import { RetryInterceptor } from './RetryInterceptor.js'
+import { NoRetry } from './NoRetry.js'
 
 export class RetryInterceptorFactory implements InterceptorFactory {
   static INSTANCE: RetryInterceptorFactory = new RetryInterceptorFactory()

@@ -1,4 +1,4 @@
-import { Link } from './Link'
+import { Link } from './Link.js'
 
 export interface ResultadoApi<T> {
   dados: T

@@ -1,8 +1,8 @@
-import { Chain } from './Chain'
-import { Interceptor } from './Interceptor'
-import { HttpRequest } from './HttpRequest'
-import { HttpResponse } from './HttpResponse'
-import { RequestFactory } from './RequestFactory'
+import { Chain } from './Chain.js'
+import { Interceptor } from './Interceptor.js'
+import { HttpRequest } from './HttpRequest.js'
+import { HttpResponse } from './HttpResponse.js'
+import { RequestFactory } from './RequestFactory.js'
 
 export class ChainExecutor implements Chain {
   constructor(

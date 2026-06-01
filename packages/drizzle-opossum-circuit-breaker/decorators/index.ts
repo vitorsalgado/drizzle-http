@@ -1,2 +1,2 @@
-export * from './Fallback'
-export * from './CircuitBreaker'
+export * from './Fallback.js'
+export * from './CircuitBreaker.js'

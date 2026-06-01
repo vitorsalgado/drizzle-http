@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
-import FastifyFormBody from 'fastify-formbody'
+import { fastify, type FastifyInstance, type FastifyPlugin, type FastifyReply, type FastifyRequest } from 'fastify'
+import formbodyImport from 'fastify-formbody'
 
-const fastify = Fastify({ logger: false })
+const formbody = (formbodyImport as unknown as { default: FastifyPlugin }).default ?? (formbodyImport as unknown as FastifyPlugin)
 
-fastify.register(FastifyFormBody)
+const server = fastify({ logger: false })
+
+server.register(formbody)
 
 export const respond = (req: FastifyRequest, obj: any): unknown => ({
   url: req.url,
@@ -20,7 +22,7 @@ export const respond = (req: FastifyRequest, obj: any): unknown => ({
 // Routes
 // ----------
 
-fastify.setErrorHandler(function (error: Error, request, reply) {
+server.setErrorHandler(function (this: FastifyInstance, error: Error, request: FastifyRequest, reply: FastifyReply) {
   this.log.error(error)
 
   reply.status(500).send({
@@ -29,32 +31,32 @@ fastify.setErrorHandler(function (error: Error, request, reply) {
   })
 })
 
-fastify.get('/', (request, reply) => {
+server.get('/', (request: FastifyRequest, reply: FastifyReply) => {
   reply.send(respond(request, { ok: true }))
 })
 
-fastify.post('/', (request, reply) => {
+server.post('/', (request: FastifyRequest, reply: FastifyReply) => {
   reply.send(respond(request, { ok: true }))
 })
 
-fastify.get('/:id/projects', (request: any, reply) => {
+server.get<{ Params: { id: string } }>('/:id/projects', (request, reply) => {
   reply.send(respond(request, { id: request.params.id }))
 })
 
-fastify.get('/group/:id/owner/:name/projects', (request: any, reply) => {
+server.get<{ Params: { id: string; name: string } }>('/group/:id/owner/:name/projects', (request, reply) => {
   reply.send(respond(request, { id: request.params.id }))
 })
 
-fastify.post('/:id/projects/:project', (request, reply) => {
+server.post('/:id/projects/:project', (request: FastifyRequest, reply: FastifyReply) => {
   reply.send(respond(request, { ok: true }))
 })
 
 // Server
 // ----------
 
-export const setupTestServer = (setup?: (f: FastifyInstance) => void) => setup?.(fastify)
-export const startTestServer = (port = 0) => fastify.listen(port)
-export const closeTestServer = () => fastify.close()
+export const setupTestServer = (setup?: (f: FastifyInstance) => void) => setup?.(server)
+export const startTestServer = (port = 0) => server.listen(port)
+export const closeTestServer = () => server.close()
 
 process.on('SIGINT', closeTestServer)
 process.on('SIGTERM', closeTestServer)

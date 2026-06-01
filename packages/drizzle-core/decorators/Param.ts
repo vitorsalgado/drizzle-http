@@ -1,6 +1,6 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { pathParameterRegex } from '../internal'
-import { PathParameter } from '../builtin'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { pathParameterRegex } from '../internal/index.js'
+import { PathParameter } from '../builtin/index.js'
 
 /**
  * Named replacement for a URL path segment

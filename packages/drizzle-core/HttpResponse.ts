@@ -1,5 +1,5 @@
-import { BodyType } from './BodyType'
-import { HttpHeaders } from './HttpHeaders'
+import { BodyType } from './BodyType.js'
+import { HttpHeaders } from './HttpHeaders.js'
 
 /**
  * Minimum contract that every response should follow inside the framework.

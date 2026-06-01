@@ -1,10 +1,10 @@
-import { ResponseHandler } from '../../../ResponseHandler'
-import { ResponseHandlerFactory } from '../../../ResponseHandler'
-import { HttpRequest } from '../../../HttpRequest'
-import { HttpResponse } from '../../../HttpResponse'
-import { Drizzle } from '../../../Drizzle'
-import { RequestFactory } from '../../../RequestFactory'
-import { RawResponse } from './RawResponse'
+import { ResponseHandler } from '../../../ResponseHandler.js'
+import { ResponseHandlerFactory } from '../../../ResponseHandler.js'
+import { HttpRequest } from '../../../HttpRequest.js'
+import { HttpResponse } from '../../../HttpResponse.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { RawResponse } from './RawResponse.js'
 
 export class RawResponseHandler implements ResponseHandler {
   static INSTANCE: RawResponseHandler = new RawResponseHandler()

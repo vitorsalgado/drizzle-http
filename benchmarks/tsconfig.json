@@ -2,10 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "module": "ES2022",
-    "moduleResolution": "node10",
-    "target": "ES2022"
+    "outDir": "./dist"
   },
   "references": [
     {

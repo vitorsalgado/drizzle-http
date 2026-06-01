@@ -1,4 +1,4 @@
-import { createParameterDecorator } from '../ApiParameterization'
+import { createParameterDecorator } from '../ApiParameterization.js'
 
 export const BodyKey = (name: string) =>
   createParameterDecorator(BodyKey, ctx => ctx.requestFactory.addConfig(BodyKey.KEY, name))

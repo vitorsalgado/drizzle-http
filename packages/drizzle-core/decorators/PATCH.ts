@@ -1,4 +1,4 @@
-import { decorateWithHttpMethod } from './utils'
+import { decorateWithHttpMethod } from './utils/index.js'
 
 /**
  * Make a PATCH HTTP Request

@@ -15,9 +15,9 @@ import { HttpError } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { Body } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { LoggingInterceptor } from '../LoggingInterceptor'
-import { Logger } from '../Logger'
-import { Level } from '../Level'
+import { LoggingInterceptor } from '../LoggingInterceptor.js'
+import { Logger } from '../Logger.js'
+import { Level } from '../Level.js'
 
 describe('Logging Interceptor', function () {
   let address = ''

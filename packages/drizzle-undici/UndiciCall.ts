@@ -1,8 +1,8 @@
 import { Pool } from 'undici'
 import { Call } from '@drizzle-http/core'
 import { HttpRequest } from '@drizzle-http/core'
-import { toUndiciRequest } from './toUndiciRequest'
-import { UndiciResponse } from './UndiciResponse'
+import { toUndiciRequest } from './toUndiciRequest.js'
+import { UndiciResponse } from './UndiciResponse.js'
 
 export class UndiciCall implements Call<UndiciResponse> {
   constructor(private readonly client: Pool) {}

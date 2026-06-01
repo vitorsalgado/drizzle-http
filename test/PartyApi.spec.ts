@@ -1,4 +1,4 @@
-import { providePartyAPI } from './providePartyAPI'
+import { providePartyAPI } from './providePartyAPI.js'
 
 describe('Party API', function () {
   const api = providePartyAPI()

@@ -1,5 +1,5 @@
-import { HttpResponse } from '../../../HttpResponse'
-import { ResponseConverter } from '../../../ResponseConverter'
+import { HttpResponse } from '../../../HttpResponse.js'
+import { ResponseConverter } from '../../../ResponseConverter.js'
 
 export class JsonResponseConverter<T> implements ResponseConverter<T> {
   static INSTANCE: JsonResponseConverter<unknown> = new JsonResponseConverter<unknown>()

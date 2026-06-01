@@ -1,5 +1,5 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization'
-import { BuiltInConv } from '../builtin'
+import { createClassAndMethodDecorator } from '../ApiParameterization.js'
+import { BuiltInConv } from '../builtin/index.js'
 
 export function PlainTextRequest() {
   return createClassAndMethodDecorator(

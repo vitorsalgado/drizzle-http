@@ -1,4 +1,4 @@
-import { DrizzleError } from './DrizzleError'
+import { DrizzleError } from './DrizzleError.js'
 
 export class InvalidMethodConfigError extends DrizzleError {
   constructor(public readonly method: string, message: string) {

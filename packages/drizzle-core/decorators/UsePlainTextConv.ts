@@ -1,5 +1,5 @@
-import { BuiltInConv } from '../builtin'
-import { createRequestAndResponseTypes } from './utils'
+import { BuiltInConv } from '../builtin/index.js'
+import { createRequestAndResponseTypes } from './utils/index.js'
 
 /**
  * Define a text/plain Content-Type for both request and response

@@ -20,10 +20,10 @@ import { CallAdapterFactory } from '@drizzle-http/core'
 import { RequestFactory } from '@drizzle-http/core'
 import { createMethodDecorator } from '@drizzle-http/core'
 import { TestId } from '@drizzle-http/test-utils'
-import { CircuitBreakerCallAdapterFactory } from '../CircuitBreakerCallAdapterFactory'
-import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry'
-import { Fallback } from '../decorators'
-import { CircuitBreaker } from '../decorators'
+import { CircuitBreakerCallAdapterFactory } from '../CircuitBreakerCallAdapterFactory.js'
+import { CircuitBreakerRegistry } from '../CircuitBreakerRegistry.js'
+import { Fallback } from '../decorators/index.js'
+import { CircuitBreaker } from '../decorators/index.js'
 
 function Custom() {
   return createMethodDecorator(Custom)

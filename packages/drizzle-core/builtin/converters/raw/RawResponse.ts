@@ -1,4 +1,4 @@
-import { createMethodDecorator } from '../../../ApiParameterization'
+import { createMethodDecorator } from '../../../ApiParameterization.js'
 
 /**
  * Use this to return the full response, including status code, headers, unprocessed body.

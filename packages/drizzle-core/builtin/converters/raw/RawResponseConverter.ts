@@ -1,9 +1,9 @@
-import { HttpResponse } from '../../../HttpResponse'
-import { ResponseConverter } from '../../../ResponseConverter'
-import { ResponseConverterFactory } from '../../../ResponseConverter'
-import { Drizzle } from '../../../Drizzle'
-import { RequestFactory } from '../../../RequestFactory'
-import { RawResponse } from './RawResponse'
+import { HttpResponse } from '../../../HttpResponse.js'
+import { ResponseConverter } from '../../../ResponseConverter.js'
+import { ResponseConverterFactory } from '../../../ResponseConverter.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { RawResponse } from './RawResponse.js'
 
 export class RawResponseConverter implements ResponseConverter<HttpResponse> {
   static INSTANCE: RawResponseConverter = new RawResponseConverter()

@@ -1,5 +1,5 @@
-import { Drizzle } from './Drizzle'
-import { AnyCtor, notEmpty, notNull } from './internal'
+import { Drizzle } from './Drizzle.js'
+import { AnyCtor, notEmpty, notNull } from './internal/index.js'
 import {
   BodyParameterHandlerFactory,
   CallbackCallAdapterFactory,
@@ -20,13 +20,13 @@ import {
   RawResponseHandlerFactory,
   RetryInterceptorFactory,
   SignalParameterHandlerFactory
-} from './builtin'
-import { Interceptor, InterceptorFactory, InterceptorFunction } from './Interceptor'
-import { RequestBodyConverterFactory } from './RequestBodyConverter'
-import { CallAdapterFactory } from './CallAdapter'
-import { CallFactory } from './Call'
-import { ResponseConverterFactory } from './ResponseConverter'
-import { ResponseHandlerFactory } from './ResponseHandler'
+} from './builtin/index.js'
+import { Interceptor, InterceptorFactory, InterceptorFunction } from './Interceptor.js'
+import { RequestBodyConverterFactory } from './RequestBodyConverter.js'
+import { CallAdapterFactory } from './CallAdapter.js'
+import { CallFactory } from './Call.js'
+import { ResponseConverterFactory } from './ResponseConverter.js'
+import { ResponseHandlerFactory } from './ResponseHandler.js'
 
 /**
  * Shortcut function to create new {@link DrizzleBuilder} instance

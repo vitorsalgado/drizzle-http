@@ -1,11 +1,11 @@
-import { MediaTypes } from '../../../../MediaTypes'
-import { RequestFactory } from '../../../../RequestFactory'
-import { DrizzleBuilder } from '../../../../DrizzleBuilder'
-import { RequestParameterization } from '../../../../RequestParameterization'
-import { FormRequestConverter, FormRequestConverterFactory } from '..'
-import { BodyParameter } from '../../../parameterhandlers'
-import { HttpHeaders } from '../../../../HttpHeaders'
-import { TestCallFactory } from '../../../../_tests/TestCallFactory'
+import { MediaTypes } from '../../../../MediaTypes.js'
+import { RequestFactory } from '../../../../RequestFactory.js'
+import { DrizzleBuilder } from '../../../../DrizzleBuilder.js'
+import { RequestParameterization } from '../../../../RequestParameterization.js'
+import { FormRequestConverter, FormRequestConverterFactory } from '../index.js'
+import { BodyParameter } from '../../../parameterhandlers/index.js'
+import { HttpHeaders } from '../../../../HttpHeaders.js'
+import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
 
 describe('Form Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()

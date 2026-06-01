@@ -1,14 +1,14 @@
 import { Blob } from 'buffer'
 import { Readable } from 'stream'
 import { Dispatcher, request as Request } from 'undici'
-import { RequestOptions } from 'undici/types/dispatcher'
-import { HttpRequest } from '../HttpRequest'
-import { Call, CallFactory } from '../Call'
-import { HttpHeaders } from '../HttpHeaders'
-import { Drizzle } from '../Drizzle'
-import { HttpResponse, isOK } from '../HttpResponse'
-import { isAbsolute } from '../internal'
-import { HttpMethod } from '../decorators/utils'
+import { RequestOptions } from 'undici'
+import { HttpRequest } from '../HttpRequest.js'
+import { Call, CallFactory } from '../Call.js'
+import { HttpHeaders } from '../HttpHeaders.js'
+import { Drizzle } from '../Drizzle.js'
+import { HttpResponse, isOK } from '../HttpResponse.js'
+import { isAbsolute } from '../internal/index.js'
+import { HttpMethod } from '../decorators/utils/index.js'
 
 class TestCall implements Call<HttpResponse<Readable>> {
   constructor(readonly baseUrl: URL) {}

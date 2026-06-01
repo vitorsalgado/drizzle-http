@@ -1,6 +1,6 @@
-import { HttpRequest } from './HttpRequest'
-import { HttpResponse } from './HttpResponse'
-import { RequestFactory } from './RequestFactory'
+import { HttpRequest } from './HttpRequest.js'
+import { HttpResponse } from './HttpResponse.js'
+import { RequestFactory } from './RequestFactory.js'
 
 export interface Chain {
   requestFactory(): RequestFactory

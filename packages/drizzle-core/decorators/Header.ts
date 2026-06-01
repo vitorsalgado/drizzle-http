@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { HeaderParameter } from '../builtin'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { HeaderParameter } from '../builtin/index.js'
 
 /**
  * Named header to be added to the request.

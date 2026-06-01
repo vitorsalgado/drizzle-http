@@ -1,5 +1,5 @@
-import { RequestParameterization } from '../RequestParameterization'
-import { HttpHeaders } from '../HttpHeaders'
+import { RequestParameterization } from '../RequestParameterization.js'
+import { HttpHeaders } from '../HttpHeaders.js'
 
 describe('RequestValues', function () {
   it('should init with default values', function () {

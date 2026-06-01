@@ -3,12 +3,12 @@ import { CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
 import { Internals } from '@drizzle-http/core'
 import { Pool } from 'undici'
-import { UndiciStreamCall } from './UndiciStreamCall'
-import { UndiciCall } from './UndiciCall'
-import { Keys } from './Keys'
-import { UndiciResponse } from './UndiciResponse'
-import { Streaming } from './Streaming'
-import { StreamingResponse } from './StreamingResponse'
+import { UndiciStreamCall } from './UndiciStreamCall.js'
+import { UndiciCall } from './UndiciCall.js'
+import { Keys } from './Keys.js'
+import { UndiciResponse } from './UndiciResponse.js'
+import { Streaming } from './Streaming.js'
+import { StreamingResponse } from './StreamingResponse.js'
 
 const { notNull } = Internals
 

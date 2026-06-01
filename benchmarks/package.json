@@ -25,5 +25,13 @@
     "node-fetch": "^3.1.0",
     "superagent": "^7.0.0",
     "table": "^6.7.5"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   }
 }

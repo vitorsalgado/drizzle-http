@@ -1,6 +1,6 @@
-import { setupRequestFactory } from '../ApiParameterization'
-import { setupApiDefaults } from '../ApiParameterization'
-import { TargetCtor, TargetProto } from '../internal'
+import { setupRequestFactory } from '../ApiParameterization.js'
+import { setupApiDefaults } from '../ApiParameterization.js'
+import { TargetCtor, TargetProto } from '../internal/index.js'
 
 /**
  * Set the timeouts for an HTTP request.

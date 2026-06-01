@@ -20,8 +20,8 @@ import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-h
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { firstValueFrom } from 'rxjs'
 import { Observable } from 'rxjs'
-import { RxJs } from '../RxJs'
-import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
+import { RxJs } from '../RxJs.js'
+import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory.js'
 
 function Custom() {
   return createMethodDecorator(Custom)

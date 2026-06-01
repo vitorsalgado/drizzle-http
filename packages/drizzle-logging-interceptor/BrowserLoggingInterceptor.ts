@@ -1,7 +1,7 @@
 import { Chain, HttpError, Interceptor } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
-import { Level } from './Level'
-import { isStream } from './isStream'
+import { Level } from './Level.js'
+import { isStream } from './isStream.js'
 
 const Styles = {
   LightGray: 'color: gray; font-weight: lighter',

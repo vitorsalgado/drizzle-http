@@ -1,8 +1,8 @@
 import { Chain, HttpError, HttpResponse, Interceptor } from '@drizzle-http/core'
-import { Level } from './Level'
-import { Logger } from './Logger'
-import { PinoLogger } from './PinoLogger'
-import { isStream } from './isStream'
+import { Level } from './Level.js'
+import { Logger } from './Logger.js'
+import { PinoLogger } from './PinoLogger.js'
+import { isStream } from './isStream.js'
 
 interface Init {
   level?: Level

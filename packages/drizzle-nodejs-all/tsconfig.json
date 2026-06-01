@@ -24,6 +24,11 @@
   ],
   "exclude": [
     "dist",
-    "node_modules"
+    "node_modules",
+    "**/_tests/**",
+    "**/__fixtures__/**",
+    "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*.config.ts"
   ]
 }

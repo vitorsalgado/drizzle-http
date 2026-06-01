@@ -1,9 +1,9 @@
-import { RequestFactory } from '../../../RequestFactory'
-import { RequestBodyConverter } from '../../../RequestBodyConverter'
-import { RequestBodyConverterFactory } from '../../../RequestBodyConverter'
-import { BodyType } from '../../../BodyType'
-import { RequestParameterization } from '../../../RequestParameterization'
-import { Drizzle } from '../../../Drizzle'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { RequestBodyConverter } from '../../../RequestBodyConverter.js'
+import { RequestBodyConverterFactory } from '../../../RequestBodyConverter.js'
+import { BodyType } from '../../../BodyType.js'
+import { RequestParameterization } from '../../../RequestParameterization.js'
+import { Drizzle } from '../../../Drizzle.js'
 
 export class RawRequestConverter implements RequestBodyConverter<BodyType> {
   static INSTANCE: RawRequestConverter = new RawRequestConverter()

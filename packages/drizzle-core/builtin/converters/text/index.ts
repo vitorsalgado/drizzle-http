@@ -1,1 +1,1 @@
-export * from './PlainTextResponseConverterFactory'
+export * from './PlainTextResponseConverterFactory.js'

@@ -3,11 +3,11 @@ import { Drizzle } from '@drizzle-http/core'
 import { CallAdapter } from '@drizzle-http/core'
 import { RequestFactory } from '@drizzle-http/core'
 import OpoCircuitBreaker from 'opossum'
-import { Keys } from './Keys'
-import { Registry } from './Registry'
-import { CircuitBreakerRegistry } from './CircuitBreakerRegistry'
-import { CircuitBreakerCallAdapter } from './CircuitBreakerCallAdapter'
-import { CircuitBreaker } from './decorators'
+import { Keys } from './Keys.js'
+import { Registry } from './Registry.js'
+import { CircuitBreakerRegistry } from './CircuitBreakerRegistry.js'
+import { CircuitBreakerCallAdapter } from './CircuitBreakerCallAdapter.js'
+import { CircuitBreaker } from './decorators/index.js'
 
 interface Init {
   options?: OpoCircuitBreaker.Options

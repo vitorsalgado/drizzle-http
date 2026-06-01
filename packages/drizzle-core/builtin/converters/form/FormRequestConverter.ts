@@ -1,9 +1,9 @@
-import { RequestFactory } from '../../../RequestFactory'
-import { RequestBodyConverter } from '../../../RequestBodyConverter'
-import { BodyType } from '../../../BodyType'
-import { MediaTypes } from '../../../MediaTypes'
-import { RequestBodyTypeNotAllowedError } from '../../../internal'
-import { RequestParameterization } from '../../../RequestParameterization'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { RequestBodyConverter } from '../../../RequestBodyConverter.js'
+import { BodyType } from '../../../BodyType.js'
+import { MediaTypes } from '../../../MediaTypes.js'
+import { RequestBodyTypeNotAllowedError } from '../../../internal/index.js'
+import { RequestParameterization } from '../../../RequestParameterization.js'
 
 export class FormRequestConverter implements RequestBodyConverter<unknown> {
   static INSTANCE: FormRequestConverter = new FormRequestConverter()

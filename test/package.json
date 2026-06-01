@@ -18,5 +18,6 @@
     "@drizzle-http/response-mapper-adapter": "^3.1.0",
     "@drizzle-http/rxjs-adapter": "^3.1.0",
     "@drizzle-http/undici": "^3.1.0"
-  }
+  },
+  "type": "module"
 }

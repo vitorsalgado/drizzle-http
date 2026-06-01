@@ -1,14 +1,14 @@
 import { Call, CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { Metadata } from '@drizzle-http/core'
-import { FetchCall } from './FetchCall'
-import { Cache } from './decorators'
-import { Mode } from './decorators'
-import { Credentials } from './decorators'
-import { Integrity } from './decorators'
-import { KeepAlive } from './decorators'
-import { Redirect } from './decorators'
-import { Referrer } from './decorators'
-import { ReferrerPolicy } from './decorators'
+import { FetchCall } from './FetchCall.js'
+import { Cache } from './decorators/index.js'
+import { Mode } from './decorators/index.js'
+import { Credentials } from './decorators/index.js'
+import { Integrity } from './decorators/index.js'
+import { KeepAlive } from './decorators/index.js'
+import { Redirect } from './decorators/index.js'
+import { Referrer } from './decorators/index.js'
+import { ReferrerPolicy } from './decorators/index.js'
 
 export class FetchCallFactory implements CallFactory {
   static DEFAULT: FetchCallFactory = new FetchCallFactory({})

@@ -1,8 +1,8 @@
-import { Interceptor } from '../../Interceptor'
-import { Chain } from '../../Chain'
-import { HttpResponse } from '../../HttpResponse'
-import { HttpMethod } from '../../decorators/utils'
-import { RetryOptions } from './Retry'
+import { Interceptor } from '../../Interceptor.js'
+import { Chain } from '../../Chain.js'
+import { HttpResponse } from '../../HttpResponse.js'
+import { HttpMethod } from '../../decorators/utils/index.js'
+import { RetryOptions } from './Retry.js'
 
 type RetryInterceptorOptions = RetryOptions
 

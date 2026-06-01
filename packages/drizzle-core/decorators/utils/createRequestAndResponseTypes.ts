@@ -1,6 +1,6 @@
-import { Decorator, TargetCtor, TargetProto } from '../../internal'
-import { createMethodDecorator } from '../../ApiParameterization'
-import { createClassDecorator } from '../../ApiParameterization'
+import { Decorator, TargetCtor, TargetProto } from '../../internal/index.js'
+import { createMethodDecorator } from '../../ApiParameterization.js'
+import { createClassDecorator } from '../../ApiParameterization.js'
 
 export const createRequestAndResponseTypes = (type: string, decorator: Decorator, request = true, response = true) => {
   return function (target: TargetProto | TargetCtor, method?: string, descriptor?: PropertyDescriptor) {

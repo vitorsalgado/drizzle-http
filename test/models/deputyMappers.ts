@@ -1,7 +1,7 @@
-import { Deputado } from './deputy.pt'
-import { DeputadoSimples } from './deputy.pt'
-import { Deputy } from './deputy'
-import { DeputySimple } from './deputy'
+import { Deputado } from './deputy.pt.js'
+import { DeputadoSimples } from './deputy.pt.js'
+import { Deputy } from './deputy.js'
+import { DeputySimple } from './deputy.js'
 
 export function toDeputySimple(dto: DeputadoSimples): DeputySimple {
   return {

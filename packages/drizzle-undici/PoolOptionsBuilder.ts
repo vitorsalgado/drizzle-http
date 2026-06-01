@@ -1,7 +1,6 @@
-import { TlsOptions } from 'tls'
-import { URL } from 'url'
-import Pool from 'undici/types/pool'
-import { Dispatcher } from 'undici'
+import { TlsOptions } from 'node:tls'
+import { URL } from 'node:url'
+import { Dispatcher, Pool } from 'undici'
 
 export class PoolOptionsBuilder {
   private _connections?: number

@@ -1,7 +1,7 @@
 import { DrizzleBuilder } from '@drizzle-http/core'
-import { PartParameterHandlerFactory } from './MultipartParameterHandler'
-import { MultipartRequestBodyConverterFactory } from './MultipartRequestBodyConverter'
-import { FetchCallFactory } from './FetchCallFactory'
+import { PartParameterHandlerFactory } from './MultipartParameterHandler.js'
+import { MultipartRequestBodyConverterFactory } from './MultipartRequestBodyConverter.js'
+import { FetchCallFactory } from './FetchCallFactory.js'
 
 export function useFetch() {
   return function (drizzleBuilder: DrizzleBuilder): void {

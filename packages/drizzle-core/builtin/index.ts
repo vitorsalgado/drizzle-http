@@ -1,12 +1,12 @@
-export * from './adapters/callback'
+export * from './adapters/callback/index.js'
 
-export * from './converters/form'
-export * from './converters/json'
-export * from './converters/raw'
-export * from './converters/text'
+export * from './converters/form/index.js'
+export * from './converters/json/index.js'
+export * from './converters/raw/index.js'
+export * from './converters/text/index.js'
 
-export * from './interceptors'
+export * from './interceptors/index.js'
 
-export * from './parameterhandlers'
+export * from './parameterhandlers/index.js'
 
-export * from './BuiltInConv'
+export * from './BuiltInConv.js'

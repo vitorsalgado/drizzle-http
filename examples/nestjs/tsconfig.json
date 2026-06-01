@@ -4,7 +4,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "moduleResolution": "node",
+    "module": "CommonJS",
+    "moduleResolution": "node10",
     "types": ["node"],
     "composite": false,
     "declaration": true,

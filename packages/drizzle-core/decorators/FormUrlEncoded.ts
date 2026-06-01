@@ -1,8 +1,8 @@
-import { setupApiDefaults, setupRequestFactory } from '../ApiParameterization'
-import { MediaTypes } from '../MediaTypes'
-import { HttpHeaders } from '../HttpHeaders'
-import { TargetCtor, TargetProto } from '../internal'
-import { BuiltInConv } from '..'
+import { setupApiDefaults, setupRequestFactory } from '../ApiParameterization.js'
+import { MediaTypes } from '../MediaTypes.js'
+import { HttpHeaders } from '../HttpHeaders.js'
+import { TargetCtor, TargetProto } from '../internal/index.js'
+import { BuiltInConv } from '../index.js'
 
 /**
  * Mark that the request body will use form url-encoding.

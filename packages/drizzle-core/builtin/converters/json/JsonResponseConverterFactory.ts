@@ -1,9 +1,9 @@
-import { Drizzle } from '../../../Drizzle'
-import { ResponseConverter } from '../../../ResponseConverter'
-import { ResponseConverterFactory } from '../../../ResponseConverter'
-import { BuiltInConv } from '../../BuiltInConv'
-import { RequestFactory } from '../../../RequestFactory'
-import { JsonResponseConverter } from './JsonResponseConverter'
+import { Drizzle } from '../../../Drizzle.js'
+import { ResponseConverter } from '../../../ResponseConverter.js'
+import { ResponseConverterFactory } from '../../../ResponseConverter.js'
+import { BuiltInConv } from '../../BuiltInConv.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { JsonResponseConverter } from './JsonResponseConverter.js'
 
 export class JsonResponseConverterFactory implements ResponseConverterFactory {
   static INSTANCE: JsonResponseConverterFactory = new JsonResponseConverterFactory()

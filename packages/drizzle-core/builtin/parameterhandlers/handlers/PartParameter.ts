@@ -1,4 +1,4 @@
-import { Parameter } from '../Parameter'
+import { Parameter } from '../Parameter.js'
 
 export class PartParameter extends Parameter {
   static Type = 'multipart'

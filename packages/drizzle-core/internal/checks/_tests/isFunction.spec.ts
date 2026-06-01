@@ -1,4 +1,4 @@
-import { isFunction } from '../isFunction'
+import { isFunction } from '../isFunction.js'
 
 describe('isFunction', function () {
   it('should throw error when argument is not a function', function () {

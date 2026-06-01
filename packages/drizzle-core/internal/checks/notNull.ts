@@ -1,4 +1,4 @@
-import { InvalidArgumentError } from './InvalidArgumentError'
+import { InvalidArgumentError } from './InvalidArgumentError.js'
 
 export function notNull<T>(value: T, message = 'Argument must not be null or undefined.'): NonNullable<T> {
   if (value === null || typeof value === 'undefined') {

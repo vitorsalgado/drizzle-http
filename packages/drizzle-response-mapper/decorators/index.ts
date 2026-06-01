@@ -1,2 +1,2 @@
-export * from './Map'
-export * from './MapTo'
+export * from './Map.js'
+export * from './MapTo.js'

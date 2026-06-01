@@ -1,8 +1,8 @@
-import { ResponseConverterFactory } from '../../../ResponseConverter'
-import { ResponseConverter } from '../../../ResponseConverter'
-import { Drizzle } from '../../../Drizzle'
-import { HttpResponse } from '../../../HttpResponse'
-import { BuiltInConv } from '../../BuiltInConv'
+import { ResponseConverterFactory } from '../../../ResponseConverter.js'
+import { ResponseConverter } from '../../../ResponseConverter.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { HttpResponse } from '../../../HttpResponse.js'
+import { BuiltInConv } from '../../BuiltInConv.js'
 
 class PlainTextResponseConverter implements ResponseConverter<string> {
   static INSTANCE: PlainTextResponseConverter = new PlainTextResponseConverter()

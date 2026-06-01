@@ -2,8 +2,8 @@
 
 import { Internals } from '@drizzle-http/core'
 import { createMethodDecorator } from '@drizzle-http/core'
-import { MapToTypeKey } from '../Keys'
-import { MapToTypeMapperKey } from '../Keys'
+import { MapToTypeKey } from '../Keys.js'
+import { MapToTypeMapperKey } from '../Keys.js'
 
 const { notNull } = Internals
 

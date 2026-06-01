@@ -1,5 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.json",
-  "exclude": ["dist", "node_modules", "**/_tests/**", "**/__fixtures__/**", "**/*.spec.ts", "**/*.spec.js", "**/*.config.ts"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/_tests/**",
+    "**/__fixtures__/**",
+    "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../packages/drizzle-core/tsconfig.build.json"
+    },
+    {
+      "path": "../packages/drizzle-undici/tsconfig.build.json"
+    }
+  ]
 }

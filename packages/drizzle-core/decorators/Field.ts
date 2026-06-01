@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { FormParameter } from '../builtin'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { FormParameter } from '../builtin/index.js'
 
 /**
  * Named form parameter for a form url-encode request.

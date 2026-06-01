@@ -1,9 +1,9 @@
-import { HttpResponse } from './HttpResponse'
-import { RequestFactory } from './RequestFactory'
-import { Drizzle } from './Drizzle'
-import { HttpError } from './HttpError'
-import { HttpRequest } from './HttpRequest'
-import { ResponseConverter } from './ResponseConverter'
+import { HttpResponse } from './HttpResponse.js'
+import { RequestFactory } from './RequestFactory.js'
+import { Drizzle } from './Drizzle.js'
+import { HttpError } from './HttpError.js'
+import { HttpRequest } from './HttpRequest.js'
+import { ResponseConverter } from './ResponseConverter.js'
 
 /**
  * Handles a {@link HttpResponse}.

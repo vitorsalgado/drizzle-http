@@ -1,7 +1,7 @@
-import { RequestFactory } from './RequestFactory'
-import { HttpHeaders } from './HttpHeaders'
-import { Decorator, isFunction, notBlank, notNull, TargetCtor, TargetProto } from './internal'
-import { Drizzle } from './Drizzle'
+import { RequestFactory } from './RequestFactory.js'
+import { HttpHeaders } from './HttpHeaders.js'
+import { Decorator, isFunction, notBlank, notNull, TargetCtor, TargetProto } from './internal/index.js'
+import { Drizzle } from './Drizzle.js'
 
 type Target = TargetCtor | TargetProto
 

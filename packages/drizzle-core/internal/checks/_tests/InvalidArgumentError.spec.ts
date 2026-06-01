@@ -1,4 +1,4 @@
-import { InvalidArgumentError } from '../InvalidArgumentError'
+import { InvalidArgumentError } from '../InvalidArgumentError.js'
 
 describe('InvalidArgumentError', function () {
   it('should init with a default message when none is provided', function () {

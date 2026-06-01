@@ -1,9 +1,9 @@
-import { RequestBodyConverter } from '../../../RequestBodyConverter'
-import { RequestBodyConverterFactory } from '../../../RequestBodyConverter'
-import { Drizzle } from '../../../Drizzle'
-import { BuiltInConv } from '../../BuiltInConv'
-import { RequestFactory } from '../../../RequestFactory'
-import { JsonRequestConverter } from './JsonRequestConverter'
+import { RequestBodyConverter } from '../../../RequestBodyConverter.js'
+import { RequestBodyConverterFactory } from '../../../RequestBodyConverter.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { BuiltInConv } from '../../BuiltInConv.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { JsonRequestConverter } from './JsonRequestConverter.js'
 
 export class JsonRequestConverterFactory implements RequestBodyConverterFactory {
   static INSTANCE: JsonRequestConverterFactory = new JsonRequestConverterFactory()

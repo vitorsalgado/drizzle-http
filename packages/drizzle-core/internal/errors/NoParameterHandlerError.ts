@@ -1,4 +1,4 @@
-import { DrizzleError } from './DrizzleError'
+import { DrizzleError } from './DrizzleError.js'
 
 export class NoParameterHandlerError extends DrizzleError {
   constructor(public readonly type: string, public readonly method: string, public readonly index: number) {

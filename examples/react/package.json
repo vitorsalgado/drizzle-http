@@ -50,5 +50,6 @@
     "react-hot-loader": "^4.13.0",
     "react-router-dom": "^6.2.1",
     "webpack-dev-server": "^4.7.2"
-  }
+  },
+  "type": "module"
 }

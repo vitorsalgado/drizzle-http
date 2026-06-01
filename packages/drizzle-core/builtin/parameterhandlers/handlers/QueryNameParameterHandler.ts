@@ -1,10 +1,10 @@
-import { ParameterHandler } from '../ParameterHandler'
-import { RequestFactory } from '../../../RequestFactory'
-import { Drizzle } from '../../../Drizzle'
-import { Parameter } from '../Parameter'
-import { ParameterHandlerFactory } from '../ParameterHandlerFactory'
-import { RequestParameterization } from '../../../RequestParameterization'
-import { encodeIfNecessary } from '../../../internal'
+import { ParameterHandler } from '../ParameterHandler.js'
+import { RequestFactory } from '../../../RequestFactory.js'
+import { Drizzle } from '../../../Drizzle.js'
+import { Parameter } from '../Parameter.js'
+import { ParameterHandlerFactory } from '../ParameterHandlerFactory.js'
+import { RequestParameterization } from '../../../RequestParameterization.js'
+import { encodeIfNecessary } from '../../../internal/index.js'
 
 export class QueryNameParameter extends Parameter {
   static Type = 'query_name'

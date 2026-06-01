@@ -1,5 +1,5 @@
-import { ResultadoApi } from './ResultadoApi'
-import { ApiResult } from './ApiResult'
+import { ResultadoApi } from './ResultadoApi.js'
+import { ApiResult } from './ApiResult.js'
 
 export const mapSingle =
   <R, TR>(mapper: (response: R) => TR) =>

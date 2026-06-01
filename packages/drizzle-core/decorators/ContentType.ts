@@ -1,7 +1,7 @@
-import { setupRequestFactory } from '../ApiParameterization'
-import { setupApiDefaults } from '../ApiParameterization'
-import { HttpHeaders } from '../HttpHeaders'
-import { TargetCtor, TargetProto } from '../internal'
+import { setupRequestFactory } from '../ApiParameterization.js'
+import { setupApiDefaults } from '../ApiParameterization.js'
+import { HttpHeaders } from '../HttpHeaders.js'
+import { TargetCtor, TargetProto } from '../internal/index.js'
 
 /**
  * Set Content-Type header in the request

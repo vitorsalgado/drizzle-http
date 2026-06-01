@@ -8,7 +8,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
@@ -64,5 +63,6 @@
   "devDependencies": {
     "@drizzle-http/test-utils": "^3.1.0",
     "@playwright/test": "^1.17.1"
-  }
+  },
+  "type": "module"
 }

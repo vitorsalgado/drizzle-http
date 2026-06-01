@@ -1,7 +1,7 @@
-import { Party } from './party'
-import { PartySimple } from './party'
-import { PartidoSimples } from './party.pt'
-import { Partido } from './party.pt'
+import { Party } from './party.js'
+import { PartySimple } from './party.js'
+import { PartidoSimples } from './party.pt.js'
+import { Partido } from './party.pt.js'
 
 export function toSimpleParty(dto: PartidoSimples): PartySimple {
   return {

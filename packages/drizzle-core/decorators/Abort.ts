@@ -1,6 +1,6 @@
-import { setupApiDefaults, setupRequestFactory } from '../ApiParameterization'
-import { SignalParameter } from '../builtin'
-import { TargetCtor, TargetProto } from '../internal'
+import { setupApiDefaults, setupRequestFactory } from '../ApiParameterization.js'
+import { SignalParameter } from '../builtin/index.js'
+import { TargetCtor, TargetProto } from '../internal/index.js'
 
 export function Abort(value: string | unknown | null = null) {
   return function (target: TargetProto | TargetCtor, method?: string, desc?: number | PropertyDescriptor): void {

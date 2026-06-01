@@ -1,4 +1,4 @@
-import { DrizzleError } from './DrizzleError'
+import { DrizzleError } from './DrizzleError.js'
 
 export class NoRequestConverterError extends DrizzleError {
   constructor(method: string) {

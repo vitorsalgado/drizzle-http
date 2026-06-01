@@ -1,5 +1,5 @@
-import { InvalidArgumentError } from './InvalidArgumentError'
-import { isNullOrUndefined } from './utils'
+import { InvalidArgumentError } from './InvalidArgumentError.js'
+import { isNullOrUndefined } from './utils.js'
 
 export function noNullElements<K, V = unknown>(
   value: Array<K> | Map<K, V> | Set<K>,

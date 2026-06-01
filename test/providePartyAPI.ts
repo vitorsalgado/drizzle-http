@@ -5,7 +5,7 @@ import { RxJsCallAdapterFactory } from '@drizzle-http/rxjs-adapter'
 import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
 import { Level } from '@drizzle-http/logging-interceptor'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { PartyAPI } from './PartyAPI'
+import { PartyAPI } from './PartyAPI.js'
 
 export function providePartyAPI(): PartyAPI {
   return DrizzleBuilder.newBuilder()

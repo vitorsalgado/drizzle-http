@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization'
+import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 
 /**
  * Define that errors should be parsed with a {@link ResponseConverter} instance.

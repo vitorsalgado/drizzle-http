@@ -1,6 +1,6 @@
-import { CallAdapter } from '../../../CallAdapter'
-import { Call } from '../../../Call'
-import { HttpRequest } from '../../../HttpRequest'
+import { CallAdapter } from '../../../CallAdapter.js'
+import { Call } from '../../../Call.js'
+import { HttpRequest } from '../../../HttpRequest.js'
 
 type Fn = (error: Error | null, response: unknown) => void
 

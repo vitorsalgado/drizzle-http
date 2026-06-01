@@ -1,7 +1,7 @@
-export * from './decorators'
+export * from './decorators/index.js'
 
-export * from './FetchCall'
-export * from './FetchCallFactory'
-export * from './MultipartParameterHandler'
-export * from './MultipartRequestBodyConverter'
-export * from './useFetch'
+export * from './FetchCall.js'
+export * from './FetchCallFactory.js'
+export * from './MultipartParameterHandler.js'
+export * from './MultipartRequestBodyConverter.js'
+export * from './useFetch.js'

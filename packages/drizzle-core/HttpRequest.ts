@@ -1,5 +1,5 @@
-import { HttpHeaders } from './HttpHeaders'
-import { BodyType } from './BodyType'
+import { HttpHeaders } from './HttpHeaders.js'
+import { BodyType } from './BodyType.js'
 
 interface HttpRequestInit {
   url: string

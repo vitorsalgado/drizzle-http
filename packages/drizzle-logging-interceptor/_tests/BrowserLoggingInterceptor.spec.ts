@@ -14,8 +14,8 @@ import { MediaTypes } from '@drizzle-http/core'
 import { Body } from '@drizzle-http/core'
 import { RawResponse } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
-import { BrowserLoggingInterceptor } from '../BrowserLoggingInterceptor'
-import { Level } from '../Level'
+import { BrowserLoggingInterceptor } from '../BrowserLoggingInterceptor.js'
+import { Level } from '../Level.js'
 
 describe('Browser Logging Interceptor', function () {
   let address = ''

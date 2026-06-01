@@ -12,15 +12,15 @@ import {
   POST,
   PUT,
   UsePlainTextConv
-} from '../decorators'
-import { MediaTypes } from '../MediaTypes'
-import { noop } from '../noop'
-import { Drizzle } from '../Drizzle'
-import { DrizzleBuilder } from '../DrizzleBuilder'
-import { BuiltInConv, RawResponse } from '../builtin'
-import { HttpResponse } from '../HttpResponse'
-import { HttpError } from '../HttpError'
-import { TestCallFactory } from './TestCallFactory'
+} from '../decorators/index.js'
+import { MediaTypes } from '../MediaTypes.js'
+import { noop } from '../noop.js'
+import { Drizzle } from '../Drizzle.js'
+import { DrizzleBuilder } from '../DrizzleBuilder.js'
+import { BuiltInConv, RawResponse } from '../builtin/index.js'
+import { HttpResponse } from '../HttpResponse.js'
+import { HttpError } from '../HttpError.js'
+import { TestCallFactory } from './TestCallFactory.js'
 
 interface User {
   id: string

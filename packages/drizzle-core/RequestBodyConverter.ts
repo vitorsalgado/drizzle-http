@@ -1,6 +1,6 @@
-import { RequestFactory } from './RequestFactory'
-import { RequestParameterization } from './RequestParameterization'
-import { Drizzle } from './Drizzle'
+import { RequestFactory } from './RequestFactory.js'
+import { RequestParameterization } from './RequestParameterization.js'
+import { Drizzle } from './Drizzle.js'
 
 /**
  * Converts a value to an HTTP representation format

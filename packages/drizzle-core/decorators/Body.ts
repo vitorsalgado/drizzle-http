@@ -1,5 +1,5 @@
-import { createParameterDecorator } from '../ApiParameterization'
-import { BodyParameter } from '../builtin'
+import { createParameterDecorator } from '../ApiParameterization.js'
+import { BodyParameter } from '../builtin/index.js'
 
 /**
  * Use this decorator to mark that a method parameter must be sent as the HTTP Request body
