@@ -15,7 +15,7 @@ import {
 import { RawRequest } from '..'
 import { noop } from '../../../../noop'
 import { HttpHeaders } from '../../../../HttpHeaders'
-import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
+import { TestCallFactory } from '../../../../_tests/TestCallFactory'
 
 class API {
   @POST('/raw-test')

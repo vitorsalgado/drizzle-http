@@ -9,9 +9,9 @@ paths-ignore:
   - node_modules
   - packages/**/node_modules
   - packages/**/dist
-  - packages/**/__tests__
+  - packages/**/_tests
   - packages/drizzle-fetch/e2e
-  - __tests__
+  - _tests
   - internal
   - benchmarks
   - examples

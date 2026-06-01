@@ -7,7 +7,7 @@ import { DrizzleBuilder } from '../../../../DrizzleBuilder'
 import { HttpError } from '../../../../HttpError'
 import { Callback } from '../Callback'
 import { noop } from '../../../../noop'
-import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
+import { TestCallFactory } from '../../../../_tests/TestCallFactory'
 import { MediaTypes } from '../../../../MediaTypes'
 
 @ContentType(MediaTypes.APPLICATION_JSON)

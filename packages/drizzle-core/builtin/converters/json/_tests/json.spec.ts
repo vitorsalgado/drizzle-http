@@ -9,7 +9,7 @@ import {
 } from '..'
 import { BodyParameter } from '../../../parameterhandlers'
 import { HttpHeaders } from '../../../../HttpHeaders'
-import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
+import { TestCallFactory } from '../../../../_tests/TestCallFactory'
 
 describe('JSON Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()

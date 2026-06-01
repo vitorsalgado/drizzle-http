@@ -8,7 +8,7 @@ export default defineConfig({
     setupFiles: ['dotenv/config'],
     testTimeout: 15000,
     restoreMocks: false,
-    include: ['**/__tests__/**/*.{spec,test}.ts', 'test/**/*.spec.ts'],
+    include: ['**/_tests/**/*.{spec,test}.ts', 'test/**/*.spec.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

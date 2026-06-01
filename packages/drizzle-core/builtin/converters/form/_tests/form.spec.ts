@@ -5,7 +5,7 @@ import { RequestParameterization } from '../../../../RequestParameterization'
 import { FormRequestConverter, FormRequestConverterFactory } from '..'
 import { BodyParameter } from '../../../parameterhandlers'
 import { HttpHeaders } from '../../../../HttpHeaders'
-import { TestCallFactory } from '../../../../__tests__/TestCallFactory'
+import { TestCallFactory } from '../../../../_tests/TestCallFactory'
 
 describe('Form Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()
