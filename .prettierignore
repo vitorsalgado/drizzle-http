@@ -12,6 +12,4 @@ temp
 *.json
 *.d.ts
 
-deno
-
 README.md

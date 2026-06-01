@@ -8,24 +8,17 @@
 
 <p align='center'>
   <a href='https://www.npmjs.com/settings/drizzle-http/packages' target='_blank'><strong>NPM Packages</strong></a><br/>
-  <a href='https://deno.land/x/drizzle_http' target='_blank'><strong>Deno</strong></a><br/>
 </p>
 
 <p align='center'>
   <a href="https://github.com/vitorsalgado/drizzle-http/actions/workflows/ci.yml">
     <img src="https://github.com/vitorsalgado/drizzle-http/actions/workflows/ci.yml/badge.svg" alt="GitHub Action Status" />
   </a>
-  <a href="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml">
-    <img src="https://github.com/vitorsalgado/drizzle-http/actions/workflows/deno.yml/badge.svg" alt="Deno GitHub Action Status" />
-  </a>
   <a href="https://codecov.io/gh/vitorsalgado/drizzle-http">
     <img src="https://codecov.io/gh/vitorsalgado/drizzle-http/branch/main/graph/badge.svg?token=XU2YHXHAEH" alt="Codecov" />
   </a>
   <a href="https://www.npmjs.com/settings/drizzle-http/packages">
     <img src="https://img.shields.io/npm/v/@drizzle-http/core?logo=npm" alt="NPM Package" />  
-  </a>
-  <a href="https://deno.land/x/drizzle_http">
-    <img src="https://img.shields.io/badge/available%20on-deno.land-lightgrey?logo=deno&labelColor=black" alt="Deno Package"/>
   </a>
   <a href="https://conventionalcommits.org">
     <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg?logo=git" alt="Conventional Commits"/>
@@ -41,7 +34,6 @@ and [Feign](https://github.com/OpenFeign/feign), that let you create API clients
 
 ## Table of Contents
 
-- [Deno](deno)
 - [Installation](#installation)
 - [Packages](packages)
 - [Getting Started](#getting-started)
@@ -231,19 +223,11 @@ the error body, pass the name of the converter to the decorator. E.g.: `@ParseEr
 - **RxJs** support with [RxJs Adapter](packages/drizzle-rxjs)
 - Map responses with [Response Mapper Adapter](packages/drizzle-response-mapper)
 - **Circuit Breaker** with **Opossum** with [this adapter](packages/drizzle-opossum-circuit-breaker)
-- **Deno** support
 
 ### Browser
 
 For Browser usage, take a look on [this implementation](packages/drizzle-fetch). It uses **fetch** to make HTTP
 requests.
-
-### Deno
-
-A version for **Deno** is available on [https://deno.land/x/drizzle_http](https://deno.land/x/drizzle_http).  
-The Deno version is simpler than the one available for Node.js. It contains the **core** module and a fetch client
-implementation specific for Deno.  
-More details and usage example [here](deno).
 
 ### Interceptors
 

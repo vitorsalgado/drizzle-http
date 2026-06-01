@@ -20,7 +20,6 @@ const config: JestConfig.InitialOptions = {
     'examples/*',
     'benchmarks/*',
     './test/*',
-    './deno/*',
     'scripts/*',
     'packages/.*/dist',
     'packages/.*/coverage',

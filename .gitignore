@@ -102,14 +102,6 @@ typings/
 # TernJS port file
 .tern-port
 
-# Yarn
-**/.yarn/*
-!**/.yarn/releases
-!**/.yarn/plugins
-!**/.yarn/sdks
-!**/.yarn/versions
-**/.pnp.*
-
 # Mac
 .DS_Store
 
@@ -124,7 +116,6 @@ typings/
 .nvmrc
 .npmrc
 temp/
-package-lock.json
 
 # Dist
 dist/

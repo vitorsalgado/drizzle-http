@@ -52,8 +52,7 @@
     "typescript",
     "decorator",
     "easy",
-    "annotations",
-    "deno"
+    "annotations"
   ],
   "devDependencies": {
     "@drizzle-http/test-utils": "^3.1.0"

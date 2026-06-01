@@ -12,6 +12,17 @@ const PkgMain = JSON.parse(Fs.readFileSync(Path.join(process.cwd(), 'package.jso
 const argv = process.argv
 if (argv.length <= 2) argv.push('--help')
 
+const WORKSPACE_PKG_PATTERNS = [
+  'benchmarks/package.json',
+  'internal/*/package.json',
+  'packages/*/package.json',
+  'examples/*/package.json',
+  'test/package.json'
+]
+
+const INTERNAL_PKG_PREFIXES = ['@drizzle-http/', 'drizzle-http']
+const DEP_FIELDS = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']
+
 const Logger = Pino({
   level: 'info',
   transport: {
@@ -26,31 +37,58 @@ const Logger = Pino({
   }
 })
 
+const isInternalPackage = name => INTERNAL_PKG_PREFIXES.some(prefix => name.startsWith(prefix))
+
+const updateInternalDeps = (pkg, version) => {
+  for (const field of DEP_FIELDS) {
+    const deps = pkg[field]
+    if (!deps) continue
+
+    for (const [name] of Object.entries(deps)) {
+      if (isInternalPackage(name)) {
+        deps[name] = `^${version}`
+      }
+    }
+  }
+}
+
+const bumpWorkspaceVersions = async version => {
+  const pkgRefs = await globby(WORKSPACE_PKG_PATTERNS, {
+    cwd: process.cwd(),
+    absolute: true,
+    ignore: ['**/node_modules/**']
+  })
+
+  for (const pkgRef of pkgRefs) {
+    const pkg = JSON.parse(Fs.readFileSync(pkgRef).toString())
+    pkg.version = version
+    updateInternalDeps(pkg, version)
+    FsExt.writeJsonSync(pkgRef, pkg, { spaces: 2 })
+    Logger.info(`Updated ${pkg.name} to v${version}`)
+  }
+}
+
 Program.command('prepare <version>')
   .description('Prepare release')
-  .action(version => {
+  .action(async version => {
     Logger.info('--> Preparing ...')
     Logger.info('Version: ' + version)
 
     Logger.info('Building ...')
-    ExecSync('yarn build')
+    ExecSync('npm run build', { stdio: 'inherit' })
 
-    Logger.info('Lerna Version ...')
-    ExecSync(`lerna version ${version} --conventional-commits --no-push --force-publish --no-git-tag-version --yes`)
+    Logger.info('Bumping workspace versions ...')
+    await bumpWorkspaceVersions(version)
 
-    Logger.info('Updating yarn.json ...')
-    ExecSync('yarn')
+    Logger.info('Updating package-lock.json ...')
+    ExecSync('npm install', { stdio: 'inherit' })
 
-    Logger.info('Reading Lerna JSON ...')
-    const lerna = FsExt.readJsonSync('./lerna.json')
-    const newVersion = lerna.version
-
-    Logger.info('Tag: ' + newVersion)
+    Logger.info('Tag: ' + version)
 
     Logger.info('Commit and Tagging ...')
     ExecSync('git add .')
-    ExecSync(`git commit -m "chore(release): v${newVersion}"`)
-    ExecSync(`git tag v${newVersion} -m v${newVersion}`)
+    ExecSync(`git commit -m "chore(release): v${version}"`)
+    ExecSync(`git tag v${version} -m v${version}`)
 
     Logger.info('<-- Preparation Finished')
   })

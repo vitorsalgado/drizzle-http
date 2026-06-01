@@ -4,17 +4,17 @@
   "private": true,
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "test:coverage": "yarn test --coverage",
-    "test:ci": "yarn test --colors --coverage --ci",
-    "test:failures": "yar test --onlyFailures",
+    "test:coverage": "npm test -- --coverage",
+    "test:ci": "npm test -- --colors --coverage --ci",
+    "test:failures": "npm test -- --onlyFailures",
     "prepare": "husky install",
-    "build": "yarn workspaces foreach run build",
+    "build": "npm run build --workspaces --if-present",
     "lint": "eslint --ext .ts .",
-    "lint:fix": "yarn lint -- --fix",
+    "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier 'packages/**' 'examples/**' 'benchmarks/**' 'scripts/**' --write --ignore-unknown",
-    "prettier:ci": "yarn prettier --check",
+    "prettier:ci": "npm run prettier -- --check",
     "release": "node scripts/packaging.js publish",
-    "clean": "yarn workspaces foreach exec rm -rf dist",
+    "clean": "node scripts/clean.js",
     "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
     "postinstall": "husky install",
     "release:prepare": "node scripts/packaging.js prepare",
@@ -102,7 +102,6 @@
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "jest": "^27.4.5",
-    "lerna": "^4.0.0",
     "lint-staged": "^12.1.5",
     "pino": "^7.6.2",
     "pino-pretty": "^7.3.0",
@@ -117,6 +116,5 @@
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.2"
-  },
-  "packageManager": "yarn@3.1.1"
+  }
 }

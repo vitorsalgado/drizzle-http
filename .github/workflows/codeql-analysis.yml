@@ -28,26 +28,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-
-      - name: Get Yarn Cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Yarn Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: yarn2-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn2-
+          cache: npm
 
       - name: Deps
-        run: |
-          yarn --immutable
+        run: npm ci
 
       - name: Build
-        run: |
-          yarn build
+        run: npm run build
 
       - name: CodeQL
         uses: github/codeql-action/analyze@v1

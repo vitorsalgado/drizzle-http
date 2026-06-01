@@ -37,7 +37,6 @@
     "**/dist",
     ".changeset",
     ".github",
-    ".yarn",
     "assets",
     "coverage"
   ]

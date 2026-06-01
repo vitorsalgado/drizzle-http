@@ -16,8 +16,3 @@ This way, you will have the core components and the Undici HTTP client implement
 ```
 npm i @drizzle-http/core
 ```
-
-## Deno
-
-The port was created using [Denoify](https://github.com/garronej/denoify) and is placed on folder [deno](../../deno).  
-The Deno version is published on [https://deno.land/x/drizzle_http](https://deno.land/x/drizzle_http).
