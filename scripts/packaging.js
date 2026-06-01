@@ -16,8 +16,7 @@ const WORKSPACE_PKG_PATTERNS = [
   '_benchmarks/package.json',
   'internal/*/package.json',
   'packages/*/package.json',
-  '_examples/*/package.json',
-  'test/package.json'
+  '_examples/*/package.json'
 ]
 
 const INTERNAL_PKG_PREFIXES = ['@drizzle-http/', 'drizzle-http']

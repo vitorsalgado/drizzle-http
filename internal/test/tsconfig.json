@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "references": [
+    {
+      "path": "../../packages/drizzle-core"
+    },
+    {
+      "path": "../../packages/drizzle-undici"
+    },
+    {
+      "path": "../../packages/drizzle-logging-interceptor"
+    },
+    {
+      "path": "../../packages/drizzle-rxjs"
+    },
+    {
+      "path": "../../packages/drizzle-response-mapper"
+    },
+    {
+      "path": "../../packages/drizzle-opossum-circuit-breaker"
+    },
+    {
+      "path": "../test-utils"
+    }
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}

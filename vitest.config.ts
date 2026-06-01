@@ -8,14 +8,15 @@ export default defineConfig({
     setupFiles: ['dotenv/config'],
     testTimeout: 15000,
     restoreMocks: false,
-    include: ['**/_tests/**/*.{spec,test}.ts', 'test/**/*.spec.ts'],
+    include: ['**/_tests/**/*.{spec,test}.ts', 'internal/test/**/*.spec.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
       '**/coverage/**',
       '**/_examples/**',
       '**/_benchmarks/**',
-      '**/internal/**',
+      'internal/test-utils/**',
+      'internal/clinic/**',
       '**/scripts/**',
       'packages/drizzle-fetch/**'
     ],

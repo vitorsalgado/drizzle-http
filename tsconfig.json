@@ -19,7 +19,7 @@
     { "path": "packages/drizzle-opossum-circuit-breaker/tsconfig.build.json" },
     { "path": "packages/drizzle-nodejs-all/tsconfig.build.json" },
     { "path": "_benchmarks/tsconfig.build.json" },
-    { "path": "test/tsconfig.build.json" },
+    { "path": "internal/test/tsconfig.build.json" },
     { "path": "_examples/typescript/tsconfig.build.json" },
     { "path": "_examples/react/tsconfig.build.json" }
   ],
