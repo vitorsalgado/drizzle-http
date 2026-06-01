@@ -11,11 +11,11 @@ test: # Run tests
 
 .PHONY: fmt
 fmt: # Format all source code
-	@npm run prettier
+	@npm run fmt
 
 .PHONY: fmt-check
 fmt-check: # Check project files format
-	@npm run prettier:ci
+	@npm run fmt:check
 
 .PHONY: lint
 lint: # Lint all files

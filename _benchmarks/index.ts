@@ -144,12 +144,14 @@ cronometro(
 
     axios() {
       return makeParallelRequests(parallelRequests, (callback: any) =>
-        axios.post(target.url, {
-          headers: h,
-          data,
-          httpAgent: axiosAgent,
-          responseType: 'json'
-        }).then(callback)
+        axios
+          .post(target.url, {
+            headers: h,
+            data,
+            httpAgent: axiosAgent,
+            responseType: 'json'
+          })
+          .then(callback)
       )
     },
 
