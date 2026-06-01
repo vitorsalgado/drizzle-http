@@ -13,10 +13,10 @@ const argv = process.argv
 if (argv.length <= 2) argv.push('--help')
 
 const WORKSPACE_PKG_PATTERNS = [
-  'benchmarks/package.json',
+  '_benchmarks/package.json',
   'internal/*/package.json',
   'packages/*/package.json',
-  'examples/*/package.json',
+  '_examples/*/package.json',
   'test/package.json'
 ]
 

@@ -12,11 +12,11 @@
     "typecheck": "tsc --build --clean && tsc --build --force",
     "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier 'packages/**' 'examples/**' 'benchmarks/**' 'scripts/**' --write --ignore-unknown",
+    "prettier": "prettier 'packages/**' '_examples/**' '_benchmarks/**' 'scripts/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check",
     "release": "node scripts/packaging.js publish",
     "clean": "node scripts/clean.js",
-    "benchmark": "concurrently -k --kill-others-on-fail -s first \"node benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node benchmarks/dist/index.js\"",
+    "benchmark": "concurrently -k --kill-others-on-fail -s first \"node _benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node _benchmarks/dist/index.js\"",
     "postinstall": "husky install",
     "release:prepare": "node scripts/packaging.js prepare",
     "release:publish": "node scripts/packaging.js publish"
@@ -38,10 +38,10 @@
   },
   "homepage": "https://github.com/vitorsalgado/drizzle-http",
   "workspaces": [
-    "benchmarks",
+    "_benchmarks",
     "internal/*",
     "packages/*",
-    "examples/*",
+    "_examples/*",
     "test"
   ],
   "keywords": [

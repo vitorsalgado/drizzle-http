@@ -1,6 +1,6 @@
 exclude_patterns:
-  - "examples/"
-  - "benchmarks/"
+  - "_examples/"
+  - "_benchmarks/"
   - "internal/"
   - "scripts/"
   - "**/*.spec.ts"

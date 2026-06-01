@@ -10,7 +10,7 @@ const SPECIFIER_RE =
 const IGNORE = [
   '**/node_modules/**',
   '**/dist/**',
-  'examples/nestjs/**',
+  '_examples/nestjs/**',
   'packages/drizzle-fetch/e2e/**'
 ]
 

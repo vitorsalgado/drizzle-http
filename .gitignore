@@ -123,5 +123,5 @@ out/
 
 # TypeScript emit outside dist
 **/*.d.ts.map
-examples/nestjs/src/**/*.js
-examples/nestjs/src/**/*.js.map
+_examples/nestjs/src/**/*.js
+_examples/nestjs/src/**/*.js.map

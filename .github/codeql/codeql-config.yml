@@ -13,8 +13,8 @@ paths-ignore:
   - packages/drizzle-fetch/e2e
   - _tests
   - internal
-  - benchmarks
-  - examples
+  - _benchmarks
+  - _examples
   - scripts
   - test
   - '**/*.spec.js'

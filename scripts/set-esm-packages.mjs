@@ -4,15 +4,15 @@ import Fs from 'fs'
 import Path from 'path'
 import { globby } from 'globby'
 
-const SKIP = new Set(['examples/nestjs/package.json', 'examples/javascript/package.json'])
+const SKIP = new Set(['_examples/nestjs/package.json', '_examples/javascript/package.json'])
 
 const pkgRefs = await globby(
   [
     'packages/*/package.json',
     'internal/*/package.json',
-    'benchmarks/package.json',
+    '_benchmarks/package.json',
     'test/package.json',
-    'examples/*/package.json'
+    '_examples/*/package.json'
   ],
   { cwd: process.cwd(), absolute: true, ignore: ['**/node_modules/**'] }
 )

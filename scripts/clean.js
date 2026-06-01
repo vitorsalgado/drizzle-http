@@ -5,19 +5,19 @@ import { globby } from 'globby'
 
 const cleanupTargets = await globby(
   [
-    'benchmarks/dist',
+    '_benchmarks/dist',
     'internal/*/dist',
     'packages/*/dist',
-    'examples/*/dist',
+    '_examples/*/dist',
     'test/dist',
     '**/tsconfig.build.tsbuildinfo',
-    'examples/nestjs/dist/tsconfig.tsbuildinfo',
-    'examples/nestjs/src/**/*.js',
-    'examples/nestjs/src/**/*.js.map',
-    'examples/react/http/index.js',
-    'examples/react/http/index.js.map',
-    'examples/react/http/index.d.ts',
-    'examples/react/http/index.d.ts.map'
+    '_examples/nestjs/dist/tsconfig.tsbuildinfo',
+    '_examples/nestjs/src/**/*.js',
+    '_examples/nestjs/src/**/*.js.map',
+    '_examples/react/http/index.js',
+    '_examples/react/http/index.js.map',
+    '_examples/react/http/index.d.ts',
+    '_examples/react/http/index.d.ts.map'
   ],
   { cwd: process.cwd(), onlyDirectories: false, absolute: true }
 )

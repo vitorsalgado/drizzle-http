@@ -13,8 +13,8 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       '**/coverage/**',
-      '**/examples/**',
-      '**/benchmarks/**',
+      '**/_examples/**',
+      '**/_benchmarks/**',
       '**/internal/**',
       '**/scripts/**',
       'packages/drizzle-fetch/**'

@@ -38,7 +38,7 @@ and [Feign](https://github.com/OpenFeign/feign), that let you create API clients
 - [Packages](packages)
 - [Getting Started](#getting-started)
 - [Features](#features)
-- [Examples](examples)
+- [Examples](_examples)
 - [Common Issues](#common-issues)
 - [Benchmarks](#benchmarks)
 - [Contributing](#contributing)

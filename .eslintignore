@@ -1,10 +1,10 @@
 .github/
 .yarn/
 
-benchmarks/
+_benchmarks/
 docs/
 /dist/
-examples/
+_examples/
 scripts/
 
 *.d.ts
