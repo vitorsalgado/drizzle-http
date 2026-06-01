@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "test": "jest --detectOpenHandles",
+    "test": "vitest run --config ../../vitest.config.ts packages/drizzle-rxjs",
     "lint": "eslint --fix --ext .ts .",
     "prettier": "prettier './**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",

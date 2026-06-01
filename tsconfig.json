@@ -33,7 +33,6 @@
     "examples/javascript",
     "examples/nodejs-es-modules",
     "examples/nestjs",
-    "jest.config.ts",
-    "jest-base.config.ts"
+    "vitest.config.ts"
   ]
 }

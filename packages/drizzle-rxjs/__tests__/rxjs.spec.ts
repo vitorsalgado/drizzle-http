@@ -18,6 +18,7 @@ import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
+import { firstValueFrom } from 'rxjs'
 import { Observable } from 'rxjs'
 import { RxJs } from '../RxJs'
 import { RxJsCallAdapterFactory } from '../RxJsCallAdapterFactory'
@@ -89,57 +90,32 @@ describe('RxJs Call Adapter', () => {
     await drizzle.shutdown()
   })
 
-  it('should capture the success response on next', done => {
-    expect.assertions(1)
+  it('should capture the success response on next', async () => {
+    const result = await firstValueFrom(api.getRx('test-id'))
 
-    api.getRx('test-id').subscribe({
-      next(x) {
-        expect(x.params).toHaveProperty('id')
-      },
-      complete() {
-        done()
-      }
+    expect(result.params).toHaveProperty('id')
+  })
+
+  it('should capture the error response on error() listener', async () => {
+    await expect(firstValueFrom(api.nowhere())).rejects.toMatchObject({
+      response: { status: 404 }
     })
   })
 
-  it('should capture the error response on error() listener', done => {
-    expect.assertions(1)
+  it('should not use rxjs adapter when response type is not Observable', async () => {
+    const response = await api.nonRx('test-id')
 
-    api.nowhere().subscribe({
-      next(_model) {
-        done()
-      },
-      error(err: HttpError) {
-        expect(err.response.status).toEqual(404)
-        done()
-      }
-    })
+    expect(response.status).toEqual(200)
+    expect(response.ok).toBeTruthy()
+
+    const json = await response.json<TestResult<TestId>>()
+
+    expect(json.params).toHaveProperty('id')
   })
 
-  it('should not use rxjs adapter when response type is not Observable', () => {
-    expect.assertions(3)
+  it('should execute decorated adapter and return response as rxjs', async () => {
+    const result = await firstValueFrom(api.decorated('test-id'))
 
-    return api
-      .nonRx('test-id')
-      .then(response => {
-        expect(response.status).toEqual(200)
-        expect(response.ok).toBeTruthy()
-
-        return response.json<TestResult<TestId>>()
-      })
-      .then(json => expect(json.params).toHaveProperty('id'))
-  })
-
-  it('should execute decorated adapter and return response as rxjs', done => {
-    expect.assertions(1)
-
-    api.decorated('test-id').subscribe({
-      next(x) {
-        expect(x.id).toEqual('test-id')
-      },
-      complete() {
-        done()
-      }
-    })
+    expect(result.id).toEqual('test-id')
   })
 })

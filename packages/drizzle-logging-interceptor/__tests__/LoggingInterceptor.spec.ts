@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { Readable } from 'stream'
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
 import { noop } from '@drizzle-http/core'
@@ -32,7 +33,7 @@ describe('Logging Interceptor', function () {
   }
 
   class SpyLogger implements Logger {
-    constructor(private readonly spy: jest.Mock) {}
+    constructor(private readonly spy: Mock) {}
 
     error(message: string, error?: Error): void {
       this.spy(message, error)
@@ -164,7 +165,7 @@ describe('Logging Interceptor', function () {
     }
 
     class FakeLogger implements Logger {
-      constructor(private readonly _spy: jest.Mock) {}
+      constructor(private readonly _spy: Mock) {}
 
       error(message: string, error?: Error): void {
         if (message.toLowerCase().indexOf('super-secret-value') > -1) {
@@ -183,7 +184,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const spy: jest.Mock = jest.fn()
+    const spy: Mock = vi.fn()
     const fake = new FakeLogger(spy)
 
     const interceptor = new LoggingInterceptor({ level: Level.BODY, logger: fake })
@@ -220,7 +221,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const spy: jest.Mock = jest.fn()
+    const spy: Mock = vi.fn()
     const fake = new SpyLogger(spy)
     const interceptor = new LoggingInterceptor({ logger: fake })
     interceptor.setLevel(Level.BODY)
@@ -251,7 +252,7 @@ describe('Logging Interceptor', function () {
       }
     }
 
-    const spy: jest.Mock = jest.fn()
+    const spy: Mock = vi.fn()
     const fake = new SpyLogger(spy)
 
     const interceptor = new LoggingInterceptor({ level: Level.BASIC, headersToRedact: new Set<string>(), logger: fake })

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "webpack:server-dev": "webpack server --config build/webpack.config.cjs",
-    "test": "jest --detectOpenHandles",
+    "test": "vitest run --config ../../vitest.config.ts --passWithNoTests",
     "test:e2e:prepare": "npx playwright install-deps && npx playwright install",
     "test:e2e": "playwright test",
     "build": "rm -rf dist && tsc --build --force tsconfig.build.json",

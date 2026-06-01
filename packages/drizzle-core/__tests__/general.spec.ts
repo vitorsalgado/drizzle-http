@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import EventEmitter from 'events'
 import { TestId } from '@drizzle-http/test-utils'
 import { closeTestServer } from '@drizzle-http/test-utils'
@@ -162,7 +163,7 @@ describe('Drizzle Http', () => {
   let address = ''
   let api: TestAPI
 
-  const configurerSpy = jest.fn()
+  const configurerSpy = vi.fn()
 
   beforeAll(() => {
     setupTestServer(fastify => {
@@ -223,7 +224,7 @@ describe('Drizzle Http', () => {
 
   describe('General', function () {
     it('should call registered shutdown', async () => {
-      const shutdownSpy = jest.fn()
+      const shutdownSpy = vi.fn()
       const d = newAPI().callFactory(TestCallFactory.INSTANCE).baseUrl('http://www.test.com.br').build()
       d.registerShutdownHook(async () => shutdownSpy())
 

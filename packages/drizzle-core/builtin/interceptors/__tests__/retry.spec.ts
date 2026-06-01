@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { Ok } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'
 import { closeTestServer } from '@drizzle-http/test-utils'
@@ -69,7 +70,7 @@ describe('Retry Interceptor', function () {
   let retryDefApi: RetryGlobalTestAPI
   let c = 0
 
-  const spy = jest.fn()
+  const spy = vi.fn()
   const max = 3
 
   afterEach(() => {

@@ -8,11 +8,8 @@
     "noEmit": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "allowUnusedLabels": true
+    "allowUnusedLabels": true,
+    "types": ["vitest/globals"]
   },
-  "exclude": [
-    "jest.config.ts",
-    "jest-base.config.ts",
-    "**/jest.config.ts"
-  ]
+  "exclude": ["vitest.config.ts"]
 }

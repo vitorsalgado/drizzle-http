@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { noop } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
@@ -143,7 +144,7 @@ class Fallbacks {
 }
 
 describe('Circuit Breaker', function () {
-  const srvSpy = jest.fn()
+  const srvSpy = vi.fn()
   const options: OpossumCircuitBreaker.Options = {}
   const registry = new CircuitBreakerRegistry()
 

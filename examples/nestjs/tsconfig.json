@@ -4,6 +4,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    "moduleResolution": "node",
+    "types": ["node"],
     "composite": false,
     "declaration": true,
     "declarationMap": false,

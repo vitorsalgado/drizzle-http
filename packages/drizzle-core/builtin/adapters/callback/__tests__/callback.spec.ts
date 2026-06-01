@@ -39,19 +39,31 @@ describe('Callback Call Adapter - @Callback decorated', function () {
 
   afterAll(() => Promise.all([closeTestServer(), drizzle.shutdown()]))
 
-  it('should return the response in the callback function', done => {
-    api.getCallback('test', (error: Error, data: TestResult<TestId>) => {
-      expect(error).toBeNull()
-      expect(data.result.id).toEqual('test')
-      done()
+  it('should return the response in the callback function', async () => {
+    await new Promise<void>((resolve, reject) => {
+      api.getCallback('test', (error: Error, data: TestResult<TestId>) => {
+        try {
+          expect(error).toBeNull()
+          expect(data.result.id).toEqual('test')
+          resolve()
+        } catch (err) {
+          reject(err)
+        }
+      })
     })
   })
 
-  it('should call the callback with the error when integration fails', done => {
-    api.err((error: HttpError) => {
-      expect(error).not.toBeNull()
-      expect(error.request).not.toBeNull()
-      done()
+  it('should call the callback with the error when integration fails', async () => {
+    await new Promise<void>((resolve, reject) => {
+      api.err((error: HttpError) => {
+        try {
+          expect(error).not.toBeNull()
+          expect(error.request).not.toBeNull()
+          resolve()
+        } catch (err) {
+          reject(err)
+        }
+      })
     })
   })
 })

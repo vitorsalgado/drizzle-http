@@ -4,9 +4,18 @@ module.exports = {
   extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   root: true,
   env: {
-    jest: true,
     node: true,
     browser: true
+  },
+  globals: {
+    describe: 'readonly',
+    it: 'readonly',
+    expect: 'readonly',
+    beforeAll: 'readonly',
+    afterAll: 'readonly',
+    beforeEach: 'readonly',
+    afterEach: 'readonly',
+    vi: 'readonly'
   },
   rules: {
     'tsdoc/syntax': 'error',

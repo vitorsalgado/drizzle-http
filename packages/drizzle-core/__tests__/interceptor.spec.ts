@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { Ok } from '@drizzle-http/test-utils'
 import { TestResult } from '@drizzle-http/test-utils'
 import { setupTestServer } from '@drizzle-http/test-utils'
@@ -47,7 +48,7 @@ describe('when using interceptors', function () {
   it('should execute the interceptor and apply changes to the request', function () {
     expect.assertions(5)
 
-    const spy = jest.fn()
+    const spy = vi.fn()
     const value = 'interceptor-header-value'
 
     const d = newAPI()

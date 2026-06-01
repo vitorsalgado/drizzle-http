@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { vi, type Mock } from 'vitest'
 import { GET, HttpHeaders, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
 import { CORS, KeepAlive } from '../decorators'
 import { useFetch } from '../useFetch'
@@ -34,7 +35,7 @@ describe('Fetch', function () {
 
   describe('when using decorators on class level', function () {
     // @ts-ignore
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         headers: new HttpHeaders(),
         text: () => Promise.resolve('txt')
@@ -44,7 +45,7 @@ describe('Fetch', function () {
     it('should execute request using class decorators values', async function () {
       const response = await api.txt()
       const txt = await response.text()
-      const args = (global.fetch as jest.Mock).mock.calls[0]
+      const args = (global.fetch as Mock).mock.calls[0]
 
       expect(txt).toEqual('txt')
       expect(args[0]).toEqual(makeUrl(url, '/txt'))
