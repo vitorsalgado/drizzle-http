@@ -3,7 +3,7 @@
 import EventEmitter from 'events'
 import { TestId, TestResult } from '@drizzle-http/test-utils'
 import { noop } from '@drizzle-http/core'
-import { Param } from '@drizzle-http/core'
+import { Param, Params, SignalParam } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
 import { Header } from '@drizzle-http/core'
 import { Abort } from '@drizzle-http/core'
@@ -19,15 +19,25 @@ import { Path } from '@drizzle-http/core'
 class API {
   @GET('/group/{id}/owner/{name}/projects')
   @HeaderMap({ 'Content-Type': 'application/json' })
+  @Params([
+    Param('id'),
+    Param('name'),
+    Query('filter'),
+    Query('sort'),
+    QueryName(),
+    Header('cache'),
+    Header('code'),
+    SignalParam()
+  ])
   projects(
-    @Param('id') id: string,
-    @Param('name') name: string,
-    @Query('filter') filter: string[],
-    @Query('sort') sort: string,
-    @QueryName() prop: string,
-    @Header('cache') cache: boolean,
-    @Header('code') code: number,
-    @Abort() abort: EventEmitter
+    id: string,
+    name: string,
+    filter: string[],
+    sort: string,
+    prop: string,
+    cache: boolean,
+    code: number,
+    abort: EventEmitter
   ): Promise<TestResult<TestId>> {
     return noop(id, name, filter, sort, prop, cache, code, abort)
   }

@@ -1,14 +1,18 @@
-import { createParameterDecorator } from '../ApiParameterization.js'
 import { BodyParameter } from '../builtin/index.js'
+import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
 
 /**
- * Use this decorator to mark that a method parameter must be sent as the HTTP Request body
- * Target: parameter
+ * Use this spec to mark that a method parameter must be sent as the HTTP Request body
  *
  * @example
  *  \@POST('/relative/path')
- *  example(\@Body() data: object): Promise<Result>
+ *  \@Params([Body()])
+ *  example(data: object): Promise<Result>
  */
-export function Body() {
-  return createParameterDecorator(Body, ctx => ctx.requestFactory.addParameter(new BodyParameter(ctx.parameterIndex)))
+export function Body(): ApiParameterSpec {
+  return {
+    apply(ctx) {
+      ctx.requestFactory.addParameter(new BodyParameter(ctx.index))
+    }
+  }
 }

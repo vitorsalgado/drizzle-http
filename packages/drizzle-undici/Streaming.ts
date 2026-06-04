@@ -1,8 +1,8 @@
 import { createMethodDecorator } from '@drizzle-http/core'
 
 export function Streaming() {
-  return createMethodDecorator(Streaming, ({ requestFactory }) => {
-    requestFactory.ignoreResponseConverter()
-    requestFactory.ignoreResponseHandler()
+  return createMethodDecorator(Streaming, ctx => {
+    ctx.requestFactory.ignoreResponseConverter()
+    ctx.requestFactory.ignoreResponseHandler()
   })
 }

@@ -1,4 +1,4 @@
-import { GET } from '@drizzle-http/core'
+import { GET, Params } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
@@ -226,14 +226,16 @@ describe('Map Adapter', function () {
         @GET('/{id}/projects')
         @Custom()
         @MapTo(JustId)
-        decoratedMapTo(@Param('id') id: string): Promise<JustId> {
+        @Params([Param('id')])
+        decoratedMapTo(id: string): Promise<JustId> {
           return noop(id)
         }
 
         @GET('/{id}/projects')
         @Custom()
         @Map((response: { result: { id: string } }) => new JustId(response))
-        decoratedMap(@Param('id') id: string): Promise<JustId> {
+        @Params([Param('id')])
+        decoratedMap(id: string): Promise<JustId> {
           return noop(id)
         }
       }

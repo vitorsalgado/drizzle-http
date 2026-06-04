@@ -1,4 +1,4 @@
-import { ContentType, DrizzleBuilder, FormUrlEncoded, GET } from '@drizzle-http/core'
+import { ContentType, DrizzleBuilder, FormUrlEncoded, GET, Params } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { POST } from '@drizzle-http/core'
@@ -33,45 +33,47 @@ class ApiTs {
   @POST('/parts')
   @Multipart()
   @RawResponse()
-  parts(
-    @Part('part1') part1: unknown,
-    @Part('part2', 'part2-filename') part2: unknown,
-    @Part('part3') part3: string
-  ): Promise<Response> {
+  @Params([Part('part1'), Part('part2', 'part2-filename'), Part('part3')])
+  parts(part1: unknown, part2: unknown, part3: string): Promise<Response> {
     return noop(part1, part2, part3)
   }
 
   @POST('/parts')
   @Multipart()
   @RawResponse()
-  file(@Body() @BodyKey('data') file: File): Promise<Response> {
+  @Params([Body(), BodyKey('data')])
+  file(file: File): Promise<Response> {
     return noop(file)
   }
 
   @POST('/parts')
   @Multipart()
   @RawResponse()
-  files(@Body() files: Array<File>): Promise<Response> {
+  @Params([Body()])
+  files(files: Array<File>): Promise<Response> {
     return noop(files)
   }
 
   @POST('/parts')
   @Multipart()
   @RawResponse()
-  form(@Body() form: HTMLFormElement): Promise<Response> {
+  @Params([Body()])
+  form(form: HTMLFormElement): Promise<Response> {
     return noop(form)
   }
 
   @POST('/parts')
   @Multipart()
   @RawResponse()
-  fromDOM(@Body() input: HTMLInputElement): Promise<Response> {
+  @Params([Body()])
+  fromDOM(input: HTMLInputElement): Promise<Response> {
     return noop(input)
   }
 
   @POST('/form')
   @FormUrlEncoded()
-  formUrlEncoded(@Body() form: Record<string, string>): Promise<Response> {
+  @Params([Body()])
+  formUrlEncoded(form: Record<string, string>): Promise<Response> {
     return noop(form)
   }
 
@@ -83,7 +85,8 @@ class ApiTs {
   @Redirect('manual')
   @Cache('no-cache')
   @UseJsonConv()
-  json(@Body() data: unknown): Promise<{ status: string; data: { test: string } }> {
+  @Params([Body()])
+  json(data: unknown): Promise<{ status: string; data: { test: string } }> {
     return noop(data)
   }
 }

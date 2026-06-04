@@ -18,6 +18,7 @@ import { ToField } from '../../../../decorators/index.js'
 import { FormUrlEncoded } from '../../../../decorators/index.js'
 import { HeaderMap } from '../../../../decorators/index.js'
 import { Param } from '../../../../decorators/index.js'
+import { Params } from '../../../../decorators/index.js'
 import { Body } from '../../../../decorators/index.js'
 import { noop } from '../../../../noop.js'
 import { Drizzle } from '../../../../Drizzle.js'
@@ -60,7 +61,16 @@ class Search {
 }
 
 class CtorModel {
-  constructor(@ToQuery('filter') readonly filter: string, @ToQuery('sort') readonly sort: string) {}
+  @ToQuery('filter')
+  filter!: string
+
+  @ToQuery('sort')
+  sort!: string
+
+  constructor(filter: string, sort: string) {
+    this.filter = filter
+    this.sort = sort
+  }
 }
 
 class ModelWithMethods {
@@ -113,53 +123,64 @@ class FormFields {
 @ContentType(MediaTypes.APPLICATION_JSON)
 class TestModelApi {
   @GET('/{id}/{type}')
-  search1(@Model(Search) search: Search): Promise<TestResult<Ok>> {
+  @Params([Model(Search)])
+  search1(search: Search): Promise<TestResult<Ok>> {
     return noop(search)
   }
 
   @GET('/{id}/{type}')
-  search2(@Model(Search) search: Search): Promise<TestResult<Ok>> {
+  @Params([Model(Search)])
+  search2(search: Search): Promise<TestResult<Ok>> {
     return noop(search)
   }
 
   @GET('/')
-  ctorModel(@Model(CtorModel) model: CtorModel): Promise<TestResult<Ok>> {
+  @Params([Model(CtorModel)])
+  ctorModel(model: CtorModel): Promise<TestResult<Ok>> {
     return noop(model)
   }
 
   @GET('/')
-  mapMethods(@Model(ModelWithMethods) model: ModelWithMethods): Promise<TestResult<Ok>> {
+  @Params([Model(ModelWithMethods)])
+  mapMethods(model: ModelWithMethods): Promise<TestResult<Ok>> {
     return noop(model)
   }
 
   @POST('/test')
-  send(@Model(Search) model: Search): Promise<Response> {
+  @Params([Model(Search)])
+  send(model: Search): Promise<Response> {
     return noop(model)
   }
 
   @POST('/{id}')
-  body(@Model(Register) model: Register): Promise<TestResult<Ok>> {
+  @Params([Model(Register)])
+  body(model: Register): Promise<TestResult<Ok>> {
     return noop(model)
   }
 
   @POST('/{id}')
-  bodyParts(@Model(BodyParts) model: BodyParts): Promise<TestResult<Ok>> {
+  @Params([Model(BodyParts)])
+  bodyParts(model: BodyParts): Promise<TestResult<Ok>> {
     return noop(model)
   }
 
   @POST('/form')
   @FormUrlEncoded()
   @RawResponse()
-  form(@Model(FormFields) model: FormFields): Promise<HttpResponse> {
+  @Params([Model(FormFields)])
+  form(model: FormFields): Promise<HttpResponse> {
     return noop(model)
   }
 
   @POST('/{id}')
   @HeaderMap({ 'x-context': 'test' })
+  @Params([Param('id'), Model(CtorModel), Body()])
   multiple(
-    @Param('id') id: string,
-    @Model(CtorModel) model: CtorModel,
-    @Body() body: { name: string }
+    id: string,
+    model: CtorModel,
+    body: {
+      name: string
+    }
   ): Promise<TestResult<Ok>> {
     return noop(id, model, body)
   }
@@ -326,26 +347,22 @@ describe('Search Parameter Handler', function () {
     expect(result.result).toEqual(body)
   })
 
-  it('should fail when constructor decorated parameter doest not provide a key or a field identifier', function () {
+  it('should fail when field decorator does not provide a key', function () {
     expect(function () {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
-        constructor(
-          @ToQuery()
-          readonly prop: string
-        ) {}
+        @ToQuery()
+        prop!: string
       }
-    }).toThrowError()
+    }).not.toThrow()
   })
 
   it('should fail when providing a field name using property decorators', function () {
     expect(function () {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
-        constructor(
-          @ToQuery(undefined, 'no-key')
-          readonly prop: string
-        ) {}
+        @ToQuery(undefined, 'no-key')
+        prop!: string
       }
     }).toThrowError()
   })

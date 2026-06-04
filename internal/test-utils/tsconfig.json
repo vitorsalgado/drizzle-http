@@ -5,6 +5,11 @@
     "rootDir": "src",
     "outDir": "dist"
   },
+  "references": [
+    {
+      "path": "../../packages/drizzle-core"
+    }
+  ],
   "include": [
     "src/**/*"
   ],

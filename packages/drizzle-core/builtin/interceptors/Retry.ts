@@ -1,6 +1,4 @@
-import { setupRequestFactory } from '../../ApiParameterization.js'
-import { setupApiDefaults } from '../../ApiParameterization.js'
-import { TargetCtor, TargetProto } from '../../internal/index.js'
+import { createClassAndMethodDecorator } from '../../ApiParameterization.js'
 import { HttpMethod } from '../../decorators/utils/index.js'
 
 export const RetryOptionsKey = 'retry:options'
@@ -19,21 +17,25 @@ const Def: RetryOptions = {
   delay: 500
 }
 
+const mergeRetryOptions = (options: Partial<RetryOptions>): RetryOptions => ({
+  limit: options.limit ?? Def.limit,
+  delay: options.delay ?? Def.delay,
+  methods: options.methods ?? Def.methods,
+  statusCodes: options.statusCodes ?? Def.statusCodes
+})
+
 export function Retry(options: Partial<RetryOptions> = Def) {
-  return function (target: TargetProto | TargetCtor, method?: string) {
-    if (method) {
-      return setupRequestFactory(Retry, target, method, requestFactory =>
-        requestFactory.addConfig(RetryOptionsKey, options)
-      )
+  return createClassAndMethodDecorator(Retry, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.addConfig(RetryOptionsKey, mergeRetryOptions(options))
+      return
     }
 
-    setupApiDefaults(Retry, target, defaults =>
-      defaults.addConfig(RetryOptionsKey, {
-        limit: options.limit ?? Def.limit,
-        delay: options.delay ?? Def.delay,
-        methods: options.methods ?? Def.methods,
-        statusCodes: options.statusCodes ?? Def.statusCodes
-      } as RetryOptions)
-    )
-  }
+    ctx.defaults.addConfig(RetryOptionsKey, {
+      limit: options.limit ?? Def.limit,
+      delay: options.delay ?? Def.delay,
+      methods: options.methods ?? Def.methods,
+      statusCodes: options.statusCodes ?? Def.statusCodes
+    } as RetryOptions)
+  })
 }

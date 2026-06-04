@@ -1,5 +1,13 @@
 import { Class } from '../../../internal/index.js'
 import { pathParameterRegex } from '../../../internal/index.js'
+import {
+  appendPendingModelMapping,
+  methodName,
+  PENDING_MODEL_MAPPINGS,
+  pendingModelMappings,
+  resolveModelMetadata,
+  type PendingModelMapping
+} from '../../../decoratorMetadata.js'
 import { ToDest } from '../../../decorators/index.js'
 import { Parameter } from '../Parameter.js'
 import { HeaderParameter } from './HeaderParameterHandler.js'
@@ -45,51 +53,103 @@ export class ModelRegistry {
   }
 }
 
+function createParameterForMapping(to: ToDest, key: string): Parameter {
+  switch (to) {
+    case 'header':
+      return new HeaderParameter(key, -1)
+    case 'query':
+      return new QueryParameter(key, -1)
+    case 'queryname':
+      return new QueryNameParameter(-1)
+    case 'param':
+      return new PathParameter(key, pathParameterRegex(key), -1)
+    case 'field':
+      return new FormParameter(key, -1)
+    case 'body':
+      return new BodyParameter(-1)
+    case 'bodypart':
+      return new Parameter(-1, 'bodypart')
+  }
+}
+
+function registerPendingEntry(model: Class, mapping: PendingModelMapping): void {
+  const parameter = createParameterForMapping(mapping.to, mapping.key)
+
+  ModelRegistry.register(mapping.to, mapping.key, mapping.decorated, mapping.type, parameter, model)
+}
+
+const registeredModelClasses = new WeakSet<object>()
+
+export function registerModelMappings(model: Class): void {
+  if (registeredModelClasses.has(model)) {
+    return
+  }
+
+  const metadata = resolveModelMetadata(model)
+  const pending = pendingModelMappings(metadata)
+
+  if (pending.length === 0) {
+    return
+  }
+
+  registeredModelClasses.add(model)
+
+  for (const mapping of pending) {
+    registerPendingEntry(model, mapping)
+  }
+
+  if (metadata) {
+    ;(metadata as { [PENDING_MODEL_MAPPINGS]?: PendingModelMapping[] })[PENDING_MODEL_MAPPINGS] = []
+  }
+}
+
+function queueMapping(
+  metadata: DecoratorMetadata,
+  to: ToDest,
+  key: string | undefined,
+  field: string | undefined,
+  decorated: string,
+  type: DecoratedTypes
+): void {
+  if (field) {
+    throw new Error('The parameter "field" is not allowed when decorating a class property or method.')
+  }
+
+  const dec = decorated
+  const k = key || dec
+
+  appendPendingModelMapping(metadata, {
+    to,
+    key: k,
+    decorated: dec,
+    type
+  })
+}
+
 export function createModelDecorator(to: ToDest, key?: string, field?: string) {
-  return function (target: object | Class, decorated?: string, _descriptor?: PropertyDescriptor | number): void {
-    if (!decorated && field) {
-      throw new Error('The parameter "field" is not allowed when decorating a class property or method.')
+  return function (
+    value: ((...args: unknown[]) => unknown) | undefined,
+    context:
+      | ClassFieldDecoratorContext
+      | ClassMethodDecoratorContext
+      | ClassGetterDecoratorContext
+      | ClassSetterDecoratorContext
+  ): void | ((...args: unknown[]) => unknown) {
+    if (context.kind === 'field') {
+      queueMapping(context.metadata, to, key, field, methodName(context), context.static ? 'static' : 'instance')
+      return
     }
 
-    if (!decorated && !key && !field) {
-      throw new Error(
-        'When using a @Model() argument with constructor decorated parameters, ' +
-          'you must provide at least the key. If the "key" differs from the constructor parameter name, ' +
-          'you must provide the field parameter with the value matching the parameter name.'
-      )
+    if (context.kind === 'method') {
+      queueMapping(context.metadata, to, key, field, methodName(context), context.static ? 'static' : 'instance')
+      return value
     }
 
-    const dec = (decorated || key || field) as string
-    const type: DecoratedTypes = typeof target === 'function' && decorated ? 'static' : 'instance'
-    const model = typeof target === 'function' ? (target as Class) : (target.constructor as Class)
-    const k = key || dec
-
-    let parameter: Parameter
-
-    switch (to) {
-      case 'header':
-        parameter = new HeaderParameter(k, -1)
-        break
-      case 'query':
-        parameter = new QueryParameter(k, -1)
-        break
-      case 'queryname':
-        parameter = new QueryNameParameter(-1)
-        break
-      case 'param':
-        parameter = new PathParameter(k, pathParameterRegex(k), -1)
-        break
-      case 'field':
-        parameter = new FormParameter(k, -1)
-        break
-      case 'body':
-        parameter = new BodyParameter(-1)
-        break
-      case 'bodypart':
-        parameter = new Parameter(-1, 'bodypart')
-        break
+    if (context.kind === 'getter' || context.kind === 'setter') {
+      queueMapping(context.metadata, to, key, field, methodName(context), 'instance')
+      return value
     }
 
-    ModelRegistry.register(to, k, dec, type, parameter, model)
+    throw new TypeError('@To* decorators must be applied to fields, methods, or accessors.')
   }
 }

@@ -1,11 +1,13 @@
 import { createClassAndMethodDecorator } from '@drizzle-http/core'
 
 export function KeepAlive(keepalive: boolean) {
-  return createClassAndMethodDecorator(
-    KeepAlive,
-    defaults => defaults.addConfig(KeepAlive.Key, keepalive),
-    requestFactory => requestFactory.addConfig(KeepAlive.Key, keepalive)
-  )
+  return createClassAndMethodDecorator(KeepAlive, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.addConfig(KeepAlive.Key, keepalive)
+    } else {
+      ctx.defaults.addConfig(KeepAlive.Key, keepalive)
+    }
+  })
 }
 
 KeepAlive.Key = 'fetch:keepalive'

@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@drizzle-http/core": "*",
     "fastify": "^3.25.3",
     "fastify-formbody": "^5.2.0"
   },

@@ -1,6 +1,6 @@
 'use strict'
 
-const { DrizzleBuilder, GET, Query, ContentType, Accept, MediaTypes } = require('@drizzle-http/core')
+const { DrizzleBuilder, GET, Query, Params, ContentType, Accept, MediaTypes } = require('@drizzle-http/core')
 const { UndiciCallFactory } = require('@drizzle-http/undici')
 
 class PartiesClientAPI {
@@ -10,7 +10,8 @@ class PartiesClientAPI {
   @GET('/partidos')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
-  parties(@Query('sigla') acronym) {}
+  @Params([Query('sigla')])
+  parties(acronym) {}
 }
 
 const deputiesApi = DrizzleBuilder.newBuilder()

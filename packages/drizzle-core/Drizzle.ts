@@ -4,6 +4,7 @@ import { RequestBodyConverter } from './RequestBodyConverter.js'
 import { RequestBodyConverterFactory } from './RequestBodyConverter.js'
 import { serviceInvoker } from './drizzleServiceInvoker.js'
 import { RequestFactory } from './RequestFactory.js'
+import { associateApiClass } from './decoratorMetadata.js'
 import { Metadata } from './ApiParameterization.js'
 import { Interceptor } from './Interceptor.js'
 import { InterceptorFactory } from './Interceptor.js'
@@ -240,6 +241,7 @@ export class Drizzle {
    * @returns InstanceType<T>
    */
   create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
+    associateApiClass(TargetApi)
     const parameterization = Metadata.metadataFor(TargetApi)
 
     if (parameterization.requestFactories.size === 0) {
@@ -255,7 +257,7 @@ export class Drizzle {
 
     for (const [method, requestFactory] of parameterization.requestFactories) {
       if (requestFactory.isPreProcessed()) {
-        break
+        continue
       }
 
       requestFactory.mergeWithApiDefaults(parameterization.meta)

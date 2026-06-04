@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { ContentType } from '@drizzle-http/core'
+import { ContentType, Params } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { GET } from '@drizzle-http/core'
 import { POST } from '@drizzle-http/core'
@@ -21,21 +21,16 @@ export class TestAPI {
   async getArgLess(): Promise<HttpResponse> {}
 
   @POST('/{id}')
-  post(
-    @Param('id') _id: string,
-    @Query('filter') _filter: string,
-    @Body() _data: unknown
-  ): Promise<{ id: string; name: string; context: string }[]> {}
+  @Params([Param('id'), Query('filter'), Body()])
+  post(_id: string, _filter: string, _data: unknown): Promise<{ id: string; name: string; context: string }[]> {}
 
   @POST('/{id}')
   @CircuitBreaker()
-  postCb(
-    @Param('id') _id: string,
-    @Query('filter') _filter: string,
-    @Body() _data: unknown
-  ): Promise<{ id: string; name: string; context: string }[]> {}
+  @Params([Param('id'), Query('filter'), Body()])
+  postCb(_id: string, _filter: string, _data: unknown): Promise<{ id: string; name: string; context: string }[]> {}
 
   @GET('/')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<HttpResponse> {}
+  @Params([StreamTo()])
+  streaming(target: Writable): Promise<HttpResponse> {}
 }

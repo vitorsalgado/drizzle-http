@@ -2,7 +2,6 @@
   "presets": ["@babel/env"],
   "plugins": [
     "@babel/transform-runtime",
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    "babel-plugin-parameter-decorator"
+    ["@babel/plugin-proposal-decorators", { "version": "2023-01" }]
   ]
 }

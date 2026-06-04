@@ -1,18 +1,20 @@
-import { createParameterDecorator } from '../ApiParameterization.js'
 import { HeaderParameter } from '../builtin/index.js'
+import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
 
 /**
  * Named header to be added to the request.
- * Target: parameter
  *
- * @param key - header key. E.g.: CommonHeaders.CONTENT_TYPE. If you don't provide the field key, the parameter name will be used.
+ * @param key - header key. E.g.: CommonHeaders.CONTENT_TYPE.
  *
  * @example
  *  \@POST('/relative/path')
- *  example(\@Header('name') name: string): Promise<Result>
+ *  \@Params([Header('name')])
+ *  example(name: string): Promise<Result>
  */
-export function Header(key: string) {
-  return createParameterDecorator(Header, ctx =>
-    ctx.requestFactory.addParameter(new HeaderParameter(key, ctx.parameterIndex))
-  )
+export function Header(key: string): ApiParameterSpec {
+  return {
+    apply(ctx) {
+      ctx.requestFactory.addParameter(new HeaderParameter(key, ctx.index))
+    }
+  }
 }

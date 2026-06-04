@@ -1,26 +1,17 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
-import { setupRequestFactory } from '../ApiParameterization.js'
-import { setupApiDefaults } from '../ApiParameterization.js'
-import { TargetCtor, TargetProto } from '../internal/index.js'
+import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 
 /**
  * Adds fixed params to the request
- * Target: method
+ * Target: class, method
  *
  * @param headers - params object dictionary
- *
- * @example
- *  \@POST('/relative/path')
- *  \@HeadersMap(\{ CommonHeaders.CONTENT_TYPE: 'Application/new-content-type' \})
- *  example(\@Header('name') name: string): Promise<Result>
  */
 export function HeaderMap(headers: Record<string, string>) {
-  return function (target: TargetProto | TargetCtor, method?: string): void {
-    if (method) {
-      return setupRequestFactory(HeaderMap, target, method, requestFactory => requestFactory.addDefaultHeaders(headers))
+  return createClassAndMethodDecorator(HeaderMap, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.addDefaultHeaders(headers)
+    } else {
+      ctx.defaults.headers.mergeObject(headers)
     }
-
-    setupApiDefaults(HeaderMap, target, parameters => parameters.headers.mergeObject(headers))
-  }
+  })
 }

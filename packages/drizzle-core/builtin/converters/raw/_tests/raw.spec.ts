@@ -2,7 +2,7 @@ import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http
 import { RequestFactory } from '../../../../RequestFactory.js'
 import { MediaTypes } from '../../../../MediaTypes.js'
 import { DrizzleBuilder, newAPI } from '../../../../DrizzleBuilder.js'
-import { Body, ContentType, POST } from '../../../../decorators/index.js'
+import { Body, ContentType, POST, Params } from '../../../../decorators/index.js'
 import { GET } from '../../../../decorators/index.js'
 import { HttpResponse } from '../../../../HttpResponse.js'
 import {
@@ -21,7 +21,8 @@ class API {
   @POST('/raw-test')
   @ContentType(MediaTypes.TEXT_PLAIN)
   @RawResponse()
-  test(@Body() data: string): Promise<HttpResponse> {
+  @Params([Body()])
+  test(data: string): Promise<HttpResponse> {
     return noop(data)
   }
 

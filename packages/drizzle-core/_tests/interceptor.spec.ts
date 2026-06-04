@@ -5,6 +5,7 @@ import { setupTestServer } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
 import { closeTestServer } from '@drizzle-http/test-utils'
 import { HeaderMap } from '../decorators/index.js'
+import { Params } from '../decorators/index.js'
 import { GET } from '../decorators/index.js'
 import { Header } from '../decorators/index.js'
 import { ContentType } from '../decorators/index.js'
@@ -21,7 +22,8 @@ class InterceptorAPI {
   @GET('/')
   @HeaderMap({ method: 'method' })
   @RawResponse()
-  test(@Header('param') param: string): Promise<HttpResponse> {
+  @Params([Header('param')])
+  test(param: string): Promise<HttpResponse> {
     return noop(param)
   }
 }

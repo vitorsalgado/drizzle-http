@@ -4,7 +4,7 @@ import { GET } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
 import { Drizzle } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
-import { Param } from '@drizzle-http/core'
+import { Param, Params } from '@drizzle-http/core'
 import { Header } from '@drizzle-http/core'
 import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
@@ -62,11 +62,8 @@ class API {
     name: undefined,
     group: 'nice-group'
   })
-  circuitBreaker(
-    @Param('id') id: string,
-    @Query('filter') filter: string,
-    @Header('test') test: string
-  ): Promise<{ id: string; filter: string; test: string }> {
+  @Params([Param('id'), Query('filter'), Header('test')])
+  circuitBreaker(id: string, filter: string, test: string): Promise<{ id: string; filter: string; test: string }> {
     return noop(id, filter, test)
   }
 
@@ -78,14 +75,16 @@ class API {
 
   @GET('/long-running')
   @CircuitBreaker({ ...opts })
-  fallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
+  @Params([Query('filter'), Query('page')])
+  fallback(filter: string, page: number): Promise<{ ok: string }> {
     return noop(filter, page)
   }
 
   @GET('/long-running')
   @CircuitBreaker({ ...opts })
   @Fallback('custom')
-  differentFallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
+  @Params([Query('filter'), Query('page')])
+  differentFallback(filter: string, page: number): Promise<{ ok: string }> {
     return noop(filter, page)
   }
 
@@ -99,14 +98,16 @@ class API {
 
     return { ok: 'fallback worked - function' + ' - filter: ' + filter + ' - page: ' + String(page) }
   })
-  functionFallback(@Query('filter') filter: string, @Query('page') page: number): Promise<{ ok: string }> {
+  @Params([Query('filter'), Query('page')])
+  functionFallback(filter: string, page: number): Promise<{ ok: string }> {
     return noop(filter, page)
   }
 
   @GET('/{id}/projects')
   @CircuitBreaker()
   @Custom()
-  decorated(@Param('id') id: string): Promise<TestId> {
+  @Params([Param('id')])
+  decorated(id: string): Promise<TestId> {
     return noop(id)
   }
 }
@@ -205,7 +206,8 @@ describe('Circuit Breaker', function () {
     class DefaultName {
       @GET('/circuit-breaker/{id}')
       @CircuitBreaker()
-      defaultName(@Param('id') id: string): Promise<unknown> {
+      @Params([Param('id')])
+      defaultName(id: string): Promise<unknown> {
         return noop(id)
       }
     }
@@ -424,7 +426,8 @@ describe('Circuit Breaker', function () {
         @GET('/{id}/projects')
         @CircuitBreaker()
         @Custom()
-        decorated(@Param('id') id: string): Promise<TestId> {
+        @Params([Param('id')])
+        decorated(id: string): Promise<TestId> {
           return noop(id)
         }
       }

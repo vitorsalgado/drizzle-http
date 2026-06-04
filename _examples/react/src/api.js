@@ -1,6 +1,6 @@
 'use strict'
 
-import { ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
+import { ContentType, DrizzleBuilder, GET, MediaTypes, Params, Query } from '@drizzle-http/core'
 import { CORS, FetchCallFactory, KeepAlive } from '@drizzle-http/fetch'
 import { BrowserLoggingInterceptor, Level } from '@drizzle-http/logging-interceptor'
 
@@ -14,7 +14,8 @@ class PartiesClientAPI {
   @CORS()
   @KeepAlive(true)
   @ContentType(MediaTypes.APPLICATION_JSON)
-  parties(@Query('acronym') acronym) {}
+  @Params([Query('acronym')])
+  parties(acronym) {}
 }
 
 export const deputiesApi = DrizzleBuilder.newBuilder()

@@ -1,6 +1,6 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
 import { Drizzle } from '../../../../Drizzle.js'
-import { GET, Param } from '../../../../decorators/index.js'
+import { GET, Param, Params } from '../../../../decorators/index.js'
 import { ContentType } from '../../../../decorators/index.js'
 import { UseJsonConv } from '../../../../decorators/index.js'
 import { DrizzleBuilder } from '../../../../DrizzleBuilder.js'
@@ -15,7 +15,8 @@ import { MediaTypes } from '../../../../MediaTypes.js'
 class API {
   @GET('/{id}/projects')
   @Callback()
-  getCallback(@Param('id') id: string, callback: (err: Error, data: TestResult<TestId>) => void): void {
+  @Params([Param('id')])
+  getCallback(id: string, callback: (err: Error, data: TestResult<TestId>) => void): void {
     return noop(id, callback)
   }
 

@@ -11,7 +11,7 @@ import { Param } from '@drizzle-http/core'
 import { DrizzleBuilder } from '@drizzle-http/core'
 import { HttpError } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
-import { Body } from '@drizzle-http/core'
+import { Body, Params } from '@drizzle-http/core'
 import { RawResponse } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { BrowserLoggingInterceptor } from '../BrowserLoggingInterceptor.js'
@@ -52,11 +52,8 @@ describe('Browser Logging Interceptor', function () {
     class API {
       @POST('/{id}/projects/{project}')
       @HeaderMap({ 'content-type': 'application/json' })
-      execute(
-        @Param('id') id: string,
-        @Param('project') project: string,
-        @Body() body: unknown
-      ): Promise<HttpResponse> {
+      @Params([Param('id'), Param('project'), Body()])
+      execute(id: string, project: string, body: unknown): Promise<HttpResponse> {
         return noop(id, project, body)
       }
     }
@@ -96,11 +93,8 @@ describe('Browser Logging Interceptor', function () {
       @POST('/{id}/projects/{project}')
       @HeaderMap({ 'content-type': 'application/json' })
       @RawResponse()
-      execute(
-        @Param('id') id: string,
-        @Param('project') project: string,
-        @Body() body: unknown
-      ): Promise<HttpResponse> {
+      @Params([Param('id'), Param('project'), Body()])
+      execute(id: string, project: string, body: unknown): Promise<HttpResponse> {
         return noop(id, project, body)
       }
     }
@@ -145,7 +139,8 @@ describe('Browser Logging Interceptor', function () {
         'x-hey': 'open-value'
       })
       @RawResponse()
-      execute(@Body() body: unknown): Promise<HttpResponse> {
+      @Params([Body()])
+      execute(body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
     }
@@ -181,7 +176,8 @@ describe('Browser Logging Interceptor', function () {
       @POST('/test-logging')
       @ContentType('text/plain')
       @RawResponse()
-      execute(@Body() body: unknown): Promise<HttpResponse> {
+      @Params([Body()])
+      execute(body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
     }
@@ -210,7 +206,8 @@ describe('Browser Logging Interceptor', function () {
       @POST('/test-logging')
       @ContentType(MediaTypes.APPLICATION_JSON)
       @RawResponse()
-      execute(@Body() body: unknown): Promise<HttpResponse> {
+      @Params([Body()])
+      execute(body: unknown): Promise<HttpResponse> {
         return noop(body)
       }
     }

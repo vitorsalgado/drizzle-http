@@ -7,7 +7,8 @@ import {
   HttpResponse,
   noop,
   Param,
-  RequestFactory
+  RequestFactory,
+  Params
 } from '@drizzle-http/core'
 import { CallAdapter } from '@drizzle-http/core'
 import { CallAdapterFactory } from '@drizzle-http/core'
@@ -46,7 +47,8 @@ class CustomCallAdapterFactory implements CallAdapterFactory {
 class API {
   @GET('/{id}/projects')
   @RxJs()
-  getRx(@Param('id') id: string): Observable<TestResult<TestId>> {
+  @Params([Param('id')])
+  getRx(id: string): Observable<TestResult<TestId>> {
     return noop(id)
   }
 
@@ -58,14 +60,16 @@ class API {
 
   @GET('/{id}/projects')
   @RawResponse()
-  nonRx(@Param('id') id: string): Promise<HttpResponse> {
+  @Params([Param('id')])
+  nonRx(id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
   @GET('/{id}/projects')
   @RxJs()
   @Custom()
-  decorated(@Param('id') id: string): Observable<TestId> {
+  @Params([Param('id')])
+  decorated(id: string): Observable<TestId> {
     return noop(id)
   }
 }

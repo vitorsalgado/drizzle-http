@@ -2,9 +2,11 @@ import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 import { BuiltInConv } from '../builtin/index.js'
 
 export function PlainTextResponse() {
-  return createClassAndMethodDecorator(
-    PlainTextResponse,
-    defaults => (defaults.responseType = BuiltInConv.TEXT),
-    requestFactory => (requestFactory.responseType = BuiltInConv.TEXT)
-  )
+  return createClassAndMethodDecorator(PlainTextResponse, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.responseType = BuiltInConv.TEXT
+    } else {
+      ctx.defaults.responseType = BuiltInConv.TEXT
+    }
+  })
 }

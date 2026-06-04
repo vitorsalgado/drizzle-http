@@ -1,4 +1,4 @@
-import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
+import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Params, Query } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 
 class PartiesClientAPI {
@@ -8,7 +8,8 @@ class PartiesClientAPI {
   @GET('/partidos')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
-  parties(@Query('sigla') acronym) {}
+  @Params([Query('sigla')])
+  parties(acronym) {}
 }
 
 const deputiesApi = DrizzleBuilder.newBuilder()

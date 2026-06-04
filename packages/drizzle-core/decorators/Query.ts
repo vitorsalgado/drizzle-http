@@ -1,18 +1,20 @@
-import { createParameterDecorator } from '../ApiParameterization.js'
 import { QueryParameter } from '../builtin/index.js'
+import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
 
 /**
  * Query parameter appended to the URL.
- * Target: parameter
  *
  * @param key - query key
  *
  * @example
  *  \@POST('/relative/path')
- *  example(\@Header('name') name: string): Promise<Result>
+ *  \@Params([Query('name')])
+ *  example(name: string): Promise<Result>
  */
-export function Query(key: string) {
-  return createParameterDecorator(Query, ctx =>
-    ctx.requestFactory.addParameter(new QueryParameter(key, ctx.parameterIndex))
-  )
+export function Query(key: string): ApiParameterSpec {
+  return {
+    apply(ctx) {
+      ctx.requestFactory.addParameter(new QueryParameter(key, ctx.index))
+    }
+  }
 }

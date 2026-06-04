@@ -14,6 +14,8 @@ import {
   MediaTypes,
   noop,
   Param,
+  Params,
+  SignalParam,
   Query,
   QueryName,
   RawResponse,
@@ -36,7 +38,8 @@ const evtMethod = new EventEmitter()
 class API {
   @GET('/{id}/projects')
   @RawResponse()
-  execute(@Param('id') id: string): Promise<HttpResponse> {
+  @Params([Param('id')])
+  execute(id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
@@ -49,20 +52,23 @@ class API {
   @GET('/')
   @ContentType('application/json')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<StreamingResponse> {
+  @Params([StreamTo()])
+  streaming(target: Writable): Promise<StreamingResponse> {
     return noop(target)
   }
 
   @GET('/nowhere')
   @ContentType('application/json')
   @Streaming()
-  streamingFromNowhere(@StreamTo() target: Writable): Promise<StreamingResponse> {
+  @Params([StreamTo()])
+  streamingFromNowhere(target: Writable): Promise<StreamingResponse> {
     return noop(target)
   }
 
   @GET('/long-running')
   @RawResponse()
-  longRunning(@Abort() cancel: EventEmitter): Promise<HttpResponse> {
+  @Params([SignalParam()])
+  longRunning(cancel: EventEmitter): Promise<HttpResponse> {
     return noop(cancel)
   }
 
@@ -81,14 +87,15 @@ class API {
 
   @GET('/group/{id}/owner/{name}/projects')
   @HeaderMap({ 'x-id': '100' })
+  @Params([Param('id'), Param('name'), Query('filter'), Query('sort'), QueryName(), Header('cache'), Header('code')])
   complete(
-    @Param('id') id: string,
-    @Param('name') name: string,
-    @Query('filter') filter: string[],
-    @Query('sort') sort: string,
-    @QueryName() prop: string,
-    @Header('cache') cache: boolean,
-    @Header('code') code: number
+    id: string,
+    name: string,
+    filter: string[],
+    sort: string,
+    prop: string,
+    cache: boolean,
+    code: number
   ): Promise<TestResult<TestId>> {
     return noop(id, name, filter, sort, prop, cache, code)
   }
@@ -158,7 +165,8 @@ describe('Undici Call', function () {
       class FailApi {
         @GET('/{id}/projects')
         @Streaming()
-        invalidStreaming(@Param('id') id: string): Promise<StreamingResponse> {
+        @Params([Param('id')])
+        invalidStreaming(id: string): Promise<StreamingResponse> {
           return noop(id)
         }
       }
@@ -169,7 +177,8 @@ describe('Undici Call', function () {
     expect(() => {
       class FailApi {
         @GET('/{id}/projects')
-        invalidStreaming(@Param('id') id: string, @StreamTo() to: unknown): Promise<StreamingResponse> {
+        @Params([Param('id'), StreamTo()])
+        invalidStreaming(id: string, to: unknown): Promise<StreamingResponse> {
           return noop(id, to)
         }
       }
@@ -328,7 +337,8 @@ describe('Undici Call', function () {
   it('should fail when one parameter is decorated with @StreamTo() and method is not decorated with @Streaming()', function () {
     class StApi {
       @GET('/')
-      streaming(@StreamTo() target: Writable): Promise<StreamingResponse> {
+      @Params([StreamTo()])
+      streaming(target: Writable): Promise<StreamingResponse> {
         return noop(target)
       }
     }

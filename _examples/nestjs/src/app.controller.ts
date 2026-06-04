@@ -1,5 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
-import { Query } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { AppService } from './app.service'
 import { Party } from './app.api'
 

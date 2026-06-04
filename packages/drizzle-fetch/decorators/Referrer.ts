@@ -1,11 +1,13 @@
 import { createClassAndMethodDecorator } from '@drizzle-http/core'
 
 export function Referrer(referrer: string) {
-  return createClassAndMethodDecorator(
-    Referrer,
-    defaults => defaults.addConfig(Referrer.Key, referrer),
-    requestFactory => requestFactory.addConfig(Referrer.Key, referrer)
-  )
+  return createClassAndMethodDecorator(Referrer, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.addConfig(Referrer.Key, referrer)
+    } else {
+      ctx.defaults.addConfig(Referrer.Key, referrer)
+    }
+  })
 }
 
 Referrer.Key = 'fetch:referrer'

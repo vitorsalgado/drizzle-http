@@ -10,9 +10,5 @@
     "**/*.spec.js",
     "**/*.config.ts"
   ],
-  "references": [
-    {
-      "path": "../../internal/test-utils/tsconfig.build.json"
-    }
-  ]
+  "references": []
 }

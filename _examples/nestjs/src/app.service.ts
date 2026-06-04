@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { PartiesAPI } from './app.api'
-import { Party } from './app.api'
+import { PartiesAPI, Party } from './app.api'
 
 @Injectable()
 export class AppService {

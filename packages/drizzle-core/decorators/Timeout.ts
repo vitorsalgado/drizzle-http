@@ -1,27 +1,20 @@
-import { setupRequestFactory } from '../ApiParameterization.js'
-import { setupApiDefaults } from '../ApiParameterization.js'
-import { TargetCtor, TargetProto } from '../internal/index.js'
+import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 
 /**
  * Set the timeouts for an HTTP request.
- * It assumes that the HTTP client configured supports timeouts for a specific request.
- * Target: method
+ * Target: class, method
  *
  * @param readTimeoutInMs - timeout value before receiving complete body - MILLISECONDS
  * @param connectTimeoutInMs - timeout value before receiving complete params - MILLISECONDS
  */
 export function Timeout(readTimeoutInMs = 30e3, connectTimeoutInMs = 30e3) {
-  return (target: TargetProto | TargetCtor, method?: string): void => {
-    if (method) {
-      return setupRequestFactory(Timeout, target, method, requestFactory => {
-        requestFactory.readTimeout = readTimeoutInMs
-        requestFactory.connectTimeout = connectTimeoutInMs
-      })
+  return createClassAndMethodDecorator(Timeout, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.readTimeout = readTimeoutInMs
+      ctx.requestFactory!.connectTimeout = connectTimeoutInMs
+    } else {
+      ctx.defaults.readTimeout = readTimeoutInMs
+      ctx.defaults.connectTimeout = connectTimeoutInMs
     }
-
-    setupApiDefaults(Timeout, target, parameters => {
-      parameters.readTimeout = readTimeoutInMs
-      parameters.connectTimeout = connectTimeoutInMs
-    })
-  }
+  })
 }

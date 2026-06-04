@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { GET } from '@drizzle-http/core'
+import { GET, Params } from '@drizzle-http/core'
 import { ContentType } from '@drizzle-http/core'
 import { MediaTypes } from '@drizzle-http/core'
 import { Query } from '@drizzle-http/core'
@@ -24,27 +24,21 @@ import { DeputySimple } from './models/deputy.js'
 @ContentType(MediaTypes.APPLICATION_JSON)
 @Timeout(15e3)
 export class PartyAPI {
-  @GET('/partidos')
+    @GET('/partidos')
   @Map(mapList(toSimpleParty))
   @CircuitBreaker()
-  parties(
-    @Query('sigla') sigla: string,
-    @Query('dataInicio') dataInicio: string | null = null,
-    @Query('dataFim') dataFim: string | null = null,
-    @Query('idLegislatura') idLegislatura: number | null = null,
-    @Query('pagina') pagina = 1,
-    @Query('itens') itens = 10,
-    @Query('ordem') ordem: Order = Order.ASC,
-    @Query('ordenarPor') ordenarPor = 'nome'
-  ): Promise<ApiResult<PartySimple[]>> {}
+  @Params([Query('sigla'), Query('dataInicio'), Query('dataFim'), Query('idLegislatura'), Query('pagina'), Query('itens'), Query('ordem'), Query('ordenarPor')])
+  parties(sigla: string, dataInicio: string | null = null, dataFim: string | null = null, idLegislatura: number | null = null, pagina = 1, itens = 10, ordem: Order = Order.ASC, ordenarPor = 'nome'): Promise<ApiResult<PartySimple[]>> {}
 
-  @GET('/partidos/{id}')
+    @GET('/partidos/{id}')
   @Map(mapSingle(toParty))
   @CircuitBreaker()
-  partyById(@Param('id') id: number): Promise<ApiResult<Party>> {}
+  @Params([Param('id')])
+  partyById(id: number): Promise<ApiResult<Party>> {}
 
-  @GET('/partidos/{id}/membros')
+    @GET('/partidos/{id}/membros')
   @Map(mapSingle(toDeputySimple))
   @CircuitBreaker()
-  partyMembers(@Param('id') id: number): Promise<ApiResult<DeputySimple>> {}
+  @Params([Param('id')])
+  partyMembers(id: number): Promise<ApiResult<DeputySimple>> {}
 }

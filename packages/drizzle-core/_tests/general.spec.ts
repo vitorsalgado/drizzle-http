@@ -21,6 +21,8 @@ import { Query } from '../decorators/index.js'
 import { OPTIONS } from '../decorators/index.js'
 import { PATCH } from '../decorators/index.js'
 import { QueryName } from '../decorators/index.js'
+import { Params } from '../decorators/index.js'
+import { SignalParam } from '../decorators/index.js'
 import { Abort } from '../decorators/index.js'
 import { HeaderMap } from '../decorators/index.js'
 import { FormUrlEncoded } from '../decorators/index.js'
@@ -69,15 +71,25 @@ class TestAPI {
   @GET('/group/{id}/owner/{name}/projects')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Timeout(5000, 5000)
+  @Params([
+    Param('id'),
+    Param('name'),
+    Query('filter'),
+    Query('sort'),
+    QueryName(),
+    Header('cache'),
+    Header('code'),
+    SignalParam()
+  ])
   projects(
-    @Param('id') id: string,
-    @Param('name') name: string,
-    @Query('filter') filter: string[],
-    @Query('sort') sort: string,
-    @QueryName() prop: string,
-    @Header('cache') cache: boolean,
-    @Header('code') code: number,
-    @Abort() abort: EventEmitter
+    id: string,
+    name: string,
+    filter: string[],
+    sort: string,
+    prop: string,
+    cache: boolean,
+    code: number,
+    abort: EventEmitter
   ): Promise<TestResult<TestId>> {
     return noop(id, name, filter, sort, prop, cache, code, abort)
   }
@@ -86,7 +98,8 @@ class TestAPI {
   @Accept(MediaTypes.APPLICATION_JSON)
   @Abort(cancellationInMethod)
   @RawResponse()
-  getRaw(@Param('id') id: string, @Query('sort') orderBy: string): Promise<HttpResponse> {
+  @Params([Param('id'), Query('sort')])
+  getRaw(id: string, orderBy: string): Promise<HttpResponse> {
     return noop(id, orderBy)
   }
 
@@ -96,7 +109,8 @@ class TestAPI {
 
   @POST('/{id}/projects/{project}')
   @HeaderMap({ 'content-type': 'application/json; charset=UTF-8' })
-  testPOST(@Param('id') id: string, @Param('project') project: string, @Body() data: Data): Promise<TestResult<Ok>> {
+  @Params([Param('id'), Param('project'), Body()])
+  testPOST(id: string, project: string, data: Data): Promise<TestResult<Ok>> {
     return noop(id, project, data)
   }
 
@@ -106,7 +120,8 @@ class TestAPI {
 
   @PUT('/test-put')
   @ContentType(MediaTypes.APPLICATION_JSON)
-  testPUT(@Body() data: unknown): Promise<TestResult<Ok>> {
+  @Params([Body()])
+  testPUT(data: unknown): Promise<TestResult<Ok>> {
     return noop(data)
   }
 
@@ -116,7 +131,8 @@ class TestAPI {
 
   @DELETE('/delete/{id}')
   @RawResponse()
-  testDELETE(@Param('id') id: string): Promise<HttpResponse> {
+  @Params([Param('id')])
+  testDELETE(id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
@@ -126,7 +142,8 @@ class TestAPI {
 
   @PATCH('/patch/{id}')
   @RawResponse()
-  testPATCH(@Param('id') id: string): Promise<HttpResponse> {
+  @Params([Param('id')])
+  testPATCH(id: string): Promise<HttpResponse> {
     return noop(id)
   }
 
@@ -292,7 +309,8 @@ describe('Drizzle Http', () => {
       class FormAPI {
         @POST('/')
         @RawResponse()
-        test(@Field('value') val: string): Promise<HttpResponse> {
+        @Params([Field('value')])
+        test(val: string): Promise<HttpResponse> {
           return noop(val)
         }
       }

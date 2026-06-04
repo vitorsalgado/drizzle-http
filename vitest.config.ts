@@ -1,6 +1,33 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitest/config'
+import swc from 'unplugin-swc'
+
+const root = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  esbuild: false,
+  resolve: {
+    alias: {
+      '@drizzle-http/core': path.join(root, 'packages/drizzle-core/index.ts')
+    }
+  },
+  plugins: [
+    swc.vite({
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          decorators: true
+        },
+        transform: {
+          legacyDecorator: false,
+          decoratorMetadata: true,
+          decoratorVersion: '2022-03'
+        },
+        target: 'es2022'
+      }
+    })
+  ],
   test: {
     name: '@drizzle-http/monorepo',
     globals: true,
@@ -32,12 +59,5 @@ export default defineConfig({
       ]
     },
     pool: 'forks'
-  },
-  esbuild: {
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true
-      }
-    }
   }
 })

@@ -2,7 +2,7 @@
 
 /* eslint-disable */
 
-import { DrizzleBuilder, GET, HttpError, Query } from '@drizzle-http/core'
+import { DrizzleBuilder, GET, HttpError, Query, Params } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { StreamTo, UndiciCallFactory } from '@drizzle-http/undici'
 import { Streaming } from '@drizzle-http/undici'
@@ -14,7 +14,8 @@ import url from 'url'
 class PartiesAPI {
   @GET('/partidos')
   @Streaming()
-  parties(@Query('sigla') acronym: string, @StreamTo() target: Writable): Promise<StreamingResponse> {
+  @Params([Query('sigla'), StreamTo()])
+  parties(acronym: string, target: Writable): Promise<StreamingResponse> {
     return noop(acronym, target)
   }
 }

@@ -1,4 +1,4 @@
-import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query } from '@drizzle-http/core'
+import { Accept, ContentType, DrizzleBuilder, GET, MediaTypes, Query, Params } from '@drizzle-http/core'
 import { noop } from '@drizzle-http/core'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { LoggingInterceptor } from '@drizzle-http/logging-interceptor'
@@ -13,7 +13,8 @@ class PartiesAPI {
   @GET('/partidos')
   @ContentType(MediaTypes.APPLICATION_JSON)
   @Accept(MediaTypes.APPLICATION_JSON)
-  parties(@Query('sigla') acronym: string): Promise<{ dados: Party[] }> {
+  @Params([Query('sigla')])
+  parties(acronym: string): Promise<{ dados: Party[] }> {
     return noop(acronym)
   }
 }

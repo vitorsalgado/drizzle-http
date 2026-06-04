@@ -7,6 +7,7 @@ import {
   FormUrlEncoded,
   GET,
   Param,
+  Params,
   ParseErrorBody,
   PlainTextResponse,
   POST,
@@ -36,39 +37,41 @@ class RealApi {
 
   @GET('/customers/{id}')
   @ParseErrorBody()
-  byId(@Param('id') id: string): Promise<{ name: string }> {
+  @Params([Param('id')])
+  byId(id: string): Promise<{ name: string }> {
     return noop(id)
   }
 
   @POST('/customers')
-  create(@Body() user: User): Promise<{ id: string }> {
+  @Params([Body()])
+  create(user: User): Promise<{ id: string }> {
     return noop(user)
   }
 
   @PUT('/customers/{id}')
   @RawResponse()
-  update(@Param('id') id: string, @Body() user: unknown): Promise<HttpResponse> {
+  @Params([Param('id'), Body()])
+  update(id: string, user: unknown): Promise<HttpResponse> {
     return noop(id, user)
   }
 
   @DELETE('/customers/{id}')
-  remove(@Param('id') id: string): Promise<void> {
+  @Params([Param('id')])
+  remove(id: string): Promise<void> {
     return noop(id)
   }
 
   @POST('/form')
   @FormUrlEncoded()
-  form(@Body() payload: unknown): Promise<unknown> {
+  @Params([Body()])
+  form(payload: unknown): Promise<unknown> {
     return noop(payload)
   }
 
   @POST('/form')
   @FormUrlEncoded()
-  formFields(
-    @Field('name') name: string,
-    @Field('age') age: number,
-    @Field('active') active: boolean
-  ): Promise<unknown> {
+  @Params([Field('name'), Field('age'), Field('active')])
+  formFields(name: string, age: number, active: boolean): Promise<unknown> {
     return noop(name, age, active)
   }
 
@@ -91,18 +94,21 @@ class RealApi {
 
   @POST('/error')
   @ParseErrorBody(BuiltInConv.TEXT)
-  err(@Body() payload: unknown): Promise<unknown> {
+  @Params([Body()])
+  err(payload: unknown): Promise<unknown> {
     return noop(payload)
   }
 
   @POST('/error/empty')
-  emptyErr(@Body() payload: unknown): Promise<unknown> {
+  @Params([Body()])
+  emptyErr(payload: unknown): Promise<unknown> {
     return noop(payload)
   }
 
   @POST('/error/empty')
   @ParseErrorBody(BuiltInConv.TEXT)
-  emptyParsedErr(@Body() payload: unknown): Promise<unknown> {
+  @Params([Body()])
+  emptyParsedErr(payload: unknown): Promise<unknown> {
     return noop(payload)
   }
 }

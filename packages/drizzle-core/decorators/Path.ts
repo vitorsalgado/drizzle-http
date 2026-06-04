@@ -1,5 +1,4 @@
 import { createClassDecorator } from '../ApiParameterization.js'
-import { Param } from './Param.js'
 
 /**
  * Sets an url path that will be concatenated with the base url and the final processed path
@@ -13,5 +12,5 @@ import { Param } from './Param.js'
  *  class API \{ \}
  */
 export function Path(path: string) {
-  return createClassDecorator(Param, ctx => (ctx.defaults.path = path))
+  return createClassDecorator(Path, ctx => (ctx.defaults.path = path))
 }

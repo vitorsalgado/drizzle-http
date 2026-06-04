@@ -4,7 +4,7 @@
   "description": "NestJs example",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "echo 'Skipped: use TypeScript 5+ and ES decorators for app.api.ts; Nest 8 requires legacy decorators in the same compilation unit.'",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

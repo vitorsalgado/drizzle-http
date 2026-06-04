@@ -1,13 +1,11 @@
-import { TargetCtor, TargetProto } from '../internal/index.js'
-import { setupRequestFactory } from '../ApiParameterization.js'
-import { setupApiDefaults } from '../ApiParameterization.js'
+import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 
 export function ResponseType(type: string) {
-  return function (target: TargetProto | TargetCtor, method?: string) {
-    if (method) {
-      return setupRequestFactory(ResponseType, target, method, ctx => (ctx.responseType = type))
+  return createClassAndMethodDecorator(ResponseType, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.responseType = type
+    } else {
+      ctx.defaults.responseType = type
     }
-
-    setupApiDefaults(ResponseType, target, parameters => (parameters.responseType = type))
-  }
+  })
 }

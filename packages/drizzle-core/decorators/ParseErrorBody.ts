@@ -7,8 +7,10 @@ import { createClassAndMethodDecorator } from '../ApiParameterization.js'
  * @param errorType - error type that a {@link ResponseConverter} will try to match. defaults to empty to use the same converter from success responses.
  */
 export const ParseErrorBody = (errorType = '') =>
-  createClassAndMethodDecorator(
-    ParseErrorBody,
-    defaults => (defaults.errorType = errorType),
-    requestFactory => (requestFactory.errorType = errorType)
-  )
+  createClassAndMethodDecorator(ParseErrorBody, ctx => {
+    if (ctx.kind === 'method') {
+      ctx.requestFactory!.errorType = errorType
+    } else {
+      ctx.defaults.errorType = errorType
+    }
+  })

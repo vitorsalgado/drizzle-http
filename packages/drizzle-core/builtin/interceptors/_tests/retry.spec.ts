@@ -5,7 +5,7 @@ import { closeTestServer } from '@drizzle-http/test-utils'
 import { startTestServer } from '@drizzle-http/test-utils'
 import { ContentType } from '../../../decorators/index.js'
 import { GET } from '../../../decorators/index.js'
-import { Param } from '../../../decorators/index.js'
+import { Param, Params } from '../../../decorators/index.js'
 import { POST } from '../../../decorators/index.js'
 import { MediaTypes } from '../../../MediaTypes.js'
 import { noop } from '../../../noop.js'
@@ -21,24 +21,28 @@ import { NoRetry } from '../NoRetry.js'
 class RetryTestAPI {
   @GET('/test/{id}')
   @Retry()
-  retryable(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  retryable(id: string): Promise<Ok> {
     return noop(id)
   }
 
   @GET('/test/{id}')
-  noRetryable(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  noRetryable(id: string): Promise<Ok> {
     return noop(id)
   }
 
   @POST('/test/{id}')
   @Retry({ delay: 100, statusCodes: [500], limit: 2, methods: ['PUT'] })
-  noRetryForPost(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  noRetryForPost(id: string): Promise<Ok> {
     return noop(id)
   }
 
   @GET('/test/{id}')
   @Retry({ statusCodes: [404] })
-  noRetryFor404(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  noRetryFor404(id: string): Promise<Ok> {
     return noop(id)
   }
 }
@@ -47,19 +51,22 @@ class RetryTestAPI {
 @Retry({ delay: 100 })
 class RetryGlobalTestAPI {
   @GET('/test/{id}')
-  retryable(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  retryable(id: string): Promise<Ok> {
     return noop(id)
   }
 
   @GET('/test/{id}')
   @Retry({ statusCodes: [404] })
-  overwriteDefaults(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  overwriteDefaults(id: string): Promise<Ok> {
     return noop(id)
   }
 
   @GET('/test/{id}')
   @NoRetry()
-  noRetryable(@Param('id') id: string): Promise<Ok> {
+  @Params([Param('id')])
+  noRetryable(id: string): Promise<Ok> {
     return noop(id)
   }
 }
@@ -80,7 +87,7 @@ describe('Retry Interceptor', function () {
 
   beforeAll(() => {
     setupTestServer(fastify => {
-      fastify.get('/test/:id', (req, res) => {
+      const handler = (req: unknown, res: { status: (code: number) => { send: (body: unknown) => void } }) => {
         if (c < max - 1) {
           c++
           spy()
@@ -88,10 +95,13 @@ describe('Retry Interceptor', function () {
         } else {
           res.status(200).send({ ok: true })
         }
-      })
+      }
+
+      fastify.get('/test/:id', handler)
+      fastify.post('/test/:id', handler)
     })
 
-    return startTestServer().then((addr: string) => {
+    return startTestServer().then(async (addr: string) => {
       drizzle = DrizzleBuilder.newBuilder()
         .baseUrl(addr)
         .callFactory(TestCallFactory.INSTANCE)

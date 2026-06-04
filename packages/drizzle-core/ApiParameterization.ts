@@ -1,9 +1,19 @@
 import { RequestFactory } from './RequestFactory.js'
 import { HttpHeaders } from './HttpHeaders.js'
-import { Decorator, isFunction, notBlank, notNull, TargetCtor, TargetProto } from './internal/index.js'
+import { Decorator, isFunction, notBlank, notNull, TargetCtor } from './internal/index.js'
 import { Drizzle } from './Drizzle.js'
+import {
+  appendPendingMethodSetup,
+  flushPendingMethodSetups,
+  methodName,
+  resolveOwner,
+  setOwner
+} from './decoratorMetadata.js'
 
-type Target = TargetCtor | TargetProto
+type Target = TargetCtor
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type DecoratedMethod = (...args: any[]) => any
 
 export class ApiDefaults {
   decorators: Decorator[] = []
@@ -86,6 +96,10 @@ export class Metadata {
     }
   }
 
+  static has(api: TargetCtor): boolean {
+    return Metadata.ENTRIES.has(api)
+  }
+
   static metadataFor(api: TargetCtor): Data {
     const data = Metadata.ENTRIES.get(api)
 
@@ -96,10 +110,8 @@ export class Metadata {
     return data
   }
 
-  private static entries(target: Target): Data {
-    const arg = typeof target === 'function' ? target : target.constructor
-
-    let data = Metadata.ENTRIES.get(arg)
+  private static entries(target: TargetCtor): Data {
+    let data = Metadata.ENTRIES.get(target)
 
     if (!data) {
       data = {
@@ -107,7 +119,7 @@ export class Metadata {
         requestFactories: new Map()
       }
 
-      Metadata.ENTRIES.set(arg, data)
+      Metadata.ENTRIES.set(target, data)
     }
 
     return data
@@ -137,89 +149,149 @@ export function setupRequestFactory(
   callback?.(requestFactory)
 }
 
-interface ClassDecoratorContext {
+export interface DrizzleClassDecoratorContext {
+  kind: 'class'
   target: TargetCtor
   defaults: ApiDefaults
 }
 
-export function createClassDecorator(decorator: Decorator, configurer?: (ctx: ClassDecoratorContext) => void) {
-  isFunction(decorator)
-
-  return function (target: TargetCtor) {
-    const defaults = Metadata.apiDefaults(target)
-    defaults.decorators.push(decorator)
-
-    configurer?.({
-      target,
-      defaults
-    })
-  }
-}
-
-interface MethodDecoratorContext {
-  target: object
+export interface DrizzleMethodDecoratorContext {
+  kind: 'method'
+  target: TargetCtor
   method: string
-  descriptor: PropertyDescriptor
   requestFactory: RequestFactory
 }
 
-export function createMethodDecorator(decorator: Decorator, configurer?: (ctx: MethodDecoratorContext) => void) {
+export interface ClassAndMethodDecoratorContext {
+  kind: 'class' | 'method'
+  target: TargetCtor
+  defaults: ApiDefaults
+  requestFactory?: RequestFactory
+  method?: string
+}
+
+export function createClassDecorator(
+  decorator: Decorator,
+  configurer?: (ctx: DrizzleClassDecoratorContext) => void
+): (target: TargetCtor, context: ClassDecoratorContext) => void {
   isFunction(decorator)
 
-  return function (target: object, method: string, descriptor: PropertyDescriptor): void {
-    const requestFactory = Metadata.requestFactory(target, method)
-    requestFactory.registerDecorator(decorator)
+  return function (target: TargetCtor, context: ClassDecoratorContext): void {
+    if (context.kind !== 'class') {
+      throw new TypeError(`${String(decorator.name)} must be applied to a class.`)
+    }
+
+    const ctor = target as TargetCtor
+    setOwner(context.metadata, ctor)
+
+    const defaults = Metadata.apiDefaults(ctor)
+    defaults.decorators.push(decorator)
 
     configurer?.({
-      target,
-      method,
-      descriptor,
-      requestFactory
+      kind: 'class',
+      target: ctor,
+      defaults
     })
+
+    flushPendingMethodSetups(context.metadata)
+  }
+}
+
+export function createMethodDecorator(
+  decorator: Decorator,
+  configurer?: (ctx: DrizzleMethodDecoratorContext) => void | DecoratedMethod
+): <T extends DecoratedMethod>(methodValue: T, context: ClassMethodDecoratorContext) => T | void {
+  isFunction(decorator)
+
+  return function <T extends DecoratedMethod>(methodValue: T, context: ClassMethodDecoratorContext): T | void {
+    if (context.kind !== 'method') {
+      throw new TypeError(`${String(decorator.name)} must be applied to a method.`)
+    }
+
+    const register = () => {
+      const apiCtor = resolveOwner(context.metadata, context.static, methodValue)
+      const method = methodName(context)
+
+      Metadata.registerApiMethod(apiCtor, method)
+
+      const requestFactory = Metadata.requestFactory(apiCtor, method)
+      requestFactory.registerDecorator(decorator)
+
+      configurer?.({
+        kind: 'method',
+        target: apiCtor,
+        method,
+        requestFactory
+      })
+    }
+
+    if (context.static) {
+      register()
+    } else {
+      appendPendingMethodSetup(context.metadata, register)
+    }
+
+    return methodValue
   }
 }
 
 export function createClassAndMethodDecorator(
   decorator: Decorator,
-  onClass?: (defaults: ApiDefaults) => void,
-  onMethod?: (requestFactory: RequestFactory) => void
-) {
+  configurer: (ctx: ClassAndMethodDecoratorContext) => void
+): <T extends TargetCtor | DecoratedMethod>(
+  target: T,
+  context: ClassDecoratorContext | ClassMethodDecoratorContext
+) => void | T {
   isFunction(decorator)
 
-  return function (target: object | TargetCtor, method?: string) {
-    if (method) {
-      const requestFactory = Metadata.requestFactory(target, method)
-      requestFactory.registerDecorator(decorator)
+  return function <T extends TargetCtor | DecoratedMethod>(
+    target: T,
+    context: ClassDecoratorContext | ClassMethodDecoratorContext
+  ): void | T {
+    if (context.kind === 'class') {
+      const ctor = target as TargetCtor
+      setOwner(context.metadata, ctor)
 
-      onMethod?.(requestFactory)
-    } else {
-      const defaults = Metadata.apiDefaults(target)
+      const defaults = Metadata.apiDefaults(ctor)
       defaults.decorators.push(decorator)
 
-      onClass?.(defaults)
+      configurer({
+        kind: 'class',
+        target: ctor,
+        defaults
+      })
+
+      flushPendingMethodSetups(context.metadata)
+
+      return
     }
-  }
-}
 
-interface ParameterDecoratorContext {
-  target: object
-  method: string
-  parameterIndex: number
-  requestFactory: RequestFactory
-}
+    if (context.kind === 'method') {
+      const register = () => {
+        const apiCtor = resolveOwner(context.metadata, context.static, target as DecoratedMethod)
+        const method = methodName(context)
+        const requestFactory = Metadata.requestFactory(apiCtor, method)
 
-export function createParameterDecorator(decorator: Decorator, configurer?: (ctx: ParameterDecoratorContext) => void) {
-  isFunction(decorator)
+        requestFactory.registerDecorator(decorator)
 
-  return function (target: object, method: string, parameterIndex: number) {
-    const requestFactory = Metadata.requestFactory(target, method)
-    requestFactory.registerDecorator(decorator)
+        configurer({
+          kind: 'method',
+          target: apiCtor,
+          method,
+          defaults: Metadata.apiDefaults(apiCtor),
+          requestFactory
+        })
+      }
 
-    configurer?.({
-      target,
-      method,
-      parameterIndex,
-      requestFactory
-    })
+      if (context.static) {
+        register()
+      } else {
+        appendPendingMethodSetup(context.metadata, register)
+      }
+
+      return target
+    }
+
+    throw new TypeError(`${String(decorator.name)} must be applied to a class or method.`)
   }
 }
