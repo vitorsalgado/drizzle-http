@@ -10,10 +10,10 @@
     },
     {
       "path": "../packages/drizzle-undici"
+    },
+    {
+      "path": "../packages/drizzle-opossum-circuit-breaker"
     }
   ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

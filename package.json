@@ -17,7 +17,8 @@
     "fmt:check": "npm run fmt -- --check",
     "release": "node scripts/packaging.js publish",
     "clean": "tsc --build --clean",
-    "benchmark": "concurrently -k --kill-others-on-fail -s first \"node _benchmarks/dist/createServer.js\" \"node -e 'setTimeout(() => {}, 1000)' && node _benchmarks/dist/index.js\"",
+    "benchmark": "npm run build --workspace @drizzle-http/benchmarks && concurrently -k --kill-others-on-fail -s first \"npm run server --workspace @drizzle-http/benchmarks\" \"node -e \\\"setTimeout(() => {}, 1000)\\\" && npm run bench:post --workspace @drizzle-http/benchmarks\"",
+    "benchmark:streaming": "npm run build --workspace @drizzle-http/benchmarks && concurrently -k --kill-others-on-fail -s first \"npm run server --workspace @drizzle-http/benchmarks\" \"node -e \\\"setTimeout(() => {}, 1000)\\\" && npm run bench:streaming --workspace @drizzle-http/benchmarks\"",
     "postinstall": "husky install",
     "release:prepare": "node scripts/packaging.js prepare",
     "release:publish": "node scripts/packaging.js publish"

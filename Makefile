@@ -21,6 +21,25 @@ fmt-check: # Check project files format
 lint: # Lint all files
 	@npm run lint
 
+# Benchmarks
+# ---
+
+.PHONY: bench-build
+bench-build: ## Build benchmark package
+	@npm run build --workspace @drizzle-http/benchmarks
+
+.PHONY: bench-server
+bench-server: bench-build ## Run benchmark HTTP server
+	@npm run server --workspace @drizzle-http/benchmarks
+
+.PHONY: bench
+bench: ## Run POST benchmark (starts server + client)
+	@npm run benchmark
+
+.PHONY: bench-streaming
+bench-streaming: ## Run streaming benchmark (starts server + client)
+	@npm run benchmark:streaming
+
 
 # Dev Environment Utilities
 # ---
