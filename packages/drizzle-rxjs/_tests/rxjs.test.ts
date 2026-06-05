@@ -3,7 +3,6 @@ import {
   Drizzle,
   DrizzleBuilder,
   GET,
-  HttpError,
   HttpResponse,
   noop,
   Param,

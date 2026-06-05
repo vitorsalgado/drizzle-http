@@ -10,4 +10,3 @@ tsconfig.build.json
 *.tgz
 *.test.ts
 *.test.js
-.eslintignore

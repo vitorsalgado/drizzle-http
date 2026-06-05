@@ -30,8 +30,8 @@ export class RetryInterceptor implements Interceptor {
           this.options.methods.includes(chain.request().method as HttpMethod)
         ) {
           if (!response.bodyUsed && response.body && RetryInterceptor.isAsyncIterable(response.body as never)) {
-            // eslint-disable-next-line no-empty,@typescript-eslint/no-unused-vars
             for await (const _ of response.body as Iterable<unknown>) {
+              void _
             }
           }
 

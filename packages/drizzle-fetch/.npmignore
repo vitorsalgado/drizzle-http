@@ -12,8 +12,6 @@ tsconfig.build.json
 *.tgz
 *.test.ts
 *.test.js
-.eslintignore
-.eslintrc.js
 webpack.config.js
 webpack.test.config.js
 .babelrc

@@ -1,10 +1,4 @@
-import {
-  headersFromRecord,
-  headersToRecord,
-  isHeadersEmpty,
-  mergeHeaders,
-  mergeHeadersObject
-} from '../headers.js'
+import { headersFromRecord, headersToRecord, isHeadersEmpty, mergeHeaders, mergeHeadersObject } from '../headers.js'
 
 describe('header utils', function () {
   it('should return isHeadersEmpty equal to true when there are no records', () => {

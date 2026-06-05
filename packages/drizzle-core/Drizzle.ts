@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { RequestBodyConverter } from './RequestBodyConverter.js'
 import { RequestBodyConverterFactory } from './RequestBodyConverter.js'
 import { serviceInvoker } from './drizzleServiceInvoker.js'

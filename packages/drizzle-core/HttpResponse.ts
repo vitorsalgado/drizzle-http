@@ -3,12 +3,7 @@ import { BodyType } from './BodyType.js'
 /**
  * Minimum contract that every response should follow inside the framework.
  */
-export interface HttpResponse<
-  BODY = BodyType,
-  BLOB = unknown,
-  FORM_DATA = unknown,
-  HEADERS extends Headers = Headers
-> {
+export interface HttpResponse<BODY = BodyType, BLOB = unknown, FORM_DATA = unknown, HEADERS extends Headers = Headers> {
   readonly headers: HEADERS
   readonly trailers?: Promise<HEADERS>
   readonly status: number

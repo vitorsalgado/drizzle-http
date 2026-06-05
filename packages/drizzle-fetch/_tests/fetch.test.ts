@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 import { vi, type Mock } from 'vitest'
 import { GET, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
 import { CORS, KeepAlive } from '../decorators/index.js'
@@ -23,13 +21,10 @@ const makeUrl = (url: string, path: string) => url + path
 
 describe('Fetch', function () {
   afterEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    global.fetch.mockClear()
+    vi.mocked(global.fetch).mockClear()
   })
 
   describe('when using decorators on class level', function () {
-    // @ts-ignore
     global.fetch = vi.fn(() =>
       Promise.resolve({
         headers: new Headers(),

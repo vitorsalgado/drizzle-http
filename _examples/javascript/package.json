@@ -7,6 +7,7 @@
     "build": "rollup --config"
   },
   "private": true,
+  "type": "module",
   "author": {
     "name": "Vitor Hugo Salgado",
     "url": "https://github.com/vitorsalgado"

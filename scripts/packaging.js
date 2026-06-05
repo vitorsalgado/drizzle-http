@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import { execSync as ExecSync } from 'child_process'
-import { program as Program } from 'commander'
 import * as Fs from 'fs'
+import Path from 'path'
+import { program as Program } from 'commander'
 import FsExt from 'fs-extra'
 import { globby } from 'globby'
-import Path from 'path'
 import Pino from 'pino'
 
 const PkgMain = JSON.parse(Fs.readFileSync(Path.join(process.cwd(), 'package.json')).toString())

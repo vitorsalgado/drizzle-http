@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-wrapper-object-types */
 
 export type Ctor<T = any, Arguments extends unknown[] = any[]> = new (...args: Arguments) => T
 
