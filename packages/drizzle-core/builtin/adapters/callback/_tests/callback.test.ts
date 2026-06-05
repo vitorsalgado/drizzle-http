@@ -1,14 +1,14 @@
 import { closeTestServer, startTestServer, TestId, TestResult } from '@drizzle-http/test-utils'
-import { Drizzle } from '../../../../Drizzle.js'
+import { Drizzle } from '../../../../drizzle.js'
 import { GET, Param, Params } from '../../../../decorators/index.js'
 import { ContentType } from '../../../../decorators/index.js'
 import { UseJsonConv } from '../../../../decorators/index.js'
-import { DrizzleBuilder } from '../../../../DrizzleBuilder.js'
-import { HttpError } from '../../../../HttpError.js'
-import { Callback } from '../Callback.js'
+import { DrizzleBuilder } from '../../../../drizzle_builder.js'
+import { HttpError } from '../../../../http_error.js'
+import { Callback } from '../callback.js'
 import { noop } from '../../../../noop.js'
-import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
-import { MediaTypes } from '../../../../MediaTypes.js'
+import { TestCallFactory } from '../../../../_tests/test_call_factory.js'
+import { MediaTypes } from '../../../../media_types.js'
 
 @ContentType(MediaTypes.APPLICATION_JSON)
 @UseJsonConv()

@@ -1,5 +1,5 @@
 import { FormParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 /**
  * Named form parameter for a form url-encode request.

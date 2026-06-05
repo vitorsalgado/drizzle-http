@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.js'
+import { createClassAndMethodDecorator } from '../api_parameterization.js'
 import { BuiltInConv } from '../builtin/index.js'
 
 export const Multipart = () =>

@@ -1,6 +1,6 @@
-import { MediaTypes } from '../../../../MediaTypes.js'
-import { RequestFactory } from '../../../../RequestFactory.js'
-import { DrizzleBuilder } from '../../../../DrizzleBuilder.js'
+import { MediaTypes } from '../../../../media_types.js'
+import { RequestFactory } from '../../../../request_factory.js'
+import { DrizzleBuilder } from '../../../../drizzle_builder.js'
 import {
   JsonRequestConverter,
   JsonRequestConverterFactory,
@@ -9,7 +9,7 @@ import {
 } from '../index.js'
 import { BodyParameter } from '../../../parameterhandlers/index.js'
 import { CommonHeaders } from '../../../../headers.js'
-import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
+import { TestCallFactory } from '../../../../_tests/test_call_factory.js'
 
 describe('JSON Converter', function () {
   const drizzle = DrizzleBuilder.newBuilder()

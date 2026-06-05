@@ -1,6 +1,6 @@
 import { pathParameterRegex } from '../internal/index.js'
 import { PathParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 /**
  * Named replacement for a URL path segment

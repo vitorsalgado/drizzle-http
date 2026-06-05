@@ -9,4 +9,4 @@ export * from './interceptors/index.js'
 
 export * from './parameterhandlers/index.js'
 
-export * from './BuiltInConv.js'
+export * from './built_in_conv.js'

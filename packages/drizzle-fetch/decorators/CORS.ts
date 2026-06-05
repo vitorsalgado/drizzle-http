@@ -1,5 +1,5 @@
 import { createClassAndMethodDecorator } from '@drizzle-http/core'
-import { Mode } from './Mode.js'
+import { Mode } from './mode.js'
 
 export function CORS() {
   return createClassAndMethodDecorator(CORS, ctx => {

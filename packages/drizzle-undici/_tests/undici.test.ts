@@ -22,12 +22,12 @@ import {
   Timeout
 } from '@drizzle-http/core'
 import { Dispatcher } from 'undici'
-import { UndiciCallFactory } from '../UndiciCallFactory.js'
-import { PoolOptionsBuilder } from '../PoolOptionsBuilder.js'
-import { Streaming } from '../Streaming.js'
-import { StreamTo } from '../StreamTo.js'
-import { StreamingResponse } from '../StreamingResponse.js'
-import { UndiciResponse } from '../UndiciResponse.js'
+import { UndiciCallFactory } from '../undici_call_factory.js'
+import { PoolOptionsBuilder } from '../pool_options_builder.js'
+import { Streaming } from '../streaming.js'
+import { StreamTo } from '../stream_to.js'
+import { StreamingResponse } from '../streaming_response.js'
+import { UndiciResponse } from '../undici_response.js'
 
 const evtCls = new EventEmitter()
 const evtMethod = new EventEmitter()

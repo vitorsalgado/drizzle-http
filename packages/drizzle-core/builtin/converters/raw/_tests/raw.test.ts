@@ -1,10 +1,10 @@
 import { closeTestServer, setupTestServer, startTestServer } from '@drizzle-http/test-utils'
-import { RequestFactory } from '../../../../RequestFactory.js'
-import { MediaTypes } from '../../../../MediaTypes.js'
-import { DrizzleBuilder, newAPI } from '../../../../DrizzleBuilder.js'
+import { RequestFactory } from '../../../../request_factory.js'
+import { MediaTypes } from '../../../../media_types.js'
+import { DrizzleBuilder, newAPI } from '../../../../drizzle_builder.js'
 import { Body, ContentType, POST, Params } from '../../../../decorators/index.js'
 import { GET } from '../../../../decorators/index.js'
-import { HttpResponse } from '../../../../HttpResponse.js'
+import { HttpResponse } from '../../../../http_response.js'
 import {
   RawRequestConverter,
   RawRequestConverterFactory,
@@ -15,7 +15,7 @@ import {
 import { RawRequest } from '../index.js'
 import { noop } from '../../../../noop.js'
 import { CommonHeaders } from '../../../../headers.js'
-import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
+import { TestCallFactory } from '../../../../_tests/test_call_factory.js'
 
 class API {
   @POST('/raw-test')

@@ -1,5 +1,5 @@
 import { HeaderParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 /**
  * Named header to be added to the request.

@@ -1,7 +1,7 @@
-import { createMethodDecorator } from '../ApiParameterization.js'
-import { registerApiMethod } from '../ApiParameterization.js'
-import { Callback } from '../builtin/adapters/callback/Callback.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import { createMethodDecorator } from '../api_parameterization.js'
+import { registerApiMethod } from '../api_parameterization.js'
+import { Callback } from '../builtin/adapters/callback/callback.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 export function Params(specs: ApiParameterSpec[]) {
   return createMethodDecorator(Params, ctx => {

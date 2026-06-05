@@ -1,4 +1,4 @@
-import { createClassDecorator } from '../ApiParameterization.js'
+import { createClassDecorator } from '../api_parameterization.js'
 
 /**
  * Sets an url path that will be concatenated with the base url and the final processed path

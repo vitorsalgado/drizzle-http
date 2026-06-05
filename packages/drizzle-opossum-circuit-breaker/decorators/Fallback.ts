@@ -1,5 +1,5 @@
 import { createMethodDecorator } from '@drizzle-http/core'
-import { Keys } from '../Keys.js'
+import { Keys } from '../keys.js'
 
 export function Fallback(fallback: string | ((...args: never[]) => unknown)) {
   return createMethodDecorator(Fallback, ctx => ctx.requestFactory.addConfig(Keys.FallbackMethod, fallback))

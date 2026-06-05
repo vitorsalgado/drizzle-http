@@ -1,5 +1,5 @@
 import { BodyParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 /**
  * Use this spec to mark that a method parameter must be sent as the HTTP Request body

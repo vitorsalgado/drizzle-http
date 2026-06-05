@@ -17,7 +17,7 @@ import { startTestServer } from '@drizzle-http/test-utils'
 import { UndiciCallFactory } from '@drizzle-http/undici'
 import { Map } from '../decorators/index.js'
 import { MapTo } from '../decorators/index.js'
-import { MapCallAdapterFactory } from '../MapCallAdapterFactory.js'
+import { MapCallAdapterFactory } from '../map_call_adapter_factory.js'
 
 function Custom() {
   return createMethodDecorator(Custom)

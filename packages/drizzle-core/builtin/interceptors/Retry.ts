@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../../ApiParameterization.js'
+import { createClassAndMethodDecorator } from '../../api_parameterization.js'
 import { HttpMethod } from '../../decorators/utils/index.js'
 
 export const RetryOptionsKey = 'retry:options'

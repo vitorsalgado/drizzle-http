@@ -10,11 +10,11 @@ import { GET } from '../decorators/index.js'
 import { Header } from '../decorators/index.js'
 import { ContentType } from '../decorators/index.js'
 import { RawResponse } from '../builtin/index.js'
-import { HttpResponse } from '../HttpResponse.js'
+import { HttpResponse } from '../http_response.js'
 import { noop } from '../noop.js'
-import { newAPI } from '../DrizzleBuilder.js'
-import { MediaTypes } from '../MediaTypes.js'
-import { TestCallFactory } from './TestCallFactory.js'
+import { newAPI } from '../drizzle_builder.js'
+import { MediaTypes } from '../media_types.js'
+import { TestCallFactory } from './test_call_factory.js'
 
 @ContentType(MediaTypes.APPLICATION_JSON)
 @HeaderMap({ clazz: 'clazz' })

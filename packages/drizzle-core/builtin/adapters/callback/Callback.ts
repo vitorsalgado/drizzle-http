@@ -1,4 +1,4 @@
-import { createMethodDecorator } from '../../../ApiParameterization.js'
+import { createMethodDecorator } from '../../../api_parameterization.js'
 
 export const Callback = () =>
   createMethodDecorator(Callback, ctx => {

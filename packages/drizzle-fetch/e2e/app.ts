@@ -15,9 +15,9 @@ import { Referrer } from '../decorators/index.js'
 import { Redirect } from '../decorators/index.js'
 import { Cache } from '../decorators/index.js'
 import { KeepAlive } from '../decorators/index.js'
-import { FetchCallFactory } from '../FetchCallFactory.js'
-import { PartParameterHandlerFactory } from '../MultipartParameterHandler.js'
-import { MultipartRequestBodyConverterFactory } from '../MultipartRequestBodyConverter.js'
+import { FetchCallFactory } from '../fetch_call_factory.js'
+import { PartParameterHandlerFactory } from '../multipart_parameter_handler.js'
+import { MultipartRequestBodyConverterFactory } from '../multipart_request_body_converter.js'
 
 @CORS()
 @KeepAlive(true)

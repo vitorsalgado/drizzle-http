@@ -1,7 +1,7 @@
-import { Chain } from './Chain.js'
-import { HttpResponse } from './HttpResponse.js'
-import { Drizzle } from './Drizzle.js'
-import { RequestFactory } from './RequestFactory.js'
+import { Chain } from './chain.js'
+import { HttpResponse } from './http_response.js'
+import { Drizzle } from './drizzle.js'
+import { RequestFactory } from './request_factory.js'
 
 export interface Interceptor {
   intercept(chain: Chain): Promise<HttpResponse>

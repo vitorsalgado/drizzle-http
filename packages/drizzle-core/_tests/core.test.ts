@@ -14,14 +14,14 @@ import {
   PUT,
   UsePlainTextConv
 } from '../decorators/index.js'
-import { MediaTypes } from '../MediaTypes.js'
+import { MediaTypes } from '../media_types.js'
 import { noop } from '../noop.js'
-import { Drizzle } from '../Drizzle.js'
-import { DrizzleBuilder } from '../DrizzleBuilder.js'
+import { Drizzle } from '../drizzle.js'
+import { DrizzleBuilder } from '../drizzle_builder.js'
 import { BuiltInConv, RawResponse } from '../builtin/index.js'
-import { HttpResponse } from '../HttpResponse.js'
-import { HttpError } from '../HttpError.js'
-import { TestCallFactory } from './TestCallFactory.js'
+import { HttpResponse } from '../http_response.js'
+import { HttpError } from '../http_error.js'
+import { TestCallFactory } from './test_call_factory.js'
 
 interface User {
   id: string

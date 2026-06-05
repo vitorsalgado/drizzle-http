@@ -1,6 +1,6 @@
-import { requestFactory } from '../../ApiParameterization.js'
-import { appendPendingMethodSetup, DRIZZLE_OWNER, methodName, resolveOwner } from '../../decoratorMetadata.js'
-import type { DrizzleDecoratorMetadata } from '../../decoratorMetadata.js'
+import { requestFactory } from '../../api_parameterization.js'
+import { appendPendingMethodSetup, DRIZZLE_OWNER, methodName, resolveOwner } from '../../decorator_metadata.js'
+import type { DrizzleDecoratorMetadata } from '../../decorator_metadata.js'
 import type { TargetCtor } from '../../internal/index.js'
 
 export function scheduleMemberSetup(metadata: DecoratorMetadata, isStatic: boolean, setup: () => void): void {

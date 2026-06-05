@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.js'
+import { createClassAndMethodDecorator } from '../api_parameterization.js'
 
 /**
  * Set the timeouts for an HTTP request.

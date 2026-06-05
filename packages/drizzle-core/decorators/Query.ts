@@ -1,5 +1,5 @@
 import { QueryParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 /**
  * Query parameter appended to the URL.

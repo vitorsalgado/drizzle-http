@@ -1,5 +1,5 @@
 import { PartParameter } from '../builtin/index.js'
-import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
+import type { ApiParameterSpec } from './params/api_parameter_spec.js'
 
 export function Part(name: string, filename?: string): ApiParameterSpec {
   return {

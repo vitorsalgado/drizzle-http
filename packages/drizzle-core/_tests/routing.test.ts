@@ -4,13 +4,13 @@ import { setupTestServer } from '@drizzle-http/test-utils'
 import { GET } from '../decorators/index.js'
 import { UsePlainTextConv } from '../decorators/index.js'
 import { Path } from '../decorators/index.js'
-import { HttpResponse } from '../HttpResponse.js'
+import { HttpResponse } from '../http_response.js'
 import { noop } from '../noop.js'
-import { Drizzle } from '../Drizzle.js'
-import { DrizzleBuilder } from '../DrizzleBuilder.js'
+import { Drizzle } from '../drizzle.js'
+import { DrizzleBuilder } from '../drizzle_builder.js'
 import { RawResponse } from '../builtin/index.js'
 import { HTTP } from '../decorators/index.js'
-import { TestCallFactory } from './TestCallFactory.js'
+import { TestCallFactory } from './test_call_factory.js'
 
 @UsePlainTextConv()
 @Path('/customers')

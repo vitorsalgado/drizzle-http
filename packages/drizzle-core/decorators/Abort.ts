@@ -1,4 +1,4 @@
-import { createClassAndMethodDecorator } from '../ApiParameterization.js'
+import { createClassAndMethodDecorator } from '../api_parameterization.js'
 
 export function Abort(value: string | unknown | null = null) {
   return createClassAndMethodDecorator(Abort, ctx => {
