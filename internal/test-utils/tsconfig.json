@@ -18,8 +18,8 @@
     "node_modules",
     "**/_tests/**",
     "**/__fixtures__/**",
-    "**/*.spec.ts",
-    "**/*.spec.js",
+    "**/*.test.ts",
+    "**/*.test.js",
     "**/*.config.ts"
   ]
 }

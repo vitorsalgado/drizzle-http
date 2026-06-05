@@ -8,6 +8,6 @@ tsconfig.build.json
 *.tsbuildinfo
 *.log
 *.tgz
-*.spec.ts
-*.spec.js
+*.test.ts
+*.test.js
 .eslintignore

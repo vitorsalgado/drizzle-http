@@ -35,7 +35,7 @@ export default defineConfig({
     setupFiles: ['dotenv/config'],
     testTimeout: 15000,
     restoreMocks: false,
-    include: ['**/_tests/**/*.{spec,test}.ts', 'internal/test/**/*.spec.ts'],
+    include: ['**/_tests/**/*.test.ts', 'internal/test/**/*.test.ts', 'packages/**/e2e/**/*.test.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
