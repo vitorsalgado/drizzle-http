@@ -64,66 +64,60 @@ export class ApiDefaults {
   }
 }
 
-interface Data {
+export interface ApiMetadataEntry {
   meta: ApiDefaults
   requestFactories: Map<string, RequestFactory>
 }
 
-export class Metadata {
-  private static readonly ENTRIES: Map<TargetCtor, Data> = new Map()
+const apiMetadataEntries = new WeakMap<TargetCtor, ApiMetadataEntry>()
 
-  static apiDefaults(target: Target): ApiDefaults {
-    return Metadata.entries(target).meta
-  }
+function getOrCreateApiMetadata(target: TargetCtor): ApiMetadataEntry {
+  let data = apiMetadataEntries.get(target)
 
-  static requestFactory(target: Target, method: string): RequestFactory {
-    const data = Metadata.entries(target)
-    let requestFactory = data.requestFactories.get(method)
-
-    if (!requestFactory) {
-      requestFactory = new RequestFactory()
-      data.requestFactories.set(method, requestFactory)
+  if (!data) {
+    data = {
+      meta: new ApiDefaults(),
+      requestFactories: new Map()
     }
 
-    return requestFactory
+    apiMetadataEntries.set(target, data)
   }
 
-  static registerApiMethod(target: TargetCtor, method: string): void {
-    const data = Metadata.entries(target)
+  return data
+}
 
-    if (!data.requestFactories.has(method)) {
-      data.requestFactories.set(method, new RequestFactory())
-    }
+export function apiDefaults(target: TargetCtor): ApiDefaults {
+  return getOrCreateApiMetadata(target).meta
+}
+
+export function requestFactory(target: TargetCtor, method: string): RequestFactory {
+  const data = getOrCreateApiMetadata(target)
+  let factory = data.requestFactories.get(method)
+
+  if (!factory) {
+    factory = new RequestFactory()
+    data.requestFactories.set(method, factory)
   }
 
-  static has(api: TargetCtor): boolean {
-    return Metadata.ENTRIES.has(api)
+  return factory
+}
+
+export function registerApiMethod(target: TargetCtor, method: string): void {
+  const data = getOrCreateApiMetadata(target)
+
+  if (!data.requestFactories.has(method)) {
+    data.requestFactories.set(method, new RequestFactory())
+  }
+}
+
+export function metadataFor(api: TargetCtor): ApiMetadataEntry {
+  const data = apiMetadataEntries.get(api)
+
+  if (!data) {
+    throw new TypeError(`Invalid API state. No metadata found for API definition: ${api}.`)
   }
 
-  static metadataFor(api: TargetCtor): Data {
-    const data = Metadata.ENTRIES.get(api)
-
-    if (!data) {
-      throw new TypeError(`Invalid API state. No metadata found for API definition: ${api}.`)
-    }
-
-    return data
-  }
-
-  private static entries(target: TargetCtor): Data {
-    let data = Metadata.ENTRIES.get(target)
-
-    if (!data) {
-      data = {
-        meta: new ApiDefaults(),
-        requestFactories: new Map()
-      }
-
-      Metadata.ENTRIES.set(target, data)
-    }
-
-    return data
-  }
+  return data
 }
 
 export function setupApiDefaults(
@@ -131,7 +125,7 @@ export function setupApiDefaults(
   target: Target,
   callback?: (parameters: ApiDefaults) => void
 ): void {
-  const defaults = Metadata.apiDefaults(target)
+  const defaults = apiDefaults(target)
   defaults.decorators.push(decorator)
 
   callback?.(defaults)
@@ -143,10 +137,10 @@ export function setupRequestFactory(
   method: string,
   callback?: (requestFactory: RequestFactory) => void
 ): void {
-  const requestFactory = Metadata.requestFactory(target, method)
-  requestFactory.registerDecorator(decorator)
+  const factory = requestFactory(target, method)
+  factory.registerDecorator(decorator)
 
-  callback?.(requestFactory)
+  callback?.(factory)
 }
 
 export interface DrizzleClassDecoratorContext {
@@ -184,7 +178,7 @@ export function createClassDecorator(
     const ctor = target as TargetCtor
     setOwner(context.metadata, ctor)
 
-    const defaults = Metadata.apiDefaults(ctor)
+    const defaults = apiDefaults(ctor)
     defaults.decorators.push(decorator)
 
     configurer?.({
@@ -212,16 +206,16 @@ export function createMethodDecorator(
       const apiCtor = resolveOwner(context.metadata, context.static, methodValue)
       const method = methodName(context)
 
-      Metadata.registerApiMethod(apiCtor, method)
+      registerApiMethod(apiCtor, method)
 
-      const requestFactory = Metadata.requestFactory(apiCtor, method)
-      requestFactory.registerDecorator(decorator)
+      const factory = requestFactory(apiCtor, method)
+      factory.registerDecorator(decorator)
 
       configurer?.({
         kind: 'method',
         target: apiCtor,
         method,
-        requestFactory
+        requestFactory: factory
       })
     }
 
@@ -252,7 +246,7 @@ export function createClassAndMethodDecorator(
       const ctor = target as TargetCtor
       setOwner(context.metadata, ctor)
 
-      const defaults = Metadata.apiDefaults(ctor)
+      const defaults = apiDefaults(ctor)
       defaults.decorators.push(decorator)
 
       configurer({
@@ -270,16 +264,16 @@ export function createClassAndMethodDecorator(
       const register = () => {
         const apiCtor = resolveOwner(context.metadata, context.static, target as DecoratedMethod)
         const method = methodName(context)
-        const requestFactory = Metadata.requestFactory(apiCtor, method)
+        const factory = requestFactory(apiCtor, method)
 
-        requestFactory.registerDecorator(decorator)
+        factory.registerDecorator(decorator)
 
         configurer({
           kind: 'method',
           target: apiCtor,
           method,
-          defaults: Metadata.apiDefaults(apiCtor),
-          requestFactory
+          defaults: apiDefaults(apiCtor),
+          requestFactory: factory
         })
       }
 

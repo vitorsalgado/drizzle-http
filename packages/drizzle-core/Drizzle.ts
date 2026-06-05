@@ -5,7 +5,7 @@ import { RequestBodyConverterFactory } from './RequestBodyConverter.js'
 import { serviceInvoker } from './drizzleServiceInvoker.js'
 import { RequestFactory } from './RequestFactory.js'
 import { associateApiClass } from './decoratorMetadata.js'
-import { Metadata } from './ApiParameterization.js'
+import { metadataFor } from './ApiParameterization.js'
 import { Interceptor } from './Interceptor.js'
 import { InterceptorFactory } from './Interceptor.js'
 import { RawRequestConverter, RawResponseConverter } from './builtin/index.js'
@@ -242,7 +242,7 @@ export class Drizzle {
    */
   create<T extends AnyCtor>(TargetApi: T, ...args: unknown[]): InstanceType<T> {
     associateApiClass(TargetApi)
-    const parameterization = Metadata.metadataFor(TargetApi)
+    const parameterization = metadataFor(TargetApi)
 
     if (parameterization.requestFactories.size === 0) {
       throw new DrizzleError(

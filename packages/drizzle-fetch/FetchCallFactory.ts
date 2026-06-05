@@ -1,5 +1,4 @@
-import { Call, CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
-import { Metadata } from '@drizzle-http/core'
+import { apiDefaults, Call, CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { FetchCall } from './FetchCall.js'
 import { Cache } from './decorators/index.js'
 import { Mode } from './decorators/index.js'
@@ -20,7 +19,7 @@ export class FetchCallFactory implements CallFactory {
   }
 
   provide(drizzle: Drizzle, requestFactory: RequestFactory): Call<Response> {
-    const defaults = Metadata.apiDefaults(requestFactory.apiOwner())
+    const defaults = apiDefaults(requestFactory.apiOwner())
 
     const def: RequestInit = {
       cache: defaults.getConfig(Cache.Key),

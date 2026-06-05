@@ -1,4 +1,4 @@
-import { DecoratedMethod, Metadata } from '../../ApiParameterization.js'
+import { DecoratedMethod, registerApiMethod, requestFactory } from '../../ApiParameterization.js'
 import { AnyClass, Decorator, isFunction, TargetCtor } from '../../internal/index.js'
 import { notNull } from '../../internal/index.js'
 import { appendPendingMethodSetup, methodName, resolveOwner } from '../../decoratorMetadata.js'
@@ -34,14 +34,14 @@ export function decorateWithHttpMethod(
       registeredCtor = apiCtor
       registeredMethod = method
 
-      Metadata.registerApiMethod(apiCtor, method)
+      registerApiMethod(apiCtor, method)
 
-      const requestFactory = Metadata.requestFactory(apiCtor, method)
-      requestFactory.registerDecorator(decorator)
-      requestFactory.apiType = apiCtor as AnyClass
-      requestFactory.method = method
-      requestFactory.path = path.trim()
-      requestFactory.httpMethod = httpMethod.toUpperCase()
+      const factory = requestFactory(apiCtor, method)
+      factory.registerDecorator(decorator)
+      factory.apiType = apiCtor as AnyClass
+      factory.method = method
+      factory.path = path.trim()
+      factory.httpMethod = httpMethod.toUpperCase()
     }
 
     if (context.static) {
@@ -53,9 +53,9 @@ export function decorateWithHttpMethod(
     const wrapped = function (...args: unknown[]) {
       const apiCtor = registeredCtor ?? resolveOwner(context.metadata, context.static, value)
       const method = registeredMethod ?? methodName(context)
-      const requestFactory = Metadata.requestFactory(apiCtor, method)
+      const factory = requestFactory(apiCtor, method)
 
-      return requestFactory.invoker()?.(...args)
+      return factory.invoker()?.(...args)
     }
 
     return wrapped as T

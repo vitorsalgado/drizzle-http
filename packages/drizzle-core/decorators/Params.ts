@@ -1,11 +1,11 @@
 import { createMethodDecorator } from '../ApiParameterization.js'
-import { Metadata } from '../ApiParameterization.js'
+import { registerApiMethod } from '../ApiParameterization.js'
 import { Callback } from '../builtin/adapters/callback/Callback.js'
 import type { ApiParameterSpec } from './params/ApiParameterSpec.js'
 
 export function Params(specs: ApiParameterSpec[]) {
   return createMethodDecorator(Params, ctx => {
-    Metadata.registerApiMethod(ctx.target, ctx.method)
+    registerApiMethod(ctx.target, ctx.method)
 
     specs.forEach((spec, index) => {
       spec.apply({
