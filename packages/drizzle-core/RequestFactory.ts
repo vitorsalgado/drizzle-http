@@ -5,7 +5,7 @@ import { RequestBodyConverter } from './RequestBodyConverter.js'
 import { ApiDefaults } from './ApiParameterization.js'
 import { RequestParameterization } from './RequestParameterization.js'
 import { MediaTypes } from './MediaTypes.js'
-import { HttpHeaders } from './HttpHeaders.js'
+import { CommonHeaders, mergeHeaders } from './headers.js'
 import { HttpRequest } from './HttpRequest.js'
 import {
   BodyParameter,
@@ -41,7 +41,7 @@ export class RequestFactory {
     public path: string = '',
     public argLen: number = 0,
     public bodyIndex: number = -1,
-    public defaultHeaders: HttpHeaders = new HttpHeaders(),
+    public defaultHeaders: Headers = new Headers(),
     public readTimeout: number | undefined = undefined,
     public connectTimeout: number | undefined = undefined,
     public parameterHandlers: { parameter: Parameter; handler: ParameterHandler }[] = [],
@@ -237,7 +237,7 @@ export class RequestFactory {
       return
     }
 
-    this.defaultHeaders.merge(defaults.headers)
+    mergeHeaders(this.defaultHeaders, defaults.headers)
 
     if (this.readTimeout === null || typeof this.readTimeout === 'undefined') {
       this.readTimeout = defaults.readTimeout
@@ -426,7 +426,7 @@ export class RequestFactory {
    * @param value - content-type
    */
   contentTypeContains(value: string): boolean {
-    const h = this.defaultHeaders.get(HttpHeaders.CONTENT_TYPE)
+    const h = this.defaultHeaders.get(CommonHeaders.CONTENT_TYPE)
 
     if (h !== null && typeof h !== 'undefined') {
       return h.indexOf(value) > -1

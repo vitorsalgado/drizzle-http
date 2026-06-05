@@ -1,20 +1,20 @@
 import { Blob } from 'buffer'
 import { Readable } from 'stream'
-import { HttpHeaders, HttpResponse, isOK } from '@drizzle-http/core'
+import { headersFromRecord, HttpResponse, isOK } from '@drizzle-http/core'
 import { Dispatcher } from 'undici'
 
 export class UndiciResponse implements HttpResponse<Readable & Dispatcher.BodyMixin, Blob, never> {
   readonly body: Readable & Dispatcher.BodyMixin
-  readonly headers: HttpHeaders
-  readonly trailers: Promise<HttpHeaders>
+  readonly headers: Headers
+  readonly trailers: Promise<Headers>
   readonly status: number
   readonly statusText: string
   readonly url: string
 
   constructor(url: string, private readonly response: Dispatcher.ResponseData) {
     this.body = response.body
-    this.headers = new HttpHeaders(response.headers as Record<string, string>)
-    this.trailers = Promise.resolve(new HttpHeaders(response.trailers))
+    this.headers = headersFromRecord(response.headers)
+    this.trailers = Promise.resolve(headersFromRecord(response.trailers))
     this.status = response.statusCode
     this.statusText = ''
     this.url = url

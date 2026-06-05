@@ -1,5 +1,4 @@
 import { RequestFactory } from './RequestFactory.js'
-import { HttpHeaders } from './HttpHeaders.js'
 import { Decorator, isFunction, notBlank, notNull, TargetCtor } from './internal/index.js'
 import { Drizzle } from './Drizzle.js'
 import { flushPendingMethodSetups, methodName, resolveOwner, setOwner } from './decoratorMetadata.js'
@@ -12,7 +11,7 @@ export type DecoratedMethod = (...args: any[]) => any
 
 export class ApiDefaults {
   decorators: Decorator[] = []
-  headers: HttpHeaders = new HttpHeaders({})
+  headers: Headers = new Headers()
   readTimeout: number | undefined = undefined
   connectTimeout: number | undefined = undefined
   signal: unknown | null = null

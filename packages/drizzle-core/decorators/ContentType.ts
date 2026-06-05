@@ -1,5 +1,5 @@
 import { createClassAndMethodDecorator } from '../ApiParameterization.js'
-import { HttpHeaders } from '../HttpHeaders.js'
+import { CommonHeaders } from '../headers.js'
 
 /**
  * Set Content-Type header in the request
@@ -10,9 +10,9 @@ import { HttpHeaders } from '../HttpHeaders.js'
 export function ContentType(value: string) {
   return createClassAndMethodDecorator(ContentType, ctx => {
     if (ctx.kind === 'method') {
-      ctx.requestFactory!.addDefaultHeader(HttpHeaders.CONTENT_TYPE, value)
+      ctx.requestFactory!.addDefaultHeader(CommonHeaders.CONTENT_TYPE, value)
     } else {
-      ctx.defaults.headers.append(HttpHeaders.CONTENT_TYPE, value)
+      ctx.defaults.headers.append(CommonHeaders.CONTENT_TYPE, value)
     }
   })
 }

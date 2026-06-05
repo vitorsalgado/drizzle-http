@@ -4,7 +4,7 @@ import { Dispatcher, request as Request } from 'undici'
 import { RequestOptions } from 'undici'
 import { HttpRequest } from '../HttpRequest.js'
 import { Call, CallFactory } from '../Call.js'
-import { HttpHeaders } from '../HttpHeaders.js'
+import { headersFromRecord, headersToRecord } from '../headers.js'
 import { Drizzle } from '../Drizzle.js'
 import { HttpResponse, isOK } from '../HttpResponse.js'
 import { isAbsolute } from '../internal/index.js'
@@ -41,7 +41,7 @@ function toRequest(url: string, request: HttpRequest): RequestOptions {
     path: url,
     method: request.method as HttpMethod,
     body: request.body,
-    headers: request.headers.toObject(),
+    headers: headersToRecord(request.headers),
     bodyTimeout: request.bodyTimeout,
     headersTimeout: request.headersTimeout,
     signal: request.signal
@@ -50,16 +50,16 @@ function toRequest(url: string, request: HttpRequest): RequestOptions {
 
 class TestDzResponse implements HttpResponse<Readable | null, Blob, never> {
   readonly body: Readable
-  readonly headers: HttpHeaders
-  readonly trailers?: Promise<HttpHeaders>
+  readonly headers: Headers
+  readonly trailers?: Promise<Headers>
   readonly status: number
   readonly statusText: string
   readonly url: string
 
   constructor(url: string, private readonly response: Dispatcher.ResponseData) {
     this.body = response.body
-    this.headers = new HttpHeaders(response.headers as Record<string, string>)
-    this.trailers = Promise.resolve(new HttpHeaders(response.trailers))
+    this.headers = headersFromRecord(response.headers)
+    this.trailers = Promise.resolve(headersFromRecord(response.trailers))
     this.status = response.statusCode
     this.statusText = ''
     this.url = url

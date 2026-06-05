@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { vi, type Mock } from 'vitest'
-import { GET, HttpHeaders, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
+import { GET, newAPI, noop, PlainTextResponse, RawResponse } from '@drizzle-http/core'
 import { CORS, KeepAlive } from '../decorators/index.js'
 import { useFetch } from '../useFetch.js'
 
@@ -22,11 +22,6 @@ const api = newAPI().baseUrl(url).configurer(useFetch()).build().create(TestAPI)
 const makeUrl = (url: string, path: string) => url + path
 
 describe('Fetch', function () {
-  beforeEach(() => {
-    // @ts-ignore
-    global.Headers = HttpHeaders
-  })
-
   afterEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -37,7 +32,7 @@ describe('Fetch', function () {
     // @ts-ignore
     global.fetch = vi.fn(() =>
       Promise.resolve({
-        headers: new HttpHeaders(),
+        headers: new Headers(),
         text: () => Promise.resolve('txt')
       })
     )

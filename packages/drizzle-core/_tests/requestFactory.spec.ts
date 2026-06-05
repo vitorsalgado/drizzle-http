@@ -1,4 +1,5 @@
 import EventEmitter from 'events'
+import { headersToRecord, isHeadersEmpty, mergeHeadersObject } from '../headers.js'
 import { NoParametersRequestBuilder, RequestFactory } from '../RequestFactory.js'
 import { pathParameterRegex } from '../internal/index.js'
 import { MediaTypes } from '../MediaTypes.js'
@@ -33,7 +34,7 @@ describe('Request Factory', () => {
     expect(requestFactory.getFormParameters()).toStrictEqual([])
     expect(requestFactory.isFormUrlEncoded()).toBeFalsy()
     expect(requestFactory.bodyIndex).toStrictEqual(-1)
-    expect(requestFactory.defaultHeaders.size).toStrictEqual(0)
+    expect(isHeadersEmpty(requestFactory.defaultHeaders)).toBe(true)
     expect(requestFactory.readTimeout).toBeUndefined()
     expect(requestFactory.connectTimeout).toBeUndefined()
     expect(requestFactory.parameterHandlers).toHaveLength(0)
@@ -99,7 +100,7 @@ describe('Request Factory', () => {
     const instanceMeta = new ApiDefaults()
     instanceMeta.connectTimeout = 10
     instanceMeta.readTimeout = 5
-    instanceMeta.headers.mergeObject({ 'x-client-id': '666' })
+    mergeHeadersObject(instanceMeta.headers, { 'x-client-id': '666' })
     instanceMeta.path = 'api/{version}'
 
     requestFactory.mergeWithApiDefaults(instanceMeta)
@@ -122,7 +123,7 @@ describe('Request Factory', () => {
     expect(request.method).toEqual('GET')
     expect(request.bodyTimeout).toEqual(5)
     expect(request.headersTimeout).toEqual(10)
-    expect(request.headers.get('x-id')).toEqual('100,8bc')
+    expect(request.headers.get('x-id')).toEqual('100, 8bc')
     expect(request.headers.get('x-client-id')).toEqual('666')
     expect(request.headers.get('content-type')).toEqual(MediaTypes.APPLICATION_JSON)
   })
@@ -394,7 +395,7 @@ describe('Request Factory', () => {
       const instanceMeta = new ApiDefaults()
       instanceMeta.connectTimeout = 15
       instanceMeta.readTimeout = 25
-      instanceMeta.headers.mergeObject({ 'x-trace-id': '200' })
+      mergeHeadersObject(instanceMeta.headers, { 'x-trace-id': '200' })
       instanceMeta.path = 'another/path/{version}/'
       instanceMeta.signal = testEmitter
 
@@ -405,7 +406,7 @@ describe('Request Factory', () => {
       expect(requestFactory.connectTimeout).toEqual(15)
       expect(requestFactory.readTimeout).toEqual(25)
       expect(requestFactory.signal).toEqual(testEmitter)
-      expect(requestFactory.defaultHeaders.toObject()).toStrictEqual({
+      expect(headersToRecord(requestFactory.defaultHeaders)).toStrictEqual({
         'x-id': '100',
         'x-trace-id': '200',
         'user-agent': 'Drizzle-HTTP'

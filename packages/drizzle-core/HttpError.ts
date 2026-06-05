@@ -1,8 +1,7 @@
 import { DrizzleError } from './internal/index.js'
 import { HttpRequest } from './HttpRequest.js'
-import { HttpHeaders } from './HttpHeaders.js'
 
-interface Res<B = unknown, H = HttpHeaders> {
+interface Res<B = unknown, H = Headers> {
   readonly headers: H
   readonly status: number
   readonly statusText: string

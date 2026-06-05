@@ -1,4 +1,5 @@
 import { createClassAndMethodDecorator } from '../ApiParameterization.js'
+import { mergeHeadersObject } from '../headers.js'
 
 /**
  * Adds fixed params to the request
@@ -11,7 +12,7 @@ export function HeaderMap(headers: Record<string, string>) {
     if (ctx.kind === 'method') {
       ctx.requestFactory!.addDefaultHeaders(headers)
     } else {
-      ctx.defaults.headers.mergeObject(headers)
+      mergeHeadersObject(ctx.defaults.headers, headers)
     }
   })
 }

@@ -8,7 +8,7 @@ import {
   JsonResponseConverterFactory
 } from '../index.js'
 import { BodyParameter } from '../../../parameterhandlers/index.js'
-import { HttpHeaders } from '../../../../HttpHeaders.js'
+import { CommonHeaders } from '../../../../headers.js'
 import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
 
 describe('JSON Converter', function () {
@@ -22,7 +22,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -37,7 +37,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     requestFactory.addParameter(new BodyParameter(0))
 
     requestFactory.preProcessAndValidate(drizzle)
@@ -53,7 +53,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -68,7 +68,7 @@ describe('JSON Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
     requestFactory.addParameter(new BodyParameter(0))
 
     requestFactory.preProcessAndValidate(drizzle)

@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders } from 'http'
 import { Blob } from 'buffer'
 import { BodyType } from '@drizzle-http/core'
-import { HttpHeaders } from '@drizzle-http/core'
+import { headersFromRecord } from '@drizzle-http/core'
 import { isOK } from '@drizzle-http/core'
 import { HttpResponse } from '@drizzle-http/core'
 
@@ -15,16 +15,16 @@ interface StreamingResponseInit {
 
 export class StreamingResponse implements HttpResponse<BodyType, Blob, never> {
   readonly body: BodyType
-  readonly headers: HttpHeaders
-  readonly trailers: Promise<HttpHeaders>
+  readonly headers: Headers
+  readonly trailers: Promise<Headers>
   readonly status: number
   readonly statusText: string
   readonly url: string
 
   constructor(url: string, private readonly init: StreamingResponseInit) {
     this.body = null
-    this.headers = new HttpHeaders(init.headers as Record<string, string>)
-    this.trailers = Promise.resolve(new HttpHeaders(init.trailers as Record<string, string>))
+    this.headers = headersFromRecord(init.headers)
+    this.trailers = Promise.resolve(headersFromRecord(init.trailers))
     this.status = init.status
     this.statusText = ''
     this.url = url

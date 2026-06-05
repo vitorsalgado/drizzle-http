@@ -7,7 +7,7 @@ export class FetchCall implements Call<Response> {
     return {
       ...requestInit,
       method: request.method,
-      headers: new Headers([...request.headers.entries()]),
+      headers: request.headers,
       body: request.body as BodyInit,
       signal: signal
     }

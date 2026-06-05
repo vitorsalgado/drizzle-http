@@ -1,6 +1,6 @@
 import { createClassAndMethodDecorator } from '../ApiParameterization.js'
 import { MediaTypes } from '../MediaTypes.js'
-import { HttpHeaders } from '../HttpHeaders.js'
+import { CommonHeaders } from '../headers.js'
 import { BuiltInConv } from '../index.js'
 
 /**
@@ -11,10 +11,10 @@ import { BuiltInConv } from '../index.js'
 export function FormUrlEncoded() {
   return createClassAndMethodDecorator(FormUrlEncoded, ctx => {
     if (ctx.kind === 'method') {
-      ctx.requestFactory!.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      ctx.requestFactory!.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       ctx.requestFactory!.requestType = BuiltInConv.FORM_URL_ENCODED
     } else {
-      ctx.defaults.headers.append(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      ctx.defaults.headers.append(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       ctx.defaults.requestType = BuiltInConv.FORM_URL_ENCODED
     }
   })

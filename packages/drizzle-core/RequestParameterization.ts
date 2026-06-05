@@ -1,4 +1,3 @@
-import { HttpHeaders } from './HttpHeaders.js'
 import { BodyType } from './BodyType.js'
 import { MediaTypes } from './MediaTypes.js'
 
@@ -10,7 +9,7 @@ import { MediaTypes } from './MediaTypes.js'
 export class RequestParameterization {
   public path = ''
   public readonly query: string[]
-  public readonly headers: HttpHeaders
+  public readonly headers: Headers
   public readonly formFields: URLSearchParams
   public body: unknown
   public signal: unknown | null
@@ -19,20 +18,20 @@ export class RequestParameterization {
     public readonly argv: unknown[],
     path = '',
     query: string[] = [],
-    headers: HttpHeaders = new HttpHeaders({}),
+    headers: Headers = new Headers(),
     formFields: URLSearchParams = new URLSearchParams(),
     body: BodyType = null,
     signal: unknown | null = null
   ) {
     this.path = path
     this.query = query
-    this.headers = new HttpHeaders(headers.toObject())
+    this.headers = new Headers(headers)
     this.formFields = formFields
     this.body = body
     this.signal = signal
   }
 
-  public static newRequest(argv: unknown[], path: string, headers: HttpHeaders, signal: unknown | null) {
+  public static newRequest(argv: unknown[], path: string, headers: Headers, signal: unknown | null) {
     return new RequestParameterization(argv, path, [], headers, new URLSearchParams(), null, signal)
   }
 

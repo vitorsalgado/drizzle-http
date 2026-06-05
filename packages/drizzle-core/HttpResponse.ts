@@ -1,5 +1,4 @@
 import { BodyType } from './BodyType.js'
-import { HttpHeaders } from './HttpHeaders.js'
 
 /**
  * Minimum contract that every response should follow inside the framework.
@@ -8,7 +7,7 @@ export interface HttpResponse<
   BODY = BodyType,
   BLOB = unknown,
   FORM_DATA = unknown,
-  HEADERS extends Headers = HttpHeaders
+  HEADERS extends Headers = Headers
 > {
   readonly headers: HEADERS
   readonly trailers?: Promise<HEADERS>

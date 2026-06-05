@@ -14,7 +14,7 @@ import {
 } from '../index.js'
 import { RawRequest } from '../index.js'
 import { noop } from '../../../../noop.js'
-import { HttpHeaders } from '../../../../HttpHeaders.js'
+import { CommonHeaders } from '../../../../headers.js'
 import { TestCallFactory } from '../../../../_tests/TestCallFactory.js'
 
 class API {
@@ -70,7 +70,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
 
     requestFactory.registerDecorator(RawResponse)
     requestFactory.preProcessAndValidate(drizzle)
@@ -86,7 +86,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
 
     requestFactory.preProcessAndValidate(drizzle)
 
@@ -101,7 +101,7 @@ describe('Raw Converter', function () {
     requestFactory.method = 'example'
     requestFactory.httpMethod = 'POST'
     requestFactory.path = '/test'
-    requestFactory.addDefaultHeader(HttpHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
+    requestFactory.addDefaultHeader(CommonHeaders.CONTENT_TYPE, MediaTypes.APPLICATION_JSON)
     requestFactory.registerDecorator(RawRequest)
 
     requestFactory.preProcessAndValidate(drizzle)

@@ -22,7 +22,7 @@
     "release:publish": "node scripts/packaging.js publish"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "repository": {
     "type": "git",

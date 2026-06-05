@@ -1,10 +1,9 @@
-import { HttpHeaders } from './HttpHeaders.js'
 import { BodyType } from './BodyType.js'
 
 interface HttpRequestInit {
   url: string
   method: string
-  headers: HttpHeaders
+  headers: Headers
   body: BodyType
   headersTimeout?: number
   bodyTimeout?: number
@@ -14,7 +13,7 @@ interface HttpRequestInit {
 export class HttpRequest {
   public readonly url: string
   public readonly method: string
-  public readonly headers: HttpHeaders
+  public readonly headers: Headers
   public readonly body: BodyType
   public readonly headersTimeout?: number
   public readonly bodyTimeout?: number
