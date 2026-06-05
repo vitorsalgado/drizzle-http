@@ -1,29 +1,42 @@
 import { DecoratedMethod, registerApiMethod, requestFactory } from '../../ApiParameterization.js'
 import { AnyClass, Decorator, isFunction, TargetCtor } from '../../internal/index.js'
 import { notNull } from '../../internal/index.js'
-import { appendPendingMethodSetup, methodName, resolveOwner } from '../../decoratorMetadata.js'
+import { methodName, resolveOwner } from '../../decoratorMetadata.js'
+import { fieldInitializerWrapper, resolveApiCtor, scheduleMemberSetup, wrapWithInvoker } from '../registrar/index.js'
 
 /**
- * Configure a method to perform an HTTP request
+ * Configure a method or field to perform an HTTP request
  *
  * @param decorator - method decorator
  * @param httpMethod - HTTP verb of the request
  * @param path - request path that will be concatenated with the base url
  */
-export function decorateWithHttpMethod(
-  decorator: Decorator,
-  httpMethod: string,
-  path: string
-): <T extends DecoratedMethod>(value: T, context: ClassMethodDecoratorContext) => T {
+type HttpMethodDecorator = {
+  <T extends DecoratedMethod>(value: T, context: ClassMethodDecoratorContext): T
+  <T extends DecoratedMethod>(value: T | undefined, context: ClassFieldDecoratorContext): (initialValue: T) => T
+}
+
+export function decorateWithHttpMethod(decorator: Decorator, httpMethod: string, path: string): HttpMethodDecorator {
   isFunction(decorator)
   notNull(httpMethod)
   notNull(path)
 
-  return function <T extends DecoratedMethod>(value: T, context: ClassMethodDecoratorContext): T {
-    if (context.kind !== 'method') {
-      throw new TypeError(`${String(decorator.name)} must be applied to a method.`)
+  return function <T extends DecoratedMethod>(
+    value: T | undefined,
+    context: ClassMethodDecoratorContext | ClassFieldDecoratorContext
+  ): T | ((initialValue: T) => T) {
+    if (context.kind === 'method') {
+      return decorateMethod(value as T, context)
     }
 
+    if (context.kind === 'field') {
+      return decorateField(context)
+    }
+
+    throw new TypeError(`${String(decorator.name)} must be applied to a method or field.`)
+  }
+
+  function decorateMethod<T extends DecoratedMethod>(value: T, context: ClassMethodDecoratorContext): T {
     let registeredCtor: TargetCtor | undefined
     let registeredMethod: string | undefined
 
@@ -44,11 +57,7 @@ export function decorateWithHttpMethod(
       factory.httpMethod = httpMethod.toUpperCase()
     }
 
-    if (context.static) {
-      register()
-    } else {
-      appendPendingMethodSetup(context.metadata, register)
-    }
+    scheduleMemberSetup(context.metadata, context.static, register)
 
     const wrapped = function (...args: unknown[]) {
       const apiCtor = registeredCtor ?? resolveOwner(context.metadata, context.static, value)
@@ -59,5 +68,31 @@ export function decorateWithHttpMethod(
     }
 
     return wrapped as T
+  }
+
+  function decorateField<T extends DecoratedMethod>(context: ClassFieldDecoratorContext): (initialValue: T) => T {
+    const member = methodName(context)
+    let registeredCtor: TargetCtor | undefined
+
+    const register = () => {
+      const apiCtor = resolveApiCtor(context.metadata, context.static, undefined, false)
+
+      registeredCtor = apiCtor
+
+      registerApiMethod(apiCtor, member)
+
+      const factory = requestFactory(apiCtor, member)
+      factory.registerDecorator(decorator)
+      factory.apiType = apiCtor as AnyClass
+      factory.method = member
+      factory.path = path.trim()
+      factory.httpMethod = httpMethod.toUpperCase()
+    }
+
+    scheduleMemberSetup(context.metadata, context.static, register)
+
+    return fieldInitializerWrapper<T>(() =>
+      wrapWithInvoker<T>(context.metadata, context.static, member, registeredCtor)
+    )
   }
 }

@@ -2,13 +2,8 @@ import { RequestFactory } from './RequestFactory.js'
 import { HttpHeaders } from './HttpHeaders.js'
 import { Decorator, isFunction, notBlank, notNull, TargetCtor } from './internal/index.js'
 import { Drizzle } from './Drizzle.js'
-import {
-  appendPendingMethodSetup,
-  flushPendingMethodSetups,
-  methodName,
-  resolveOwner,
-  setOwner
-} from './decoratorMetadata.js'
+import { flushPendingMethodSetups, methodName, resolveOwner, setOwner } from './decoratorMetadata.js'
+import { resolveApiCtor, scheduleMemberSetup } from './decorators/registrar/index.js'
 
 type Target = TargetCtor
 
@@ -157,7 +152,7 @@ export interface DrizzleMethodDecoratorContext {
 }
 
 export interface ClassAndMethodDecoratorContext {
-  kind: 'class' | 'method'
+  kind: 'class' | 'method' | 'field'
   target: TargetCtor
   defaults: ApiDefaults
   requestFactory?: RequestFactory
@@ -191,19 +186,50 @@ export function createClassDecorator(
   }
 }
 
+type MethodOrFieldDecorator = {
+  <T extends DecoratedMethod>(methodValue: T, context: ClassMethodDecoratorContext): T
+  (methodValue: undefined, context: ClassFieldDecoratorContext): void
+}
+
 export function createMethodDecorator(
   decorator: Decorator,
   configurer?: (ctx: DrizzleMethodDecoratorContext) => void | DecoratedMethod
-): <T extends DecoratedMethod>(methodValue: T, context: ClassMethodDecoratorContext) => T | void {
+): MethodOrFieldDecorator {
   isFunction(decorator)
 
-  return function <T extends DecoratedMethod>(methodValue: T, context: ClassMethodDecoratorContext): T | void {
+  return function <T extends DecoratedMethod>(
+    methodValue: T | undefined,
+    context: ClassMethodDecoratorContext | ClassFieldDecoratorContext
+  ): T | void {
+    if (context.kind === 'field') {
+      const register = () => {
+        const apiCtor = resolveApiCtor(context.metadata, context.static, undefined, false)
+        const method = methodName(context)
+
+        registerApiMethod(apiCtor, method)
+
+        const factory = requestFactory(apiCtor, method)
+        factory.registerDecorator(decorator)
+
+        configurer?.({
+          kind: 'method',
+          target: apiCtor,
+          method,
+          requestFactory: factory
+        })
+      }
+
+      scheduleMemberSetup(context.metadata, context.static, register)
+
+      return
+    }
+
     if (context.kind !== 'method') {
-      throw new TypeError(`${String(decorator.name)} must be applied to a method.`)
+      throw new TypeError(`${String(decorator.name)} must be applied to a method or field.`)
     }
 
     const register = () => {
-      const apiCtor = resolveOwner(context.metadata, context.static, methodValue)
+      const apiCtor = resolveOwner(context.metadata, context.static, methodValue as T)
       const method = methodName(context)
 
       registerApiMethod(apiCtor, method)
@@ -219,28 +245,27 @@ export function createMethodDecorator(
       })
     }
 
-    if (context.static) {
-      register()
-    } else {
-      appendPendingMethodSetup(context.metadata, register)
-    }
+    scheduleMemberSetup(context.metadata, context.static, register)
 
-    return methodValue
+    return methodValue as T
   }
+}
+
+type ClassMethodOrFieldDecorator = {
+  (target: TargetCtor, context: ClassDecoratorContext): void
+  <T extends DecoratedMethod>(target: T, context: ClassMethodDecoratorContext): T
+  (target: undefined, context: ClassFieldDecoratorContext): void
 }
 
 export function createClassAndMethodDecorator(
   decorator: Decorator,
   configurer: (ctx: ClassAndMethodDecoratorContext) => void
-): <T extends TargetCtor | DecoratedMethod>(
-  target: T,
-  context: ClassDecoratorContext | ClassMethodDecoratorContext
-) => void | T {
+): ClassMethodOrFieldDecorator {
   isFunction(decorator)
 
   return function <T extends TargetCtor | DecoratedMethod>(
-    target: T,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext
+    target: T | undefined,
+    context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext
   ): void | T {
     if (context.kind === 'class') {
       const ctor = target as TargetCtor
@@ -277,15 +302,33 @@ export function createClassAndMethodDecorator(
         })
       }
 
-      if (context.static) {
-        register()
-      } else {
-        appendPendingMethodSetup(context.metadata, register)
-      }
+      scheduleMemberSetup(context.metadata, context.static, register)
 
-      return target
+      return target as T
     }
 
-    throw new TypeError(`${String(decorator.name)} must be applied to a class or method.`)
+    if (context.kind === 'field') {
+      const register = () => {
+        const apiCtor = resolveApiCtor(context.metadata, context.static, undefined, false)
+        const method = methodName(context)
+        const factory = requestFactory(apiCtor, method)
+
+        factory.registerDecorator(decorator)
+
+        configurer({
+          kind: 'method',
+          target: apiCtor,
+          method,
+          defaults: apiDefaults(apiCtor),
+          requestFactory: factory
+        })
+      }
+
+      scheduleMemberSetup(context.metadata, context.static, register)
+
+      return
+    }
+
+    throw new TypeError(`${String(decorator.name)} must be applied to a class, method, or field.`)
   }
 }
