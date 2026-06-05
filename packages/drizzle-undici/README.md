@@ -15,7 +15,7 @@ npm i @drizzle-http/undici
 ## Features
 
 - Customize Undici pool
-- Allows the response to be written direct to stream.
+- Stream responses directly to a `Writable` via `@StreamTo()`
 
 ## Usage
 
@@ -33,20 +33,60 @@ const api = DrizzleBuilder
   .create(API)
 ```
 
-## Stream
+## Streaming
 
-This feature uses [undici.stream](https://github.com/nodejs/undici#undicistreamurl-options-factory-promise) feature.  
-Example:
+Uses [undici.stream](https://github.com/nodejs/undici#undicistreamurl-options-factory-promise). The method promise resolves when **response headers** arrive; body bytes pipe to the `@StreamTo()` argument; `response.completed` resolves when the stream finishes.
 
 ```typescript
-import { StreamingResponse } from "@drizzle-http/undici";
-import { Streaming } from "@drizzle-http/undici";
-import { StreamTo } from "@drizzle-http/undici";
-import { GET } from "@drizzle-http/core";
+import { Streaming, StreamTo, StreamingResponse } from "@drizzle-http/undici";
+import { GET, Params } from "@drizzle-http/core";
+import { Writable } from "stream";
 
 class API {
   @GET('/')
   @Streaming()
-  streaming(@StreamTo() target: Writable): Promise<StreamingResponse> { }
+  @Params([StreamTo()])
+  async download(target: Writable): Promise<StreamingResponse> {
+    const response = await /* drizzle invokes this */;
+    if (!response.ok) {
+      await response.completed;
+      throw new Error(`HTTP ${response.status}`);
+    }
+    await response.completed;
+    return response;
+  }
 }
 ```
+
+### Two-phase response
+
+| Phase | API | When |
+|-------|-----|------|
+| Headers | `await api.download(dest)` → `status`, `headers`, `ok` | Undici factory (before body bytes) |
+| Body | bytes written to `@StreamTo()` writable | in flight |
+| Done | `await response.completed` → `{ trailers }` | stream finished |
+
+Failures before headers reject the outer promise. Failures after headers reject `response.completed`.
+
+### Options
+
+```typescript
+@Streaming({
+  // Synchronous hook inside undici factory — use for HTTP proxies (writeHead before bytes)
+  onHeaders: ({ statusCode, headers, destination, response }) => {
+    (destination as ServerResponse).writeHead(statusCode, headers);
+    return destination;
+  },
+  // Default true: status >= 400 bodies are discarded, not written to @StreamTo
+  skipErrorBody: true,
+})
+```
+
+Set `skipErrorBody: false` to stream error response bodies to the destination.
+
+### Constraints
+
+- Use `@Params([StreamTo()])` (only one `@StreamTo()` per method).
+- `@Streaming()` cannot be combined with `@Retry()` — add `@NoRetry()` if the class has global retry.
+- Callers must handle backpressure on the destination `Writable`.
+- Bodies are raw bytes (`content-encoding` is not decoded on the stream path).

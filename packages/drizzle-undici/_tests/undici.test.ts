@@ -15,6 +15,7 @@ import {
   noop,
   Param,
   Params,
+  Retry,
   SignalParam,
   Query,
   QueryName,
@@ -65,6 +66,21 @@ class API {
     return noop(target)
   }
 
+  @GET('/nowhere')
+  @ContentType('application/json')
+  @Streaming({ skipErrorBody: false })
+  @Params([StreamTo()])
+  streamingErrorBody(target: Writable): Promise<StreamingResponse> {
+    return noop(target)
+  }
+
+  @GET('/slow-stream')
+  @Streaming()
+  @Params([StreamTo(), SignalParam()])
+  slowStream(target: Writable, cancel: EventEmitter): Promise<StreamingResponse> {
+    return noop(target, cancel)
+  }
+
   @GET('/long-running')
   @RawResponse()
   @Params([SignalParam()])
@@ -110,6 +126,18 @@ describe('Undici Call', function () {
     setupTestServer(fastify => {
       fastify.get('/long-running', (req, res) => {
         setTimeout(() => res.status(200).send({ ok: true }), 5000)
+      })
+      fastify.get('/slow-stream', (req, reply) => {
+        reply.hijack()
+        reply.raw.writeHead(200, { 'content-type': 'application/octet-stream', 'transfer-encoding': 'chunked' })
+
+        const interval = setInterval(() => {
+          reply.raw.write('chunk-')
+        }, 200)
+
+        req.raw.on('close', () => {
+          clearInterval(interval)
+        })
       })
       fastify.get('/testing/join/base/path', (req, res) => {
         res.status(200).send({ ok: true })
@@ -171,7 +199,7 @@ describe('Undici Call', function () {
         }
       }
 
-      DrizzleBuilder.newBuilder().build().create(FailApi)
+      DrizzleBuilder.newBuilder().baseUrl(address).callFactory(new UndiciCallFactory()).build().create(FailApi)
     }).toThrowError()
 
     expect(() => {
@@ -183,38 +211,179 @@ describe('Undici Call', function () {
         }
       }
 
-      DrizzleBuilder.newBuilder().build().create(FailApi)
+      DrizzleBuilder.newBuilder().baseUrl(address).callFactory(new UndiciCallFactory()).build().create(FailApi)
     }).toThrowError()
   })
 
-  it('should pipe the response direct to the writable stream', () => {
-    return api
-      .streaming(
-        new Writable({
-          write(_chunk, _encoding, callback) {
-            callback()
-          }
-        })
-      )
-      .then(response => {
-        expect(response.status).toEqual(200)
-      })
+  it('should resolve headers before completed and pipe body to writable', async () => {
+    const chunks: string[] = []
+
+    const target = new Writable({
+      write(chunk, _encoding, callback) {
+        chunks.push(chunk.toString())
+        callback()
+      }
+    })
+
+    const response = await api.streaming(target)
+
+    expect(response.status).toEqual(200)
+    expect(response.ok).toBeTruthy()
+
+    await response.completed
+
+    expect(chunks.join('')).toContain('result')
   })
 
-  it('should not throw error when an http error occurs', () => {
+  it('should not throw when an http error occurs and should skip error body by default', async () => {
+    const chunks: string[] = []
+
+    const response = await api.streamingFromNowhere(
+      new Writable({
+        write(chunk, _encoding, callback) {
+          chunks.push(chunk.toString())
+          callback()
+        }
+      })
+    )
+
+    expect(response.status).toEqual(404)
+    expect(response.ok).toBeFalsy()
+
+    await response.completed
+
+    expect(chunks).toHaveLength(0)
+  })
+
+  it('should stream error body when skipErrorBody is false', async () => {
+    const chunks: string[] = []
+
+    const response = await api.streamingErrorBody(
+      new Writable({
+        write(chunk, _encoding, callback) {
+          chunks.push(chunk.toString())
+          callback()
+        }
+      })
+    )
+
+    expect(response.status).toEqual(404)
+
+    await response.completed
+
+    expect(chunks.length).toBeGreaterThan(0)
+  })
+
+  it('should reject completed when writable write throws', async () => {
+    expect.assertions(2)
+
+    const response = await api.streaming(
+      new Writable({
+        write(_chunk, _encoding) {
+          throw new Error('Failed!')
+        }
+      })
+    )
+
+    expect(response.status).toEqual(200)
+
+    await expect(response.completed).rejects.toThrow('Failed!')
+  })
+
+  it('should reject completed when streaming request is aborted after headers', async () => {
+    expect.assertions(2)
+
+    const cancel = new EventEmitter()
+
+    setTimeout(() => cancel.emit('abort'), 300)
+
+    const response = await api.slowStream(
+      new Writable({
+        write(_chunk, _encoding, callback) {
+          callback()
+        }
+      }),
+      cancel
+    )
+
+    expect(response.status).toEqual(200)
+
+    await expect(response.completed).rejects.toMatchObject({ code: 'UND_ERR_ABORTED' })
+  })
+
+  it('should throw when @StreamTo() argument is not a Writable', async () => {
     expect.assertions(1)
 
-    return api
-      .streamingFromNowhere(
-        new Writable({
-          write(_chunk, _encoding, callback) {
-            callback()
-          }
-        })
-      )
-      .then(err => {
-        expect(err.status).toEqual(404)
+    await expect(async () => {
+      await api.streaming('not-a-stream' as unknown as Writable)
+    }).rejects.toThrow('@StreamTo() argument must be a Writable stream.')
+  })
+
+  it('should fail on duplicate @StreamTo()', () => {
+    expect(() => {
+      class DupApi {
+        @GET('/')
+        @Streaming()
+        @Params([StreamTo(), StreamTo()])
+        dup(a: Writable, b: Writable): Promise<StreamingResponse> {
+          return noop(a, b)
+        }
+      }
+
+      DrizzleBuilder.newBuilder().baseUrl(address).callFactory(new UndiciCallFactory()).build().create(DupApi)
+    }).toThrowError(/Only one parameter can be decorated with @StreamTo\(\)/)
+  })
+
+  it('should fail when @Streaming() is combined with @Retry()', () => {
+    expect(() => {
+      class RetryStreamApi {
+        @GET('/')
+        @Retry()
+        @Streaming()
+        @Params([StreamTo()])
+        stream(target: Writable): Promise<StreamingResponse> {
+          return noop(target)
+        }
+      }
+
+      DrizzleBuilder.newBuilder().baseUrl(address).callFactory(new UndiciCallFactory()).build().create(RetryStreamApi)
+    }).toThrowError(/@Streaming\(\) cannot be combined with @Retry\(\)/)
+  })
+
+  it('should invoke onHeaders before body is written', async () => {
+    class OnHeadersApi {
+      @GET('/')
+      @Streaming({
+        onHeaders: ({ statusCode, destination }) => {
+          const writable = destination as Writable & { headerStatus?: number }
+          writable.headerStatus = statusCode
+          return destination
+        }
       })
+      @Params([StreamTo()])
+      stream(target: Writable): Promise<StreamingResponse> {
+        return noop(target)
+      }
+    }
+
+    const onHeadersApi = DrizzleBuilder.newBuilder()
+      .baseUrl(address)
+      .callFactory(new UndiciCallFactory())
+      .build()
+      .create(OnHeadersApi)
+
+    const target = new Writable({
+      write(_chunk, _encoding, callback) {
+        callback()
+      }
+    }) as Writable & { headerStatus?: number }
+
+    const response = await onHeadersApi.stream(target)
+
+    expect(target.headerStatus).toEqual(200)
+    expect(response.status).toEqual(200)
+
+    await response.completed
   })
 
   it('should should send all specified arguments in the request respecting decorators setupTestServer', () => {
@@ -296,15 +465,19 @@ describe('Undici Call', function () {
   })
 
   it('should init stream result', function () {
+    const completed = Promise.resolve({ trailers: new Headers() })
+
     expect(
       () =>
-        new StreamingResponse('http://www.test.com.br/', {
-          status: 200,
-          statusText: '',
-          headers: {},
-          trailers: {},
-          url: ''
-        })
+        new StreamingResponse(
+          'http://www.test.com.br/',
+          {
+            status: 200,
+            statusText: '',
+            headers: {}
+          },
+          completed
+        )
     ).not.toThrowError()
   })
 
@@ -349,22 +522,6 @@ describe('Undici Call', function () {
       .build()
 
     expect(() => drizzle.create(StApi)).toThrowError()
-  })
-
-  it('should throw error an non http exception occurs', () => {
-    expect.assertions(1)
-
-    return api
-      .streaming(
-        new Writable({
-          write(_chunk, _encoding) {
-            throw new Error('Failed!')
-          }
-        })
-      )
-      .catch(err => {
-        expect(err.message).toEqual('Failed!')
-      })
   })
 
   it('should expose pool from factory', async function () {

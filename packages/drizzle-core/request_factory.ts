@@ -49,6 +49,7 @@ export class RequestFactory {
     public signal: unknown = null,
     public noResponseConverter: boolean = false,
     public noResponseHandler: boolean = false,
+    public streamingResponse: boolean = false,
     public readonly bag: Map<string, unknown> = new Map<string, unknown>(),
     public checkIfPathParamsAreInSyncWithUrl: boolean = true,
     public requestType: string = '',
@@ -609,6 +610,10 @@ export class RequestFactory {
    */
   ignoreResponseHandler(value = true): void {
     this.noResponseHandler = value
+  }
+
+  markStreamingResponse(): void {
+    this.streamingResponse = true
   }
 
   private invalidArgErr(message: string): InvalidMethodConfigError {

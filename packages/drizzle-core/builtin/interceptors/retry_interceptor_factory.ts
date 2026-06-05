@@ -11,6 +11,10 @@ export class RetryInterceptorFactory implements InterceptorFactory {
   static INSTANCE: RetryInterceptorFactory = new RetryInterceptorFactory()
 
   provide(drizzle: Drizzle, requestFactory: RequestFactory): Interceptor | null {
+    if (requestFactory.streamingResponse) {
+      return null
+    }
+
     if (requestFactory.hasDecorator(Retry) && !requestFactory.hasDecorator(NoRetry)) {
       return new RetryInterceptor(requestFactory.getConfig(RetryOptionsKey))
     }

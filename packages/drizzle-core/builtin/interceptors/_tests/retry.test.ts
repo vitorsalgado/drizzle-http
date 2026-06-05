@@ -14,6 +14,7 @@ import { DrizzleBuilder } from '../../../drizzle_builder.js'
 import { TestCallFactory } from '../../../_tests/test_call_factory.js'
 import { Retry } from '../retry.js'
 import { RetryInterceptorFactory } from '../retry_interceptor_factory.js'
+import { RequestFactory } from '../../../request_factory.js'
 import { HttpError } from '../../../http_error.js'
 import { NoRetry } from '../no_retry.js'
 
@@ -205,5 +206,12 @@ describe('Retry Interceptor', function () {
         }
       })
     })
+  })
+
+  it('should not register retry interceptor for streaming responses', function () {
+    const factory = new RequestFactory()
+    factory.markStreamingResponse()
+
+    expect(RetryInterceptorFactory.INSTANCE.provide(drizzle, factory)).toBeNull()
   })
 })

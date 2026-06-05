@@ -1,33 +1,30 @@
 import { IncomingHttpHeaders } from 'http'
-import { Blob } from 'buffer'
-import { BodyType } from '@drizzle-http/core'
-import { headersFromRecord } from '@drizzle-http/core'
-import { isOK } from '@drizzle-http/core'
-import { HttpResponse } from '@drizzle-http/core'
+import { headersFromRecord, HttpResponse, isOK } from '@drizzle-http/core'
 
-interface StreamingResponseInit {
-  readonly headers: IncomingHttpHeaders
-  readonly trailers: IncomingHttpHeaders
-  readonly status: number
-  readonly statusText: string
-  readonly url: string
+export interface StreamingCompletion {
+  readonly trailers: Headers
 }
 
-export class StreamingResponse implements HttpResponse<BodyType, Blob, never> {
-  readonly body: BodyType
+export interface StreamingResponseInit {
+  readonly headers: IncomingHttpHeaders
+  readonly status: number
+  readonly statusText: string
+}
+
+export class StreamingResponse implements HttpResponse<null, never, never> {
+  readonly body: null = null
   readonly headers: Headers
-  readonly trailers: Promise<Headers>
   readonly status: number
   readonly statusText: string
   readonly url: string
+  readonly completed: Promise<StreamingCompletion>
 
-  constructor(url: string, private readonly init: StreamingResponseInit) {
-    this.body = null
+  constructor(url: string, init: StreamingResponseInit, completed: Promise<StreamingCompletion>) {
     this.headers = headersFromRecord(init.headers)
-    this.trailers = Promise.resolve(headersFromRecord(init.trailers))
     this.status = init.status
-    this.statusText = ''
+    this.statusText = init.statusText
     this.url = url
+    this.completed = completed
   }
 
   get ok(): boolean {
@@ -42,7 +39,7 @@ export class StreamingResponse implements HttpResponse<BodyType, Blob, never> {
     throw new TypeError('.arrayBuffer() is not applicable')
   }
 
-  blob(): Promise<Blob> {
+  blob(): Promise<never> {
     throw new TypeError('.blob() is not applicable')
   }
 

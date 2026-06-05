@@ -1,5 +1,6 @@
 export * from './pool_options_builder.js'
 export * from './streaming.js'
+export * from './streaming_options.js'
 export * from './streaming_response.js'
 export * from './stream_to.js'
 export * from './undici_stream_call.js'

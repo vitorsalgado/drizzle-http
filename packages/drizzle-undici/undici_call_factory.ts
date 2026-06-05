@@ -2,6 +2,7 @@ import { URL } from 'url'
 import { CallFactory, Drizzle, RequestFactory } from '@drizzle-http/core'
 import { Call } from '@drizzle-http/core'
 import { Internals } from '@drizzle-http/core'
+import { NoRetry, Retry } from '@drizzle-http/core'
 import { Pool } from 'undici'
 import { UndiciStreamCall } from './undici_stream_call.js'
 import { UndiciCall } from './undici_call.js'
@@ -9,6 +10,7 @@ import { Keys } from './keys.js'
 import { UndiciResponse } from './undici_response.js'
 import { Streaming } from './streaming.js'
 import { StreamingResponse } from './streaming_response.js'
+import { resolveStreamingOptions, ResolvedStreamingOptions } from './streaming_options.js'
 
 const { notNull } = Internals
 
@@ -47,7 +49,18 @@ export class UndiciCallFactory implements CallFactory {
         )
       }
 
-      return new UndiciStreamCall(this._pool, streamToIndex)
+      if (requestFactory.hasDecorator(Retry) && !requestFactory.hasDecorator(NoRetry)) {
+        throw new Internals.InvalidMethodConfigError(
+          '@Streaming() cannot be combined with @Retry(). Add @NoRetry() to the streaming method.',
+          requestFactory.method
+        )
+      }
+
+      const streamingOptions =
+        (requestFactory.getConfig(Keys.StreamingOptions) as ResolvedStreamingOptions | undefined) ??
+        resolveStreamingOptions()
+
+      return new UndiciStreamCall(this._pool, streamToIndex, streamingOptions)
     } else {
       if (streamToIndex > -1) {
         throw new Internals.InvalidMethodConfigError(

@@ -1,41 +1,103 @@
 import { Writable } from 'stream'
-import { IncomingHttpHeaders } from 'http'
 import { Pool } from 'undici'
-import { Call } from '@drizzle-http/core'
-import { HttpRequest } from '@drizzle-http/core'
+import { Call, headersFromRecord, HttpRequest } from '@drizzle-http/core'
 import { toUndiciRequest } from './to_undici_request.js'
-import { StreamingResponse } from './streaming_response.js'
+import { DISCARD_WRITABLE } from './discard_writable.js'
+import { ResolvedStreamingOptions } from './streaming_options.js'
+import { StreamingCompletion, StreamingResponse } from './streaming_response.js'
+
+interface StreamContext {
+  readonly destination: Writable
+  readonly url: string
+  readonly options: ResolvedStreamingOptions
+}
+
+function assertWritable(target: unknown): asserts target is Writable {
+  if (target == null || typeof (target as Writable).write !== 'function') {
+    throw new TypeError('@StreamTo() argument must be a Writable stream.')
+  }
+}
 
 export class UndiciStreamCall implements Call<StreamingResponse> {
-  constructor(private readonly client: Pool, private readonly streamTo: number) {}
+  constructor(
+    private readonly client: Pool,
+    private readonly streamTo: number,
+    private readonly options: ResolvedStreamingOptions
+  ) {}
 
-  async execute(request: HttpRequest, argv: unknown[]): Promise<StreamingResponse> {
-    return new Promise<StreamingResponse>((resolve, reject) => {
-      const partial = {} as Record<string, unknown>
-      partial.url = request.url
+  execute(request: HttpRequest, argv: unknown[]): Promise<StreamingResponse> {
+    const destination = argv[this.streamTo]
+    assertWritable(destination)
+
+    return new Promise<StreamingResponse>((resolveOuter, rejectOuter) => {
+      let completedResolve!: (value: StreamingCompletion) => void
+      let completedReject!: (reason: Error) => void
+
+      const completed = new Promise<StreamingCompletion>((resolve, reject) => {
+        completedResolve = resolve
+        completedReject = reject
+      })
+
+      let headersReceived = false
+
+      const context: StreamContext = {
+        destination,
+        url: request.url,
+        options: this.options
+      }
 
       this.client.stream(
-        toUndiciRequest(request, argv[this.streamTo] as Writable),
+        toUndiciRequest(request, context),
         ({ statusCode, headers, opaque }) => {
-          partial.status = statusCode
-          partial.headers = headers
+          const streamContext = opaque as StreamContext
 
-          return opaque as Writable
+          const response = new StreamingResponse(
+            streamContext.url,
+            {
+              status: statusCode,
+              statusText: '',
+              headers
+            },
+            completed
+          )
+
+          headersReceived = true
+          resolveOuter(response)
+
+          let pipeTarget: Writable = streamContext.destination
+
+          if (streamContext.options.onHeaders) {
+            const override = streamContext.options.onHeaders({
+              statusCode,
+              headers,
+              destination: streamContext.destination,
+              url: streamContext.url,
+              response
+            })
+
+            if (override) {
+              pipeTarget = override
+            }
+          } else if (streamContext.options.skipErrorBody && statusCode >= 400) {
+            pipeTarget = DISCARD_WRITABLE
+          }
+
+          return pipeTarget
         },
         (err, data) => {
           if (err) {
-            return reject(err)
+            if (headersReceived) {
+              completedReject(err)
+            } else {
+              rejectOuter(err)
+            }
+
+            return
           }
 
-          const response = new StreamingResponse(partial.url as string, {
-            status: partial.status as number,
-            statusText: '',
-            headers: partial.headers as IncomingHttpHeaders,
-            trailers: data.trailers,
-            url: partial.url as string
+          completedResolve({
+            trailers: headersFromRecord(data.trailers)
           })
-
-          return resolve(response)
         }
       )
     })
