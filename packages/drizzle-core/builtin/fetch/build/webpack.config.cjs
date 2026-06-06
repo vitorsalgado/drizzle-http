@@ -5,13 +5,11 @@ const CleanPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const Cwd = process.cwd()
 
-console.log(Cwd)
-
 module.exports = {
   mode: 'production',
   bail: true,
   target: 'web',
-  entry: './e2e/app.ts',
+  entry: './builtin/fetch/e2e/app.ts',
   devtool: 'inline-source-map',
   devServer: {
     hot: false,
@@ -31,7 +29,7 @@ module.exports = {
     new CleanPlugin(),
     new HtmlWebPackPlugin({
       inject: true,
-      template: './e2e/index.html'
+      template: './builtin/fetch/e2e/index.html'
     })
   ],
   module: {
@@ -58,7 +56,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json'],
+    extensionAlias: {
+      '.js': ['.ts', '.js']
+    }
   },
   performance: {
     hints: 'warning'
@@ -66,6 +67,6 @@ module.exports = {
   stats: 'errors-only',
   output: {
     filename: '[name].js',
-    path: Path.join(Cwd, 'e2e/dist')
+    path: Path.join(Cwd, 'builtin/fetch/e2e/dist')
   }
 }

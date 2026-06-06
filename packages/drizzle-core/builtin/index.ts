@@ -10,3 +10,5 @@ export * from './interceptors/index.js'
 export * from './parameterhandlers/index.js'
 
 export * from './built_in_conv.js'
+
+export * from './fetch/index.js'

@@ -8,7 +8,9 @@
     "**/__fixtures__/**",
     "**/*.test.ts",
     "**/*.test.js",
-    "**/*.config.ts"
+    "**/*.config.ts",
+    "builtin/fetch/e2e/**",
+    "builtin/fetch/build/**"
   ],
   "references": []
 }

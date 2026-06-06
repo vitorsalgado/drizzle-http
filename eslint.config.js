@@ -60,9 +60,9 @@ export default tseslint.config(
       '**/*.d.ts',
       '**/*.cjs',
       'commitlint.config.cjs',
-      'packages/drizzle-fetch/build/**',
-      'packages/drizzle-fetch/e2e/**',
-      'packages/drizzle-fetch/playwright.config.ts'
+      'packages/drizzle-core/builtin/fetch/build/**',
+      'packages/drizzle-core/builtin/fetch/e2e/**',
+      'packages/drizzle-core/builtin/fetch/playwright.config.ts'
     ]
   },
   ...tseslint.configs.recommended,
@@ -102,7 +102,8 @@ export default tseslint.config(
     }
   },
   {
-    files: ['packages/drizzle-fetch/**/*.ts'],
+    files: ['packages/drizzle-core/builtin/fetch/**/*.ts'],
+    ignores: ['packages/drizzle-core/builtin/fetch/_tests/**'],
     languageOptions: {
       globals: {
         ...globals.browser

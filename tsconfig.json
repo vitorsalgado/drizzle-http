@@ -12,7 +12,6 @@
     { "path": "internal/clinic/tsconfig.build.json" },
     { "path": "packages/drizzle-core/tsconfig.build.json" },
     { "path": "packages/drizzle-undici/tsconfig.build.json" },
-    { "path": "packages/drizzle-fetch/tsconfig.build.json" },
     { "path": "packages/drizzle-logging-interceptor/tsconfig.build.json" },
     { "path": "packages/drizzle-rxjs/tsconfig.build.json" },
     { "path": "packages/drizzle-response-mapper/tsconfig.build.json" },

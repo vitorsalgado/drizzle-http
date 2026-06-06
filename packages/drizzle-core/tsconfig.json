@@ -2,7 +2,12 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "lib": ["ES2022", "ESNext.decorators", "DOM", "DOM.Iterable"],
+    "paths": {
+      "@drizzle-http/core": ["./index.ts"]
+    }
   },
   "references": [
     {

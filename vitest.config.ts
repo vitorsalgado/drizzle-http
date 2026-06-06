@@ -45,7 +45,7 @@ export default defineConfig({
       'internal/test-utils/**',
       'internal/clinic/**',
       '**/scripts/**',
-      'packages/drizzle-fetch/**'
+      'packages/drizzle-core/builtin/fetch/e2e/**'
     ],
     coverage: {
       provider: 'v8',
@@ -54,7 +54,6 @@ export default defineConfig({
         '**/node_modules/**',
         '**/dist/**',
         '**/coverage/**',
-        'packages/drizzle-fetch/**',
         'packages/**/index.ts'
       ]
     },

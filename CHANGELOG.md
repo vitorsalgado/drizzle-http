@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/vitorsalgado/drizzle-http/compare/v3.1.0...v4.0.0) (2026-06-05)
+
+### BREAKING CHANGES
+
+* **fetch:** merge `@drizzle-http/fetch` into `@drizzle-http/core`; update imports from `@drizzle-http/fetch` to `@drizzle-http/core`
+
 # [3.1.0](https://github.com/vitorsalgado/drizzle-http/compare/v3.0.0...v3.1.0) (2022-01-03)
 
 

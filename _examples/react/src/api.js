@@ -1,7 +1,16 @@
 'use strict'
 
-import { ContentType, DrizzleBuilder, GET, MediaTypes, Params, Query } from '@drizzle-http/core'
-import { CORS, FetchCallFactory, KeepAlive } from '@drizzle-http/fetch'
+import {
+  ContentType,
+  CORS,
+  DrizzleBuilder,
+  FetchCallFactory,
+  GET,
+  KeepAlive,
+  MediaTypes,
+  Params,
+  Query
+} from '@drizzle-http/core'
 import { BrowserLoggingInterceptor, Level } from '@drizzle-http/logging-interceptor'
 
 const PORT = process.env.PORT || 3001

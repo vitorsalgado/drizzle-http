@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-http/core",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Drizzle-Http core module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,6 +15,9 @@
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
     "test": "vitest run --config ../../vitest.config.ts packages/drizzle-core",
+    "test:e2e:prepare": "npx playwright install-deps && npx playwright install",
+    "test:e2e": "playwright test --config builtin/fetch/playwright.config.ts",
+    "webpack:server-dev": "webpack serve --config builtin/fetch/build/webpack.config.cjs",
     "lint": "eslint \"**/*.ts\" --fix",
     "prettier": "prettier './**' --write --ignore-unknown",
     "prepublishOnly": "pinst --disable",
@@ -59,7 +62,8 @@
     "annotations"
   ],
   "devDependencies": {
-    "@drizzle-http/test-utils": "^3.1.0"
+    "@drizzle-http/test-utils": "^3.1.0",
+    "@playwright/test": "^1.17.1"
   },
   "type": "module"
 }

@@ -6,7 +6,9 @@ const devUrl = 'http://localhost:3000'
 
 test.describe('Fetch Client', () => {
   test.beforeEach(({ page }) => page.goto(devUrl))
-  test.beforeAll(() => startServer())
+  test.beforeAll(async () => {
+    await startServer()
+  })
   test.afterAll(() => closeServer())
 
   test('check GET and POST requests with default fetch response and parsed json body', async ({ page }) => {

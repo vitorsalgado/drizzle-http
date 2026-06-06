@@ -58,7 +58,6 @@ For browser environments:
 
 ```
 npm i @drizzle-http/core
-npm i @drizzle-http/fetch
 ```
 
 ## Getting Started
@@ -226,8 +225,7 @@ the error body, pass the name of the converter to the decorator. E.g.: `@ParseEr
 
 ### Browser
 
-For Browser usage, take a look on [this implementation](packages/drizzle-fetch). It uses **fetch** to make HTTP
-requests.
+For Browser usage, take a look on [the built-in fetch client](packages/drizzle-core/builtin/fetch). It uses the native **fetch** API to make HTTP requests.
 
 ### Interceptors
 

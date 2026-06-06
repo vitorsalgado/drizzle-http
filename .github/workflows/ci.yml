@@ -57,7 +57,7 @@ jobs:
         run: npm run test:ci
 
       - name: Browser Test
-        working-directory: packages/drizzle-fetch
+        working-directory: packages/drizzle-core
         run: |
           npm run test:e2e:prepare
           npm run test:e2e
